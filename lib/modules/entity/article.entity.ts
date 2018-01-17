@@ -1,5 +1,6 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-import {isJSDocNonNullableType} from "typescript/lib/tsserverlibrary";
+import {EnumType} from "typescript";
+
 
 @Entity('article')
 export class ArticleEntity{
@@ -16,13 +17,15 @@ export class ArticleEntity{
     //来源
     @Column({nullable:true,length:120}) source:string;
     //来源链接
-    @Column({nullable:true,length:200}) sourceUrl:string
+    @Column({nullable:true,length:200}) sourceUrl:string;
     //置顶
-    @Column({ }) topPlace:number;
+    @Column() topPlace:number;
     //是否隐藏
-    @Column({nullable:true}) hidden:boolean;
+    @Column() hidden:boolean;
     //删除(回收站)
     @Column({nullable:true}) recycling:boolean;
+    //发布时间
+    @Column({nullable:true}) publishedTime:Date;
     //摘要
     @Column({nullable:true,length:500}) abstract:string;
     //创建时间
