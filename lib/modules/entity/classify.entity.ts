@@ -10,7 +10,7 @@ export class ClassifyEntity{
     //分类名称
     @Column({nullable:false,length:120}) classifyName:string;
     //分类别名
-    @Column({nullable:false,length:120})
+    @Column({nullable:false,length:120}) classifyAlias:string;
     //内链
     @Column({nullable:true,length:200}) chainUrl:string;
     //描述
