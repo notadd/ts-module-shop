@@ -26,6 +26,28 @@ export class ClassifyService{
     }
 
     /**
+     * 修改分类
+     * @param {ClassifyEntity} entity
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    async updateClassify(entity:ClassifyEntity):Promise<ClassifyEntity[]>{
+        //当前Id是否存在
+        let classify:ClassifyEntity = await this.repository.findOneById(entity.id);
+        if(classify==null) throw new MessageCodeError('update:classify:updateById');
+        let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
+        //别名不能重复
+        if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
+        let parentClassify:ClassifyEntity = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:parent}).getOne();
+        //通过父级别名确定父级是否存在
+        if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+        entity.parentId = parentClassify.id;
+        entity.updateAt =new Date();
+        let finalClassify:ClassifyEntity =entity;
+        await this.repository.updateById(entity.id,finalClassify);
+        return this.findAllClassify(1);
+     }
+
+    /**
      * 查找所有分类
      * @param {number} id
      * @returns {Promise<ClassifyEntity[]>}
