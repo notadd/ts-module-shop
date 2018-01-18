@@ -19,5 +19,23 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'The published time cannot be less than the current time.',
         userMessage:'The published time cannot be less than the current time.',
+    },
+    'create:classify:parentIdMissing':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The upper level classification does not exist.',
+        userMessage:'The upper level classification does not exist.'
+    },
+    'create:classify:aliasRepeat':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'New classification alias cannot be repeated, please re-enter.',
+        userMessage:'New classification alias cannot be repeated, please re-enter.',
+    },
+    'update:classify:updateById':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The id corresponding classification does not exist, please re-enter.',
+        userMessage:'The id corresponding classification does not exist, please re-enter.',
     }
 };
