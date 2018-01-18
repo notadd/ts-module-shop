@@ -2,6 +2,7 @@ import {Body, Controller, Get, HttpStatus, Post, Response} from "@nestjs/common"
 import {ClassifyService} from "./classify.service";
 import {ApiOperation} from "@nestjs/swagger";
 import {CreateClassify} from "../common/param.dto";
+import {UpdateClassify} from "../common/param.dto";
 import {ClassifyEntity} from "../entity/classify.entity";
 
 @Controller('classify')
@@ -18,6 +19,11 @@ export class ClassifyController{
         res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
+    /**
+     * 新增分类
+     * @param res
+     * @param {CreateClassify} entity
+     */
     @ApiOperation({title:'create a classification'})
     @Post('createClassify')
     public createClassify(@Response() res,@Body() entity:CreateClassify){
@@ -27,8 +33,28 @@ export class ClassifyController{
       classify.chainUrl = entity.chainUrl;
       classify.describe = entity.describe;
       classify.color = entity.color;
+      classify.showNext = entity.showNext;
       const result = this.classifyService.createClassify(classify,entity.parentClassify);
       res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 修改分类
+     * @param res
+     * @param {CreateClassify} entity
+     */
+    @ApiOperation({title:'update a classification'})
+    public updateClassify(@Response() res,@Body() entity:UpdateClassify){
+        let classify =new ClassifyEntity();
+        classify.id = entity.id;
+        classify.classifyName = entity.classifyName;
+        classify.classifyAlias = entity.classifyAlias;
+        classify.chainUrl = entity.chainUrl;
+        classify.describe = entity.describe;
+        classify.color = entity.color;
+        classify.showNext = entity.showNext;
+        const result =  this.classifyService.updateClassify(classify);
+        res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
 }
