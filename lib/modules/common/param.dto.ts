@@ -38,8 +38,8 @@ export class CreateArticle{
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({type:Number})
-    @IsInt()
+    @ApiModelProperty({type:String})
+    @IsString()
     readonly topPlace;
 
     @ApiModelProperty({type:Boolean})
@@ -77,8 +77,8 @@ export class UpdateArticle{
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({type:Number})
-    @IsInt()
+    @ApiModelProperty({type:String})
+    @IsString()
     readonly topPlace;
 
     @ApiModelProperty({type:Boolean})
@@ -97,4 +97,26 @@ export class UpdateArticle{
     @IsUrl()
     readonly sourceUrl;
 
+}
+
+export class CreateClassify{
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly classifyName;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly classifyAlias;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly chainUrl;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly describe;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly color;
 }
