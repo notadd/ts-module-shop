@@ -3,10 +3,12 @@ import {Repository} from "typeorm";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {getManager} from "typeorm";
+import {ArticleEntity} from "../entity/article.entity";
 
 @Component()
 export class ClassifyService{
-    constructor(@Inject('ClassifyRepositoryToken') private readonly repository:Repository<ClassifyEntity>){}
+    constructor(@Inject('ClassifyRepositoryToken') private readonly repository:Repository<ClassifyEntity>,
+                @Inject('ArticleRepositoryToken') private readonly artRepository:Repository<ArticleEntity>){}
 
     /**
      * 新增分类
@@ -112,6 +114,46 @@ export class ClassifyService{
         if(classify==null) throw new MessageCodeError('update:classify:updateById');
         await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
         const result =await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
+        let resultArray:ClassifyEntity[]=result;
+        console.log('deleteResult='+JSON.stringify(resultArray));
+        await getManager().query("update public.classify set \"parentId\"=null");
+        let deleteArray:number[]=[];
+        for (let t in result){
+            let num = result[t].id;
+            if(num==id){
+                deleteArray.push(id);
+                let array:ClassifyEntity[]= result[t].childrens;
+                if(array.length>0){
+                    for(let h in array){
+                        let numH = array[h].id;
+                        deleteArray.push(numH);
+                        await this.repository.deleteById(numH);
+                    }
+                }
+                await this.repository.deleteById(num);
+            }
+        }
+        this.updateArticleClassify(deleteArray);
+        //await this.repository.deleteById(id);
+        return this.findAllClassify();
+    }
+
+    /**
+     * 删除分类后，修改文章状态为默认分类。需要新建一个分类为默认
+     * @param {number[]} classifyArray
+     * @returns {Promise<void>}
+     */
+    async updateArticleClassify(classifyArray:number[]){
+        for(let t in classifyArray){
+            let article:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId',{classifyId:classifyArray[t]}).getMany();
+            for(let h in article){
+                let newArticle:ArticleEntity=article[h];
+                newArticle.classifyId=null;
+                newArticle.classify=null;
+                newArticle.updateAt =new Date();
+                this.artRepository.updateById(newArticle.id,newArticle);
+            }
+        }
         return;
     }
 }
