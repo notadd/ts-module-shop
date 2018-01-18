@@ -119,4 +119,52 @@ export class CreateClassify{
     @ApiModelProperty({type:String})
     @IsString()
     readonly color;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly parentId;
+
+    @ApiModelProperty({type:Boolean})
+    @IsBoolean()
+    readonly showNext;
+}
+
+export class UpdateClassify{
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly id;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly classifyName;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly classifyAlias;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly chainUrl;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly describe;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly color;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly parentId;
+
+    @ApiModelProperty({type:Boolean})
+    @IsBoolean()
+    readonly showNext;
+}
+
+export class DeleteDto{
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly id;
 }
