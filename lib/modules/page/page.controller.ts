@@ -3,6 +3,8 @@ import {PageService} from "./page.service";
 import {ApiOperation} from "@nestjs/swagger";
 import {PageSerach} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
+import {CreatePage} from "../common/param.dto";
+import {PageEntity} from "../entity/page.entity";
 
 @Controller('page')
 export class PageController{
@@ -41,5 +43,23 @@ export class PageController{
         const result=this.pageService.deletePages(array.id);
         let deleteNum=`已经成功删除${result}个页面`;
         return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
+    }
+
+    /**
+     * 新增页面
+     * @param res
+     * @param {CreatePage} page
+     */
+    @ApiOperation({title:'create pages'})
+    @Post('createPages')
+    public createPages(@Response() res,@Body() page:CreatePage){
+        let newPage =new PageEntity();
+        newPage.title = page.title;
+        newPage.alias = page.alias;
+        newPage.classify = page.classify;
+        newPage.open =page.open;
+        newPage.content =page.content;
+        const result=this.pageService.createPages(newPage);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 }
