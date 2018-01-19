@@ -2,6 +2,7 @@ import {Body, Controller, Get, HttpStatus, Post, Response} from "@nestjs/common"
 import {ClassifyService} from "./classify.service";
 import {ApiOperation} from "@nestjs/swagger";
 import {CreateClassify} from "../common/param.dto";
+import {GetClassify} from "../common/param.dto";
 import {UpdateClassify} from "../common/param.dto";
 import {DeleteDto} from "../common/param.dto";
 import {ClassifyEntity} from "../entity/classify.entity";
@@ -10,13 +11,13 @@ import {ClassifyEntity} from "../entity/classify.entity";
 export class ClassifyController{
     constructor(private classifyService:ClassifyService){}
     /**
-     * 获取所有导航
+     * 获取所有分类
      * @param res
      */
     @ApiOperation({title:'Get all categories'})
-    @Get('getAllClassify')
-    public getAllClassify(@Response() res){
-        const result=this.classifyService.findAllClassify();
+    @Post('getAllClassify')
+    public getAllClassify(@Response() res,@Body() useFor:GetClassify){
+        const result=this.classifyService.findAllClassify(useFor.usedFor);
         res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -36,7 +37,7 @@ export class ClassifyController{
       classify.color = entity.color;
       classify.showNext = entity.showNext;
       classify.groupId =entity.parentId;
-      const result = this.classifyService.createClassify(classify);
+      const result = this.classifyService.createClassify(classify,entity.usedFor);
       res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -57,8 +58,8 @@ export class ClassifyController{
         classify.color = entity.color;
         classify.showNext = entity.showNext;
         classify.groupId = entity.parentId;
-        const result =  this.classifyService.updateClassify(classify);
-        res.status(HttpStatus.OK).send(JSON.stringify(result));
+        const result =  this.classifyService.updateClassify(classify,entity.usedFor);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
     /**
@@ -69,7 +70,8 @@ export class ClassifyController{
     @ApiOperation({title:'Delete the classification by id.'})
     @Post('deleteClassify')
     public deleteById(@Response() res,@Body() deleteId:DeleteDto){
-
+      const result=this.classifyService.deleteClassify(deleteId.id,deleteId.usedFor);
+      return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
 }
