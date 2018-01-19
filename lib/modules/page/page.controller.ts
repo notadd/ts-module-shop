@@ -4,6 +4,7 @@ import {ApiOperation} from "@nestjs/swagger";
 import {PageSerach} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
+import {UpdatePage} from "../common/param.dto";
 import {PageEntity} from "../entity/page.entity";
 
 @Controller('page')
@@ -60,6 +61,25 @@ export class PageController{
         newPage.open =page.open;
         newPage.content =page.content;
         const result=this.pageService.createPages(newPage);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 修改页面
+     * @param res
+     * @param {CreatePage} page
+     */
+    @ApiOperation({title:'update pages'})
+    @Post('updatePages')
+    public updatePages(@Response() res,@Body() page:UpdatePage){
+        let newPage =new PageEntity();
+        newPage.id = page.id;
+        newPage.title = page.title;
+        newPage.alias = page.alias;
+        newPage.classify = page.classify;
+        newPage.open =page.open;
+        newPage.content =page.content;
+        const result=this.pageService.updatePages(newPage);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 }
