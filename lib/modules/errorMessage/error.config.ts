@@ -37,5 +37,23 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'The id corresponding classification does not exist, please re-enter.',
         userMessage:'The id corresponding classification does not exist, please re-enter.',
+    },
+    'delete:page:deleteById':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The current id corresponds to the page table does not exist.',
+        userMessage:'The current id corresponds to the page table does not exist.',
+    },
+    'create:page:missingTitle':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The title cannot be empty when the page is created.',
+        userMessage:'The title cannot be empty when the page is created.',
+    },
+    'create:page:missingAlias':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The alias cannot be empty when the page is created.',
+        userMessage:'The alias cannot be empty when the page is created.',
     }
 };
