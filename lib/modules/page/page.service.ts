@@ -52,4 +52,16 @@ export class PageService{
         this.historyService.createHistory(hisArray);
         return deleteNum;
     }
+
+    /**
+     * 新增页面,暂时不能确定别名是否可以重复
+     * @param {PageEntity} page
+     * @returns {Promise<PageEntity[]>}
+     */
+    async createPages(page:PageEntity):Promise<PageEntity[]>{
+        if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
+        if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
+        this.repository.insert(page);
+        return this.getAllPage();
+    }
 }
