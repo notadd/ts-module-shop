@@ -64,4 +64,18 @@ export class PageService{
         this.repository.insert(page);
         return this.getAllPage();
     }
+    /**
+     * 修改页面,暂时不能确定别名是否可以重复
+     * @param {PageEntity} page
+     * @returns {Promise<PageEntity[]>}
+     */
+    async updatePages(page:PageEntity):Promise<PageEntity[]>{
+        if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
+        if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
+        if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
+        page.uodateAt =new Date;
+        let newPage:PageEntity =page;
+        this.repository.updateById(page.id,newPage);
+        return this.getAllPage();
+    }
 }
