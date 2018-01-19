@@ -1,8 +1,8 @@
-import {Column, Entity, PrimaryColumn, UpdateDateColumn} from "typeorm";
+import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 
 @Entity('history')
-export class DeleteEntity{
-    @PrimaryColumn() id:number;
+export class HistoryEntity{
+    @PrimaryGeneratedColumn() id:number;
     //删除文章Id
     @Column() articleId:number;
     //文章名称
