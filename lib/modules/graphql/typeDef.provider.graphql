@@ -100,10 +100,29 @@ type Classify{
     showNext:Boolean,
     #父节点
     groupId:Int,
+    #子节点
+    childrens:[Classify],
+}
+input ClassifyCreate{
+    #分类名称
+    classifyName:String!,
+    #分类别名
+    classifyAlias:String!,
+    #内链
+    chainUrl:String,
+    #描述
+    describe:String,
+    #颜色
+    color:String,
+    #父节点
+    groupId:Int,
+    #是否显示下一级分类文章
+    showNext:Boolean,
 }
 type Query {
     getArticleAll(limitNum:Int!):[Article],
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
+    getAllClassify(useFor:String!):[Classify],
 }
 type Mutation{
     deleteById(id:[Int]):Int,
@@ -112,5 +131,6 @@ type Mutation{
     recycleFind(limitNum:Int!):[Article],
     recycleDelete(id:[Int]):Int,
     reductionArticle(id:[Int]):[Article],
+    createClassify(createClass:ClassifyCreate!,useFor:String):[Classify],
 
 }

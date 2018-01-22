@@ -1,10 +1,13 @@
 import {Mutation, Query, Resolver} from "@nestjs/graphql";
 import {ArticleService} from "../article/article.service";
 import {ArticleEntity} from "../entity/article.entity";
+import {ClassifyService} from "../classify/classify.service";
+import {ClassifyEntity} from "../entity/classify.entity";
 
 @Resolver()
 export class GraphqlResolver{
-    constructor(private readonly articleService:ArticleService,){}
+    constructor(private readonly articleService:ArticleService,
+                private readonly classifyService:ClassifyService,){}
 
     /**
      * 分页获取全部文章
@@ -125,6 +128,42 @@ export class GraphqlResolver{
         let array:[number]=map.get('id');
         const result=this.articleService.reductionArticle(array);
         return result;
+    }
+
+    /**
+     * 获取所有分类
+     * @param obj
+     * @param arg
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    @Query()
+    getAllClassify(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let useFor:string=map.get('useFor');
+        const result=this.classifyService.findAllClassify(useFor);
+        return result;
+    }
+
+    /**
+     * 新增分类
+     * @param obj
+     * @param arg
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    @Mutation()
+    createClassify(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let useFor:string=map.get('useFor');
+        let newClass:ClassifyEntity=map.get('createClass');
+        const result=this.classifyService.createClassify(newClass,useFor);
+        return result;
+
     }
     /**
      * JSON----Map
