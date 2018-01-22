@@ -1,5 +1,6 @@
-import {Query, Resolver} from "@nestjs/graphql";
+import {Mutation, Query, Resolver} from "@nestjs/graphql";
 import {ArticleService} from "../article/article.service";
+import {ArticleEntity} from "../entity/article.entity";
 
 @Resolver()
 export class GraphqlResolver{
@@ -40,6 +41,41 @@ export class GraphqlResolver{
         const result=this.articleService.serachArticles(keyWords,limit);
         return result;
     }
+
+    /**
+     * 文章放入回收站
+     * @param obj
+     * @param arg
+     * @returns {Promise<number>}
+     */
+    @Mutation()
+    deleteById(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let array:[number]=map.get('id');
+        const result=this.articleService.deleteArticles(array);
+        return result;
+    }
+
+    /**
+     * 创建文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<void>}
+     */
+    @Mutation()
+    createArticle(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let art:ArticleEntity=map.get('createArt');
+        const result=this.articleService.createArticle(art);
+        return result;
+    }
+
     /**
      * JSON----Map
      * @param obj

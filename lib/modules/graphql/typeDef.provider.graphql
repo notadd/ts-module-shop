@@ -58,5 +58,10 @@ input ArticleInput{
     sourceUrl:Url,
 }
 type Query {
-    findAllArticles(limitNum:Int!):[Article]
+    getArticleAll(limitNum:Int!):[Article],
+    keywordsSerach(keywords:String!,limitNum:Int!):[Article]
+}
+type Mutation{
+    deleteById(id:[Int]):Int,
+    createArticle(createArt:ArticleInput!):
 }
