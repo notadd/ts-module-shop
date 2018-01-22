@@ -139,7 +139,19 @@ input ClassifyUpdate{
 }
 type Page{
     #页面id
-    id:number,
+    id:Int,
+    #页面标题
+    title:String,
+    #页面别名
+    alias:String,
+    #是否开启
+    open:Boolean,
+    #页面内容
+    content:String,
+    #页面分类
+    classify:Int,
+}
+input CreatePage{
     #页面标题
     title:string,
     #页面别名
@@ -150,6 +162,20 @@ type Page{
     content:string,
     #页面分类
     classify:number,
+}
+input UpdatePage{
+    #页面id
+    id:Int,
+    #页面标题
+    title:String,
+    #页面别名
+    alias:String,
+    #是否开启
+    open:Boolean,
+    #页面内容
+    content:String,
+    #页面分类
+    classify:Int,
 }
 type Query {
     getArticleAll(limitNum:Int!):[Article],
@@ -169,6 +195,6 @@ type Mutation{
     updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
     deleteClassifyById(id:int!,useFor:String!):[Classify],
     deletePages(id:[Int]!):Int,
-
-
+    createPages(createPage:CreatePage):[Page],
+    updatePages(updatePage:UpdatePage):[Page],
 }
