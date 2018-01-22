@@ -77,6 +77,56 @@ export class GraphqlResolver{
     }
 
     /**
+     * 回收站内分页获取文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Mutation()
+    recycleFind(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let limitNum:number=map.get('limitNum');
+        const result=this.articleService.recycleFind(limitNum);
+        return result;
+    }
+
+    /**
+     * 回收站内批量或者单个删除文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<number>}
+     */
+    @Mutation()
+    recycleDelete(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let array:[number]=map.get('id');
+        const result=this.articleService.recycleDelete(array);
+        return result;
+    }
+
+    /**
+     * 回收站内还原文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Mutation()
+    reductionArticle(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let array:[number]=map.get('id');
+        const result=this.articleService.reductionArticle(array);
+        return result;
+    }
+    /**
      * JSON----Map
      * @param obj
      * @returns {Map<string, string>}

@@ -46,6 +46,32 @@ input ArticleInput{
     classifyId:Int,
     #摘要
     abstract:String,
+    #内容
+    content:String,
+    #置顶
+    topPlace:stick,
+    #是否隐藏
+    hidden:Boolean,
+    #发布时间
+    publishedTime:Date,
+    #来源
+    source:String,
+    #来源链接
+    sourceUrl:Url,
+}
+input ArticleUpdate{
+    #文章Id
+    id:Int,
+    #文章名
+    name:String,
+    #分类名称
+    classify:String,
+    #分类Id
+    classifyId:Int,
+    #摘要
+    abstract:String,
+    #内容
+    content:String,
     #置顶
     topPlace:stick,
     #是否隐藏
@@ -63,5 +89,10 @@ type Query {
 }
 type Mutation{
     deleteById(id:[Int]):Int,
-    createArticle(createArt:ArticleInput!):
+    createArticle(createArt:ArticleInput!):[Article],
+    updateArticle(updateArt:ArticleUpdate):[Article],
+    recycleFind(limitNum:Int!):[Article],
+    recycleDelete(id:[Int]):Int,
+    reductionArticle(id:[Int]):[Article],
+
 }
