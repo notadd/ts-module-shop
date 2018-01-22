@@ -83,6 +83,24 @@ input ArticleUpdate{
     #来源链接
     sourceUrl:Url,
 }
+type Classify{
+    #分类Id
+    id:Int,
+    #分类名称
+    classifyName:String,
+    #分类别名
+    classifyAlias:String,
+    #内链
+    chainUrl:String,
+    #描述
+    describe:String,
+    #颜色
+    color:String,
+    #是否显示下一级分类文章
+    showNext:Boolean,
+    #父节点
+    groupId:Int,
+}
 type Query {
     getArticleAll(limitNum:Int!):[Article],
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
