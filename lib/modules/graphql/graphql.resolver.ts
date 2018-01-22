@@ -250,6 +250,39 @@ export class GraphqlResolver{
     }
 
     /**
+     *新增页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<PageEntity[]>}
+     */
+    @Mutation()
+    createPages(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let page:PageEntity=map.get('createPage');
+        const result=this.pageService.createPages(page);
+        return result;
+    }
+
+    /**
+     * 修改页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<PageEntity[]>}
+     */
+    @Mutation()
+    updatePages(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let page:PageEntity=map.get('updatePage');
+        const result=this.pageService.updatePages(page);
+        return result;
+    }
+    /**
      * JSON----Map
      * @param obj
      * @returns {Map<string, string>}
