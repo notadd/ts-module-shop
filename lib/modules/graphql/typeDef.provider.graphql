@@ -1,0 +1,62 @@
+type Article{
+    #文章Id
+    id:Int,
+    #文章名
+    name:String,
+    #分类名称
+    classify:String,
+    #分类Id
+    classifyId:Int,
+    #文章地址
+    url:Url,
+    #来源
+    source:String,
+    #来源链接
+    sourceUrl:Url,
+    #置顶
+    topPlace:stick,
+    #是否隐藏
+    hidden:Boolean,
+    #删除(回收站)
+    recycling:Boolean,
+    #发布时间
+    publishedTime:Date,
+    #摘要
+    abstract:String,
+    #内容
+    content:String,
+    #创建时间
+    createAt:Date,
+    #修改时间
+    updateAt:Date,
+}
+enum stick{
+    global,
+    current,
+    Level1,
+    Level2,
+    Level3
+}
+input ArticleInput{
+    #文章名
+    name:String,
+    #分类名称
+    classify:String,
+    #分类Id
+    classifyId:Int,
+    #摘要
+    abstract:String,
+    #置顶
+    topPlace:stick,
+    #是否隐藏
+    hidden:Boolean,
+    #发布时间
+    publishedTime:Date,
+    #来源
+    source:String,
+    #来源链接
+    sourceUrl:Url,
+}
+type Query {
+    findAllArticles(limitNum:Int!):[Article]
+}
