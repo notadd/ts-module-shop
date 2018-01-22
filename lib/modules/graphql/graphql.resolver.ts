@@ -3,11 +3,14 @@ import {ArticleService} from "../article/article.service";
 import {ArticleEntity} from "../entity/article.entity";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
+import {PageService} from "../page/page.service";
+import {PageEntity} from "../entity/page.entity";
 
 @Resolver()
 export class GraphqlResolver{
     constructor(private readonly articleService:ArticleService,
-                private readonly classifyService:ClassifyService,){}
+                private readonly classifyService:ClassifyService,
+                private readonly pageService:PageService){}
 
     /**
      * 分页获取全部文章
@@ -199,6 +202,50 @@ export class GraphqlResolver{
         let useFor:string=map.get('useFor');
         let id:number=map.get('id');
         const result=this.classifyService.deleteClassify(id,useFor);
+        return result;
+    }
+
+    /**
+     * 获取全部页面
+     * @returns {Promise<PageEntity[]>}
+     */
+    @Query()
+    async getAllPage(){
+        let  result:PageEntity[]= await this.pageService.getAllPage();
+        return result;
+    }
+
+    /**
+     * 关键字搜索页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<PageEntity[]>}
+     */
+    @Query()
+    serachPages(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let key:string=map.get('keyWords');
+        const result=this.pageService.serachKeywords(key);
+        return result;
+    }
+
+    /**
+     * 批量或者单个删除页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<number>}
+     */
+    @Mutation()
+    deletePages(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let array:[number]=map.get('id');
+        const result=this.pageService.deletePages(array);
         return result;
     }
 
