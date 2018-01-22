@@ -137,10 +137,26 @@ input ClassifyUpdate{
     #是否显示下一级分类文章
     showNext:Boolean,
 }
+type Page{
+    #页面id
+    id:number,
+    #页面标题
+    title:string,
+    #页面别名
+    alias:string,
+    #是否开启
+    open:boolean,
+    #页面内容
+    content:string,
+    #页面分类
+    classify:number,
+}
 type Query {
     getArticleAll(limitNum:Int!):[Article],
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
     getAllClassify(useFor:String!):[Classify],
+    getAllPage:[Page],
+    serachPages(keyWords:String!):[Page],
 }
 type Mutation{
     deleteById(id:[Int]):Int,
@@ -152,5 +168,7 @@ type Mutation{
     createClassify(createClass:ClassifyCreate!,useFor:String!):[Classify],
     updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
     deleteClassifyById(id:int!,useFor:String!):[Classify],
+    deletePages(id:[Int]!):Int,
+
 
 }
