@@ -20,15 +20,15 @@ type Article{
     #删除(回收站)
     recycling:Boolean,
     #发布时间
-    publishedTime:Date,
+    publishedTime:String,
     #摘要
     abstract:String,
     #内容
     content:String,
     #创建时间
-    createAt:Date,
+    createAt:String,
     #修改时间
-    updateAt:Date,
+    updateAt:String,
 }
 enum stick{
     global,
@@ -53,7 +53,7 @@ input ArticleInput{
     #是否隐藏
     hidden:Boolean,
     #发布时间
-    publishedTime:Date,
+    publishedTime:String,
     #来源
     source:String,
     #来源链接
@@ -77,7 +77,7 @@ input ArticleUpdate{
     #是否隐藏
     hidden:Boolean,
     #发布时间
-    publishedTime:Date,
+    publishedTime:String,
     #来源
     source:String,
     #来源链接
