@@ -165,6 +165,43 @@ export class GraphqlResolver{
         return result;
 
     }
+
+    /**
+     * 编辑分类
+     * @param obj
+     * @param arg
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    @Mutation()
+    updateClassify(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let useFor:string=map.get('useFor');
+        let newClass:ClassifyEntity=map.get('updateClass');
+        const result=this.classifyService.updateClassify(newClass,useFor);
+        return result;
+    }
+
+    /**
+     * 删除分类，分类对应文章的分类改为默认分类
+     * @param obj
+     * @param arg
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    @Mutation()
+    deleteClassifyById(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let useFor:string=map.get('useFor');
+        let id:number=map.get('id');
+        const result=this.classifyService.deleteClassify(id,useFor);
+        return result;
+    }
+
     /**
      * JSON----Map
      * @param obj
