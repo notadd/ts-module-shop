@@ -8,11 +8,11 @@ type Article{
     #分类Id
     classifyId:Int,
     #文章地址
-    url:Url,
+    url:String,
     #来源
     source:String,
     #来源链接
-    sourceUrl:Url,
+    sourceUrl:String,
     #置顶
     topPlace:stick,
     #是否隐藏
@@ -57,7 +57,7 @@ input ArticleInput{
     #来源
     source:String,
     #来源链接
-    sourceUrl:Url,
+    sourceUrl:String,
 }
 input ArticleUpdate{
     #文章Id
@@ -81,7 +81,7 @@ input ArticleUpdate{
     #来源
     source:String,
     #来源链接
-    sourceUrl:Url,
+    sourceUrl:String,
 }
 type Classify{
     #分类Id
@@ -178,23 +178,40 @@ input UpdatePage{
     classify:Int,
 }
 type Query {
+    #Get all the articles by paging.
     getArticleAll(limitNum:Int!):[Article],
+    #Get the article by searching for keywords.
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
+    #Get all the categories,But you need to provide'art'or 'page'.
     getAllClassify(useFor:String!):[Classify],
+    #Get all pages.
     getAllPage:[Page],
+    #Get the page by searching for keywords.
     serachPages(keyWords:String!):[Page],
 }
 type Mutation{
+    #Delete the article by id, and the article will go to the recycle bin.
     deleteById(id:[Int]):Int,
+    #To create the article
     createArticle(createArt:ArticleInput!):[Article],
+    #To update the article
     updateArticle(updateArt:ArticleUpdate):[Article],
+    #Find all the articles in the recycle bin.
     recycleFind(limitNum:Int!):[Article],
+    #Delete the article in the recycle bin.
     recycleDelete(id:[Int]):Int,
+    #Restore the article in the recycle bin.
     reductionArticle(id:[Int]):[Article],
+    #To create a classification,and you need to provide'art'or 'page'.
     createClassify(createClass:ClassifyCreate!,useFor:String!):[Classify],
+    #To update a classification,and you need to provide'art'or 'page'.
     updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
+    #To delete a classification,and you need to provide'art'or 'page'.
     deleteClassifyById(id:int!,useFor:String!):[Classify],
+    #Single or batch delete pages
     deletePages(id:[Int]!):Int,
+    #To cerate a page
     createPages(createPage:CreatePage):[Page],
+    #To update a page
     updatePages(updatePage:UpdatePage):[Page],
 }
