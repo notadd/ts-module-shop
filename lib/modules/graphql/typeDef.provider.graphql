@@ -39,19 +39,19 @@ enum stick{
 }
 input ArticleInput{
     #文章名
-    name:String,
+    name:String!,
     #分类名称
     classify:String,
     #分类Id
-    classifyId:Int,
+    classifyId:Int!,
     #摘要
     abstract:String,
     #内容
     content:String,
     #置顶
-    topPlace:stick,
+    topPlace:stick!,
     #是否隐藏
-    hidden:Boolean,
+    hidden:Boolean!,
     #发布时间
     publishedTime:String,
     #来源
@@ -153,15 +153,15 @@ type Page{
 }
 input CreatePage{
     #页面标题
-    title:string,
+    title:String,
     #页面别名
-    alias:string,
+    alias:String,
     #是否开启
-    open:boolean,
+    open:Boolean,
     #页面内容
-    content:string,
+    content:String,
     #页面分类
-    classify:number,
+    classify:Int,
 }
 input UpdatePage{
     #页面id
@@ -207,7 +207,7 @@ type Mutation{
     #To update a classification,and you need to provide'art'or 'page'.
     updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
     #To delete a classification,and you need to provide'art'or 'page'.
-    deleteClassifyById(id:int!,useFor:String!):[Classify],
+    deleteClassifyById(id:Int!,useFor:String!):[Classify],
     #Single or batch delete pages
     deletePages(id:[Int]!):Int,
     #To cerate a page

@@ -78,10 +78,34 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let art:ArticleEntity=map.get('createArt');
-        const result=this.articleService.createArticle(art);
+        let date:string=art.publishedTime.toString();
+        console.log('time='+date);
+        art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+        let newArticle:ArticleEntity=art;
+        const result=this.articleService.createArticle(newArticle);
         return result;
     }
 
+    /**
+     * 修改文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Mutation()
+    updateArticle(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let art:ArticleEntity=map.get('createArt');
+        let date:string=art.publishedTime.toString();
+        console.log('time='+date);
+        art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+        let newArticle:ArticleEntity=art;
+        const result=this.articleService.updateArticle(art);
+        return result;
+    }
     /**
      * 回收站内分页获取文章
      * @param obj
@@ -288,7 +312,7 @@ export class GraphqlResolver{
      * @returns {Map<string, string>}
      */
     objToStrMap(obj):Map<string,string> {
-        let strMap:Map<string,string>;
+        let strMap=new Map();
         for (let k of Object.keys(obj)) {
             strMap.set(k, obj[k]);
         }
