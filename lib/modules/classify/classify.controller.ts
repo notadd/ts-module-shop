@@ -5,7 +5,9 @@ import {CreateClassify} from "../common/param.dto";
 import {GetClassify} from "../common/param.dto";
 import {UpdateClassify} from "../common/param.dto";
 import {DeleteDto} from "../common/param.dto";
+import {showNextDto} from "../common/param.dto";
 import {ClassifyEntity} from "../entity/classify.entity";
+import {ArticleEntity} from "../entity/article.entity";
 
 @Controller('classify')
 export class ClassifyController{
@@ -28,16 +30,15 @@ export class ClassifyController{
      */
     @ApiOperation({title:'create a classification'})
     @Post('createClassify')
-    public createClassify(@Response() res,@Body() entity:CreateClassify){
+    public async createClassify(@Response() res,@Body() entity:CreateClassify){
       let classify =new ClassifyEntity();
       classify.classifyName = entity.classifyName;
       classify.classifyAlias = entity.classifyAlias;
       classify.chainUrl = entity.chainUrl;
       classify.describe = entity.describe;
       classify.color = entity.color;
-      classify.showNext = entity.showNext;
       classify.groupId =entity.parentId;
-      const result = this.classifyService.createClassify(classify,entity.usedFor);
+      let result:ClassifyEntity[] = await this.classifyService.createClassify(classify,entity.usedFor);
       res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -56,7 +57,6 @@ export class ClassifyController{
         classify.chainUrl = entity.chainUrl;
         classify.describe = entity.describe;
         classify.color = entity.color;
-        classify.showNext = entity.showNext;
         classify.groupId = entity.parentId;
         const result =  this.classifyService.updateClassify(classify,entity.usedFor);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
@@ -69,9 +69,22 @@ export class ClassifyController{
      */
     @ApiOperation({title:'Delete the classification by id.'})
     @Post('deleteClassify')
-    public deleteById(@Response() res,@Body() deleteId:DeleteDto){
+    public deleteClassifyById(@Response() res,@Body() deleteId:DeleteDto){
       const result=this.classifyService.deleteClassify(deleteId.id,deleteId.usedFor);
       return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
+
+    /**
+     * 显示子级分类文章
+     * @param res
+     * @param {DeleteDto} showNextId
+     */
+    @ApiOperation({title:'Show the next level of the article by id.'})
+    @Post('showNext')
+    public async showNext(@Response() res,@Body() showNextId:showNextDto){
+      let result:ArticleEntity[]=await this.classifyService.showNextTitle(showNextId.id);
+      return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
 
 }
