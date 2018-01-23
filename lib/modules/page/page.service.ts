@@ -4,11 +4,14 @@ import {PageEntity} from "../entity/page.entity";
 import {HistoryService} from "../history/history.service";
 import {HistoryEntity} from "../entity/history.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
+import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {ClassifyService} from "../classify/classify.service";
 
 @Component()
 export class PageService{
     constructor(@Inject('PageRepositoryToken') private readonly repository:Repository<PageEntity>,
-                private readonly historyService:HistoryService){}
+                private readonly historyService:HistoryService,
+                private readonly classifyService:ClassifyService){}
 
     /**
      * 获取所有页面
@@ -16,7 +19,7 @@ export class PageService{
      */
     async getAllPage():Promise<PageEntity[]>{
         let pages:PageEntity[]=await this.repository.find();
-        return;
+        return pages;
     }
 
     /**
@@ -27,7 +30,7 @@ export class PageService{
     async serachKeywords(keywords:string):Promise<PageEntity[]>{
         let words=`%${keywords}%`;
         console.log('page的关键字'+words);
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('page.id','ASC').getMany();
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').getMany();
         return pages;
     }
 
@@ -61,6 +64,8 @@ export class PageService{
     async createPages(page:PageEntity):Promise<PageEntity[]>{
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
+        let entity:PageClassifyEntity=await this.classifyService.findOneById(page.classify,"page");
+        if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         this.repository.insert(page);
         return this.getAllPage();
     }
@@ -73,7 +78,10 @@ export class PageService{
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
-        page.uodateAt =new Date;
+        let entity:PageClassifyEntity=await this.classifyService.findOneById(page.classify,"page");
+        if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let time =new Date();
+        page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
         let newPage:PageEntity =page;
         this.repository.updateById(page.id,newPage);
         return this.getAllPage();
