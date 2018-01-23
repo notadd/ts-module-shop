@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 
 @Entity('history')
 export class HistoryEntity{

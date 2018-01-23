@@ -1,5 +1,4 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {stringify} from "querystring";
 
 @Entity('information')
 export class InformationEntity{

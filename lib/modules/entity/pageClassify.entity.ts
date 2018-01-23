@@ -17,8 +17,6 @@ export class PageClassifyEntity{
     @Column({nullable:true,length:200}) describe:string;
     //颜色
     @Column({nullable:true,length:40}) color:string;
-    //是否显示下一级分类文章
-    @Column() showNext:boolean;
     //父节点
     @Column({nullable:true}) groupId:number;
 
