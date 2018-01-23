@@ -26,7 +26,7 @@ export class KeyWords{
 }
 
 export class DeleteArticleId{
-    @ApiModelProperty({type:[Number]})
+    @ApiModelProperty({type:Array})
     @IsInt()
     readonly id;
 
@@ -53,9 +53,9 @@ export class CreateArticle{
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({required:true})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
-    readonly topPlace:EnvConfig;
+    topPlace:EnvConfig;
 
     @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
@@ -101,7 +101,7 @@ export class UpdateArticle{
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({required:true})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly topPlace:EnvConfig;
 
