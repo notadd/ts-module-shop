@@ -19,22 +19,31 @@ export class ClassifyService{
      * @returns {Promise<ClassifyEntity[]>}
      */
     async createClassify(entity:ClassifyEntity,useFor:string):Promise<ClassifyEntity[]>{
+        console.log('usedFor='+useFor);
         if(useFor=='art'){
             let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
             //别名不能重复
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
             let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
             //通过父级别名确定父级是否存在
-            if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-            this.repository.insert(entity);
+            if(entity.groupId!=0 && entity.groupId!=null && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+            if(entity.groupId==0){
+                entity.groupId=null;
+            }
+            let classify:ClassifyEntity=entity;
+            this.repository.insert(classify);
         }else if(useFor=='page'){
             let newClassify:ClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
             //别名不能重复
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
             let parentClassify:ClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
             //通过父级别名确定父级是否存在
-            if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-            this.pageRepository.insert(entity);
+            if(entity.groupId!=0 && entity.groupId!=null && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+            if(entity.groupId==0){
+                entity.groupId=null;
+            }
+            let classify:ClassifyEntity=entity;
+            this.pageRepository.insert(classify);
         }
 
        return this.findAllClassify(useFor);
@@ -88,8 +97,8 @@ export class ClassifyService{
              classify=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
             // console.log('classify='+JSON.stringify(classify));
         }else if(useFor=='page'){
-            await getManager().query("update public.pageClassify set \"parentId\" = \"groupId\"");
-            classify=await this.pageRepository.createQueryBuilder('pageClassify').innerJoinAndSelect('pageClassify.childrens','childrens').orderBy('pageClassify.id').getMany();
+            await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
+            classify=await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();
         }
 
         let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
@@ -173,11 +182,11 @@ export class ClassifyService{
         }else if(useFor=='page'){
             let classify:ClassifyEntity = await this.pageRepository.findOneById(id);
             if(classify==null) throw new MessageCodeError('update:classify:updateById');
-            await getManager().query("update public.pageClassify set \"parentId\" = \"groupId\"");
-            const result =await this.pageRepository.createQueryBuilder('pageClassify').innerJoinAndSelect('pageClassify.childrens','childrens').orderBy('pageClassify.id').getMany();
+            await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
+            const result =await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();
             let resultArray:ClassifyEntity[]=result;
             console.log('deleteResult='+JSON.stringify(resultArray));
-            await getManager().query("update public.pageClassify set \"parentId\"=null");
+            await getManager().query("update public.page_classify_table set \"parentId\"=null");
             let deleteArray:number[]=[];
             for (let t in result){
                 let num = result[t].id;
@@ -218,5 +227,21 @@ export class ClassifyService{
             }
         }
         return;
+    }
+
+    /**
+     * 查找分类是否存在
+     * @param {number} id
+     * @param {string} useFor
+     * @returns {Promise<ClassifyEntity>}
+     */
+    async findOneById(id:number,useFor:string):Promise<ClassifyEntity>{
+        let entity:ClassifyEntity;
+        if(useFor=='art'){
+            entity=await this.repository.findOneById(id);
+        }else if(useFor=='page'){
+            entity=await this.pageRepository.findOneById(id);
+        }
+        return entity;
     }
 }
