@@ -15,7 +15,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
     async  getArticleAll(limit:number):Promise<ArticleEntity[]>{
-        let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().orderBy('id',"ASC").limit(limit).getMany();
+        let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
         return resultAll;
     }
 
@@ -27,7 +27,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async serachArticles(name:string,limit:number):Promise<ArticleEntity[]>{
         let str:string=`%${name}%`;
-        console.log('字符串拼接=='+str);
         let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).orderBy('id','ASC').limit(limit).getMany();
         return resultAll;
     }
@@ -101,11 +100,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let history:HistoryEntity[] =[];
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
-            if(article=null) throw new MessageCodeError('delete:recycling:idMissing');
+            if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
+            let id:number=article.id;
             let his:HistoryEntity =new HistoryEntity();
-            his.articleId =article.id;
+            his.articleId =id;
             his.articleName =article.name;
-            this.respository.deleteById(article.id);
+            this.respository.deleteById(id);
             count++;
             history.push(his);
         }
@@ -114,19 +114,19 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
     }
 
     /**
-     * 回收站内批量或者单个还原数据，目前限制分页为10
+     * 回收站内批量或者单个还原数据，目前限制分页为0
      * @param {[number]} array
      * @returns {Promise<ArticleEntity[]>}
      */
     async reductionArticle(array:[number]):Promise<ArticleEntity[]>{
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
-            if(article=null) throw new MessageCodeError('delete:recycling:idMissing');
+            if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
             article.recycling=false;
             let time =new Date();
             article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let newArticle:ArticleEntity=article;
-            this.respository.updateById(array[t],newArticle);
+            this.respository.updateById(newArticle.id,newArticle);
         }
         return this.recycleFind(0);
     }
