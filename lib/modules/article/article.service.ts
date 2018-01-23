@@ -4,11 +4,15 @@ import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {HistoryEntity} from "../entity/history.entity";
 import {HistoryService} from "../history/history.service";
+import {ClassifyService} from "../classify/classify.service";
+import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {ClassifyEntity} from "../entity/classify.entity";
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
-            private readonly historyService:HistoryService){}
+            private readonly historyService:HistoryService,
+            private readonly classifyService:ClassifyService){}
 
     /**
      * 返回所有数据,依据提供limit number 进行分页
@@ -57,9 +61,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<void>}
      */
       async createArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
-          if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
-          if(article.classifyId==0 ||article.classifyId==null)
-              article.classifyId=null;
+        let entity:ClassifyEntity=await this.classifyService.findOneById(article.classifyId,"page");
+        if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
+        if(article.classifyId==0 ||article.classifyId==null)
+            article.classifyId=null;
           console.log('输入时间='+article.publishedTime);
           this.respository.insert(article);
          return this.getArticleAll(0);
@@ -73,6 +79,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
       async updateArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
+          let entity:ClassifyEntity=await this.classifyService.findOneById(article.classifyId,"page");
+          if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
           let time =new Date();
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =art;
