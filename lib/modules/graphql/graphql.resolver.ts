@@ -79,7 +79,6 @@ export class GraphqlResolver{
         map=this.objToStrMap(bToJSon);
         let art:ArticleEntity=map.get('createArt');
         let date:string=art.publishedTime.toString();
-        console.log('time='+date);
         art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
         let newArticle:ArticleEntity=art;
         const result=this.articleService.createArticle(newArticle);
@@ -100,7 +99,6 @@ export class GraphqlResolver{
         map=this.objToStrMap(bToJSon);
         let art:ArticleEntity=map.get('createArt');
         let date:string=art.publishedTime.toString();
-        console.log('time='+date);
         art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
         let newArticle:ArticleEntity=art;
         const result=this.articleService.updateArticle(art);
@@ -304,6 +302,22 @@ export class GraphqlResolver{
         map=this.objToStrMap(bToJSon);
         let page:PageEntity=map.get('updatePage');
         const result=this.pageService.updatePages(page);
+        return result;
+    }
+
+    /**
+     * 显示子级分类文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    showNext(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        const result=this.classifyService.showNextTitle(map.get('id'));
         return result;
     }
     /**

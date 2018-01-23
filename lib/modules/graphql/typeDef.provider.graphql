@@ -43,7 +43,7 @@ input ArticleInput{
     #分类名称
     classify:String,
     #分类Id
-    classifyId:Int!,
+    classifyId:Int,
     #摘要
     abstract:String,
     #内容
@@ -61,9 +61,9 @@ input ArticleInput{
 }
 input ArticleUpdate{
     #文章Id
-    id:Int,
+    id:Int!,
     #文章名
-    name:String,
+    name:String!,
     #分类名称
     classify:String,
     #分类Id
@@ -73,9 +73,9 @@ input ArticleUpdate{
     #内容
     content:String,
     #置顶
-    topPlace:stick,
+    topPlace:stick!,
     #是否隐藏
-    hidden:Boolean,
+    hidden:Boolean!,
     #发布时间
     publishedTime:String,
     #来源
@@ -96,8 +96,6 @@ type Classify{
     describe:String,
     #颜色
     color:String,
-    #是否显示下一级分类文章
-    showNext:Boolean,
     #父节点
     groupId:Int,
     #子节点
@@ -116,8 +114,6 @@ input ClassifyCreate{
     color:String,
     #父节点
     groupId:Int,
-    #是否显示下一级分类文章
-    showNext:Boolean,
 }
 input ClassifyUpdate{
     #分类id
@@ -134,8 +130,6 @@ input ClassifyUpdate{
     color:String,
     #父节点
     groupId:Int,
-    #是否显示下一级分类文章
-    showNext:Boolean,
 }
 type Page{
     #页面id
@@ -153,11 +147,11 @@ type Page{
 }
 input CreatePage{
     #页面标题
-    title:String,
+    title:String!,
     #页面别名
-    alias:String,
+    alias:String!,
     #是否开启
-    open:Boolean,
+    open:Boolean!,
     #页面内容
     content:String,
     #页面分类
@@ -167,9 +161,9 @@ input UpdatePage{
     #页面id
     id:Int,
     #页面标题
-    title:String,
+    title:String!,
     #页面别名
-    alias:String,
+    alias:String!,
     #是否开启
     open:Boolean,
     #页面内容
@@ -188,6 +182,7 @@ type Query {
     getAllPage:[Page],
     #Get the page by searching for keywords.
     serachPages(keyWords:String!):[Page],
+    showNext(id:Int!):[Article]
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.
@@ -195,7 +190,7 @@ type Mutation{
     #To create the article
     createArticle(createArt:ArticleInput!):[Article],
     #To update the article
-    updateArticle(updateArt:ArticleUpdate):[Article],
+    updateArticle(updateArt:ArticleUpdate!):[Article],
     #Find all the articles in the recycle bin.
     recycleFind(limitNum:Int!):[Article],
     #Delete the article in the recycle bin.
