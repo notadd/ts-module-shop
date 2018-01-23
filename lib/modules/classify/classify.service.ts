@@ -19,7 +19,6 @@ export class ClassifyService{
      * @returns {Promise<ClassifyEntity[]>}
      */
     async createClassify(entity:ClassifyEntity,useFor:string):Promise<ClassifyEntity[]>{
-        console.log('usedFor='+useFor);
         if(useFor=='art'){
             let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
             //别名不能重复
@@ -243,5 +242,24 @@ export class ClassifyService{
             entity=await this.pageRepository.findOneById(id);
         }
         return entity;
+    }
+
+    /**
+     * 显示子级分类文章
+     * @param {number} id
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    async showNextTitle(id:number):Promise<ArticleEntity[]>{
+        let arrayNum:number[] = [];
+        let classifications:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :groupId',{groupId:id}).getMany();
+        for(let t in classifications){
+            arrayNum.push(classifications[t].id);
+        }
+        let articles:ArticleEntity[]=[];
+        for(let h in arrayNum){
+            let art:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId',{classifyId:arrayNum[h]}).getMany();
+            articles.push(...art);
+        }
+        return articles;
     }
 }
