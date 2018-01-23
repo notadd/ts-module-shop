@@ -1,7 +1,14 @@
 import {ApiModelProperty} from "@nestjs/swagger";
 import {IsString,IsInt,IsBoolean,IsDate,IsUrl} from 'class-validator';
-import {Url, URL} from "url";
-
+import {URL} from "url";
+import {type} from "os";
+export enum EnvConfig{
+    global,
+    current,
+    Level1,
+    Level2,
+    Level3
+}
 export class GetLimit{
     @ApiModelProperty({type:Number})
     @IsInt()
@@ -26,23 +33,31 @@ export class DeleteArticleId{
 }
 
 export class CreateArticle{
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly name;
 
     @ApiModelProperty({type:String})
     @IsString()
-    readonly classify;
+    readonly content;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly classifyId;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly classifyName;
 
     @ApiModelProperty({type:String})
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({required:true})
     @IsString()
-    readonly topPlace;
+    readonly topPlace:EnvConfig;
 
-    @ApiModelProperty({type:Boolean})
+    @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
     readonly hidden;
 
@@ -61,32 +76,41 @@ export class CreateArticle{
 }
 
 export class UpdateArticle{
-    @ApiModelProperty({type:Number})
+    @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly id;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly name;
 
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly classifyId;
+
     @ApiModelProperty({type:String})
     @IsString()
-    readonly classify;
+    readonly classifyName;
+
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly content;
 
     @ApiModelProperty({type:String})
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({required:true})
     @IsString()
-    readonly topPlace;
+    readonly topPlace:EnvConfig;
 
-    @ApiModelProperty({type:Boolean})
+    @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
     readonly hidden;
 
-    @ApiModelProperty({type:Date})
-    @IsDate()
+    @ApiModelProperty({type:String})
+    @IsString()
     readonly publishedTime;
 
     @ApiModelProperty({type:String})
@@ -98,13 +122,23 @@ export class UpdateArticle{
     readonly sourceUrl;
 
 }
+export class GetClassify{
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly usedFor;
+}
+
 
 export class CreateClassify{
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly usedFor;
+
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly classifyName;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly classifyAlias;
 
@@ -120,25 +154,29 @@ export class CreateClassify{
     @IsString()
     readonly color;
 
-    @ApiModelProperty({type:Number})
+    @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly parentId;
 
-    @ApiModelProperty({type:Boolean})
+    @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
     readonly showNext;
 }
 
 export class UpdateClassify{
-    @ApiModelProperty({type:Number})
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly usedFor;
+
+    @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly id;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly classifyName;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly classifyAlias;
 
@@ -154,17 +192,75 @@ export class UpdateClassify{
     @IsString()
     readonly color;
 
-    @ApiModelProperty({type:Number})
+    @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly parentId;
 
-    @ApiModelProperty({type:Boolean})
+    @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
     readonly showNext;
 }
 
 export class DeleteDto{
-    @ApiModelProperty({type:Number})
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly usedFor;
+
+    @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly id;
+}
+
+export class PageSerach{
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly keyWords;
+}
+export class CreatePage{
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly title;
+
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly alias;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly content;
+
+    @ApiModelProperty({type:Boolean,required:true})
+    @IsBoolean()
+    readonly open;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly classify;
+
+}
+export class UpdatePage{
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly id;
+
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly title;
+
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly alias;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly content;
+
+    @ApiModelProperty({type:Boolean,required:true})
+    @IsBoolean()
+    readonly open;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly classify;
+
 }
