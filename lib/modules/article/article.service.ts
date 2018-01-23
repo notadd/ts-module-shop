@@ -15,9 +15,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
     async  getArticleAll(limit:number):Promise<ArticleEntity[]>{
-        console.log('limitNum='+limit);
         let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().orderBy('id',"ASC").limit(limit).getMany();
-        console.log('resultFind='+JSON.stringify(resultAll));
         return resultAll;
     }
 
@@ -43,11 +41,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let count:number=0;
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
-            if(article=null) throw new MessageCodeError('delete:recycling:idMissing');
+            if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
             article.recycling=true;
-            article.updateAt =new Date();
+            let time =new Date();
+            article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let newArticle:ArticleEntity=article;
-            this.respository.updateById(array[t],newArticle);
+            this.respository.updateById(newArticle.id,newArticle);
             count++;
         }
         return count;
@@ -75,7 +74,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
       async updateArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
-          art.updateAt=new Date();
+          let time =new Date();
+          article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =art;
           this.respository.updateById(newArt.id,newArt);
           return this.getArticleAll(0);
@@ -123,10 +123,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
             if(article=null) throw new MessageCodeError('delete:recycling:idMissing');
             article.recycling=false;
-            article.updateAt =new Date();
+            let time =new Date();
+            article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let newArticle:ArticleEntity=article;
             this.respository.updateById(array[t],newArticle);
         }
-        return this.recycleFind(10);
+        return this.recycleFind(0);
     }
 }
