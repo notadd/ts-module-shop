@@ -302,4 +302,29 @@ export class ClassifyService{
         }
         return articles;
     }
+
+    /**
+     * 通过分类id获取文章
+     * @param {number} id
+     */
+    async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
+        let article:ArticleEntity[]=[];
+        if(id==1){
+          let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').getMany();
+          article.push(...global);
+            let articel:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'global\'',{classifyId:1}).orderBy('id','ASC').getMany();
+            article.push(...article);
+        }
+
+        return article;
+    }
+
+    /**
+     * 找出分类级别
+     * @param {number} ids
+     * @returns {Promise<number>}
+     */
+    showClassifyLevel(id:number):Promise<number>{
+        return ;
+    }
 }
