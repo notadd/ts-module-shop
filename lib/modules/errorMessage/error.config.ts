@@ -55,5 +55,11 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'The alias cannot be empty when the page is created.',
         userMessage:'The alias cannot be empty when the page is created.',
+    },
+    'page:classify:classifyIdMissing':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'The classifyId input does not exist, please re-enter.',
+        userMessage:'The classifyId input does not exist, please re-enter.',
     }
 };

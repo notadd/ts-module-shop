@@ -13,7 +13,8 @@ export class HistoryService{
    createHistory(history:HistoryEntity[]){
       for(let t in history){
           let newHis:HistoryEntity =history[t];
-          newHis.deleteAt =new Date ;
+          let time =new Date();
+          newHis.deleteAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           this.repository.insert(newHis);
       }
   }
