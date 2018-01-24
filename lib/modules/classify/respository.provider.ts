@@ -1,6 +1,7 @@
 import {Connection} from "typeorm";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {PageEntity} from "../entity/page.entity";
 
 export const clarespositoryProvider=[
     {
@@ -15,3 +16,11 @@ export const pageClassifyProvider=[{
     useFactory:(connection:Connection) =>connection.getRepository(PageClassifyEntity),
     inject:['DbConnectionToken']
 }]
+
+export const pagerespositoryProvider=[
+    {
+        provide:"PageRepositoryToken",
+        useFactory:(connection:Connection) =>connection.getRepository(PageEntity),
+        inject:['DbConnectionToken']
+    }
+]
