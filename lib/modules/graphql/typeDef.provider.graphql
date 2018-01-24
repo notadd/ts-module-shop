@@ -182,6 +182,9 @@ type Query {
     getAllPage:[Page],
     #Get the page by searching for keywords.
     serachPages(keyWords:String!):[Page],
+    #Find all the articles in the recycle bin.
+    recycleFind(limitNum:Int!):[Article],
+    #show the articles in the next level of the current classification.
     showNext(id:Int!):[Article]
 }
 type Mutation{
@@ -191,8 +194,6 @@ type Mutation{
     createArticle(createArt:ArticleInput!):[Article],
     #To update the article
     updateArticle(updateArt:ArticleUpdate!):[Article],
-    #Find all the articles in the recycle bin.
-    recycleFind(limitNum:Int!):[Article],
     #Delete the article in the recycle bin.
     recycleDelete(id:[Int]):Int,
     #Restore the article in the recycle bin.

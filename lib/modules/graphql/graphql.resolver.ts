@@ -111,7 +111,7 @@ export class GraphqlResolver{
      * @param arg
      * @returns {Promise<ArticleEntity[]>}
      */
-    @Mutation()
+    @Query()
     recycleFind(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
