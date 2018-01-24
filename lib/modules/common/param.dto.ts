@@ -157,10 +157,6 @@ export class CreateClassify{
     @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly parentId;
-
-    @ApiModelProperty({type:Boolean,required:true})
-    @IsBoolean()
-    readonly showNext;
 }
 
 export class UpdateClassify{
@@ -195,10 +191,6 @@ export class UpdateClassify{
     @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly parentId;
-
-    @ApiModelProperty({type:Boolean,required:true})
-    @IsBoolean()
-    readonly showNext;
 }
 
 export class DeleteDto{
@@ -211,6 +203,11 @@ export class DeleteDto{
     readonly id;
 }
 
+export class showNextDto{
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly id;
+}
 export class PageSerach{
     @ApiModelProperty({type:String})
     @IsString()
