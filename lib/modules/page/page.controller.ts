@@ -16,8 +16,8 @@ export class PageController{
      */
     @ApiOperation({title:'get All pages'})
     @Get('getAllPage')
-    public getAllPage(@Response() res){
-        const result=this.pageService.getAllPage();
+    public async getAllPage(@Response() res){
+        let result:PageEntity[]=await this.pageService.getAllPage();
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -28,8 +28,8 @@ export class PageController{
      */
     @ApiOperation({title:'get pages by keywords'})
     @Post('serachPages')
-    public serachPages(@Response() res,@Body() keywords:PageSerach){
-        const result=this.pageService.serachKeywords(keywords.keyWords);
+    public async serachPages(@Response() res,@Body() keywords:PageSerach){
+        let result:PageEntity[]=await this.pageService.serachKeywords(keywords.keyWords);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -40,8 +40,8 @@ export class PageController{
      */
     @ApiOperation({title:'delete pages'})
     @Post('deletePages')
-    public deletePages(@Response() res,@Body() array:DeleteArticleId){
-        const result=this.pageService.deletePages(array.id);
+    public async deletePages(@Response() res,@Body() array:DeleteArticleId){
+        let result:number=await this.pageService.deletePages(array.id);
         let deleteNum=`已经成功删除${result}个页面`;
         return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
     }
@@ -53,14 +53,14 @@ export class PageController{
      */
     @ApiOperation({title:'create pages'})
     @Post('createPages')
-    public createPages(@Response() res,@Body() page:CreatePage){
+    public async createPages(@Response() res,@Body() page:CreatePage){
         let newPage =new PageEntity();
         newPage.title = page.title;
         newPage.alias = page.alias;
         newPage.classify = page.classify;
         newPage.open =page.open;
         newPage.content =page.content;
-        const result=this.pageService.createPages(newPage);
+        let result:PageEntity[]=await this.pageService.createPages(newPage);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -71,7 +71,7 @@ export class PageController{
      */
     @ApiOperation({title:'update pages'})
     @Post('updatePages')
-    public updatePages(@Response() res,@Body() page:UpdatePage){
+    public async updatePages(@Response() res,@Body() page:UpdatePage){
         let newPage =new PageEntity();
         newPage.id = page.id;
         newPage.title = page.title;
@@ -79,7 +79,8 @@ export class PageController{
         newPage.classify = page.classify;
         newPage.open =page.open;
         newPage.content =page.content;
-        const result=this.pageService.updatePages(newPage);
+        let result:PageEntity[]=await this.pageService.updatePages(newPage);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
+
 }
