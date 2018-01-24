@@ -243,7 +243,8 @@ export class ClassifyService{
                     let newArticle:ArticleEntity=article[h];
                     newArticle.classifyId=null;
                     newArticle.classify=null;
-                    newArticle.updateAt =new Date();
+                    let time =new Date();
+                    newArticle.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
                     this.artRepository.updateById(newArticle.id,newArticle);
                 }
             }
@@ -253,7 +254,8 @@ export class ClassifyService{
                 for(let h in article){
                     let newArticle:PageEntity=article[h];
                     newArticle.classify=null;
-                    newArticle.updateAt =new Date();
+                    let time =new Date();
+                    newArticle.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
                     this.repositoryPage.updateById(newArticle.id,newArticle);
                 }
             }
@@ -280,6 +282,7 @@ export class ClassifyService{
         let entity:PageClassifyEntity=await this.pageRepository.findOneById(id);
         return entity;
     }
+    //let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'Level1'}).orderBy('id','ASC').getMany();
 
     /**
      * 显示子级分类文章
@@ -287,14 +290,14 @@ export class ClassifyService{
      * @returns {Promise<ArticleEntity[]>}
      */
     async showNextTitle(id:number):Promise<ArticleEntity[]>{
+        let articles:ArticleEntity[]=[];
         let arrayNum:number[] = [];
         let classifications:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :groupId',{groupId:id}).getMany();
         for(let t in classifications){
             arrayNum.push(classifications[t].id);
         }
-        let articles:ArticleEntity[]=[];
         for(let h in arrayNum){
-            let art:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId',{classifyId:arrayNum[h]}).getMany();
+            let art:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId',{classifyId:arrayNum[h]}).orderBy('id','ASC').getMany();
             articles.push(...art);
         }
         return articles;
