@@ -5,6 +5,7 @@ import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {PageService} from "../page/page.service";
 import {PageEntity} from "../entity/page.entity";
+import {PageClassifyEntity} from "../entity/pageClassify.entity";
 
 @Resolver()
 export class GraphqlResolver{
@@ -168,7 +169,12 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let useFor:string=map.get('useFor');
-        const result=this.classifyService.findAllClassify(useFor);
+        let result;
+        if(useFor=='art'){
+            result=this.classifyService.findAllClassifyArt();
+        }else if(useFor=='page'){
+            result=this.classifyService.findAllClassifyPage();
+        }
         return result;
     }
 
@@ -185,8 +191,14 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let useFor:string=map.get('useFor');
-        let newClass:ClassifyEntity=map.get('createClass');
-        const result=this.classifyService.createClassify(newClass,useFor);
+        let result;
+        if(useFor=='art'){
+            let newClass:ClassifyEntity=map.get('createClass');
+            result=this.classifyService.createClassifyArt(newClass);
+        }else if(useFor=='page'){
+            let newClass:PageClassifyEntity=map.get('createClass');
+            result=this.classifyService.createClassifyPage(newClass);
+        }
         return result;
 
     }
@@ -204,8 +216,14 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let useFor:string=map.get('useFor');
-        let newClass:ClassifyEntity=map.get('updateClass');
-        const result=this.classifyService.updateClassify(newClass,useFor);
+        let result;
+        if(useFor=='art'){
+            let newClass:ClassifyEntity=map.get('updateClass');
+            result=this.classifyService.updateClassifyArt(newClass);
+        }else if(useFor=='page'){
+            let newClass:PageClassifyEntity=map.get('updateClass');
+            result=this.classifyService.updateClassifyPage(newClass);
+        }
         return result;
     }
 
@@ -223,7 +241,12 @@ export class GraphqlResolver{
         map=this.objToStrMap(bToJSon);
         let useFor:string=map.get('useFor');
         let id:number=map.get('id');
-        const result=this.classifyService.deleteClassify(id,useFor);
+        let result;
+        if(useFor=='art'){
+            result=this.classifyService.deleteClassifyArt(id);
+        }else if(useFor=='page'){
+            result=this.classifyService.deleteClassifyPage(id);
+        }
         return result;
     }
 
