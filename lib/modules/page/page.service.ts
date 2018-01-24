@@ -64,7 +64,7 @@ export class PageService{
     async createPages(page:PageEntity):Promise<PageEntity[]>{
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
-        let entity:PageClassifyEntity=await this.classifyService.findOneById(page.classify,"page");
+        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
         if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         this.repository.insert(page);
         return this.getAllPage();
@@ -78,7 +78,7 @@ export class PageService{
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
-        let entity:PageClassifyEntity=await this.classifyService.findOneById(page.classify,"page");
+        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
         if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let time =new Date();
         page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
