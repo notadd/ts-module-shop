@@ -309,14 +309,31 @@ export class ClassifyService{
      */
     async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
         let article:ArticleEntity[]=[];
-        if(id==1){
+        await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
+        //let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
+        let classify:ClassifyEntity[]=await this.repository.find();
+         console.log('数组='+this.findLevel(classify,id,0));
+        /*let num:number=*///await this.showClassifyLevel(classify,id,0).then( a=>{console.log('级别是'+a)});
+       /* console.log('级别是'+num);*/
+      /*  if(id==1){
           let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').getMany();
           article.push(...global);
             let articel:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'global\'',{classifyId:1}).orderBy('id','ASC').getMany();
             article.push(...article);
-        }
+        }*/
 
         return article;
+    }
+    public findLevel(arr:ClassifyEntity[],id:number,level){
+        //let finalArray:ClassifyEntity[]=[];
+        for(let t in arr){
+            if(arr[t].groupId==id && arr[t].groupId!=null){
+              //  arr[t].level=level;
+               // finalArray.push(arr[t]);
+                this.findLevel(arr,arr[t].groupId,level+1);
+            }
+        }
+        return //finalArray;
     }
 
     /**
@@ -324,7 +341,27 @@ export class ClassifyService{
      * @param {number} ids
      * @returns {Promise<number>}
      */
-    showClassifyLevel(id:number):Promise<number>{
-        return ;
+    public async showClassifyLevel(/*arr:ClassifyEntity[],*/id:number,level:number){
+        let levelNum:number;
+        console.log('arr='+JSON.stringify(id));
+        let first:ClassifyEntity=await this.repository.findOneById(id);
+        if(first!=null && first.groupId!=null){
+            console.log('id='+id+'level='+level);
+            levelNum++;
+            await this.showClassifyLevel(first.groupId,level+1);
+        }
+        return levelNum;
+        /*for(let t in arr){
+            let classify:ClassifyEntity[]=arr[t].childrens;
+            for(let h in classify){
+                if(classify[h].id==id){
+                    levelNum=level;
+                    console.log('levelNum='+levelNum+',id='+classify[h].id);
+                    await this.showClassifyLevel(arr, classify[h].groupId,level+1);
+                    return levelNum;
+                }
+            }
+        }*/
+
     }
 }
