@@ -19,7 +19,13 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
     async  getArticleAll(limit:number):Promise<ArticleEntity[]>{
-        let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+        let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull  and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+       /* let result:ArticleEntity[]=[];
+        for(let t in resultAll){
+            if(!resultAll[t].hidden){
+               result.push(resultAll[t]);
+            }
+        }*/
         return resultAll;
     }
 
@@ -61,7 +67,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<void>}
      */
       async createArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
-        let entity:ClassifyEntity=await this.classifyService.findOneById(article.classifyId,"page");
+        let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
         if(article.classifyId==0 ||article.classifyId==null)
@@ -79,7 +85,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
       async updateArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
-          let entity:ClassifyEntity=await this.classifyService.findOneById(article.classifyId,"page");
+          let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
           if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
           let time =new Date();
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
