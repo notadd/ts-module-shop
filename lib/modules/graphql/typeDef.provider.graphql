@@ -140,8 +140,6 @@ type Page{
     alias:String,
     #是否开启
     open:Boolean,
-    #页面内容
-    content:String,
     #页面分类
     classify:Int,
     #内容
@@ -154,32 +152,6 @@ type Content{
     parentId:Int,
     #页面内容
     content:String,
-}
-input CreatePage{
-    #页面标题
-    title:String!,
-    #页面别名
-    alias:String!,
-    #是否开启
-    open:Boolean!,
-    #页面内容
-    content:[String],
-    #页面分类
-    classify:Int,
-}
-input UpdatePage{
-    #页面id
-    id:Int,
-    #页面标题
-    title:String!,
-    #页面别名
-    alias:String!,
-    #是否开启
-    open:Boolean,
-    #页面内容
-    content:String,
-    #页面分类
-    classify:Int,
 }
 type Query {
     #Get all the articles by paging.
@@ -221,7 +193,7 @@ type Mutation{
     #Single or batch delete pages
     deletePages(id:[Int]!):Int,
     #To cerate a page
-    createPages(createPage:CreatePage):[Page],
+    createPages(title:String!,alias:String!,content:[String],classify:Int):[Page],
     #To update a page
-    updatePages(updatePage:UpdatePage):[Page],
+    updatePages(id:Int!,title:String!,alias:String!,content:[String],classify:Int):[Page],
 }

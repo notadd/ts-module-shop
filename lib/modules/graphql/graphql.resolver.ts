@@ -307,9 +307,18 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let page:PageEntity=map.get('createPage');
-        let content:PageContentEntity[]=page.contents;
-        const result=this.pageService.createPages(page,content);
+        let page:PageEntity=new PageEntity();
+        page.title=map.get('title');
+        page.alias=map.get('alias');
+        page.classify=map.get('classify');
+        let contents:PageContentEntity[]=[];
+        let strFinal:string[]=map.get('content');
+        for(let t in strFinal){
+            let newContent:PageContentEntity=new PageContentEntity;
+            newContent.content=strFinal[t];
+            contents.push(newContent);
+        }
+        const result=this.pageService.createPages(page,contents);
         return result;
     }
 
@@ -325,7 +334,17 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let page:PageEntity=map.get('updatePage');
+        let page:PageEntity=new PageEntity();
+        page.title=map.get('title');
+        page.alias=map.get('alias');
+        page.classify=map.get('classify');
+        let contents:PageContentEntity[]=[];
+        let strFinal:string[]=map.get('content');
+        for(let t in strFinal){
+            let newContent:PageContentEntity=new PageContentEntity;
+            newContent.content=strFinal[t];
+            contents.push(newContent);
+        }
         const result=this.pageService.updatePages(page);
         return result;
     }
