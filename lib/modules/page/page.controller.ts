@@ -6,6 +6,7 @@ import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
 import {PageEntity} from "../entity/page.entity";
+import {PageContentEntity} from "../entity/page.content.entity";
 
 @Controller('page')
 export class PageController{
@@ -42,6 +43,7 @@ export class PageController{
     @Post('deletePages')
     public async deletePages(@Response() res,@Body() array:DeleteArticleId){
         let result:number=await this.pageService.deletePages(array.id);
+        console.log('num='+result)
         let deleteNum=`已经成功删除${result}个页面`;
         return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
     }
@@ -58,9 +60,15 @@ export class PageController{
         newPage.title = page.title;
         newPage.alias = page.alias;
         newPage.classify = page.classify;
-        newPage.open =page.open;
-        newPage.content =page.content;
-        let result:PageEntity[]=await this.pageService.createPages(newPage);
+        let contents:PageContentEntity[]=[];
+        let str:string[]=page.content;
+        for(let t in str){
+            let newContent:PageContentEntity=new PageContentEntity;
+            newContent.content=str[t];
+            contents.push(newContent);
+        }
+        console.log('contents='+JSON.stringify(contents));
+        let result:PageEntity[]=await this.pageService.createPages(newPage,contents);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -77,8 +85,8 @@ export class PageController{
         newPage.title = page.title;
         newPage.alias = page.alias;
         newPage.classify = page.classify;
-        newPage.open =page.open;
-        newPage.content =page.content;
+       /* newPage.open =page.open;*/
+       // newPage.content =page.content;
         let result:PageEntity[]=await this.pageService.updatePages(newPage);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
