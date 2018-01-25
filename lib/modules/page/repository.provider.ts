@@ -8,3 +8,10 @@ export const pagerespositoryProvider=[
         inject:['DbConnectionToken']
     }
 ]
+export const contentrespositoryProvider=[
+    {
+        provide:"ContentRepositoryToken",
+        useFactory:(connection:Connection) =>connection.getRepository(PageEntity),
+        inject:['DbConnectionToken']
+    }
+]
