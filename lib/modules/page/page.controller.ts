@@ -4,6 +4,7 @@ import {ApiOperation} from "@nestjs/swagger";
 import {PageSerach} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
+import {showNextDto} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
 import {PageEntity} from "../entity/page.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
@@ -88,6 +89,20 @@ export class PageController{
        /* newPage.open =page.open;*/
        // newPage.content =page.content;
         let result:PageEntity[]=await this.pageService.updatePages(newPage);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 根据id查找页面
+     * @param res
+     * @param {showNextDto} page
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'find page by id'})
+    @Post('findPageById')
+    public async findPageById(@Response() res,@Body() page:showNextDto){
+        let id:number=page.id;
+        let result:PageEntity=await this.pageService.findPageById(id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 

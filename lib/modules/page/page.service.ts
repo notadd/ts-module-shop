@@ -111,4 +111,17 @@ export class PageService{
         this.repository.updateById(page.id,newPage);
         return this.getAllPage();
     }
+
+    /**
+     * 根据id查找页面及对应内容
+     * @param {number} id
+     * @returns {Promise<PageEntity>}
+     */
+    async findPageById(id:number):Promise<PageEntity>{
+        let entity:PageEntity=await this.repository.findOneById(id);
+        if(entity==null) throw new MessageCodeError('delete:page:deleteById');
+        let children:PageContentEntity[]=await this.contentRepository.createQueryBuilder().where('"parentId"= :parentId',{parentId:entity.id}).orderBy('id','ASC').getMany();
+        entity.contents=children;
+        return entity;
+    }
 }
