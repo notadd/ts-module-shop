@@ -6,6 +6,8 @@ import {getManager} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageEntity} from "../entity/page.entity";
+import {async} from "rxjs/scheduler/async";
+import {createYield} from "typescript";
 
 @Component()
 export class ClassifyService{
@@ -104,9 +106,8 @@ export class ClassifyService{
     async findAllClassifyArt():Promise<ClassifyEntity[]>{
         await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
         let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
-        // console.log('classify='+JSON.stringify(classify));
-        let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
-        console.log('finalArray='+JSON.stringify(finalArray));
+       // let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
+       // console.log('finalArray='+JSON.stringify(finalArray));
         return classify;
     }
 
@@ -116,39 +117,39 @@ export class ClassifyService{
      */
     async findAllClassifyPage():Promise<PageClassifyEntity[]>{
         await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
-        let classify:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();;
+        //let classify:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();;
         //let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
         //console.log('finalArray='+JSON.stringify(finalArray));
-        return classify;
+        let list:PageClassifyEntity[]=await this.pageRepository.find();
+        let result:PageClassifyEntity[]=await this.recursion(1,list);
+        return result;
     }
 
-    /**
-     * 无极限分类
-     * @param {ClassifyEntity[]} entity
-     * @returns {Promise<ClassifyEntity[]>}
-     */
-    async recursion(entity:ClassifyEntity[]):Promise<ClassifyEntity[]>{
-        let returnArray:ClassifyEntity[]=[];
-        for(let t in entity){
-            let firstArray:ClassifyEntity[] = entity[t].childrens;
-            for(let h in firstArray){
-                let num:number =firstArray[h].id;
-                for(let m in entity){
-                    if(num == entity[m].id){
-                        firstArray[h].childrens = entity[m].childrens;
-                        entity[t].childrens=firstArray;
-                        returnArray.push(entity[t]);
-                       // console.log('deletegroup='+JSON.stringify(this.deletegroup(num,entity)));
-                        /*this.recursion(*//*this.deletegroup(num,entity)*//*);*/
-                    }
+    async recursion(id:number,listFirst:PageClassifyEntity[]):Promise<PageClassifyEntity[]>{
+        let children:PageClassifyEntity[]=[];
+        for(let t in listFirst){
+            let groupIdFirst:number=listFirst[t].id;
+            let navigationArray=new PageClassifyEntity;
+            navigationArray.id =listFirst[t].id;
+            navigationArray.groupId = listFirst[t].groupId;
+            navigationArray.classifyAlias = listFirst[t].classifyAlias;
+            navigationArray.chainUrl =listFirst[t].chainUrl;
+            navigationArray.classifyName=listFirst[t].classifyName;
+            let listSecond:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:groupIdFirst,}).getMany();
+            if(listSecond.length>0){
+                for(let h in listSecond){
+                    let theEnd:PageClassifyEntity[]= await this.recursion(listSecond[h].id,listSecond);
+                    navigationArray.childrens =theEnd;
                 }
+            }else{
+                navigationArray.childrens=null;
             }
-
+            let navigationFinal:PageClassifyEntity=navigationArray;
+            children.push(navigationFinal);
         }
-        //console.log('returnArray='+JSON.stringify(returnArray));
-        return returnArray;
+        //children.sort(this.compare('Id'));
+        return children;
     }
-
     /**
      * 数组删除数据
      */
@@ -310,18 +311,22 @@ export class ClassifyService{
     async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
         let article:ArticleEntity[]=[];
         await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
-        //let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
-        let classify:ClassifyEntity[]=await this.repository.find();
-         console.log('数组='+this.findLevel(classify,id,0));
-        /*let num:number=*///await this.showClassifyLevel(classify,id,0).then( a=>{console.log('级别是'+a)});
-       /* console.log('级别是'+num);*/
-      /*  if(id==1){
+        let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
+        console.log('数组='+this.findLevel(classify,id,0));
+      /*   let num:number=await this.showClassifyLevel(classify,id,0).then( a=>{console.log('级别是'+a)});
+        console.log('级别是'+num);
+        if(id==1){
           let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').getMany();
           article.push(...global);
             let articel:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'global\'',{classifyId:1}).orderBy('id','ASC').getMany();
             article.push(...article);
-        }*/
-
+        }
+        const num= new Promise((resolve ) =>{ this.showClassifyLevel(id,0)});
+        let num:number=await this.showClassifyLevel(id,0);
+        console.log('cehis='+JSON.stringify(num));
+        let array:ClassifyEntity[]=await this.showClassifyLevel(id,0);
+        let num:number=this.modifyLevel(array);
+        console.log('num='+num);*/
         return article;
     }
     public findLevel(arr:ClassifyEntity[],id:number,level){
@@ -342,15 +347,19 @@ export class ClassifyService{
      * @returns {Promise<number>}
      */
     public async showClassifyLevel(/*arr:ClassifyEntity[],*/id:number,level:number){
-        let levelNum:number;
-        console.log('arr='+JSON.stringify(id));
+        let array:ClassifyEntity[]=[];
         let first:ClassifyEntity=await this.repository.findOneById(id);
-        if(first!=null && first.groupId!=null){
-            console.log('id='+id+'level='+level);
-            levelNum++;
-            await this.showClassifyLevel(first.groupId,level+1);
+        if(first!=null){
+           // console.log('id='+id+'level='+level);
+            first.level=level;
+            let second:ClassifyEntity[]=await this.showClassifyLevel(first.groupId,level+1);
+            first.childrens=second;
+
         }
-        return levelNum;
+        array.push(first);
+       // console.log('n='+JSON.stringify(array));
+        return array;
+
         /*for(let t in arr){
             let classify:ClassifyEntity[]=arr[t].childrens;
             for(let h in classify){
@@ -363,5 +372,16 @@ export class ClassifyService{
             }
         }*/
 
+    }
+    public  modifyLevel(arr:ClassifyEntity[]):number{
+        for(let t in arr){
+            if(arr[t].id!=1){
+                 this.modifyLevel(arr[t].childrens)
+            }else if(arr[t].id==1){
+                let levelNum:number=arr[t].level;
+                console.log('levelnum='+levelNum);
+                return levelNum;
+            }
+        }
     }
 }
