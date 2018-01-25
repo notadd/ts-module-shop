@@ -47,6 +47,7 @@ export class PageService{
         for(let t in array){
             let page:PageEntity = await this.repository.findOneById(array[t]);
             if(page==null) throw new MessageCodeError('delete:page:deleteById');
+            await this.contentRepository.createQueryBuilder().delete().from(PageContentEntity).where('"parentId"= :parentId',{parentId:page.id}).execute();
             let history=new HistoryEntity();
             history.articleId =page.id;
             history.articleName =page.title;
