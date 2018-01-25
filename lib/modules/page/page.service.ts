@@ -100,7 +100,7 @@ export class PageService{
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async updatePages(page:PageEntity):Promise<PageEntity[]>{
+    async updatePages(page:PageEntity,content:PageContentEntity[]):Promise<PageEntity[]>{
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
@@ -110,6 +110,20 @@ export class PageService{
         page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
         let newPage:PageEntity =page;
         this.repository.updateById(page.id,newPage);
+        for(let t in content){
+            if(content[t].id==0){
+                let newContent:PageContentEntity=new PageContentEntity();
+                newContent=content[t];
+                newContent.parentId=page.id;
+                await this.contentRepository.insert(newContent);
+            }else {
+                let newContent:PageContentEntity=new PageContentEntity();
+                newContent=content[t];
+                newContent.parentId=page.id;
+                newContent.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+                await this.contentRepository.updateById(newContent.id,newContent);
+            }
+        }
         return this.getAllPage();
     }
 
