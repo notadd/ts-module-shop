@@ -6,6 +6,7 @@ import {ClassifyEntity} from "../entity/classify.entity";
 import {PageService} from "../page/page.service";
 import {PageEntity} from "../entity/page.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {PageContentEntity} from "../entity/page.content.entity";
 
 @Resolver()
 export class GraphqlResolver{
@@ -307,7 +308,8 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let page:PageEntity=map.get('createPage');
-        const result=this.pageService.createPages(page);
+        let content:PageContentEntity[]=page.contents;
+        const result=this.pageService.createPages(page,content);
         return result;
     }
 
@@ -341,6 +343,37 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         const result=this.classifyService.showNextTitle(map.get('id'));
+        return result;
+    }
+
+    /**
+     * 通过分类id获取文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    getArticleByClassifyId(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        const result=this.classifyService.getArticelsByClassifyId(map.get('id'));
+        return result;
+    }
+    /**
+     * 通过页面id获取页面及对应内容
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    findPageById(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        const result=this.pageService.findPageById(map.get('id'));
         return result;
     }
     /**

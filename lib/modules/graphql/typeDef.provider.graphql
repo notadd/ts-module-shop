@@ -144,6 +144,16 @@ type Page{
     content:String,
     #页面分类
     classify:Int,
+    #内容
+    contents:[Content]
+}
+type Content{
+    #内容id
+    id:Int,
+    #页面id
+    parentId:Int,
+    #页面内容
+    content:String,
 }
 input CreatePage{
     #页面标题
@@ -153,7 +163,7 @@ input CreatePage{
     #是否开启
     open:Boolean!,
     #页面内容
-    content:String,
+    content:[String],
     #页面分类
     classify:Int,
 }
@@ -186,6 +196,10 @@ type Query {
     recycleFind(limitNum:Int!):[Article],
     #show the articles in the next level of the current classification.
     showNext(id:Int!):[Article]
+    #Get articles by classifaction id
+    getArticleByClassifyId(id:Int!):[Article]
+    #find page by id
+    findPageById(id:Int!):Page
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.
