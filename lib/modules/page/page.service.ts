@@ -6,12 +6,14 @@ import {HistoryEntity} from "../entity/history.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {ClassifyService} from "../classify/classify.service";
+import {PageContentEntity} from "../entity/page.content.entity";
 
 @Component()
 export class PageService{
     constructor(@Inject('PageRepositoryToken') private readonly repository:Repository<PageEntity>,
                 private readonly historyService:HistoryService,
-                private readonly classifyService:ClassifyService){}
+                private readonly classifyService:ClassifyService,
+                @Inject('ContentRepositoryToken') private readonly contentRepository:Repository<PageContentEntity>) {}
 
     /**
      * 获取所有页面
@@ -61,13 +63,36 @@ export class PageService{
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async createPages(page:PageEntity):Promise<PageEntity[]>{
+    async createPages(page:PageEntity,contents:PageContentEntity[]):Promise<PageEntity[]>{
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
         if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-        this.repository.insert(page);
+        let id:number= await this.repository.createQueryBuilder().insert().into(PageEntity).values(page).output('id').execute();
+        const str:string=JSON.stringify(id);
+        let newstr:string=str.replace('{','').replace('}','').replace('[','').replace(']','');
+        let finalStr:string[]=newstr.replace('"','').replace('"','').split(':');
+        let idNum:number=Number(finalStr[1]);
+        for(let t in contents){
+            let newContent:PageContentEntity=new PageContentEntity();
+             newContent=contents[t];
+             newContent.parentId=idNum;
+            await this.contentRepository.insert(newContent);
+        }
         return this.getAllPage();
+    }
+
+    /**
+     * 转换
+     * @param obj
+     * @returns {Map<string, string>}
+     */
+    objToStrMap(obj):Map<string,string> {
+        let strMap=new Map();
+        for (let k of Object.keys(obj)) {
+            strMap.set(k, obj[k]);
+        }
+        return strMap;
     }
     /**
      * 修改页面,暂时不能确定别名是否可以重复
