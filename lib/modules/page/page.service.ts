@@ -82,19 +82,6 @@ export class PageService{
         }
         return this.getAllPage();
     }
-
-    /**
-     * 转换
-     * @param obj
-     * @returns {Map<string, string>}
-     */
-    objToStrMap(obj):Map<string,string> {
-        let strMap=new Map();
-        for (let k of Object.keys(obj)) {
-            strMap.set(k, obj[k]);
-        }
-        return strMap;
-    }
     /**
      * 修改页面,暂时不能确定别名是否可以重复
      * @param {PageEntity} page
