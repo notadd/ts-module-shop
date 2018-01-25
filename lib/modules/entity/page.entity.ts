@@ -1,4 +1,5 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {PageContentEntity} from "./page.content.entity";
 
 @Entity('page')
 export class PageEntity{
@@ -8,14 +9,12 @@ export class PageEntity{
     @Column({length:200}) title:string;
     //页面别名
     @Column({length:200}) alias:string;
-    //是否开启
-    @Column() open:boolean;
-    //页面内容
-    @Column({nullable:true,length:10000}) content:string;
     //页面分类
     @Column({nullable:true}) classify:number;
     //创建时间
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
+   /* @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.pages)*/
+    contents:PageContentEntity[];
 }

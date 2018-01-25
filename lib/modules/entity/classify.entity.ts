@@ -20,6 +20,8 @@ export class ClassifyEntity{
     @Column({nullable:true,length:40}) color:string;
     //父节点
     @Column({nullable:true}) groupId:number;
+    //层级
+    @Column({nullable:true}) level:number;
 
     @OneToMany(type => ClassifyEntity,ClassifyEntity =>ClassifyEntity.parent,{cascadeInsert:true})
     childrens: ClassifyEntity[];

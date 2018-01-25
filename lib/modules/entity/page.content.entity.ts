@@ -13,7 +13,4 @@ export class PageContentEntity{
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
-
-    @ManyToOne(type => PageEntity,PageEntity=>PageEntity.contents)
-    pages:PageEntity;
 }
