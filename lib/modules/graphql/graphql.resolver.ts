@@ -7,6 +7,7 @@ import {PageService} from "../page/page.service";
 import {PageEntity} from "../entity/page.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
+import {ContentMap} from "../common/param.dto";
 
 @Resolver()
 export class GraphqlResolver{
@@ -339,13 +340,15 @@ export class GraphqlResolver{
         page.alias=map.get('alias');
         page.classify=map.get('classify');
         let contents:PageContentEntity[]=[];
-        let strFinal:string[]=map.get('content');
+        let strFinal:ContentMap[]=map.get('content');
         for(let t in strFinal){
             let newContent:PageContentEntity=new PageContentEntity;
-            newContent.content=strFinal[t];
+            newContent.content=strFinal[t].content;
+            newContent.id=strFinal[t].id;
             contents.push(newContent);
         }
-        const result=this.pageService.updatePages(page);
+        console.log('数组:'+JSON.stringify(contents));
+        const result=this.pageService.updatePages(page,contents);
         return result;
     }
 
