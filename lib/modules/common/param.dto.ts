@@ -1,7 +1,6 @@
 import {ApiModelProperty} from "@nestjs/swagger";
 import {IsString,IsInt,IsBoolean,IsDate,IsUrl} from 'class-validator';
 import {URL} from "url";
-import {type} from "os";
 export enum EnvConfig{
     global,
     current,
@@ -222,7 +221,7 @@ export class CreatePage{
     @IsString()
     readonly alias;
 
-    @ApiModelProperty({type:String})
+    @ApiModelProperty({type:Array})
     @IsString()
     readonly content;
 
@@ -235,6 +234,16 @@ export class CreatePage{
     readonly classify;
 
 }
+export class ContentMap{
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly id;
+
+    @ApiModelProperty({type:String})
+    @IsString()
+    readonly content;
+}
+
 export class UpdatePage{
     @ApiModelProperty({type:Number,required:true})
     @IsInt()
@@ -248,16 +257,11 @@ export class UpdatePage{
     @IsString()
     readonly alias;
 
-    @ApiModelProperty({type:String})
-    @IsString()
-    readonly content;
-
-    @ApiModelProperty({type:Boolean,required:true})
-    @IsBoolean()
-    readonly open;
-
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly classify;
+
+    @ApiModelProperty({type:ContentMap})
+    readonly contents:[ContentMap]
 
 }
