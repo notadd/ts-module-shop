@@ -131,6 +131,12 @@ input ClassifyUpdate{
     #父节点
     groupId:Int,
 }
+input ContentArray{
+    #内容id
+    id:Int,
+    #页面内容
+    content:String
+}
 type Page{
     #页面id
     id:Int,
@@ -195,5 +201,5 @@ type Mutation{
     #To cerate a page
     createPages(title:String!,alias:String!,content:[String],classify:Int):[Page],
     #To update a page
-    updatePages(id:Int!,title:String!,alias:String!,content:[String],classify:Int):[Page],
+    updatePages(id:Int!,title:String!,alias:String!,content:[ContentArray],classify:Int):[Page],
 }
