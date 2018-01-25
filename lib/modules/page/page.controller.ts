@@ -6,6 +6,7 @@ import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
 import {showNextDto} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
+import {ContentMap} from "../common/param.dto";
 import {PageEntity} from "../entity/page.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 
@@ -86,9 +87,16 @@ export class PageController{
         newPage.title = page.title;
         newPage.alias = page.alias;
         newPage.classify = page.classify;
-       /* newPage.open =page.open;*/
-       // newPage.content =page.content;
-        let result:PageEntity[]=await this.pageService.updatePages(newPage);
+        let content:ContentMap[]=page.contents;
+        let contents:PageContentEntity[]=[];
+        for(let t in content){
+            let newContent:PageContentEntity=new PageContentEntity;
+            newContent.content=content[t].content;
+            newContent.id=content[t].id;
+            contents.push(newContent);
+        }
+        console.log('contents='+JSON.stringify(content));
+        let result:PageEntity[]=await this.pageService.updatePages(newPage,contents);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
