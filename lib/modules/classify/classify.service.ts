@@ -29,11 +29,14 @@ export class ClassifyService{
             let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
             //通过父级别名确定父级是否存在
             if(entity.groupId!=0 && entity.groupId!=null && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-            if(entity.groupId==0){
+            let first:ClassifyEntity=await this.repository.findOneById(1);
+            if(entity.groupId==0 && first==null){
                 entity.groupId=null;
+            }else{
+                entity.groupId=1;
             }
             let classify:ClassifyEntity=entity;
-            this.repository.insert(classify);
+            await this.repository.insert(classify);
             return this.findAllClassifyArt(1);
     }
 
@@ -49,11 +52,14 @@ export class ClassifyService{
         let parentClassify:PageClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
         //通过父级别名确定父级是否存在
         if(entity.groupId!=0 && entity.groupId!=null && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-        if(entity.groupId==0){
+        let first:PageClassifyEntity=await this.pageRepository.findOneById(1);
+        if(entity.groupId==0 && first==null){
             entity.groupId=null;
+        }else{
+            entity.groupId=1;
         }
         let classify:PageClassifyEntity=entity;
-        this.pageRepository.insert(classify);
+        await this.pageRepository.insert(classify);
         return this.findAllClassifyPage(1);
     }
 
@@ -205,11 +211,11 @@ export class ClassifyService{
     async deleteClassifyArt(id:number):Promise<ClassifyEntity[]>{
             let classify:ClassifyEntity = await this.repository.findOneById(id);
             if(classify==null) throw new MessageCodeError('update:classify:updateById');
-            await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
-            const result =await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
+            await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
+            const result =await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
             let resultArray:ClassifyEntity[]=result;
             console.log('deleteResult='+JSON.stringify(resultArray));
-            await getManager().query("update public.classify set \"parentId\"=null");
+            await getManager().query("update public.article_classify_table set \"parentId\"=null");
             let deleteArray:number[]=[];
             for (let t in result){
                 let num = result[t].id;
@@ -342,8 +348,8 @@ export class ClassifyService{
      */
     async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
         let article:ArticleEntity[]=[];
-        await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
-        let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
+        await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
+        let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
         console.log('数组='+this.findLevel(classify,id,0));
       /*   let num:number=await this.showClassifyLevel(classify,id,0).then( a=>{console.log('级别是'+a)});
         console.log('级别是'+num);
