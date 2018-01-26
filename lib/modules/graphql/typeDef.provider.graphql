@@ -173,11 +173,13 @@ type Query {
     #Find all the articles in the recycle bin.
     recycleFind(limitNum:Int!):[Article],
     #show the articles in the next level of the current classification.
-    showNext(id:Int!):[Article]
+    showNext(id:Int!):[Article],
     #Get articles by classifaction id
-    getArticleByClassifyId(id:Int!):[Article]
+    getArticleByClassifyId(id:Int!):[Article],
     #find page by id
-    findPageById(id:Int!):Page
+    findPageById(id:Int!):Page,
+    #get top place articles
+    findTopPlace(limitNum:Int!):[Article],
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.

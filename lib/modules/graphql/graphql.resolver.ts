@@ -289,6 +289,22 @@ export class GraphqlResolver{
     }
 
     /**
+     * 分页获取置顶文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    async findTopPlace(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let  result:ArticleEntity[]= await this.articleService.findTopPlace(map.get('limitNum'));
+        return result;
+    }
+
+    /**
      * 关键字搜索页面
      * @param obj
      * @param arg
