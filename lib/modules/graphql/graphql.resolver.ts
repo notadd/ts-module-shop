@@ -267,20 +267,24 @@ export class GraphqlResolver{
         let id:number=map.get('id');
         let result;
         if(useFor=='art'){
-            result=this.classifyService.deleteClassifyArt(id);
+            result=this.classifyService.deleteMethodFirst(id);
         }else if(useFor=='page'){
-            result=this.classifyService.deleteClassifyPage(id);
+            result=this.classifyService.deleteMethodSecond(id);
         }
         return result;
     }
 
     /**
-     * 获取全部页面
+     * 分页获取全部页面
      * @returns {Promise<PageEntity[]>}
      */
     @Query()
-    async getAllPage(){
-        let  result:PageEntity[]= await this.pageService.getAllPage();
+    async getAllPage(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let  result:PageEntity[]= await this.pageService.getAllPage(map.get('limitNum'));
         return result;
     }
 

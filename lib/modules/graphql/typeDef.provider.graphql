@@ -167,7 +167,7 @@ type Query {
     #Get all the categories,But you need to provide'art'or 'page'.
     getAllClassify(useFor:String!,id:Int!):[Classify],
     #Get all pages.
-    getAllPage:[Page],
+    getAllPage(limitNum:Int!):[Page],
     #Get the page by searching for keywords.
     serachPages(keyWords:String!):[Page],
     #Find all the articles in the recycle bin.
