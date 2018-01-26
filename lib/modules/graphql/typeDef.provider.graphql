@@ -165,7 +165,7 @@ type Query {
     #Get the article by searching for keywords.
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
     #Get all the categories,But you need to provide'art'or 'page'.
-    getAllClassify(useFor:String!):[Classify],
+    getAllClassify(useFor:String!,id:Int!):[Classify],
     #Get all pages.
     getAllPage:[Page],
     #Get the page by searching for keywords.
@@ -196,6 +196,8 @@ type Mutation{
     updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
     #To delete a classification,and you need to provide'art'or 'page'.
     deleteClassifyById(id:Int!,useFor:String!):[Classify],
+    #mobile the classification
+    mobileTheClassify(useFor:String!,id:Int!,parentId:Int!):[Classify]
     #Single or batch delete pages
     deletePages(id:[Int]!):Int,
     #To cerate a page

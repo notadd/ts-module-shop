@@ -173,9 +173,9 @@ export class GraphqlResolver{
         let useFor:string=map.get('useFor');
         let result;
         if(useFor=='art'){
-            result=this.classifyService.findAllClassifyArt();
+            result=this.classifyService.findAllClassifyArt(map.get('id'));
         }else if(useFor=='page'){
-            result=this.classifyService.findAllClassifyPage();
+            result=this.classifyService.findAllClassifyPage(map.get('id'));
         }
         return result;
     }
@@ -225,6 +225,28 @@ export class GraphqlResolver{
         }else if(useFor=='page'){
             let newClass:PageClassifyEntity=map.get('updateClass');
             result=this.classifyService.updateClassifyPage(newClass);
+        }
+        return result;
+    }
+
+    /**
+     * 移动分类
+     * @param obj
+     * @param arg
+     * @returns {any}
+     */
+    @Mutation()
+    mobileTheClassify(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let useFor:string=map.get('useFor');
+        let result;
+        if(useFor=='art'){
+            result=this.classifyService.mobileClassifyArt(map.get('id'),map.get('parentId'));
+        }else if(useFor=='page'){
+            result=this.classifyService.mobileClassifyArt(map.get('id'),map.get('parentId'));
         }
         return result;
     }
@@ -347,7 +369,6 @@ export class GraphqlResolver{
             newContent.id=strFinal[t].id;
             contents.push(newContent);
         }
-        console.log('数组:'+JSON.stringify(contents));
         const result=this.pageService.updatePages(page,contents);
         return result;
     }
