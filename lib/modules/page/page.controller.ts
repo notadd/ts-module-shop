@@ -5,6 +5,7 @@ import {PageSerach} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
 import {showNextDto} from "../common/param.dto";
+import {GetLimit} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
 import {ContentMap} from "../common/param.dto";
 import {PageEntity} from "../entity/page.entity";
@@ -19,8 +20,8 @@ export class PageController{
      */
     @ApiOperation({title:'get All pages'})
     @Get('getAllPage')
-    public async getAllPage(@Response() res){
-        let result:PageEntity[]=await this.pageService.getAllPage();
+    public async getAllPage(@Response() res,@Body() getLimit:GetLimit){
+        let result:PageEntity[]=await this.pageService.getAllPage(getLimit.limitNumber);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
