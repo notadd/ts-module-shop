@@ -356,35 +356,26 @@ export class ClassifyService{
      */
     async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
         let article:ArticleEntity[]=[];
-        await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
-        let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
-        console.log('数组='+this.findLevel(classify,id,0));
-      /*   let num:number=await this.showClassifyLevel(classify,id,0).then( a=>{console.log('级别是'+a)});
-        console.log('级别是'+num);
-        if(id==1){
-          let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').getMany();
-          article.push(...global);
-            let articel:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'global\'',{classifyId:1}).orderBy('id','ASC').getMany();
-            article.push(...article);
-        }
-        const num= new Promise((resolve ) =>{ this.showClassifyLevel(id,0)});
-        let num:number=await this.showClassifyLevel(id,0);
-        console.log('cehis='+JSON.stringify(num));
-        let array:ClassifyEntity[]=await this.showClassifyLevel(id,0);
-        let num:number=this.modifyLevel(array);
-        console.log('num='+num);*/
+        let level:number=await this.findLevel(id);
+        console.log('level='+level);
         return article;
     }
-    public findLevel(arr:ClassifyEntity[],id:number,level){
-        //let finalArray:ClassifyEntity[]=[];
-        for(let t in arr){
-            if(arr[t].groupId==id && arr[t].groupId!=null){
-              //  arr[t].level=level;
-               // finalArray.push(arr[t]);
-                this.findLevel(arr,arr[t].groupId,level+1);
+
+    /**
+     * 获取当前分类级别
+     * @param {number} id
+     * @returns {Promise<void>}
+     */
+    public async findLevel(id:number):Promise<number>{
+        let arr:ClassifyEntity[]=await this.repository.find();
+        let final:ClassifyEntity[]=await this.showClassifyLevel(arr,id,0).then(a=>{return a});
+        let num:number;
+        for(let t in final){
+            if(final[t].id==1){
+                num=final[t].level;
             }
         }
-        return //finalArray;
+        return num;
     }
 
     /**
@@ -392,45 +383,39 @@ export class ClassifyService{
      * @param {number} ids
      * @returns {Promise<number>}
      */
-    public async showClassifyLevel(/*arr:ClassifyEntity[],*/id:number,level:number){
+    public async showClassifyLevel(arr:ClassifyEntity[],id:number,level:number){
         let array:ClassifyEntity[]=[];
-        let first:ClassifyEntity=await this.repository.findOneById(id);
-        if(first!=null){
-           // console.log('id='+id+'level='+level);
-            first.level=level;
-            let second:ClassifyEntity[]=await this.showClassifyLevel(first.groupId,level+1);
-            first.childrens=second;
-
-        }
-        array.push(first);
-       // console.log('n='+JSON.stringify(array));
-        return array;
-
-        /*for(let t in arr){
-            let classify:ClassifyEntity[]=arr[t].childrens;
-            for(let h in classify){
-                if(classify[h].id==id){
-                    levelNum=level;
-                    console.log('levelNum='+levelNum+',id='+classify[h].id);
-                    await this.showClassifyLevel(arr, classify[h].groupId,level+1);
-                    return levelNum;
-                }
-            }
-        }*/
-
-    }
-    public  modifyLevel(arr:ClassifyEntity[]):number{
         for(let t in arr){
-            if(arr[t].id!=1){
-                 this.modifyLevel(arr[t].childrens)
-            }else if(arr[t].id==1){
-                let levelNum:number=arr[t].level;
-                console.log('levelnum='+levelNum);
-                return levelNum;
+            if(arr[t].id==id){
+                arr[t].level=level;
+                let newClas:ClassifyEntity=arr[t];
+                array.push(newClas);
+               let arrayCla:ClassifyEntity[]=await this.showClassifyLevel(arr, arr[t].groupId,level+1);
+               array.push(...arrayCla);
+
             }
         }
+        return array;
     }
 
+    /**
+     * 级别转换
+     * @param {number} level
+     * @returns {string}
+     */
+    public interfaceChange(level:number):string{
+        let finalLevel:string;
+        if(level==1){
+            finalLevel='level1';
+        }else if(level==2){
+            finalLevel='level2';
+        }else if(level==3){
+            finalLevel='level3';
+        }else if(level==4){
+            finalLevel=='current';
+        }
+        return finalLevel;
+    }
     /**
      *文章分类移动
      * @param {string} useFor
