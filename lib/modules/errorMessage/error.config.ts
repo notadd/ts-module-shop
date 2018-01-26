@@ -26,11 +26,17 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         errorMessage:'The upper level classification does not exist.',
         userMessage:'The upper level classification does not exist.'
     },
+    'create:level:lessThanLevel':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'Cannot select a category smaller than the current classification.',
+        userMessage:'Cannot select a category smaller than the current classification.'
+    },
     'create:classify:aliasRepeat':{
         type: 'BadRequest',
         httpStatus: HttpStatus.BAD_REQUEST,
-        errorMessage:'New classification alias cannot be repeated, please re-enter.',
-        userMessage:'New classification alias cannot be repeated, please re-enter.',
+        errorMessage:'alias cannot be repeated, please re-enter.',
+        userMessage:' alias cannot be repeated, please re-enter.',
     },
     'update:classify:updateById':{
         type: 'BadRequest',

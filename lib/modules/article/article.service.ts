@@ -12,7 +12,7 @@ import {ClassifyEntity} from "../entity/classify.entity";
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
             private readonly historyService:HistoryService,
-            private readonly classifyService:ClassifyService){}
+            private readonly classifyService:ClassifyService,){}
 
     /**
      * 返回所有数据,依据提供limit number 进行分页
@@ -64,6 +64,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
+        let num:number=await this.classifyService.findLevel(article.classifyId);
+        let level:string=this.classifyService.interfaceChange(num);
+        let levelGive:string=article.topPlace.toString();
+        if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
+        if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=null;
           console.log('输入时间='+article.publishedTime);
@@ -81,6 +86,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
           if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+          let num:number=await this.classifyService.findLevel(article.classifyId);
+          let level:string=this.classifyService.interfaceChange(num);
+          let levelGive:string=article.topPlace.toString();
+          if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
+          if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
           let time =new Date();
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =art;
