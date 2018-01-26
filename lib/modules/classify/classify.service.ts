@@ -34,7 +34,7 @@ export class ClassifyService{
             }
             let classify:ClassifyEntity=entity;
             this.repository.insert(classify);
-            return this.findAllClassifyArt();
+            return this.findAllClassifyArt(1);
     }
 
     /**
@@ -54,7 +54,7 @@ export class ClassifyService{
         }
         let classify:PageClassifyEntity=entity;
         this.pageRepository.insert(classify);
-        return this.findAllClassifyPage();
+        return this.findAllClassifyPage(1);
     }
 
     /**
@@ -75,7 +75,7 @@ export class ClassifyService{
             entity.updateAt =new Date();
             let finalClassify:ClassifyEntity =entity;
             await this.repository.updateById(entity.id,finalClassify);
-            return this.findAllClassifyArt();
+            return this.findAllClassifyArt(1);
      }
 
     /**
@@ -95,7 +95,7 @@ export class ClassifyService{
          entity.updateAt =new Date();
          let finalClassify:PageClassifyEntity =entity;
          await this.pageRepository.updateById(entity.id,finalClassify);
-         return this.findAllClassifyPage();
+         return this.findAllClassifyPage(1);
      }
 
     /**
@@ -103,42 +103,47 @@ export class ClassifyService{
      * @param {number} id
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async findAllClassifyArt():Promise<ClassifyEntity[]>{
-        await getManager().query("update public.classify set \"parentId\" = \"groupId\"");
-        let classify:ClassifyEntity[]=await this.repository.createQueryBuilder('classify').innerJoinAndSelect('classify.childrens','childrens').orderBy('classify.id').getMany();
-       // let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
-       // console.log('finalArray='+JSON.stringify(finalArray));
-        return classify;
+    async findAllClassifyArt(id:number):Promise<ClassifyEntity[]>{
+        let list:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :id',{id:id,}).orderBy('id','ASC').getMany();
+        let idFindOne:ClassifyEntity =await this.repository.createQueryBuilder().where('"id"= :id',{id:id,}).getOne();
+        let result:ClassifyEntity[]=[];
+        let resultArray:ClassifyEntity[]=await this.Artrecursion(id,list);
+        idFindOne.childrens=resultArray;
+        let newPageClassify:ClassifyEntity=idFindOne;
+        result.push(newPageClassify);
+        return result;
     }
 
     /**
      * 查找页面所有分类
      * @returns {Promise<PageClassifyEntity[]>}
      */
-    async findAllClassifyPage():Promise<PageClassifyEntity[]>{
-        await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
-        //let classify:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();;
-        //let finalArray:ClassifyEntity[]=await this.recursion(this.deletegroup(0,classify));
-        //console.log('finalArray='+JSON.stringify(finalArray));
-        let list:PageClassifyEntity[]=await this.pageRepository.find();
-        let result:PageClassifyEntity[]=await this.recursion(1,list);
+    async findAllClassifyPage(id:number):Promise<PageClassifyEntity[]>{
+        let list:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:id,}).orderBy('id','ASC').getMany();
+        let idFindOne:PageClassifyEntity =await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:id,}).getOne();
+        let result:PageClassifyEntity[]=[];
+        let resultArray:PageClassifyEntity[]=await this.Pagerecursion(id,list);
+        idFindOne.childrens=resultArray;
+        let newPageClassify:PageClassifyEntity=idFindOne;
+        result.push(newPageClassify);
         return result;
     }
 
-    async recursion(id:number,listFirst:PageClassifyEntity[]):Promise<PageClassifyEntity[]>{
+    /**
+     * 页面无极限分类
+     * @param {ClassifyEntity[]} entity
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    async Pagerecursion(id:number,listFirst:PageClassifyEntity[]):Promise<PageClassifyEntity[]>{
         let children:PageClassifyEntity[]=[];
         for(let t in listFirst){
             let groupIdFirst:number=listFirst[t].id;
             let navigationArray=new PageClassifyEntity;
-            navigationArray.id =listFirst[t].id;
-            navigationArray.groupId = listFirst[t].groupId;
-            navigationArray.classifyAlias = listFirst[t].classifyAlias;
-            navigationArray.chainUrl =listFirst[t].chainUrl;
-            navigationArray.classifyName=listFirst[t].classifyName;
-            let listSecond:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:groupIdFirst,}).getMany();
+            navigationArray=listFirst[t];
+            let listSecond:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:groupIdFirst,}).orderBy('id','ASC').getMany();
             if(listSecond.length>0){
                 for(let h in listSecond){
-                    let theEnd:PageClassifyEntity[]= await this.recursion(listSecond[h].id,listSecond);
+                    let theEnd:PageClassifyEntity[]= await this.Pagerecursion(listSecond[h].id,listSecond);
                     navigationArray.childrens =theEnd;
                 }
             }else{
@@ -147,7 +152,34 @@ export class ClassifyService{
             let navigationFinal:PageClassifyEntity=navigationArray;
             children.push(navigationFinal);
         }
-        //children.sort(this.compare('Id'));
+        return children;
+    }
+
+    /**
+     *文章无极限分类
+     * @param {number} id
+     * @param {ClassifyEntity[]} listFirst
+     * @returns {Promise<ClassifyEntity[]>}
+     * @constructor
+     */
+    async Artrecursion(id:number,listFirst:ClassifyEntity[]):Promise<ClassifyEntity[]>{
+        let children:ClassifyEntity[]=[];
+        for(let t in listFirst){
+            let groupIdFirst:number=listFirst[t].id;
+            let navigationArray=new ClassifyEntity;
+            navigationArray=listFirst[t];
+            let listSecond:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :id',{id:groupIdFirst,}).orderBy('id','ASC').getMany();
+            if(listSecond.length>0){
+                for(let h in listSecond){
+                    let theEnd:ClassifyEntity[]= await this.Artrecursion(listSecond[h].id,listSecond);
+                    navigationArray.childrens =theEnd;
+                }
+            }else{
+                navigationArray.childrens=null;
+            }
+            let navigationFinal:ClassifyEntity=navigationArray;
+            children.push(navigationFinal);
+        }
         return children;
     }
     /**
@@ -196,7 +228,7 @@ export class ClassifyService{
             }
             this.updateArticleClassify(deleteArray,'art');
             //await this.repository.deleteById(id);
-            return this.findAllClassifyArt();
+            return this.findAllClassifyArt(1);
     }
 
     /**
@@ -229,7 +261,7 @@ export class ClassifyService{
             }
         }
         this.updateArticleClassify(deleteArray,'page');
-        return this.findAllClassifyPage();
+        return this.findAllClassifyPage(1);
     }
     /**
      * 删除分类后，修改文章状态为默认分类。需要新建一个分类为默认
