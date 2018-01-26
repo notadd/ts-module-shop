@@ -144,4 +144,14 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
         return this.recycleFind(0);
     }
+
+    /**
+     * 分批获取置顶文章
+     * @param {number} limit
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    async findTopPlace(limit:number):Promise<ArticleEntity[]>{
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').limit(limit).getMany();
+        return result;
+    }
 }

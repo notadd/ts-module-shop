@@ -133,4 +133,16 @@ export class ArticleController{
         let result:ArticleEntity[]= await this.articleService.reductionArticle(array.id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
+    /**
+     * 分页获取置顶文章
+     * @param res
+     * @param {GetLimit} getLimit
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'Get the top article for pagination.'})
+    @Post('findTopPlace')
+    public async findTopPlace(@Response() res,@Body() getLimit:GetLimit){
+        let result:ArticleEntity[]= await this.articleService.findTopPlace(getLimit.limitNumber);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
 }
