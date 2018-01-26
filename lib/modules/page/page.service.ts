@@ -19,8 +19,8 @@ export class PageService{
      * 获取所有页面
      * @returns {Promise<PageEntity[]>}
      */
-    async getAllPage():Promise<PageEntity[]>{
-        let pages:PageEntity[]=await this.repository.find();
+    async getAllPage(limit:number):Promise<PageEntity[]>{
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").limit(limit).getMany();
         return pages;
     }
 
@@ -35,7 +35,6 @@ export class PageService{
         let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').getMany();
         return pages;
     }
-
     /**
      * 批量或者单个删除页面
      * @param {number[]} array
@@ -69,6 +68,8 @@ export class PageService{
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
         if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
+        if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let id:number= await this.repository.createQueryBuilder().insert().into(PageEntity).values(page).output('id').execute();
         const str:string=JSON.stringify(id);
         let newstr:string=str.replace('{','').replace('}','').replace('[','').replace(']','');
@@ -80,7 +81,7 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-        return this.getAllPage();
+        return this.getAllPage(0);
     }
     /**
      * 修改页面,暂时不能确定别名是否可以重复
@@ -91,6 +92,8 @@ export class PageService{
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
+        let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
+        if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
         if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let time =new Date();
@@ -111,7 +114,7 @@ export class PageService{
                 await this.contentRepository.updateById(newContent.id,newContent);
             }
         }
-        return this.getAllPage();
+        return this.getAllPage(0);
     }
 
     /**
