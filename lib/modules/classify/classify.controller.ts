@@ -107,10 +107,10 @@ export class ClassifyController{
     @Post('deleteClassify')
     public async deleteClassifyById(@Response() res,@Body() deleteId:DeleteDto){
         if(deleteId.usedFor=='art'){
-            let result:ClassifyEntity[]=await this.classifyService.deleteClassifyArt(deleteId.id);
+            let result:ClassifyEntity[]=await this.classifyService.deleteMethodFirst(deleteId.id);
             return res.status(HttpStatus.OK).send(JSON.stringify(result));
         }else if(deleteId.usedFor=='page'){
-            let result:PageClassifyEntity[]=await this.classifyService.deleteClassifyPage(deleteId.id);
+            let result:PageClassifyEntity[]=await this.classifyService.deleteMethodSecond(deleteId.id);
             return res.status(HttpStatus.OK).send(JSON.stringify(result));
         }
     }

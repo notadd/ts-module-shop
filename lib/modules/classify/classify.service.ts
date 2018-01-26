@@ -8,6 +8,7 @@ import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageEntity} from "../entity/page.entity";
 import {async} from "rxjs/scheduler/async";
 import {createYield} from "typescript";
+import {isNumber} from "util";
 
 @Component()
 export class ClassifyService{
@@ -32,7 +33,7 @@ export class ClassifyService{
             let first:ClassifyEntity=await this.repository.findOneById(1);
             if(entity.groupId==0 && first==null){
                 entity.groupId=null;
-            }else{
+            }else if(entity.groupId==0){
                 entity.groupId=1;
             }
             let classify:ClassifyEntity=entity;
@@ -55,7 +56,7 @@ export class ClassifyService{
         let first:PageClassifyEntity=await this.pageRepository.findOneById(1);
         if(entity.groupId==0 && first==null){
             entity.groupId=null;
-        }else{
+        }else if(entity.groupId==0){
             entity.groupId=1;
         }
         let classify:PageClassifyEntity=entity;
@@ -191,34 +192,12 @@ export class ClassifyService{
         return children;
     }
     /**
-     * 数组删除数据
-     */
-    deletegroup(id:number,entity:ClassifyEntity[]){
-        let array:ClassifyEntity[]=[];
-        for(let t in entity){
-            if(entity[t].id!=id){
-                console.log('删除数据'+id);
-                array.push(entity[t]);
-            }
-        }
-        return array;
-    }
-
-
-    /**
      * 通过Id删除文章分类及对应的子分类
      * @param {number} id
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async deleteClassifyArt(id:number):Promise<ClassifyEntity[]>{
-            let classify:ClassifyEntity = await this.repository.findOneById(id);
-            if(classify==null) throw new MessageCodeError('update:classify:updateById');
-            await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
-            const result =await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
-            let resultArray:ClassifyEntity[]=result;
-            console.log('deleteResult='+JSON.stringify(resultArray));
-            await getManager().query("update public.article_classify_table set \"parentId\"=null");
-            let deleteArray:number[]=[];
+    async deleteClassifyArt(id:number,result:ClassifyEntity[]):Promise<number[]>{
+        let deleteArray:number[]=[];
             for (let t in result){
                 let num = result[t].id;
                 if(num==id){
@@ -227,31 +206,53 @@ export class ClassifyService{
                     if(array.length>0){
                         for(let h in array){
                             let numH = array[h].id;
+                            console.log('numH='+numH);
                             deleteArray.push(numH);
                             await this.repository.deleteById(numH);
+                            await this.deleteClassifyArt(numH,result);
                         }
                     }
                     await this.repository.deleteById(num);
                 }
             }
+            if(deleteArray.length==0){
+                deleteArray.push(id);
+            }
             this.updateArticleClassify(deleteArray,'art');
-            //await this.repository.deleteById(id);
-            return this.findAllClassifyArt(1);
-    }
+            await this.repository.deleteById(id);
+            return deleteArray;
 
+    }
+    async deleteMethodFirst(id:number){
+        await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
+        const result =await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
+        let resultArray:ClassifyEntity[]=result;
+        await getManager().query("update public.article_classify_table set \"parentId\"=null");
+        let res:number[]=await this.deleteClassifyArt(id,result);
+        return this.findAllClassifyArt(1);
+    }
     /**
      * 通过id删除页面分类及对应的子分类
      * @param {number} id
      * @returns {Promise<PageClassifyEntity[]>}
      */
-    async deleteClassifyPage(id:number):Promise<PageClassifyEntity[]>{
+    async deleteMethodSecond(id:number):Promise<PageClassifyEntity[]>{
         let classify:PageClassifyEntity = await this.pageRepository.findOneById(id);
         if(classify==null) throw new MessageCodeError('update:classify:updateById');
         await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
         const result =await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();
         let resultArray:PageClassifyEntity[]=result;
-        console.log('deleteResult='+JSON.stringify(resultArray));
-        await getManager().query("update public.page_classify_table set \"parentId\"=null");
+        let res:number[]=await this.deleteClassifyPage(id,result);
+        return this.findAllClassifyPage(1);
+    }
+
+    /**
+     * 页面删除分类
+     * @param {number} id
+     * @param {PageClassifyEntity[]} result
+     * @returns {Promise<number[]>}
+     */
+    async deleteClassifyPage(id:number,result:PageClassifyEntity[]):Promise<number[]>{
         let deleteArray:number[]=[];
         for (let t in result){
             let num = result[t].id;
@@ -261,15 +262,21 @@ export class ClassifyService{
                 if(array.length>0){
                     for(let h in array){
                         let numH = array[h].id;
+                        console.log('numH='+numH);
                         deleteArray.push(numH);
                         await this.pageRepository.deleteById(numH);
+                        await this.deleteClassifyPage(numH,result);
                     }
                 }
                 await this.pageRepository.deleteById(num);
             }
         }
+        if(deleteArray.length==0){
+            deleteArray.push(id);
+        }
         this.updateArticleClassify(deleteArray,'page');
-        return this.findAllClassifyPage(1);
+        await this.pageRepository.deleteById(id);
+        return deleteArray;
     }
     /**
      * 删除分类后，修改文章状态为默认分类。需要新建一个分类为默认
