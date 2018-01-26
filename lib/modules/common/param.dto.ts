@@ -125,6 +125,9 @@ export class GetClassify{
     @ApiModelProperty({type:String,required:true})
     @IsString()
     readonly usedFor;
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly id;
 }
 
 
@@ -211,6 +214,19 @@ export class PageSerach{
     @ApiModelProperty({type:String})
     @IsString()
     readonly keyWords;
+}
+export class MobileClassify{
+    @ApiModelProperty({type:String,required:true})
+    @IsString()
+    readonly usedFor;
+
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly id;
+
+    @ApiModelProperty({type:Number,required:true})
+    @IsInt()
+    readonly parentId;
 }
 export class CreatePage{
     @ApiModelProperty({type:String,required:true})
