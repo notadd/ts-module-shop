@@ -245,7 +245,6 @@ export class ClassifyService{
         let res:number[]=await this.deleteClassifyPage(id,result);
         return this.findAllClassifyPage(1);
     }
-
     /**
      * 页面删除分类
      * @param {number} id
