@@ -139,7 +139,6 @@ export class ClassifyController{
         let result:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(getId.id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
-
     /**
      * 移动分类
      * @param res
