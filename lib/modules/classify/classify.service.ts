@@ -78,14 +78,15 @@ export class ClassifyService{
             let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
             //通过父级别名确定父级是否存在
             if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-            entity.updateAt =new Date();
+            let time =new Date();
+            entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let finalClassify:ClassifyEntity =entity;
             await this.repository.updateById(entity.id,finalClassify);
             return this.findAllClassifyArt(1);
      }
 
     /**
-     * 修改文章分类
+     * 修改页面分类
      * @param {PageClassifyEntity} entity
      * @returns {Promise<PageClassifyEntity[]>}
      */
@@ -98,7 +99,8 @@ export class ClassifyService{
          let parentClassify:PageClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
          //通过父级别名确定父级是否存在
          if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
-         entity.updateAt =new Date();
+         let time =new Date();
+         entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
          let finalClassify:PageClassifyEntity =entity;
          await this.pageRepository.updateById(entity.id,finalClassify);
          return this.findAllClassifyPage(1);
@@ -421,5 +423,55 @@ export class ClassifyService{
                 return levelNum;
             }
         }
+    }
+
+    /**
+     *文章分类移动
+     * @param {string} useFor
+     * @param {number} id
+     * @param {number} groupId
+     * @returns {Promise<ClassifyEntity[]>}
+     */
+    public async mobileClassifyArt(id:number,groupId:number):Promise<ClassifyEntity[]>{
+        let classify:ClassifyEntity = await this.repository.findOneById(id);
+        if(classify==null) throw new MessageCodeError('update:classify:updateById');
+        if(groupId!=0){
+            let parent:ClassifyEntity =await this.repository.findOneById(groupId);
+            if(parent==null) throw new MessageCodeError('update:classify:updateById');
+        }
+        if(groupId==0){
+            groupId=1;
+        }
+        classify.groupId=groupId;
+        let time =new Date();
+        classify.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        let newClassify:ClassifyEntity=classify;
+        this.repository.updateById(newClassify.id,newClassify);
+        return this.findAllClassifyArt(1);
+
+    }
+
+    /**
+     * 页面分类移动
+     * @param {number} id
+     * @param {number} groupId
+     * @returns {Promise<PageClassifyEntity[]>}
+     */
+    public async mobileClassifyPage(id:number,groupId:number):Promise<PageClassifyEntity[]>{
+        let classify:PageClassifyEntity = await this.pageRepository.findOneById(id);
+        if(classify==null) throw new MessageCodeError('update:classify:updateById');
+        if(groupId!=0){
+            let parent:PageClassifyEntity =await this.pageRepository.findOneById(groupId);
+            if(parent==null) throw new MessageCodeError('update:classify:updateById');
+        }
+        if(groupId==0){
+            groupId=1;
+        }
+        classify.groupId=groupId;
+        let time =new Date();
+        classify.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        let newClassify:PageClassifyEntity=classify;
+        this.pageRepository.updateById(newClassify.id,newClassify);
+        return this.findAllClassifyPage(1);
     }
 }

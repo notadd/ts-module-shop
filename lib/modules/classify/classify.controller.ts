@@ -1,11 +1,12 @@
 import {Body, Controller, Get, HttpStatus, Post, Response} from "@nestjs/common";
 import {ClassifyService} from "./classify.service";
-import {ApiOperation} from "@nestjs/swagger";
+import {ApiOperation, ApiResponse} from "@nestjs/swagger";
 import {CreateClassify} from "../common/param.dto";
 import {GetClassify} from "../common/param.dto";
 import {UpdateClassify} from "../common/param.dto";
 import {DeleteDto} from "../common/param.dto";
 import {showNextDto} from "../common/param.dto";
+import {MobileClassify} from "../common/param.dto";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
@@ -18,14 +19,17 @@ export class ClassifyController{
      * @param res
      */
     @ApiOperation({title:'Get all categories'})
+    @ApiResponse({status:403,description:'useFor 只能输入page或者art'})
     @Post('getAllClassify')
     public async getAllClassify(@Response() res,@Body() useFor:GetClassify){
         if(useFor.usedFor=='art'){
-            let  result:ClassifyEntity[]=await this.classifyService.findAllClassifyArt();
+            let  result:ClassifyEntity[]=await this.classifyService.findAllClassifyArt(useFor.id);
             return res.status(HttpStatus.OK).send(JSON.stringify(result));
         }else if(useFor.usedFor=='page'){
-            let result:PageClassifyEntity[]=await this.classifyService.findAllClassifyPage();
+            let result:PageClassifyEntity[]=await this.classifyService.findAllClassifyPage(useFor.id);
             return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        }else{
+            return res.status(403);
         }
 
     }
@@ -59,8 +63,6 @@ export class ClassifyController{
             let result:PageClassifyEntity[]= await this.classifyService.createClassifyPage(classify);
             return res.status(HttpStatus.OK).send(JSON.stringify(result));
         }
-
-
     }
 
     /**
@@ -123,6 +125,38 @@ export class ClassifyController{
     public async showNext(@Response() res,@Body() showNextId:showNextDto){
       let result:ArticleEntity[]=await this.classifyService.showNextTitle(showNextId.id);
       return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 通过分类id获取文章
+     * @param res
+     * @param {showNextDto} getId
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'get articles by id'})
+    @Post('getArticles')
+    public async getArticleByClassifyId(@Response() res,@Body() getId:showNextDto){
+        let result:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(getId.id);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 移动分类
+     * @param res
+     * @param {MobileClassify} getId
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'mobile the Classify'})
+    @Post('mobileTheClassify')
+    public async mobileTheClassify(@Response() res,@Body() getId:MobileClassify){
+       if(getId.usedFor=='art'){
+           let result:ClassifyEntity[]=await this.classifyService.mobileClassifyArt(getId.id,getId.parentId);
+           return res.status(HttpStatus.OK).send(JSON.stringify(result));
+       }else if(getId.usedFor=='page'){
+           let result:PageClassifyEntity[]=await this.classifyService.mobileClassifyPage(getId.id,getId.parentId);
+           return res.status(HttpStatus.OK).send(JSON.stringify(result));
+       }
+
     }
 
 
