@@ -20,12 +20,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async  getArticleAll(limit:number):Promise<ArticleEntity[]>{
         let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull  and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
-       /* let result:ArticleEntity[]=[];
-        for(let t in resultAll){
-            if(!resultAll[t].hidden){
-               result.push(resultAll[t]);
-            }
-        }*/
         return resultAll;
     }
 
@@ -154,4 +148,5 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').limit(limit).getMany();
         return result;
     }
+
 }
