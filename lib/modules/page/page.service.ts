@@ -137,6 +137,8 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async findPageByClassifyId(id:number,limit:number):Promise<PageEntity[]>{
+        let entityClassify:PageClassifyEntity=await this.classifyService.findOnePageClassifyById(id);
+        if(entityClassify==null) throw new MessageCodeError('delete:page:deleteById');
         let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classify"= :classify',{classify:id}).orderBy('id','ASC').limit(limit).getMany();
         return entity;
     }

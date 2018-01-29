@@ -9,13 +9,15 @@ import {PageEntity} from "../entity/page.entity";
 import {async} from "rxjs/scheduler/async";
 import {createYield} from "typescript";
 import {isNumber} from "util";
+import {ArticleService} from "../article/article.service";
 
 @Component()
 export class ClassifyService{
     constructor(@Inject('ClassifyRepositoryToken') private readonly repository:Repository<ClassifyEntity>,
                 @Inject('ArticleRepositoryToken') private readonly artRepository:Repository<ArticleEntity>,
                 @Inject('PageClassifyRepositoryToken') private readonly pageRepository:Repository<PageClassifyEntity>,
-                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>){}
+                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>,
+                private readonly artService:ArticleService){}
 
     /**
      * 新增文章分类
@@ -362,6 +364,8 @@ export class ClassifyService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         let newArray:number[]=Array.from(new Set(array));
         console.log('array='+newArray);
+        let globalArts:ArticleEntity[]=await this.artService.findTopPlace(0);
+        articles.push(...globalArts);
         if(level==1){
             let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('id','ASC').limit(limit).getMany();
             articles.push(...newArticles);
