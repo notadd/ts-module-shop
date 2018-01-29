@@ -20,6 +20,7 @@ export class ArticleController{
      * @param {GetLimit} limitNum
      */
     @ApiOperation({title:"find All articles"})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('findAll')
     public async getArticleAll(@Response() res,@Body() limitNum:GetLimit){
         let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden);
@@ -32,6 +33,7 @@ export class ArticleController{
      * @param {KeyWords} key
      */
     @ApiOperation({title:"Keyword search"})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('serach')
     public async keywordsSerach(@Response() res,@Body() key:KeyWords){
         let findAll:ArticleEntity[]=await this.articleService.serachArticles(key.keyWords,key.limitNumber);
@@ -44,6 +46,7 @@ export class ArticleController{
      * @param {DeleteArticleId} idArray
      */
     @ApiOperation({title:'Delete data according to Id.'})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('deleteById')
     public async deleteById(@Response() res,@Body() idArray:DeleteArticleId){
         let result:number= await this.articleService.deleteArticles(idArray.id);

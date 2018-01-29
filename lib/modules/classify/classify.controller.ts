@@ -134,6 +134,7 @@ export class ClassifyController{
      * @param {DeleteDto} showNextId
      */
     @ApiOperation({title:'Show the next level of the article by id.'})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('showNext')
     public async showNext(@Response() res,@Body() showNextId:showNextDto){
       let result:ArticleEntity[]=await this.classifyService.showNextTitle(showNextId.id);
@@ -147,6 +148,7 @@ export class ClassifyController{
      * @returns {Promise<void>}
      */
     @ApiOperation({title:'get articles by id'})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('getArticles')
     public async getArticleByClassifyId(@Response() res,@Body() getId:GetClassifyLimit){
         let result:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(getId.id,getId.limitNumber);
