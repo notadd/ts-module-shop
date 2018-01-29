@@ -172,7 +172,7 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let array:[number]=map.get('id');
-        const num=this.articleService.reductionArticle(array);
+        const num=this.articleService.reductionArticle(array,map.get('limitNum'));
         let result:string=`成功将${num}条数据还原`;
         return result;
     }

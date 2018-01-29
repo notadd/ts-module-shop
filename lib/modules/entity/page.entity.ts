@@ -1,7 +1,7 @@
 import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {PageContentEntity} from "./page.content.entity";
 
-@Entity('page')
+@Entity('page_entity_table')
 export class PageEntity{
     //页面id
     @PrimaryGeneratedColumn() id:number;
