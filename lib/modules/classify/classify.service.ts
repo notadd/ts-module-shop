@@ -331,7 +331,6 @@ export class ClassifyService{
         let entity:PageClassifyEntity=await this.pageRepository.findOneById(id);
         return entity;
     }
-    //let global:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'Level1'}).orderBy('id','ASC').getMany();
 
     /**
      * 显示子级分类文章

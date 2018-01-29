@@ -5,9 +5,7 @@ import {MessageCodeError} from "../errorMessage/error.interface";
 import {HistoryEntity} from "../entity/history.entity";
 import {HistoryService} from "../history/history.service";
 import {ClassifyService} from "../classify/classify.service";
-import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {ClassifyEntity} from "../entity/classify.entity";
-import {EnvConfig} from "../common/param.dto";
 
 @Component()
 export class ArticleService{
