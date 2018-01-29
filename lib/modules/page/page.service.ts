@@ -129,4 +129,15 @@ export class PageService{
         entity.contents=children;
         return entity;
     }
+
+    /**
+     * 通过分类id查找页面
+     * @param {number} id
+     * @param {number} limit
+     * @returns {Promise<PageEntity[]>}
+     */
+    async findPageByClassifyId(id:number,limit:number):Promise<PageEntity[]>{
+        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classify"= :classify',{classify:id}).orderBy('id','ASC').limit(limit).getMany();
+        return entity;
+    }
 }

@@ -4,6 +4,7 @@ import {ApiOperation} from "@nestjs/swagger";
 import {PageSerach} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {CreatePage} from "../common/param.dto";
+import {GetClassifyLimit} from "../common/param.dto";
 import {showNextDto} from "../common/param.dto";
 import {GetLimit} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
@@ -39,7 +40,7 @@ export class PageController{
 
     /**
      * 批量或者单个删除页面，并记入历史表
-     * @param res
+     * @param resClassity
      * @param {DeleteArticleId} array
      */
     @ApiOperation({title:'delete pages'})
@@ -84,7 +85,7 @@ export class PageController{
     @Post('updatePages')
     public async updatePages(@Response() res,@Body() page:UpdatePage){
         let newPage =new PageEntity();
-        newPage.id = page.id;
+        newPage.id = page.id;GetLimit
         newPage.title = page.title;
         newPage.alias = page.alias;
         newPage.classify = page.classify;
@@ -112,6 +113,19 @@ export class PageController{
     public async findPageById(@Response() res,@Body() page:showNextDto){
         let id:number=page.id;
         let result:PageEntity=await this.pageService.findPageById(id);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 根据分类id查找页面
+     * @param res
+     * @param {GetClassifyLimit} getLimit
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'find pages by classification id'})
+    @Post('getPagesByClassifyId')
+    public async getPagesByClassifyId(@Response() res,@Body() getLimit:GetClassifyLimit){
+        let result:PageEntity[]=await this.pageService.findPageByClassifyId(getLimit.id,getLimit.limitNumber);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
