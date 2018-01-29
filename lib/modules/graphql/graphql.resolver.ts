@@ -28,7 +28,8 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let limit:number=map.get('limitNum');
-        const result=this.articleService.getArticleAll(limit);
+        let hidden:boolean=map.get('hidden');
+        const result=this.articleService.getArticleAll(limit,hidden);
         return result;
 
     }
@@ -75,7 +76,7 @@ export class GraphqlResolver{
      * @returns {Promise<void>}
      */
     @Mutation()
-    createArticle(obj,arg){
+    async createArticle(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -84,8 +85,9 @@ export class GraphqlResolver{
         let date:string=art.publishedTime.toString();
         art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
         let newArticle:ArticleEntity=art;
-        const result=this.articleService.createArticle(newArticle);
-        return result;
+        const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
+        let final:string=JSON.stringify(result);
+        return final;
     }
 
     /**
@@ -104,8 +106,9 @@ export class GraphqlResolver{
         let date:string=art.publishedTime.toString();
         art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
         let newArticle:ArticleEntity=art;
-        const result=this.articleService.updateArticle(art);
-        return result;
+        const result=this.articleService.updateArticle(newArticle).then(a=>{return a});
+        let final:string=JSON.stringify(result);
+        return final;
     }
     /**
      * 回收站内分页获取文章
@@ -124,6 +127,21 @@ export class GraphqlResolver{
         return result;
     }
 
+    /**
+     * 回收站内分类获取文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    reductionGetByClassifyId(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        const result=this.articleService.reductionClassity(map.get('id'),map.get('limitNum'));
+        return result;
+    }
     /**
      * 回收站内批量或者单个删除文章
      * @param obj
@@ -154,7 +172,8 @@ export class GraphqlResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let array:[number]=map.get('id');
-        const result=this.articleService.reductionArticle(array);
+        const num=this.articleService.reductionArticle(array);
+        let result:string=`成功将${num}条数据还原`;
         return result;
     }
 
@@ -303,6 +322,22 @@ export class GraphqlResolver{
         let  result:ArticleEntity[]= await this.articleService.findTopPlace(map.get('limitNum'));
         return result;
     }
+    /**
+     *根据文章id获取文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    async getArticleById(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let result:ArticleEntity= await this.articleService.getArticleById(map.get('id'));
+        console.log('result='+JSON.stringify(result));
+        return result;
+    }
 
     /**
      * 关键字搜索页面
@@ -421,7 +456,22 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        const result=this.classifyService.getArticelsByClassifyId(map.get('id'));
+        const result=this.classifyService.getArticelsByClassifyId(map.get('id'),map.get('limitNum'));
+        return result;
+    }
+    /**
+     * 通过分类id获取页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    @Query()
+    getPagesByClassifyId(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        const result=this.pageService.findPageByClassifyId(map.get('id'),map.get('limitNum'));
         return result;
     }
     /**

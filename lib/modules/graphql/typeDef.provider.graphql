@@ -14,7 +14,7 @@ type Article{
     #来源链接
     sourceUrl:String,
     #置顶
-    topPlace:stick,
+    topPlace:String,
     #是否隐藏
     hidden:Boolean,
     #删除(回收站)
@@ -33,9 +33,9 @@ type Article{
 enum stick{
     global,
     current,
-    Level1,
-    Level2,
-    Level3
+    level1,
+    level2,
+    level3
 }
 input ArticleInput{
     #文章名
@@ -160,8 +160,8 @@ type Content{
     content:String,
 }
 type Query {
-    #Get all the articles by paging.
-    getArticleAll(limitNum:Int!):[Article],
+    #Get all the articles by paging and the articles is show.
+    getArticleAll(limitNum:Int!,hidden:Boolean!):[Article],
     #Get the article by searching for keywords.
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
     #Get all the categories,But you need to provide'art'or 'page'.
@@ -172,26 +172,32 @@ type Query {
     serachPages(keyWords:String!):[Page],
     #Find all the articles in the recycle bin.
     recycleFind(limitNum:Int!):[Article],
+    #Get the  article from  reduction by classify id.
+    reductionGetByClassifyId(id:Int!,limitNum:Int!):[Article],
     #show the articles in the next level of the current classification.
     showNext(id:Int!):[Article],
-    #Get articles by classifaction id
-    getArticleByClassifyId(id:Int!):[Article],
-    #find page by id
+    #Get articles by classifaction id topPlace
+    getArticleByClassifyId(id:Int!,limitNum:Int!):[Article],
+    #find pages by classification id.
+    getPagesByClassifyId(id:Int!,limitNum:Int!):[Page]
+    #find a page by id
     findPageById(id:Int!):Page,
     #get top place articles
     findTopPlace(limitNum:Int!):[Article],
+    #get articles by id
+    getArticleById(id:Int!):Article
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.
     deleteById(id:[Int]):Int,
     #To create the article
-    createArticle(createArt:ArticleInput!):[Article],
+    createArticle(createArt:ArticleInput!):String,
     #To update the article
-    updateArticle(updateArt:ArticleUpdate!):[Article],
+    updateArticle(updateArt:ArticleUpdate!):String,
     #Delete the article in the recycle bin.
     recycleDelete(id:[Int]):Int,
     #Restore the article in the recycle bin.
-    reductionArticle(id:[Int]):[Article],
+    reductionArticle(id:[Int]):String,
     #To create a classification,and you need to provide'art'or 'page'.
     createClassify(createClass:ClassifyCreate!,useFor:String!):[Classify],
     #To update a classification,and you need to provide'art'or 'page'.
