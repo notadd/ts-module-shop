@@ -3,11 +3,11 @@ import {ClassifyEntity} from "./classify.entity";
 enum EnvConfig{
     global,
     current,
-    Level1,
-    Level2,
-    Level3
+    level1,
+    level2,
+    level3
 }
-@Entity('article')
+@Entity('article_entity_table')
 export class ArticleEntity{
     //文章Id
     @PrimaryGeneratedColumn() id:number;
@@ -24,7 +24,7 @@ export class ArticleEntity{
     //来源链接
     @Column({nullable:true,length:200}) sourceUrl:string;
     //置顶
-    @Column({type:String}) topPlace:EnvConfig;
+    @Column() topPlace:string;
     //是否隐藏
     @Column({nullable:false}) hidden:boolean;
     //删除(回收站)

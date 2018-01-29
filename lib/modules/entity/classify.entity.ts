@@ -4,7 +4,7 @@ import {
 } from "typeorm";
 import {ArticleEntity} from "./article.entity";
 
-@Entity('classify')
+@Entity('article_classify_table')
 export class ClassifyEntity{
     //分类Id
     @PrimaryGeneratedColumn() id:number;
