@@ -351,14 +351,56 @@ export class ClassifyService{
     }
 
     /**
-     * 通过分类id获取文章
+     * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
-    async getArticelsByClassifyId(id:number):Promise<ArticleEntity[]>{
-        let article:ArticleEntity[]=[];
-        let level:number=await this.findLevel(id);
-        console.log('level='+level);
-        return article;
+    async getArticelsByClassifyId(id:number,limit:number):Promise<ArticleEntity[]>{
+        let articles:ArticleEntity[]=[];
+        let entity:ClassifyEntity=await this.findOneByIdArt(id);
+        if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let level:number=await this.findLevel(entity.id);
+        let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        let newArray:number[]=Array.from(new Set(array));
+        console.log('array='+newArray);
+        if(level==1){
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...newArticles);
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...finalArticles);
+        }else if(level==2){
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...newArticles);
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...finalArticles);
+        }else if(level==3){
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...newArticles);
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level3\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            articles.push(...finalArticles);
+        }
+        return articles;
+    }
+
+    /**
+     * 获取当前分类所有子分类id
+     * @param {number} id
+     * @returns {Promise<number[]>}
+     */
+    async  getClassifyId(id:number):Promise<number[]>{
+        await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
+        const result =await this.repository.createQueryBuilder('article_classify_table').where('article_classify_table.id= :id',{id:id}).innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
+        let firstArray:ClassifyEntity[]=result;
+        let array:number[]=[];
+        for(let t in firstArray){
+            array.push(firstArray[t].id);
+            if(firstArray[t].childrens.length>0){
+               for(let h in firstArray[t].childrens){
+                   array.push(firstArray[t].childrens[h].id);
+                   array.push(...await this.getClassifyId(firstArray[t].childrens[h].id));
+               }
+            }
+        }
+        return array;
     }
 
     /**
