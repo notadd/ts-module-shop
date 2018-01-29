@@ -4,6 +4,7 @@ import {ArticleService} from "./article.service";
 import {GetLimit} from "../common/param.dto";
 import {CreateArticle} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
+import {GetClassifyLimit} from "../common/param.dto";
 import {UpdateArticle} from "../common/param.dto";
 import {KeyWords} from "../common/param.dto";
 import {ArticleEntity} from "../entity/article.entity";
@@ -143,6 +144,19 @@ export class ArticleController{
     @Post('findTopPlace')
     public async findTopPlace(@Response() res,@Body() getLimit:GetLimit){
         let result:ArticleEntity[]= await this.articleService.findTopPlace(getLimit.limitNumber);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
+    /**
+     * 回收站内分类获取文章
+     * @param res
+     * @param {GetClassifyLimit} getLimit
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'Get the  article from  reduction by classify id.'})
+    @Post('reductionGetByClassifyId')
+    public async reductionGetByClassifyId(@Response() res,@Body() getLimit:GetClassifyLimit){
+        let result:ArticleEntity[]=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 }

@@ -155,7 +155,18 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
     async findTopPlace(limit:number):Promise<ArticleEntity[]>{
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','ASC').limit(limit).getMany();
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('id','DESC').limit(limit).getMany();
+        return result;
+    }
+
+    /**
+     * 回收站内根据分类查找文章
+     * @param {number} id
+     * @param {number} limit
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    async reductionClassity(id:number,limit:number):Promise<ArticleEntity[]>{
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId"= :classifyId  and recycling=true',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
         return result;
     }
 

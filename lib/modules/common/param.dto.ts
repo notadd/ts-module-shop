@@ -13,7 +13,15 @@ export class GetLimit{
     @IsInt()
     readonly limitNumber;
 }
+export class GetClassifyLimit{
+    @ApiModelProperty({type:Array})
+    @IsInt()
+    readonly id;
 
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly limitNumber;
+}
 export class KeyWords{
     @ApiModelProperty({type:Number})
     @IsInt()
