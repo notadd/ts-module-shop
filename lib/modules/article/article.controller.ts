@@ -1,10 +1,11 @@
-import {Body, Controller, Get, HttpStatus, Post, Response} from "@nestjs/common";
+import {Body, Controller, HttpStatus, Post, Response} from "@nestjs/common";
 import {ApiOperation} from "@nestjs/swagger";
 import {ArticleService} from "./article.service";
-import {GetLimit} from "../common/param.dto";
+import {GetLimit, showNextDto} from "../common/param.dto";
 import {CreateArticle} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {GetClassifyLimit} from "../common/param.dto";
+import {GetLimitNum} from "../common/param.dto";
 import {UpdateArticle} from "../common/param.dto";
 import {KeyWords} from "../common/param.dto";
 import {ArticleEntity} from "../entity/article.entity";
@@ -21,7 +22,7 @@ export class ArticleController{
     @ApiOperation({title:"find All articles"})
     @Post('findAll')
     public async getArticleAll(@Response() res,@Body() limitNum:GetLimit){
-        let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber);
+        let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden);
         return res.status(HttpStatus.OK).send(JSON.stringify(findAll));
     }
 
@@ -69,9 +70,10 @@ export class ArticleController{
         art.publishedTime =new Date(Date.parse(article.publishedTime.replace(/-/g,"/")));
         art.source = article.source;
         art.sourceUrl =article.sourceUrl;
-        let result:ArticleEntity[]= await this.articleService.createArticle(art);
-        console.log('result='+JSON.stringify(result));
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let result= await this.articleService.createArticle(art);
+        let str:string=JSON.stringify(result);
+        let final:string=`成功添加数据${str}`;
+        return res.status(HttpStatus.OK).send(JSON.stringify(final));
     }
 
     /**
@@ -81,7 +83,7 @@ export class ArticleController{
      */
     @ApiOperation({title:'Update the article'})
     @Post('updateArticle')
-    public updateArticle(@Response() res,@Body() article:UpdateArticle){
+    public async updateArticle(@Response() res,@Body() article:UpdateArticle){
         let art =new ArticleEntity();
         art.id =article.id;
         art.name=article.name;
@@ -94,8 +96,10 @@ export class ArticleController{
         art.publishedTime =new Date(Date.parse(article.publishedTime.replace(/-/g,"/")));
         art.source = article.source;
         art.sourceUrl =article.sourceUrl;
-        const result=this.articleService.updateArticle(art);
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let result=await this.articleService.updateArticle(art);
+        let str:string=JSON.stringify(result);
+        let final:string=`成功修改数据${str}`;
+        return res.status(HttpStatus.OK).send(JSON.stringify(final));
     }
 
     /**
@@ -105,7 +109,7 @@ export class ArticleController{
      */
     @ApiOperation({title:'The article in the recycle bin.'})
     @Post('recycle')
-    public async recycleFind(@Response() res,@Body() limit:GetLimit){
+    public async recycleFind(@Response() res,@Body() limit:GetLimitNum){
         let result:ArticleEntity[] =await this.articleService.recycleFind(limit.limitNumber);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
@@ -131,7 +135,8 @@ export class ArticleController{
     @ApiOperation({title:'The article was restored at the recycle bin.'})
     @Post('recycleRestore')
     public async reductionArticle(@Response() res,@Body() array:DeleteArticleId){
-        let result:ArticleEntity[]= await this.articleService.reductionArticle(array.id);
+        let num:number= await this.articleService.reductionArticle(array.id);
+        let result:string=`成功将${num}条数据还原`;
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
     /**
@@ -159,4 +164,17 @@ export class ArticleController{
         let result:ArticleEntity[]=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
+    /**
+     * 通过文章id获取文章
+     * @param res
+     * @param {showNextDto} getId
+     * @returns {Promise<void>}
+     */
+    @ApiOperation({title:'get articles by id'})
+    @Post('getArticleById')
+    public async getArticleById(@Response() res,@Body() getId:showNextDto){
+        let result:ArticleEntity=await this.articleService.getArticleById(getId.id);
+        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+    }
+
 }
