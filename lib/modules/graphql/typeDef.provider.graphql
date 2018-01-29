@@ -51,7 +51,7 @@ input ArticleInput{
     #置顶
     topPlace:stick!,
     #是否隐藏
-    hidden:Boolean!,
+    hidden:Boolean,
     #发布时间
     publishedTime:String,
     #来源
@@ -161,7 +161,7 @@ type Content{
 }
 type Query {
     #Get all the articles by paging and the articles is show.
-    getArticleAll(limitNum:Int!,hidden:Boolean!):[Article],
+    getArticleAll(limitNum:Int!,hidden:Boolean):[Article],
     #Get the article by searching for keywords.
     keywordsSerach(keywords:String!,limitNum:Int!):[Article]
     #Get all the categories,But you need to provide'art'or 'page'.
@@ -197,7 +197,7 @@ type Mutation{
     #Delete the article in the recycle bin.
     recycleDelete(id:[Int]):Int,
     #Restore the article in the recycle bin.
-    reductionArticle(id:[Int]):String,
+    reductionArticle(id:[Int],limitNum:Int!):String,
     #To create a classification,and you need to provide'art'or 'page'.
     createClassify(createClass:ClassifyCreate!,useFor:String!):[Classify],
     #To update a classification,and you need to provide'art'or 'page'.

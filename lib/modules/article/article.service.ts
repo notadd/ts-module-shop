@@ -143,7 +143,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<ArticleEntity[]>}
      */
-    async reductionArticle(array:[number]):Promise<number>{
+    async reductionArticle(array:[number],limit:number):Promise<ArticleEntity[]>{
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
             if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
@@ -154,7 +154,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             this.respository.updateById(newArticle.id,newArticle);
 
         }
-        return array.length;
+        return this.recycleFind(limit);
     }
 
     /**
