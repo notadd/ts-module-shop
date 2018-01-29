@@ -1,7 +1,7 @@
 import {Body, Controller, HttpStatus, Post, Response} from "@nestjs/common";
-import {ApiOperation} from "@nestjs/swagger";
+import {ApiOperation, ApiResponse} from "@nestjs/swagger";
 import {ArticleService} from "./article.service";
-import {GetLimit, showNextDto} from "../common/param.dto";
+import {EnvConfig, GetLimit, showNextDto} from "../common/param.dto";
 import {CreateArticle} from "../common/param.dto";
 import {DeleteArticleId} from "../common/param.dto";
 import {GetClassifyLimit} from "../common/param.dto";
@@ -57,14 +57,20 @@ export class ArticleController{
      * @param {CreateArticle} article
      */
     @ApiOperation({title:'Add the article'})
+    @ApiResponse({status:403,description:'topPlace 必须为global、current、level1、level2、level3'})
+    @ApiResponse({status:500,description:'Internal server error'})
     @Post('createArticle')
     public async createArticle(@Response() res,@Body() article:CreateArticle){
+        let topPlace:string=article.topPlace.toString();
+        if(topPlace=='global' || topPlace=='current'){}else if(topPlace=='level1' || topPlace=='level2'){}else if(topPlace=='level1'){}else{
+            return res.status(403).send()
+        }
         let art =new ArticleEntity();
         art.name=article.name;
         art.classifyId=article.classifyId;
         art.classify =article.classifyName;
         art.abstract=article.abstractArticle;
-        art.topPlace =article.topPlace;
+        art.topPlace =topPlace;
         art.hidden =article.hidden;
         art.content = article.content;
         art.publishedTime =new Date(Date.parse(article.publishedTime.replace(/-/g,"/")));
@@ -82,15 +88,20 @@ export class ArticleController{
      * @param {UpdateArticle} article
      */
     @ApiOperation({title:'Update the article'})
+
     @Post('updateArticle')
     public async updateArticle(@Response() res,@Body() article:UpdateArticle){
+        let topPlace:string=article.topPlace.toString();
+        if(topPlace=='global' || topPlace=='current'){}else if(topPlace=='level1' || topPlace=='level2'){}else if(topPlace=='level1'){}else{
+            return res.status(403).send()
+        }
         let art =new ArticleEntity();
         art.id =article.id;
         art.name=article.name;
         art.classifyId=article.classifyId;
         art.classify =article.classifyName;
         art.abstract=article.abstractArticle;
-        art.topPlace =article.topPlace;
+        art.topPlace =topPlace;
         art.hidden =article.hidden;
         art.content = article.content;
         art.publishedTime =new Date(Date.parse(article.publishedTime.replace(/-/g,"/")));

@@ -1,23 +1,31 @@
 import {ApiModelProperty} from "@nestjs/swagger";
-import {IsString,IsInt,IsBoolean,IsDate,IsUrl} from 'class-validator';
-import {URL} from "url";
+import {IsString,IsInt,IsBoolean} from 'class-validator';
 export enum EnvConfig{
     global,
     current,
-    Level1,
-    Level2,
-    Level3
+    level1,
+    level2,
+    level3
 }
 export class GetLimit{
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly limitNumber;
+
+    @ApiModelProperty({type:Boolean})
+    @IsBoolean()
+    readonly hidden;
 }
 export class GetClassifyLimit{
-    @ApiModelProperty({type:Array})
+    @ApiModelProperty({type:Number})
     @IsInt()
     readonly id;
 
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly limitNumber;
+}
+export class GetLimitNum{
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly limitNumber;
@@ -60,9 +68,9 @@ export class CreateArticle{
     @IsString()
     readonly abstractArticle;
 
-    @ApiModelProperty({type:String,required:true})
+    @ApiModelProperty({type:String})
     @IsString()
-    topPlace:EnvConfig;
+     topPlace:EnvConfig;
 
     @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
@@ -76,8 +84,8 @@ export class CreateArticle{
     @IsString()
     readonly source;
 
-    @ApiModelProperty({type:URL})
-    @IsUrl()
+    @ApiModelProperty({type:String})
+    @IsString()
     readonly sourceUrl;
 
 }
@@ -110,7 +118,7 @@ export class UpdateArticle{
 
     @ApiModelProperty({type:String,required:true})
     @IsString()
-    readonly topPlace:EnvConfig;
+     topPlace:EnvConfig;
 
     @ApiModelProperty({type:Boolean,required:true})
     @IsBoolean()
@@ -125,7 +133,7 @@ export class UpdateArticle{
     readonly source;
 
     @ApiModelProperty({type:String})
-    @IsUrl()
+    @IsString()
     readonly sourceUrl;
 
 }
@@ -217,6 +225,7 @@ export class showNextDto{
     @ApiModelProperty({type:Number,required:true})
     @IsInt()
     readonly id;
+
 }
 export class PageSerach{
     @ApiModelProperty({type:String})
