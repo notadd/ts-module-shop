@@ -7,6 +7,7 @@ import {HistoryService} from "../history/history.service";
 import {ClassifyService} from "../classify/classify.service";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {ClassifyEntity} from "../entity/classify.entity";
+import {EnvConfig} from "../common/param.dto";
 
 @Component()
 export class ArticleService{
@@ -15,11 +16,16 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             private readonly classifyService:ClassifyService,){}
 
     /**
-     * 返回所有数据,依据提供limit number 进行分页
+     * 返回所有数据,依据提供limit进行分页
      * @returns {Promise<ArticleEntity[]>}
      */
-    async  getArticleAll(limit:number):Promise<ArticleEntity[]>{
-        let resultAll:ArticleEntity[]= await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull  and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+    async  getArticleAll(limit:number,hidden:boolean):Promise<ArticleEntity[]>{
+        let resultAll:ArticleEntity[];
+        if(hidden){
+            resultAll = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+        }else{
+            resultAll = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+        }
         return resultAll;
     }
 
@@ -31,7 +37,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async serachArticles(name:string,limit:number):Promise<ArticleEntity[]>{
         let str:string=`%${name}%`;
-        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).orderBy('id','ASC').limit(limit).getMany();
+        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').limit(limit).getMany();
         return resultAll;
     }
 
@@ -60,7 +66,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async createArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
+      async createArticle(article:ArticleEntity){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
@@ -72,8 +78,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=null;
           console.log('输入时间='+article.publishedTime);
-          this.respository.insert(article);
-         return this.getArticleAll(0);
+         let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
+         return create;
       }
 
     /**
@@ -81,7 +87,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async updateArticle(article:ArticleEntity):Promise<ArticleEntity[]>{
+      async updateArticle(article:ArticleEntity):Promise<number>{
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
@@ -93,9 +99,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
           let time =new Date();
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-          let newArt:ArticleEntity =art;
-          this.respository.updateById(newArt.id,newArt);
-          return this.getArticleAll(0);
+          let newArt:ArticleEntity =article;
+          let result=await this.respository.createQueryBuilder().update(ArticleEntity).set(newArt).where('"id"= :id',{id:newArt.id}).output('id').execute().then(a=>{return a});
+          return result;
       }
 
     /**
@@ -136,7 +142,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<ArticleEntity[]>}
      */
-    async reductionArticle(array:[number]):Promise<ArticleEntity[]>{
+    async reductionArticle(array:[number]):Promise<number>{
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
             if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
@@ -145,8 +151,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let newArticle:ArticleEntity=article;
             this.respository.updateById(newArticle.id,newArticle);
+
         }
-        return this.recycleFind(0);
+        return array.length;
     }
 
     /**
@@ -168,6 +175,31 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
     async reductionClassity(id:number,limit:number):Promise<ArticleEntity[]>{
         let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId"= :classifyId  and recycling=true',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
         return result;
+    }
+
+    /**
+     * 根据id获取文章
+     * @param {number} id
+     * @returns {Promise<ArticleEntity>}
+     */
+    async getArticleById(id:number):Promise<ArticleEntity>{
+        let article:ArticleEntity=await this.respository.findOneById(id);
+        if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
+        let parent:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
+        if(parent==null) throw new MessageCodeError('delete:recycling:idMissing');
+        let num:number=await this.classifyService.findLevel(article.classifyId).then(a=>{return a});
+        let level:string=this.classifyService.interfaceChange(num);
+        if(level=='level1'){
+            article.topPlace=`global,current`;
+        }else if(level=='level2'){
+            article.topPlace=`global,level1,current`;
+        }else if(level=='level3'){
+            article.topPlace=`global,level1,current,level2`;
+        }else{
+            article.topPlace=`global,level1,,level2,level3,current`;
+        }
+        let newArticle:ArticleEntity=article;
+        return newArticle;
     }
 
 }
