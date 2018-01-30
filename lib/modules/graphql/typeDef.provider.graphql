@@ -186,10 +186,10 @@ enum useFor{
     page
 }
 type Query {
-    getArticle(getArticleAll:ArticleAll,keywordsSerach:Keywords,recycleFind:recycleLimit,reductionGetByClassifyId:recycleClasssifyId,showNext:ArticleId,getArticleByClassifyId:recycleClasssifyId,
+    getArticles(getArticleAll:ArticleAll,keywordsSerach:Keywords,recycleFind:recycleLimit,reductionGetByClassifyId:recycleClasssifyId,showNext:ArticleId,getArticleByClassifyId:recycleClasssifyId,
         findTopPlace:recycleLimit,getArticleById:ArticleId):[Article],
-    getClassify(getAllClassify:AllClassify,):[Classify],
-    getPage(getAllPage:recycleLimit,serachPages:Keywords,getPagesByClassifyId:recycleClasssifyId,findPageById:ArticleId):[Page],
+    getClassifys(getAllClassify:AllClassify,):[Classify],
+    getPages(getAllPage:recycleLimit,serachPages:Keywords,getPagesByClassifyId:recycleClasssifyId,findPageById:ArticleId):[Page],
     #Get all the articles by paging and the articles is show.
     getArticleAll(limitNum:Int!,hidden:Boolean):[Article],
     #Get the article by searching for keywords.

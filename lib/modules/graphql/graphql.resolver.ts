@@ -23,7 +23,7 @@ export class GraphqlResolver{
      */
 
     @Query()
-    getArticle(obj,arg){
+    getArticles(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -85,8 +85,15 @@ export class GraphqlResolver{
             return result;
         }
     }
+
+    /**
+     * 获取分类
+     * @param obj
+     * @param arg
+     * @returns {any}
+     */
     @Query()
-    getClassify(obj,arg){
+    getClassifys(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -109,13 +116,47 @@ export class GraphqlResolver{
             return result;
         }
     }
+
+    /**
+     * 获取页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<PageEntity[]>}
+     */
     @Query()
-    getPage(obj,arg){
+    getPages(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-
+        let getAllPage=map.get('getAllPage');
+        if(getAllPage!=null || getAllPage !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getAllPage);
+            const result=this.pageService.getAllPage(amap.get('limitNum'));
+            return result;
+        }
+        let serachPages=map.get('serachPages');
+        if(serachPages!=null || serachPages !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(serachPages);
+            const result=this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'));
+            return result;
+        }
+        let getPagesByClassifyId=map.get('getPagesByClassifyId');
+        if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getPagesByClassifyId);
+            const result=this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'));
+            return result;
+        }
+        let findPageById=map.get('findPageById');
+        if(findPageById!=null || findPageById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(findPageById);
+            const result=this.pageService.findPageById(amap.get('id'));
+            return result;
+        }
     }
     /**
      * 分页获取全部文章
