@@ -102,6 +102,7 @@ type Classify{
     childrens:[Classify],
 }
 input ClassifyCreate{
+    useFor:useFor
     #分类名称
     classifyName:String!,
     #分类别名
@@ -192,6 +193,25 @@ enum useFor{
 input Array{
     id:[Int],
 }
+input ClassifyCreateNew{
+    useFor:useFor!,
+    createClass:ClassifyCreate,
+    id:Int
+}
+input ClassifyUpdateNew{
+    useFor:useFor!,
+    updateClass:ClassifyUpdate,
+    id:Int
+}
+input deleteClassify{
+    useFor:useFor!,
+    id:Int!
+}
+input mobileClassify{
+    useFor:useFor!,
+    id:Int!,
+    parentId:Int!
+}
 type Query {
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId) : [Article],
     getClassifys(getAllClassify: AllClassify, ) : [Classify],
@@ -200,13 +220,7 @@ type Query {
 type Mutation{
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array):String
     #To create a classification,and you need to provide'art'or 'page'.
-    createClassify(createClass:ClassifyCreate!,useFor:String!):[Classify],
-    #To update a classification,and you need to provide'art'or 'page'.
-    updateClassify(updateClass:ClassifyUpdate!,useFor:String!):[Classify],
-    #To delete a classification,and you need to provide'art'or 'page'.
-    deleteClassifyById(id:Int!,useFor:String!):[Classify],
-    #mobile the classification
-    mobileTheClassify(useFor:String!,id:Int!,parentId:Int!):[Classify]
+    ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
     #Single or batch delete pages
     deletePages(id:[Int]!):Int,
     #To cerate a page

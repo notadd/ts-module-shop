@@ -8,6 +8,7 @@ import {PageEntity} from "../entity/page.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
+import {MessageCodeError} from "../errorMessage/error.interface";
 
 @Resolver()
 export class GraphqlResolver{
@@ -222,98 +223,95 @@ export class GraphqlResolver{
     }
 
     /**
-     * 新增分类
-     * @param obj
-     * @param arg
-     * @returns {Promise<ClassifyEntity[]>}
-     */
-    @Mutation()
-    createClassify(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let useFor:string=map.get('useFor');
-        let result;
-        if(useFor=='art'){
-            let newClass:ClassifyEntity=map.get('createClass');
-            result=this.classifyService.createClassifyArt(newClass);
-        }else if(useFor=='page'){
-            let newClass:PageClassifyEntity=map.get('createClass');
-            result=this.classifyService.createClassifyPage(newClass);
-        }
-        return result;
-
-    }
-
-    /**
-     * 编辑分类
-     * @param obj
-     * @param arg
-     * @returns {Promise<ClassifyEntity[]>}
-     */
-    @Mutation()
-    updateClassify(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let useFor:string=map.get('useFor');
-        let result;
-        if(useFor=='art'){
-            let newClass:ClassifyEntity=map.get('updateClass');
-            result=this.classifyService.updateClassifyArt(newClass);
-        }else if(useFor=='page'){
-            let newClass:PageClassifyEntity=map.get('updateClass');
-            result=this.classifyService.updateClassifyPage(newClass);
-        }
-        return result;
-    }
-
-    /**
-     * 移动分类
+     * 分类的增加、修改 分文章和页面两种
      * @param obj
      * @param arg
      * @returns {any}
+     * @constructor
      */
     @Mutation()
-    mobileTheClassify(obj,arg){
+    ClassifyCU(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let useFor:string=map.get('useFor');
-        let result;
-        if(useFor=='art'){
-            result=this.classifyService.mobileClassifyArt(map.get('id'),map.get('parentId'));
-        }else if(useFor=='page'){
-            result=this.classifyService.mobileClassifyArt(map.get('id'),map.get('parentId'));
+        let createArt=map.get('createClass');
+        if(createArt!=null || createArt !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(createArt);
+            let useFor:string=amap.get('useFor');
+            let result;
+            let id:number=amap.get('id');
+            if(id==null || id==0){
+                id=1;
+            }
+            if(useFor=='art'){
+                let newClass:ClassifyEntity=amap.get('createClass');
+                result=this.classifyService.createClassifyArt(newClass,id);
+            }else if(useFor=='page'){
+                let newClass:PageClassifyEntity=amap.get('createClass');
+                result=this.classifyService.createClassifyPage(newClass,id);
+            }
+            return result;
         }
-        return result;
+        let updateClass=map.get('updateClass');
+        if(updateClass!=null || updateClass !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(updateClass);
+            let useFor:string=amap.get('useFor');
+            let id:number=amap.get('id');
+            if(id==null || id==0){
+                id=1;
+            }
+            let result;
+            if(useFor=='art'){
+                let newClass:ClassifyEntity=amap.get('updateClass');
+                result=this.classifyService.updateClassifyArt(newClass,id);
+            }else if(useFor=='page'){
+                let newClass:PageClassifyEntity=amap.get('updateClass');
+                result=this.classifyService.updateClassifyPage(newClass,id);
+            }
+            return result;
+        }
+        let deleteClassifyById=map.get('deleteClassifyById');
+        if(deleteClassifyById!=null || deleteClassifyById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(deleteClassifyById);
+            let useFor:string=amap.get('useFor');
+            let id:number=amap.get('id');
+            if(id==null || id==0){
+                id=1;
+            }
+            if(id==1)throw new MessageCodeError('drop:table:ById1');
+            let result;
+            if(useFor=='art'){
+                result=this.classifyService.deleteMethodFirst(id);
+            }else if(useFor=='page'){
+                result=this.classifyService.deleteMethodSecond(id);
+            }
+            return result;
+        }
+        let mobileTheClassify=map.get('mobileTheClassify');
+        if(mobileTheClassify!=null || mobileTheClassify !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(mobileTheClassify);
+            let useFor:string=amap.get('useFor');
+            let id:number=amap.get('id');
+            let parentId:number=amap.get('parentId')
+            if(parentId==null || parentId==0){
+                parentId=1;
+            } let result;
+            if(useFor=='art'){
+                result=this.classifyService.mobileClassifyArt(id,parentId);
+            }else if(useFor=='page'){
+                result=this.classifyService.mobileClassifyPage(id,parentId);
+            }
+            return result;
+        }
+
     }
 
-    /**
-     * 删除分类，分类对应文章的分类改为默认分类
-     * @param obj
-     * @param arg
-     * @returns {Promise<ClassifyEntity[]>}
-     */
-    @Mutation()
-    deleteClassifyById(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let useFor:string=map.get('useFor');
-        let id:number=map.get('id');
-        let result;
-        if(useFor=='art'){
-            result=this.classifyService.deleteMethodFirst(id);
-        }else if(useFor=='page'){
-            result=this.classifyService.deleteMethodSecond(id);
-        }
-        return result;
-    }
+
 
     /**
      * 批量或者单个删除页面
