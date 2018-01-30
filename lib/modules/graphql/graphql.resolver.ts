@@ -64,6 +64,21 @@ export class GraphqlResolver{
             const result=this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'));
             return result;
         }
+        let findTopPlace=map.get('findTopPlace');
+        if(findTopPlace!=null || findTopPlace !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(findTopPlace);
+            const result= this.articleService.findTopPlace(amap.get('limitNum'));
+            return result;
+        }
+        let getArticleById=map.get('getArticleById');
+        if(getArticleById!=null || getArticleById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getArticleById);
+            console.log('id='+amap.get('id'));
+            const result= this.articleService.getArticleById(amap.get('id'));
+            return result;
+        }
     }
     @Query()
     getClassify(obj,arg){
@@ -372,7 +387,7 @@ export class GraphqlResolver{
         return result;
     }
 
-    /**
+    /**newArticle
      * 分页获取置顶文章
      * @param obj
      * @param arg
@@ -399,7 +414,7 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let result:ArticleEntity= await this.articleService.getArticleById(map.get('id'));
+        let result:ArticleEntity[]= await this.articleService.getArticleById(map.get('id'));
         console.log('result='+JSON.stringify(result));
         return result;
     }

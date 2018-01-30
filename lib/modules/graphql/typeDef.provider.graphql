@@ -159,7 +159,37 @@ type Content{
     #页面内容
     content:String,
 }
+input ArticleAll{
+    limitNum:Int,
+    hidden:Boolean
+}
+input Keywords{
+    keywords:String!,
+    limitNum:Int
+}
+input recycleLimit{
+    limitNum:Int
+}
+input recycleClasssifyId{
+    id:Int!,
+    limitNum:Int
+}
+input ArticleId{
+    id:Int!
+}
+input AllClassify{
+    id:Int,
+    useFor:useFor
+}
+enum useFor{
+    art,
+    page
+}
 type Query {
+    getArticle(getArticleAll:ArticleAll,keywordsSerach:Keywords,recycleFind:recycleLimit,reductionGetByClassifyId:recycleClasssifyId,showNext:ArticleId,getArticleByClassifyId:recycleClasssifyId,
+        findTopPlace:recycleLimit,getArticleById:ArticleId):[Article],
+    getClassify(getAllClassify:AllClassify,):[Classify],
+    getPage(getAllPage:recycleLimit,serachPages:Keywords,getPagesByClassifyId:recycleClasssifyId,findPageById:ArticleId):[Page],
     #Get all the articles by paging and the articles is show.
     getArticleAll(limitNum:Int!,hidden:Boolean):[Article],
     #Get the article by searching for keywords.
