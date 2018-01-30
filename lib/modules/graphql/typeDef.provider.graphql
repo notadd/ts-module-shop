@@ -148,6 +148,10 @@ type Page{
     open:Boolean,
     #页面分类
     classify:Int,
+    #创建时间
+    createAt:String,
+    #修改时间
+    updateAt:String,
     #内容
     contents:[Content]
 }
@@ -186,46 +190,20 @@ enum useFor{
     page
 }
 type Query {
-    getArticles(getArticleAll:ArticleAll,keywordsSerach:Keywords,recycleFind:recycleLimit,reductionGetByClassifyId:recycleClasssifyId,showNext:ArticleId,getArticleByClassifyId:recycleClasssifyId,
-        findTopPlace:recycleLimit,getArticleById:ArticleId):[Article],
-    getClassifys(getAllClassify:AllClassify,):[Classify],
-    getPages(getAllPage:recycleLimit,serachPages:Keywords,getPagesByClassifyId:recycleClasssifyId,findPageById:ArticleId):[Page],
-    #Get all the articles by paging and the articles is show.
-    getArticleAll(limitNum:Int!,hidden:Boolean):[Article],
-    #Get the article by searching for keywords.
-    keywordsSerach(keywords:String!,limitNum:Int!):[Article]
-    #Get all the categories,But you need to provide'art'or 'page'.
-    getAllClassify(useFor:String!,id:Int!):[Classify],
-    #Get all pages.
-    getAllPage(limitNum:Int!):[Page],
-    #Get the page by searching for keywords.
-    serachPages(keyWords:String!):[Page],
-    #Find all the articles in the recycle bin.
-    recycleFind(limitNum:Int!):[Article],
-    #Get the  article from  reduction by classify id.
-    reductionGetByClassifyId(id:Int!,limitNum:Int!):[Article],
-    #show the articles in the next level of the current classification.
-    showNext(id:Int!):[Article],
-    #Get articles by classifaction id topPlace
-    getArticleByClassifyId(id:Int!,limitNum:Int!):[Article],
-    #find pages by classification id.
-    getPagesByClassifyId(id:Int!,limitNum:Int!):[Page]
-    #find a page by id
-    findPageById(id:Int!):Page,
-    #get top place articles
-    findTopPlace(limitNum:Int!):[Article],
-    #get articles by id
-    getArticleById(id:Int!):Article
+    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId) : [Article],
+    getClassifys(getAllClassify: AllClassify, ) : [Classify],
+    getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.
     deleteById(id:[Int]):Int,
     #To create the article
+    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate):String
     createArticle(createArt:ArticleInput!):String,
     #To update the article
     updateArticle(updateArt:ArticleUpdate!):String,
     #Delete the article in the recycle bin.
-    recycleDelete(id:[Int]):Int,
+    recycleDelete(id:[Int]):String,
     #Restore the article in the recycle bin.
     reductionArticle(id:[Int],limitNum:Int!):String,
     #To create a classification,and you need to provide'art'or 'page'.

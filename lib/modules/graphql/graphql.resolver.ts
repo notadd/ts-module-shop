@@ -158,42 +158,6 @@ export class GraphqlResolver{
             return result;
         }
     }
-    /**
-     * 分页获取全部文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    getArticleAll(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let limit:number=map.get('limitNum');
-        let hidden:boolean=map.get('hidden');
-        const result=this.articleService.getArticleAll(limit,hidden);
-        return result;
-
-    }
-
-    /**
-     * 分页根据关键字搜索
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    keywordsSerach(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let limit:number=map.get('limitNum');
-        let keyWords:string=map.get('keywords');
-        const result=this.articleService.serachArticles(keyWords,limit);
-        return result;
-    }
 
     /**
      * 文章放入回收站
@@ -253,38 +217,7 @@ export class GraphqlResolver{
         let final:string=JSON.stringify(result);
         return final;
     }
-    /**
-     * 回收站内分页获取文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    recycleFind(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let limitNum:number=map.get('limitNum');
-        const result=this.articleService.recycleFind(limitNum);
-        return result;
-    }
 
-    /**
-     * 回收站内分类获取文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    reductionGetByClassifyId(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        const result=this.articleService.reductionClassity(map.get('id'),map.get('limitNum'));
-        return result;
-        }
     /**
      * 回收站内批量或者单个删除文章
      * @param obj
@@ -292,14 +225,15 @@ export class GraphqlResolver{
      * @returns {Promise<number>}
      */
     @Mutation()
-    recycleDelete(obj,arg){
+   async recycleDelete(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let array:[number]=map.get('id');
-        const result=this.articleService.recycleDelete(array);
-        return result;
+        let num:number=await this.articleService.recycleDelete(array);
+        let string=`已经成功删除${num}条数据`;
+        return string;
     }
 
     /**
@@ -320,27 +254,6 @@ export class GraphqlResolver{
         return result;
     }
 
-    /**
-     * 获取所有分类
-     * @param obj
-     * @param arg
-     * @returns {Promise<ClassifyEntity[]>}
-     */
-    @Query()
-    getAllClassify(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let useFor:string=map.get('useFor');
-        let result;
-        if(useFor=='art'){
-            result=this.classifyService.findAllClassifyArt(map.get('id'));
-        }else if(useFor=='page'){
-            result=this.classifyService.findAllClassifyPage(map.get('id'));
-        }
-        return result;
-    }
 
     /**
      * 新增分类
@@ -437,69 +350,6 @@ export class GraphqlResolver{
     }
 
     /**
-     * 分页获取全部页面
-     * @returns {Promise<PageEntity[]>}
-     */
-    @Query()
-    async getAllPage(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let  result:PageEntity[]= await this.pageService.getAllPage(map.get('limitNum'));
-        return result;
-    }
-
-    /**newArticle
-     * 分页获取置顶文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    async findTopPlace(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let  result:ArticleEntity[]= await this.articleService.findTopPlace(map.get('limitNum'));
-        return result;
-    }
-    /**
-     *根据文章id获取文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    async getArticleById(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let result:ArticleEntity[]= await this.articleService.getArticleById(map.get('id'));
-        console.log('result='+JSON.stringify(result));
-        return result;
-    }
-
-    /**
-     * 关键字搜索页面
-     * @param obj
-     * @param arg
-     * @returns {Promise<PageEntity[]>}
-     */
-    @Query()
-    serachPages(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let key:string=map.get('keyWords');
-        const result=this.pageService.serachKeywords(key);
-        return result;
-    }
-
-    /**
      * 批量或者单个删除页面
      * @param obj
      * @param arg
@@ -568,68 +418,6 @@ export class GraphqlResolver{
             contents.push(newContent);
         }
         const result=this.pageService.updatePages(page,contents);
-        return result;
-    }
-
-    /**
-     * 显示子级分类文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    showNext(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        const result=this.classifyService.showNextTitle(map.get('id'));
-        return result;
-    }
-
-    /**
-     * 通过分类id获取文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    getArticleByClassifyId(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        const result=this.classifyService.getArticelsByClassifyId(map.get('id'),map.get('limitNum'));
-        return result;
-    }
-    /**
-     * 通过分类id获取页面
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    getPagesByClassifyId(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        const result=this.pageService.findPageByClassifyId(map.get('id'),map.get('limitNum'));
-        return result;
-    }
-    /**
-     * 通过页面id获取页面及对应内容
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Query()
-    findPageById(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        const result=this.pageService.findPageById(map.get('id'));
         return result;
     }
     /**
