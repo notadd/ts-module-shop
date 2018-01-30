@@ -40,7 +40,7 @@ export class PageService{
      * @param {number[]} array
      * @returns {Promise<number>}
      */
-    async deletePages(array:number[]):Promise<number>{
+    async deletePages(array:number[],limit?:number):Promise<PageEntity[]>{
         let deleteNum:number;
         let hisArray:HistoryEntity[]=[];
         for(let t in array){
@@ -55,7 +55,7 @@ export class PageService{
             this.repository.deleteById(page.id);
         }
         this.historyService.createHistory(hisArray);
-        return deleteNum;
+        return this.getAllPage(limit);
     }
 
     /**
@@ -63,11 +63,11 @@ export class PageService{
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async createPages(page:PageEntity,contents:PageContentEntity[]):Promise<PageEntity[]>{
+    async createPages(page:PageEntity,contents:PageContentEntity[],limit?:number):Promise<PageEntity[]>{
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
-        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
-        if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
+        if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let id:number= await this.repository.createQueryBuilder().insert().into(PageEntity).values(page).output('id').execute();
@@ -81,21 +81,19 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-        return this.getAllPage(0);
+        return this.getAllPage(limit);
     }
     /**
      * 修改页面,暂时不能确定别名是否可以重复
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async updatePages(page:PageEntity,content:PageContentEntity[]):Promise<PageEntity[]>{
+    async updatePages(page:PageEntity,content:PageContentEntity[],limit?:number):Promise<PageEntity[]>{
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
-        if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
-        if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
-        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classify);
-        if(page.classify!=null && page.classify!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
+        if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let time =new Date();
         page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
         let newPage:PageEntity =page;
@@ -114,7 +112,7 @@ export class PageService{
                 await this.contentRepository.updateById(newContent.id,newContent);
             }
         }
-        return this.getAllPage(0);
+        return this.getAllPage(limit);
     }
 
     /**

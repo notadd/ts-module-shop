@@ -46,7 +46,7 @@ export class PageController{
     @ApiOperation({title:'delete pages'})
     @Post('deletePages')
     public async deletePages(@Response() res,@Body() array:DeleteArticleId){
-        let result:number=await this.pageService.deletePages(array.id);
+        let result:PageEntity[]=await this.pageService.deletePages(array.id);
         console.log('num='+result)
         let deleteNum=`已经成功删除${result}个页面`;
         return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
@@ -112,7 +112,7 @@ export class PageController{
     @Post('findPageById')
     public async findPageById(@Response() res,@Body() page:showNextDto){
         let id:number=page.id;
-        let result:PageEntity=await this.pageService.findPageById(id);
+        let result:PageEntity[]=await this.pageService.findPageById(id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
