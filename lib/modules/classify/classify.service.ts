@@ -358,6 +358,7 @@ export class ClassifyService{
         let articles:ArticleEntity[]=[];
         let currentArticle:ArticleEntity[]=await this.artRepository.createQueryBuilder().
         where('"classifyId"= :classifyId and "topPlace"=\'current\'',{classifyId:classify.groupId}).orderBy('"updateAt"','ASC').getMany();
+        articles.push(...currentArticle);
         let array:number[]=await this.getClassifyId(classify.groupId).then(a=>{return a});
         let newArray:number[]=Array.from(new Set(array));
         let finalArray:number[]=[];
@@ -377,7 +378,7 @@ export class ClassifyService{
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
-        return;
+        return articles;
     }
     /**
      * 通过分类id获取文章(包含置顶)

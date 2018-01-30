@@ -86,7 +86,7 @@ export class GraphqlResolver{
             return result;
         }
         let superiorArticle=map.get('superiorArticle');
-        if(getArticleById!=null || getArticleById !=undefined){
+        if(superiorArticle!=null || superiorArticle !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(superiorArticle);
             const result= this.classifyService.showBeforeTitle(amap.get('id'));
