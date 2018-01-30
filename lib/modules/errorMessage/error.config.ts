@@ -67,5 +67,11 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'The classifyId input does not exist, please re-enter.',
         userMessage:'The classifyId input does not exist, please re-enter.',
+    },
+    'drop:table:ById1':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'Cannot delete the data of id=1 (root node).',
+        userMessage:'Cannot delete the data of id=1 (root node).',
     }
 };

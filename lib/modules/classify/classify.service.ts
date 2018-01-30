@@ -20,7 +20,7 @@ export class ClassifyService{
      * @param {string} parent
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async createClassifyArt(entity:ClassifyEntity):Promise<ClassifyEntity[]>{
+    async createClassifyArt(entity:ClassifyEntity,limit:number):Promise<ClassifyEntity[]>{
             let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
             //别名不能重复
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
@@ -35,7 +35,7 @@ export class ClassifyService{
             }
             let classify:ClassifyEntity=entity;
             await this.repository.insert(classify);
-            return this.findAllClassifyArt(1);
+            return this.findAllClassifyArt(limit);
     }
 
     /**
@@ -43,7 +43,7 @@ export class ClassifyService{
      * @param {PageClassifyEntity} entity
      * @returns {Promise<PageClassifyEntity[]>}
      */
-    async createClassifyPage(entity:PageClassifyEntity):Promise<PageClassifyEntity[]>{
+    async createClassifyPage(entity:PageClassifyEntity,limit:number):Promise<PageClassifyEntity[]>{
         let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
         //别名不能重复
         if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
@@ -58,7 +58,7 @@ export class ClassifyService{
         }
         let classify:PageClassifyEntity=entity;
         await this.pageRepository.insert(classify);
-        return this.findAllClassifyPage(1);
+        return this.findAllClassifyPage(limit);
     }
 
     /**
@@ -66,7 +66,7 @@ export class ClassifyService{
      * @param {ClassifyEntity} entity
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async updateClassifyArt(entity:ClassifyEntity):Promise<ClassifyEntity[]>{
+    async updateClassifyArt(entity:ClassifyEntity,id:number):Promise<ClassifyEntity[]>{
             //当前Id是否存在
             let classify:ClassifyEntity = await this.repository.findOneById(entity.id);
             if(classify==null) throw new MessageCodeError('update:classify:updateById');
@@ -80,7 +80,7 @@ export class ClassifyService{
             entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let finalClassify:ClassifyEntity =entity;
             await this.repository.updateById(entity.id,finalClassify);
-            return this.findAllClassifyArt(1);
+            return this.findAllClassifyArt(id);
      }
 
     /**
@@ -88,7 +88,7 @@ export class ClassifyService{
      * @param {PageClassifyEntity} entity
      * @returns {Promise<PageClassifyEntity[]>}
      */
-     async updateClassifyPage(entity:PageClassifyEntity):Promise<PageClassifyEntity[]>{
+     async updateClassifyPage(entity:PageClassifyEntity,id:number):Promise<PageClassifyEntity[]>{
          let classify:PageClassifyEntity = await this.pageRepository.findOneById(entity.id);
          if(classify==null) throw new MessageCodeError('update:classify:updateById');
          let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
@@ -101,7 +101,7 @@ export class ClassifyService{
          entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
          let finalClassify:PageClassifyEntity =entity;
          await this.pageRepository.updateById(entity.id,finalClassify);
-         return this.findAllClassifyPage(1);
+         return this.findAllClassifyPage(id);
      }
 
     /**
@@ -298,6 +298,7 @@ export class ClassifyService{
                 for(let h in article){
                     let newArticle:PageEntity=article[h];
                     newArticle.classify=null;
+                    newArticle.classifyId=null;
                     let time =new Date();
                     newArticle.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
                     this.repositoryPage.updateById(newArticle.id,newArticle);
