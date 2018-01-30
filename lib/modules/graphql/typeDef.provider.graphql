@@ -192,6 +192,7 @@ enum useFor{
 }
 input Array{
     id:[Int],
+    limitNum:Int
 }
 input ClassifyCreateNew{
     useFor:useFor!,
@@ -212,6 +213,23 @@ input mobileClassify{
     id:Int!,
     parentId:Int!
 }
+input CreatePage{
+    title:String!,
+    alias:String!,
+    content:[String],
+    classify:String,
+    classifyId:Int,
+    limitNum:Int
+}
+input UpdatePage{
+    id:Int!,
+    title:String,
+    alias:String,
+    content:[ContentArray],
+    classify:String,
+    classifyId:Int,
+    limitNum:Int
+}
 type Query {
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId) : [Article],
     getClassifys(getAllClassify: AllClassify, ) : [Classify],
@@ -219,12 +237,6 @@ type Query {
 }
 type Mutation{
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array):String
-    #To create a classification,and you need to provide'art'or 'page'.
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
-    #Single or batch delete pages
-    deletePages(id:[Int]!):Int,
-    #To cerate a page
-    createPages(title:String!,alias:String!,content:[String],classify:Int):[Page],
-    #To update a page
-    updatePages(id:Int!,title:String!,alias:String!,content:[ContentArray],classify:Int):[Page],
+    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):[Page],
 }

@@ -310,79 +310,61 @@ export class GraphqlResolver{
         }
 
     }
-
-
-
-    /**
-     * 批量或者单个删除页面
-     * @param obj
-     * @param arg
-     * @returns {Promise<number>}
-     */
     @Mutation()
-    deletePages(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let array:[number]=map.get('id');
-        const result=this.pageService.deletePages(array);
-        return result;
-    }
-
-    /**
-     *新增页面
-     * @param obj
-     * @param arg
-     * @returns {Promise<PageEntity[]>}
-     */
-    @Mutation()
-    createPages(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let page:PageEntity=new PageEntity();
-        page.title=map.get('title');
-        page.alias=map.get('alias');
-        page.classify=map.get('classify');
-        let contents:PageContentEntity[]=[];
-        let strFinal:string[]=map.get('content');
-        for(let t in strFinal){
-            let newContent:PageContentEntity=new PageContentEntity;
-            newContent.content=strFinal[t];
-            contents.push(newContent);
+    PageCUD(obj,arg) {
+        const str: string = JSON.stringify(arg);
+        let bToJSon = JSON.parse(str);
+        let map = new Map();
+        map = this.objToStrMap(bToJSon);
+        let createPages = map.get('createPages');
+        if (createPages != null || createPages != undefined) {
+            let amap = new Map();
+            amap = this.objToStrMap(createPages);
+            let page:PageEntity=new PageEntity();
+            page.title=amap.get('title');
+            page.alias=amap.get('alias');
+            page.classify=amap.get('classify');
+            page.classifyId=amap.get('classifyId');
+            let contents:PageContentEntity[]=[];
+            let strFinal:string[]=amap.get('content');
+            for(let t in strFinal){
+                let newContent:PageContentEntity=new PageContentEntity;
+                newContent.content=strFinal[t];
+                contents.push(newContent);
+            }
+            const result=this.pageService.createPages(page,contents,amap.get('limitNum'));
+            return result;
         }
-        const result=this.pageService.createPages(page,contents);
-        return result;
-    }
-
-    /**
-     * 修改页面
-     * @param obj
-     * @param arg
-     * @returns {Promise<PageEntity[]>}
-     */
-    @Mutation()
-    updatePages(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let page:PageEntity=new PageEntity();
-        page.title=map.get('title');
-        page.alias=map.get('alias');
-        page.classify=map.get('classify');
-        let contents:PageContentEntity[]=[];
-        let strFinal:ContentMap[]=map.get('content');
-        for(let t in strFinal){
-            let newContent:PageContentEntity=new PageContentEntity;
-            newContent.content=strFinal[t].content;
-            newContent.id=strFinal[t].id;
-            contents.push(newContent);
+        let updatePages=map.get('updatePages');
+        if(updatePages != null || updatePages != undefined){
+            let amap = new Map();
+            amap = this.objToStrMap(updatePages);
+            let page:PageEntity=new PageEntity();
+            page.id=amap.get('id');
+            page.title=amap.get('title');
+            page.alias=amap.get('alias');
+            page.classify=amap.get('classify');
+            page.classifyId=amap.get('classifyId');
+            let contents:PageContentEntity[]=[];
+            let strFinal:ContentMap[]=amap.get('content');
+            for(let t in strFinal){
+                let newContent:PageContentEntity=new PageContentEntity;
+                newContent.content=strFinal[t].content;
+                newContent.id=strFinal[t].id;
+                contents.push(newContent);
+            }
+            const result=this.pageService.updatePages(page,contents,amap.get('limitNum'));
+            return result;
         }
-        const result=this.pageService.updatePages(page,contents);
-        return result;
+        let deletePages=map.get('deletePages');
+        if(deletePages != null || deletePages != undefined) {
+            let amap = new Map();
+            amap = this.objToStrMap(deletePages);
+            let array:[number]=amap.get('id');
+            const result=this.pageService.deletePages(array,amap.get('limitNum'));
+            return result;
+
+        }
     }
     /**
      * JSON----Map
