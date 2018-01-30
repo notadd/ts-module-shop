@@ -6,18 +6,13 @@ import {getManager} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageEntity} from "../entity/page.entity";
-import {async} from "rxjs/scheduler/async";
-import {createYield} from "typescript";
-import {isNumber} from "util";
-import {ArticleService} from "../article/article.service";
 
 @Component()
 export class ClassifyService{
     constructor(@Inject('ClassifyRepositoryToken') private readonly repository:Repository<ClassifyEntity>,
                 @Inject('ArticleRepositoryToken') private readonly artRepository:Repository<ArticleEntity>,
                 @Inject('PageClassifyRepositoryToken') private readonly pageRepository:Repository<PageClassifyEntity>,
-                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>,
-                private readonly artService:ArticleService){}
+                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>){}
 
     /**
      * 新增文章分类
@@ -115,7 +110,7 @@ export class ClassifyService{
      * @returns {Promise<ClassifyEntity[]>}
      */
     async findAllClassifyArt(id:number):Promise<ClassifyEntity[]>{
-        let list:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :id',{id:id,}).orderBy('id','ASC').getMany();
+        let list:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :groupId',{groupId:id,}).orderBy('id','ASC').getMany();
         let idFindOne:ClassifyEntity =await this.repository.createQueryBuilder().where('"id"= :id',{id:id,}).getOne();
         let result:ClassifyEntity[]=[];
         let resultArray:ClassifyEntity[]=await this.Artrecursion(id,list);
@@ -355,7 +350,7 @@ export class ClassifyService{
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
-    async getArticelsByClassifyId(id:number,limit:number):Promise<ArticleEntity[]>{
+    async getArticelsByClassifyId(id:number,limit?:number):Promise<ArticleEntity[]>{
         let articles:ArticleEntity[]=[];
         let entity:ClassifyEntity=await this.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
@@ -363,22 +358,22 @@ export class ClassifyService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         let newArray:number[]=Array.from(new Set(array));
         console.log('array='+newArray);
-        let globalArts:ArticleEntity[]=await this.artService.findTopPlace(0);
+        let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
         articles.push(...globalArts);
         if(level==1){
-            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('id','ASC').limit(limit).getMany();
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
         }else if(level==2){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('id','ASC').limit(limit).getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
         }else if(level==3){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('id','ASC').limit(limit).getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level3\'',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level3\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
         }
         return articles;

@@ -19,7 +19,7 @@ export class PageService{
      * 获取所有页面
      * @returns {Promise<PageEntity[]>}
      */
-    async getAllPage(limit:number):Promise<PageEntity[]>{
+    async getAllPage(limit?:number):Promise<PageEntity[]>{
         let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").limit(limit).getMany();
         return pages;
     }
@@ -29,10 +29,10 @@ export class PageService{
      * @param {string} keywords
      * @returns {Promise<PageEntity[]>}
      */
-    async serachKeywords(keywords:string):Promise<PageEntity[]>{
+    async serachKeywords(keywords:string,limit?:number):Promise<PageEntity[]>{
         let words=`%${keywords}%`;
         console.log('page的关键字'+words);
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').getMany();
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').limit(limit).getMany();
         return pages;
     }
     /**
@@ -122,12 +122,14 @@ export class PageService{
      * @param {number} id
      * @returns {Promise<PageEntity>}
      */
-    async findPageById(id:number):Promise<PageEntity>{
+    async findPageById(id:number):Promise<PageEntity[]>{
+        let array:PageEntity[]=[];
         let entity:PageEntity=await this.repository.findOneById(id);
         if(entity==null) throw new MessageCodeError('delete:page:deleteById');
         let children:PageContentEntity[]=await this.contentRepository.createQueryBuilder().where('"parentId"= :parentId',{parentId:entity.id}).orderBy('id','ASC').getMany();
         entity.contents=children;
-        return entity;
+        array.push(entity);
+        return array;
     }
 
     /**
@@ -136,7 +138,7 @@ export class PageService{
      * @param {number} limit
      * @returns {Promise<PageEntity[]>}
      */
-    async findPageByClassifyId(id:number,limit:number):Promise<PageEntity[]>{
+    async findPageByClassifyId(id:number,limit?:number):Promise<PageEntity[]>{
         let entityClassify:PageClassifyEntity=await this.classifyService.findOnePageClassifyById(id);
         if(entityClassify==null) throw new MessageCodeError('delete:page:deleteById');
         let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classify"= :classify',{classify:id}).orderBy('id','ASC').limit(limit).getMany();
