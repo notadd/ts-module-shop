@@ -15,6 +15,12 @@ export class GraphqlResolver{
                 private readonly classifyService:ClassifyService,
                 private readonly pageService:PageService){}
 
+    /**
+     * 文章的查询方法
+     * @param obj
+     * @param arg
+     * @returns {Promise<ArticleEntity[]>}
+     */
 
     @Query()
     getArticle(obj,arg){
@@ -75,7 +81,6 @@ export class GraphqlResolver{
         if(getArticleById!=null || getArticleById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleById);
-            console.log('id='+amap.get('id'));
             const result= this.articleService.getArticleById(amap.get('id'));
             return result;
         }
@@ -86,6 +91,23 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
+        let getAllClassify=map.get('getAllClassify');
+        if(getAllClassify!=null || getAllClassify !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getAllClassify);
+            let useFor:string=amap.get('useFor');
+            let id:number=amap.get('id');
+            if(id==null || id==0){
+                id=1;
+            }
+            let result;
+            if(useFor=='art'){
+                result=this.classifyService.findAllClassifyArt(id);
+            }else if(useFor=='page'){
+                result=this.classifyService.findAllClassifyPage(id);
+            }
+            return result;
+        }
     }
     @Query()
     getPage(obj,arg){
@@ -221,7 +243,7 @@ export class GraphqlResolver{
         map=this.objToStrMap(bToJSon);
         const result=this.articleService.reductionClassity(map.get('id'),map.get('limitNum'));
         return result;
-    }
+        }
     /**
      * 回收站内批量或者单个删除文章
      * @param obj

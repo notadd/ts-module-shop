@@ -179,7 +179,7 @@ input ArticleId{
 }
 input AllClassify{
     id:Int,
-    useFor:useFor
+    useFor:useFor!
 }
 enum useFor{
     art,
