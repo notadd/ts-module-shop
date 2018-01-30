@@ -160,20 +160,83 @@ export class GraphqlResolver{
     }
 
     /**
+     * 文章的增加和修改
+     * @param obj
+     * @param arg
+     * @returns {Promise<string>}
+     * @constructor
+     */
+    @Mutation()
+    async ArticleCU(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let createArt=map.get('createArt');
+        if(createArt!=null || createArt !=undefined){
+            let art:ArticleEntity=createArt;
+            let date:string=art.publishedTime.toString();
+            art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            let newArticle:ArticleEntity=art;
+            const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
+            let final:string=JSON.stringify(result);
+            return final;
+        }
+        let updateArt=map.get('updateArt');
+        if(updateArt!=null || updateArt !=undefined){
+            let art:ArticleEntity=updateArt;
+            let date:string=art.publishedTime.toString();
+            art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            let newArticle:ArticleEntity=art;
+            const result=this.articleService.updateArticle(newArticle).then(a=>{return a});
+            let final:string=JSON.stringify(result);
+            return final;
+        }
+        let deleteById=map.get('deleteById');
+        if(deleteById!=null || deleteById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(deleteById);
+            let array:[number]=amap.get('id');
+            let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
+            let strResult:string=`已成功将${JSON.stringify(result)}条数据放入回收站`;
+            return strResult;
+        }
+        let recycleDelete=map.get('recycleDelete');
+        if(recycleDelete!=null || recycleDelete !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(recycleDelete);
+            let array:[number]=amap.get('id');
+            let num:number=await this.articleService.recycleDelete(array);
+            let string=`已经成功删除${num}条数据`;
+            return string;
+        }
+        let reductionArticle=map.get('reductionArticle');
+        if(reductionArticle!=null || reductionArticle !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(reductionArticle);
+            let array:[number]=amap.get('id');
+            const num=await this.articleService.reductionArticle(array);
+            let result:string=`成功将${num}条数据还原`;
+            return result;
+        }
+    }
+    /**
      * 文章放入回收站
      * @param obj
      * @param arg
      * @returns {Promise<number>}
      */
     @Mutation()
-    deleteById(obj,arg){
+    async deleteById(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let array:[number]=map.get('id');
-        const result=this.articleService.deleteArticles(array);
-        return result;
+        let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
+        console.log('num='+JSON.stringify(result));
+        let strResult:string=`已成功将${JSON.stringify(result)}条数据放入回收站`;
+        return strResult;
     }
 
     /**
@@ -243,13 +306,13 @@ export class GraphqlResolver{
      * @returns {Promise<ArticleEntity[]>}
      */
     @Mutation()
-    reductionArticle(obj,arg){
+     async reductionArticle(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let array:[number]=map.get('id');
-        const num=this.articleService.reductionArticle(array,map.get('limitNum'));
+        const num=await this.articleService.reductionArticle(array);
         let result:string=`成功将${num}条数据还原`;
         return result;
     }

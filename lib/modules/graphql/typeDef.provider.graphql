@@ -189,6 +189,9 @@ enum useFor{
     art,
     page
 }
+input Array{
+    id:[Int],
+}
 type Query {
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId) : [Article],
     getClassifys(getAllClassify: AllClassify, ) : [Classify],
@@ -196,9 +199,9 @@ type Query {
 }
 type Mutation{
     #Delete the article by id, and the article will go to the recycle bin.
-    deleteById(id:[Int]):Int,
+    deleteById(id:[Int]):String,
     #To create the article
-    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate):String
+    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array):String
     createArticle(createArt:ArticleInput!):String,
     #To update the article
     updateArticle(updateArt:ArticleUpdate!):String,
