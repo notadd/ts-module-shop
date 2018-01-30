@@ -149,7 +149,7 @@ export class ArticleController{
     @ApiOperation({title:'The article was restored at the recycle bin.'})
     @Post('recycleRestore')
     public async reductionArticle(@Response() res,@Body() array:DeleteArticleId){
-        let num:number= await this.articleService.reductionArticle(array.id);
+        let num:ArticleEntity[]= await this.articleService.reductionArticle(array.id,array.limitNumber);
         let result:string=`成功将${num}条数据还原`;
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }

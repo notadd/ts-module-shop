@@ -17,15 +17,25 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * 返回所有数据,依据提供limit进行分页
      * @returns {Promise<ArticleEntity[]>}
      */
-    async  getArticleAll(limit:number,hidden?:boolean):Promise<ArticleEntity[]>{
-        let resultAll:ArticleEntity[];
-        if(hidden){
-            resultAll = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=true',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
-        }else{
-            resultAll = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
-        }
-        if(hidden==null){
-            resultAll = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+    async  getArticleAll(limit:number,hidden:boolean):Promise<ArticleEntity[]>{
+        let resultAll:ArticleEntity[]=[];
+        if(hidden==true){
+            let newArray:ArticleEntity[]=[];
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=true',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            for(let t in newresult){
+                if(newresult[t].hidden){
+                    newArray.push(newresult[t]);
+                }
+            }
+            resultAll.push(...newArray);
+        }else if(hidden==false){
+            console.log('false='+hidden);
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            resultAll.push(...newresult);
+        }else if(hidden==undefined){
+            console.log('undefined='+hidden);
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            resultAll.push(...newresult);
         }
         return resultAll;
     }
