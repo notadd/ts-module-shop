@@ -85,6 +85,13 @@ export class GraphqlResolver{
             const result= this.articleService.getArticleById(amap.get('id'));
             return result;
         }
+        let superiorArticle=map.get('superiorArticle');
+        if(getArticleById!=null || getArticleById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(superiorArticle);
+            const result= this.classifyService.showBeforeTitle(amap.get('id'));
+            return result;
+        }
     }
 
     /**

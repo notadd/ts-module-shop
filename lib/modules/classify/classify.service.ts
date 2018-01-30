@@ -348,6 +348,38 @@ export class ClassifyService{
     }
 
     /**
+     * 显示上级置顶文章
+     * @param {number} id
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    async showBeforeTitle(id:number):Promise<ArticleEntity[]>{
+        let classify:ClassifyEntity=await this.repository.findOneById(id);
+        if(classify==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let articles:ArticleEntity[]=[];
+        let currentArticle:ArticleEntity[]=await this.artRepository.createQueryBuilder().
+        where('"classifyId"= :classifyId and "topPlace"=\'current\'',{classifyId:classify.groupId}).orderBy('"updateAt"','ASC').getMany();
+        let array:number[]=await this.getClassifyId(classify.groupId).then(a=>{return a});
+        let newArray:number[]=Array.from(new Set(array));
+        let finalArray:number[]=[];
+        for(let t in newArray){
+            if(newArray[t]!=classify.groupId){
+                finalArray.push(newArray[t]);
+            }
+        }
+        let level:number=await this.findLevel(classify.groupId);
+        if(level==1){
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
+            articles.push(...newArticles);
+        }else if(level==2){
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
+            articles.push(...newArticles);
+        }else if(level==3){
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
+            articles.push(...newArticles);
+        }
+        return;
+    }
+    /**
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
