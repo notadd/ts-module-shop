@@ -15,6 +15,71 @@ export class GraphqlResolver{
                 private readonly classifyService:ClassifyService,
                 private readonly pageService:PageService){}
 
+
+    @Query()
+    getArticle(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let getArticle=map.get('getArticleAll');
+        if(getArticle!=null || getArticle!=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getArticle);
+            const result=this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'));
+            return result;
+        }
+        let keywordsSerach=map.get('keywordsSerach');
+        if(keywordsSerach!=null || keywordsSerach!=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(keywordsSerach);
+            const result=this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'));
+            return result;
+        }
+        let recycleFind=map.get('recycleFind');
+        if(recycleFind!=null || recycleFind !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(recycleFind);
+            const result=this.articleService.recycleFind(amap.get('limitNum'));
+            return result;
+        }
+        let reductionGetByClassifyId=map.get('reductionGetByClassifyId');
+        if(reductionGetByClassifyId!=null || reductionGetByClassifyId !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(reductionGetByClassifyId);
+            const result=this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'));
+            return result;
+        }
+        let showNext=map.get('showNext');
+        if(showNext!=null || showNext !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(showNext);
+            const result=this.classifyService.showNextTitle(amap.get('id'));
+            return result;
+        }
+        let getArticleByClassifyId=map.get('getArticleByClassifyId');
+        if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getArticleByClassifyId);
+            const result=this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'));
+            return result;
+        }
+    }
+    @Query()
+    getClassify(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+    }
+    @Query()
+    getPage(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+
+    }
     /**
      * 分页获取全部文章
      * @param obj
