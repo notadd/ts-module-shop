@@ -188,7 +188,7 @@ export class GraphqlResolver{
             let date:string=art.publishedTime.toString();
             art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
             let newArticle:ArticleEntity=art;
-            const result=this.articleService.updateArticle(newArticle).then(a=>{return a});
+            const result=await this.articleService.updateArticle(newArticle).then(a=>{return a});
             let final:string=JSON.stringify(result);
             return final;
         }
@@ -220,103 +220,6 @@ export class GraphqlResolver{
             return result;
         }
     }
-    /**
-     * 文章放入回收站
-     * @param obj
-     * @param arg
-     * @returns {Promise<number>}
-     */
-    @Mutation()
-    async deleteById(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let array:[number]=map.get('id');
-        let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
-        console.log('num='+JSON.stringify(result));
-        let strResult:string=`已成功将${JSON.stringify(result)}条数据放入回收站`;
-        return strResult;
-    }
-
-    /**
-     * 创建文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<void>}
-     */
-    @Mutation()
-    async createArticle(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let art:ArticleEntity=map.get('createArt');
-        let date:string=art.publishedTime.toString();
-        art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
-        let newArticle:ArticleEntity=art;
-        const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
-        let final:string=JSON.stringify(result);
-        return final;
-    }
-
-    /**
-     * 修改文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Mutation()
-    updateArticle(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let art:ArticleEntity=map.get('createArt');
-        let date:string=art.publishedTime.toString();
-        art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
-        let newArticle:ArticleEntity=art;
-        const result=this.articleService.updateArticle(newArticle).then(a=>{return a});
-        let final:string=JSON.stringify(result);
-        return final;
-    }
-
-    /**
-     * 回收站内批量或者单个删除文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<number>}
-     */
-    @Mutation()
-   async recycleDelete(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let array:[number]=map.get('id');
-        let num:number=await this.articleService.recycleDelete(array);
-        let string=`已经成功删除${num}条数据`;
-        return string;
-    }
-
-    /**
-     * 回收站内还原文章
-     * @param obj
-     * @param arg
-     * @returns {Promise<ArticleEntity[]>}
-     */
-    @Mutation()
-     async reductionArticle(obj,arg){
-        const str:string=JSON.stringify(arg);
-        let bToJSon=JSON.parse(str);
-        let map =new Map();
-        map=this.objToStrMap(bToJSon);
-        let array:[number]=map.get('id');
-        const num=await this.articleService.reductionArticle(array);
-        let result:string=`成功将${num}条数据还原`;
-        return result;
-    }
-
 
     /**
      * 新增分类
