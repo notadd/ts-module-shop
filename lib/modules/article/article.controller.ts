@@ -149,7 +149,7 @@ export class ArticleController{
     @ApiOperation({title:'The article was restored at the recycle bin.'})
     @Post('recycleRestore')
     public async reductionArticle(@Response() res,@Body() array:DeleteArticleId){
-        let num:ArticleEntity[]= await this.articleService.reductionArticle(array.id,array.limitNumber);
+        let num:number= await this.articleService.reductionArticle(array.id);
         let result:string=`成功将${num}条数据还原`;
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
@@ -187,7 +187,7 @@ export class ArticleController{
     @ApiOperation({title:'get articles by id'})
     @Post('getArticleById')
     public async getArticleById(@Response() res,@Body() getId:showNextDto){
-        let result:ArticleEntity=await this.articleService.getArticleById(getId.id);
+        let result:ArticleEntity[]=await this.articleService.getArticleById(getId.id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
