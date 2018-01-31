@@ -51,9 +51,9 @@ input ArticleInput{
     #置顶
     topPlace:stick!,
     #是否隐藏
-    hidden:Boolean,
+    hidden:Boolean!,
     #发布时间
-    publishedTime:String,
+    publishedTime:String!,
     #来源
     source:String,
     #来源链接
@@ -148,7 +148,9 @@ type Page{
     #是否开启
     open:Boolean,
     #页面分类
-    classify:Int,
+    classify:String,
+    #页面分类Id
+    classifyId:Int,
     #创建时间
     createAt:String,
     #修改时间
@@ -278,7 +280,7 @@ input ArticleIdArray{
 }
 type Query {
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
-    getClassifys(getAllClassify: AllClassify, ) : [Classify],
+    getClassifys(getAllClassify: AllClassify) : [Classify],
     getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
 }
 type Mutation{
