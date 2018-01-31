@@ -87,8 +87,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(article.classifyId==0 ||article.classifyId==null)
-            article.classifyId=null;
-          console.log('输入时间='+article.publishedTime);
+            article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
+            article.classify='默认分类';
          let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
          return create;
       }
@@ -103,7 +103,10 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
           if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-          let num:number=await this.classifyService.findLevel(article.classifyId);
+          if(article.classifyId==0 ||article.classifyId==null)
+            article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
+            article.classify='默认分类';
+        let num:number=await this.classifyService.findLevel(article.classifyId);
           let level:string=this.classifyService.interfaceChange(num);
           let levelGive:string=article.topPlace.toString();
           if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');

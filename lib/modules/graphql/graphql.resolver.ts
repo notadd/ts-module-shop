@@ -92,6 +92,14 @@ export class GraphqlResolver{
             const result= this.classifyService.showBeforeTitle(amap.get('id'));
             return result;
         }
+        let getCurrentClassifyArticles=map.get('getCurrentClassifyArticles');
+        if(getCurrentClassifyArticles!=null || getCurrentClassifyArticles !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getCurrentClassifyArticles);
+            const result= this.classifyService.showCurrentArticles(amap.get('id'));
+            return result;
+        }
+
     }
 
     /**
