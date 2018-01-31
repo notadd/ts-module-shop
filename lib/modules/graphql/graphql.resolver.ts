@@ -24,7 +24,7 @@ export class GraphqlResolver{
      */
 
     @Query()
-    getArticles(obj,arg){
+    async getArticles(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -33,7 +33,8 @@ export class GraphqlResolver{
         if(getArticle!=null || getArticle!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticle);
-            const result=this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'));
+            let entity:ArticleEntity[]=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let keywordsSerach=map.get('keywordsSerach');
@@ -140,7 +141,7 @@ export class GraphqlResolver{
      * @returns {Promise<PageEntity[]>}
      */
     @Query()
-    getPages(obj,arg){
+    async getPages(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -149,7 +150,8 @@ export class GraphqlResolver{
         if(getAllPage!=null || getAllPage !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getAllPage);
-            const result=this.pageService.getAllPage(amap.get('limitNum'));
+            let entity:PageEntity[]=await this.pageService.getAllPage(amap.get('limitNum'));
+            const result=this.classifyService.TimestampPage(entity);
             return result;
         }
         let serachPages=map.get('serachPages');
