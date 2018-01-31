@@ -710,14 +710,16 @@ export class ClassifyService{
             let time:Date= art[t].createAt;
             let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
             let newTime:Date=art[t].updateAt;
-            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000)
+            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
+            let publish:Date=art[t].publishedTime;
+            let publishDate:Date=new Date(publish.getTime()+publish.getTimezoneOffset()*2*30*1000);
             entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
             entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
+            entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
             entity.id=art[t].id;
             entity.name=art[t].name;
             entity.classifyId=art[t].classifyId;
             entity.classify=art[t].classify;
-            entity.publishedTime=art[t].publishedTime;
             result.push(entity);
         }
         return result;

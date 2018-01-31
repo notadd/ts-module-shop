@@ -20,3 +20,12 @@ export class PageEntity{
    /* @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.pages)*/
     contents:PageContentEntity[];
 }
+export class Page{
+   id:number;
+   title:string;
+   alias:string;
+   classifyId:number;
+   classify:string;
+   createAt:string;
+   updateAt:string;
+}

@@ -57,7 +57,7 @@ export class Article{
     topPlace:string;
     hidden:boolean;
     recycling:boolean;
-    publishedTime:Date;
+    publishedTime:string;
     abstract:string;
     content:string;
     display:string;
