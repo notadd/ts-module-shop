@@ -44,7 +44,9 @@ export class DeleteArticleId{
     @ApiModelProperty({type:Array})
     @IsInt()
     readonly id;
-
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly limitNumber;
 }
 
 export class CreateArticle{
