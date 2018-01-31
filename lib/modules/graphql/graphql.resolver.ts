@@ -235,6 +235,15 @@ export class GraphqlResolver{
             let result:string=`成功将${num}条数据还原`;
             return result;
         }
+        let classifyTopPlace=map.get('classifyTopPlace');
+        if(classifyTopPlace!=null || classifyTopPlace !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(classifyTopPlace);
+            let id:number=amap.get('id');
+            const num=await this.classifyService.classifyTopPlace(id);
+            let result:string=`成功将${num}条数据置顶`;
+            return result;
+        }
     }
 
     /**
