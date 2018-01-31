@@ -165,69 +165,107 @@ type Content{
     content:String,
 }
 input ArticleAll{
+    #分页
     limitNum:Int,
+    #是否隐藏
     hidden:Boolean
 }
 input Keywords{
+    #关键字
     keywords:String!,
+    #分页
     limitNum:Int
 }
 input recycleLimit{
+    #分页
     limitNum:Int
 }
 input recycleClasssifyId{
+    #分类id
     id:Int!,
+    #分页
     limitNum:Int
 }
 input ArticleId{
+    #文章id
     id:Int!
 }
 input AllClassify{
+    #分类id
     id:Int,
+    #适用于文章或者页面分类
     useFor:useFor!
 }
 enum useFor{
+    #文章分类
     art,
+    #页面分类
     page
 }
 input Array{
+    #id数组
     id:[Int],
+    #分页
     limitNum:Int
 }
 input ClassifyCreateNew{
+    #适用
     useFor:useFor!,
+    #创建分类模板
     createClass:ClassifyCreate,
+    #分类id
     id:Int
 }
 input ClassifyUpdateNew{
+    #适用
     useFor:useFor!,
+    #修改分类模板
     updateClass:ClassifyUpdate,
+    #分类id
     id:Int
 }
 input deleteClassify{
+    #适用
     useFor:useFor!,
+    #分类id
     id:Int!
 }
 input mobileClassify{
+    #适用
     useFor:useFor!,
+    #分类id
     id:Int!,
+    #分类父Id
     parentId:Int!
 }
 input CreatePage{
+    #页面名称
     title:String!,
+    #页面别名
     alias:String!,
+    #页面内容
     content:[String],
+    #页面分类名称
     classify:String,
+    #页面分类Id
     classifyId:Int,
+    #分页
     limitNum:Int
 }
 input UpdatePage{
+    #页面id
     id:Int!,
+    #页面名称
     title:String,
+    #页面别名
     alias:String,
+    #页面内容
     content:[ContentArray],
+    #页面分类名称
     classify:String,
+    #页面分类id
     classifyId:Int,
+    #分页
     limitNum:Int
 }
 type Query {
