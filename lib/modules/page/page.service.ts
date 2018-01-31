@@ -1,5 +1,5 @@
 import {Component, Inject} from "@nestjs/common";
-import {Repository} from "typeorm";
+import {getManager, Repository} from "typeorm";
 import {PageEntity} from "../entity/page.entity";
 import {HistoryService} from "../history/history.service";
 import {HistoryEntity} from "../entity/history.entity";
@@ -7,13 +7,15 @@ import {MessageCodeError} from "../errorMessage/error.interface";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {ClassifyService} from "../classify/classify.service";
 import {PageContentEntity} from "../entity/page.content.entity";
+import {ClassifyEntity} from "../entity/classify.entity";
 
 @Component()
 export class PageService{
     constructor(@Inject('PageRepositoryToken') private readonly repository:Repository<PageEntity>,
                 private readonly historyService:HistoryService,
                 private readonly classifyService:ClassifyService,
-                @Inject('ContentRepositoryToken') private readonly contentRepository:Repository<PageContentEntity>) {}
+                @Inject('ContentRepositoryToken') private readonly contentRepository:Repository<PageContentEntity>,
+                @Inject('PageClassifyRepositoryToken') private readonly pageRepository:Repository<PageClassifyEntity>,) {}
 
     /**
      * 获取所有页面
@@ -139,7 +141,32 @@ export class PageService{
     async findPageByClassifyId(id:number,limit?:number):Promise<PageEntity[]>{
         let entityClassify:PageClassifyEntity=await this.classifyService.findOnePageClassifyById(id);
         if(entityClassify==null) throw new MessageCodeError('delete:page:deleteById');
-        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classify"= :classify',{classify:id}).orderBy('id','ASC').limit(limit).getMany();
+        let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
+        let newArray:number[]=Array.from(new Set(array));
+        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('id','ASC').limit(limit).getMany();
         return entity;
+    }
+
+    /**
+     * 获取子级分类
+     * @param {number} id
+     * @returns {Promise<number[]>}
+     */
+    async  getClassifyId(id:number):Promise<number[]>{
+        await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
+        const result =await this.pageRepository.createQueryBuilder('page_classify_table').where('page_classify_table.id= :id',{id:id}).innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();
+        let firstArray:PageClassifyEntity[]=result;
+        let array:number[]=[];
+        for(let t in firstArray){
+            array.push(firstArray[t].id);
+            if(firstArray[t].childrens.length>0){
+                for(let h in firstArray[t].childrens){
+                    array.push(firstArray[t].childrens[h].id);
+                    array.push(...await this.getClassifyId(firstArray[t].childrens[h].id));
+                }
+            }
+        }
+        return array;
     }
 }
