@@ -427,11 +427,24 @@ export class ClassifyService{
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let level:number=await this.findLevel(entity.id);
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        console.log('array='+newArray);
         if(show==true || show==undefined){
+            let global:ArticleEntity[]=[];
             let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
-            articles.push(...globalArts);
+            for(let t in globalArts){
+                if(globalArts[t].display!=null){
+                    let newArray:string[]=globalArts[t].display.split(',');
+                    let num:number=newArray.indexOf(id.toString());
+                    if(num<0){
+                        global.push(globalArts[t])
+                    }
+                }else{
+                    global.push(globalArts[t]);
+                }
+
+            }
+            articles.push(...global);
         }else{
             level=4;
         }
@@ -456,7 +469,6 @@ export class ClassifyService{
         }
         return articles;
     }
-
     /**
      * 获取当前分类所有子分类id
      * @param {number} id
@@ -654,17 +666,27 @@ export class ClassifyService{
      * @param {number} id
      * @returns {Promise<number>}
      */
-    async classifyTopPlace(id:number){
+    async classifyTopPlace(id:number,display?:number[]){
         let entity:ClassifyEntity=await this.repository.findOneById(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
         let newArray:number[]=Array.from(new Set(array));
         let num:number=0;
-        let result:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"<>\'grobal\'').getMany();
+        let result:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"<> :topPlace',{topPlace:'global'}).getMany();
+        let numArray:number[]=[];
+        for(let t in display){
+            let array:number[]=await this.getClassifyId(display[t]).then(a=>{return a});
+            let newArray:number[]=Array.from(new Set(array));
+            numArray.push(...newArray);
+        }
+        numArray.push(...display);
+        let finalArray:number[]=Array.from(new Set(numArray));
         for(let t in result){
             let newArt=new ArticleEntity;
             newArt=result[t];
-            newArt.topPlace='grobal';
+            newArt.topPlace='global';
+            newArt.display=finalArray.toString();
             let time =new Date();
             newArt.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             this.artRepository.updateById(newArt.id,newArt);
