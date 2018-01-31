@@ -34,7 +34,7 @@ export class ClassifyService{
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
             let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
             //通过父级id确定父级是否存在
-            if(entity.groupId!=0 && entity.groupId!=null && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+            if(entity.groupId!=0  && parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
             let first:ClassifyEntity=await this.repository.findOneById(1);
             if(entity.groupId==0 && first==null){
                 entity.groupId=null;
@@ -381,6 +381,7 @@ export class ClassifyService{
         where('"classifyId"= :classifyId and "topPlace"=\'current\'',{classifyId:classify.groupId}).orderBy('"updateAt"','ASC').getMany();
         articles.push(...currentArticle);
         let array:number[]=await this.getClassifyId(classify.groupId).then(a=>{return a});
+        array.push(id);
         let newArray:number[]=Array.from(new Set(array));
         let finalArray:number[]=[];
         for(let t in newArray){
@@ -390,13 +391,14 @@ export class ClassifyService{
         }
         let level:number=await this.findLevel(classify.groupId);
         if(level==1){
-            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
+           console.log('final='+JSON.stringify(newArticles));
             articles.push(...newArticles);
         }else if(level==2){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }else if(level==3){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:finalArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
         return articles;
@@ -691,7 +693,6 @@ export class ClassifyService{
             newArt.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             this.artRepository.updateById(newArt.id,newArt);
             num++
-
         }
         return num;
     }
