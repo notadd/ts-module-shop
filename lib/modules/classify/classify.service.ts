@@ -3,9 +3,9 @@ import {Repository} from "typeorm";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {getManager} from "typeorm";
-import {ArticleEntity} from "../entity/article.entity";
+import {Article, ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
-import {PageEntity} from "../entity/page.entity";
+import {Page, PageEntity} from "../entity/page.entity";
 
 @Component()
 export class ClassifyService{
@@ -695,5 +695,54 @@ export class ClassifyService{
             num++
         }
         return num;
+    }
+
+    /**
+     * 文章时间格式转化
+     * @param {ArticleEntity[]} art
+     * @returns {Promise<Article[]>}
+     * @constructor
+     */
+    async TimestampArt(art:ArticleEntity[]){
+        let result:Article[]=[];
+        for(let t in art){
+            let entity=new Article();
+            let time:Date= art[t].createAt;
+            let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+            let newTime:Date=art[t].updateAt;
+            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000)
+            entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+            entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
+            entity.id=art[t].id;
+            entity.name=art[t].name;
+            entity.classifyId=art[t].classifyId;
+            entity.classify=art[t].classify;
+            entity.publishedTime=art[t].publishedTime;
+            result.push(entity);
+        }
+        return result;
+    }
+    /**
+     * 页面时间格式转化
+     * @param {ArticleEntity[]} art
+     * @returns {Promise<Article[]>}
+     * @constructor
+     */
+    async TimestampPage(art:PageEntity[]){
+        let result:Page[]=[];
+        for(let t in art){
+            let entity=new Page();
+            let time:Date= art[t].createAt;
+            let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+            let newTime:Date=art[t].updateAt;
+            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000)
+            entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+            entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
+            entity.id=art[t].id;
+            entity.classifyId=art[t].classifyId;
+            entity.classify=art[t].classify;
+            result.push(entity);
+        }
+        return result;
     }
 }

@@ -46,3 +46,23 @@ export class ArticleEntity{
     classifications:ClassifyEntity[];
 
 }
+export class Article{
+    id:number;
+    name:string;
+    classify:string;
+    classifyId:number;
+    url:string;
+    source:string;
+    sourceUrl:string;
+    topPlace:string;
+    hidden:boolean;
+    recycling:boolean;
+    publishedTime:Date;
+    abstract:string;
+    content:string;
+    display:string;
+    createAt:string;
+    updateAt:string;
+    classifications:ClassifyEntity[];
+
+}
