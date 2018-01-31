@@ -421,7 +421,7 @@ export class ClassifyService{
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
-    async getArticelsByClassifyId(id:number,limit?:number):Promise<ArticleEntity[]>{
+    async getArticelsByClassifyId(id:number,limit?:number,show?:Boolean):Promise<ArticleEntity[]>{
         let articles:ArticleEntity[]=[];
         let entity:ClassifyEntity=await this.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
@@ -429,23 +429,30 @@ export class ClassifyService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         let newArray:number[]=Array.from(new Set(array));
         console.log('array='+newArray);
-        let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
-        articles.push(...globalArts);
+        if(show==true || show==undefined){
+            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            articles.push(...globalArts);
+        }else{
+            level=4;
+        }
         if(level==1){
             let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
         }else if(level==2){
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
         }else if(level==3){
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level3\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
             articles.push(...finalArticles);
+        }else{
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            articles.push(...newArticles);
         }
         return articles;
     }

@@ -68,7 +68,7 @@ export class GraphqlResolver{
         if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleByClassifyId);
-            const result=this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'));
+            const result=this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'));
             return result;
         }
         let findTopPlace=map.get('findTopPlace');

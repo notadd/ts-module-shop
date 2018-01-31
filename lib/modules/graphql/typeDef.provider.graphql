@@ -184,7 +184,9 @@ input recycleClasssifyId{
     #分类id
     id:Int!,
     #分页
-    limitNum:Int
+    limitNum:Int,
+    #是否显示置顶文章
+    show:Boolean
 }
 input ArticleId{
     #文章id
