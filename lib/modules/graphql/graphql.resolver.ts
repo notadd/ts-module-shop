@@ -240,7 +240,7 @@ export class GraphqlResolver{
             let amap=new Map();
             amap=this.objToStrMap(classifyTopPlace);
             let id:number=amap.get('id');
-            const num=await this.classifyService.classifyTopPlace(id);
+            const num=await this.classifyService.classifyTopPlace(id,amap.get('display'));
             let result:string=`成功将${num}条数据置顶`;
             return result;
         }

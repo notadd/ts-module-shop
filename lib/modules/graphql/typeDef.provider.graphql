@@ -270,13 +270,19 @@ input UpdatePage{
     #分页
     limitNum:Int
 }
+input ArticleIdArray{
+    #置顶分类
+    id:Int!
+    #不显示分类
+    display:[Int]
+}
 type Query {
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
     getClassifys(getAllClassify: AllClassify, ) : [Classify],
     getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
 }
 type Mutation{
-    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleId):String
+    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray):String
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
     PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):[Page],
 }
