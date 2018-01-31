@@ -35,6 +35,8 @@ export class ArticleEntity{
     @Column({nullable:true,length:500}) abstract:string;
     //内容
     @Column({nullable:true,length:10000}) content:string;
+    //不显示分类
+    @Column({nullable:true}) display:string;
     //创建时间
     @CreateDateColumn() createAt:Date;
     //修改时间

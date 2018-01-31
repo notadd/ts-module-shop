@@ -9,8 +9,10 @@ export class PageEntity{
     @Column({length:200}) title:string;
     //页面别名
     @Column({length:200}) alias:string;
-    //页面分类
-    @Column({nullable:true}) classify:number;
+    //页面分类Id
+    @Column({nullable:true}) classifyId:number;
+    //页面分类Id
+    @Column({nullable:true}) classify:string;
     //创建时间
     @CreateDateColumn() createAt:Date;
     //修改时间
