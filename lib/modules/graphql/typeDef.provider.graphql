@@ -231,7 +231,7 @@ input UpdatePage{
     limitNum:Int
 }
 type Query {
-    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId) : [Article],
+    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
     getClassifys(getAllClassify: AllClassify, ) : [Classify],
     getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
 }

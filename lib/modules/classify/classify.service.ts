@@ -20,7 +20,7 @@ export class ClassifyService{
      * @param {string} parent
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async createClassifyArt(entity:ClassifyEntity,limit:number):Promise<ClassifyEntity[]>{
+    async createClassifyArt(entity:ClassifyEntity,limit?:number):Promise<ClassifyEntity[]>{
             let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
             //别名不能重复
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
@@ -43,7 +43,7 @@ export class ClassifyService{
      * @param {PageClassifyEntity} entity
      * @returns {Promise<PageClassifyEntity[]>}
      */
-    async createClassifyPage(entity:PageClassifyEntity,limit:number):Promise<PageClassifyEntity[]>{
+    async createClassifyPage(entity:PageClassifyEntity,limit?:number):Promise<PageClassifyEntity[]>{
         let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:-entity.classifyAlias}).getMany();
         //别名不能重复
         if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
@@ -66,7 +66,7 @@ export class ClassifyService{
      * @param {ClassifyEntity} entity
      * @returns {Promise<ClassifyEntity[]>}
      */
-    async updateClassifyArt(entity:ClassifyEntity,id:number):Promise<ClassifyEntity[]>{
+    async updateClassifyArt(entity:ClassifyEntity,id?:number):Promise<ClassifyEntity[]>{
             //当前Id是否存在
             let classify:ClassifyEntity = await this.repository.findOneById(entity.id);
             if(classify==null) throw new MessageCodeError('update:classify:updateById');
@@ -88,7 +88,7 @@ export class ClassifyService{
      * @param {PageClassifyEntity} entity
      * @returns {Promise<PageClassifyEntity[]>}
      */
-     async updateClassifyPage(entity:PageClassifyEntity,id:number):Promise<PageClassifyEntity[]>{
+     async updateClassifyPage(entity:PageClassifyEntity,id?:number):Promise<PageClassifyEntity[]>{
          let classify:PageClassifyEntity = await this.pageRepository.findOneById(entity.id);
          if(classify==null) throw new MessageCodeError('update:classify:updateById');
          let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
@@ -380,6 +380,22 @@ export class ClassifyService{
         }
         return articles;
     }
+
+    /**
+     * 全局置顶和当前分类文章
+     * @param {number} id
+     * @returns {Promise<ArticleEntity[]>}
+     */
+    async showCurrentArticles(id:number):Promise<ArticleEntity[]>{
+        let classify:ClassifyEntity=await this.repository.findOneById(id);
+        if(classify==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let articles:ArticleEntity[]=[];
+        let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
+        let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).andWhere('"topPlace"<> :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
+        articles.push(...globalArts);
+        articles.push(...current);
+        return articles;
+    }
     /**
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
@@ -547,5 +563,61 @@ export class ClassifyService{
     public async findOnePageClassifyById(id:number):Promise<PageClassifyEntity>{
         let final:PageClassifyEntity=await this.pageRepository.findOneById(id);
         return final;
+    }
+
+    /**
+     * 判断默认分类是否存在
+     * @param {string} Alias
+     * @param {string} useFor
+     * @returns {Promise<number>}
+     */
+    public async findTheDefaultByAlias(Alias:string,useFor:string){
+        let numId:number=0;
+        if(useFor=='art'){
+            let defaultArt:ClassifyEntity=await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:Alias}).getOne();
+            if(defaultArt==null){
+                let classify =new ClassifyEntity();
+                classify.groupId=1;
+                classify.classifyName='默认分类';
+                classify.classifyAlias='默认分类';
+                classify.describe='默认分类';
+                const result:string=await this.repository.createQueryBuilder().insert().into(ClassifyEntity).values(classify).output('id').execute();
+                let str:string=JSON.stringify(result);
+                let newstr:string=str.replace('{','').replace('}','').replace('[','').replace(']','');
+                let finalStr:string[]=newstr.replace('"','').replace('"','').split(':');
+                numId=Number(finalStr[1]);
+            }else{
+                numId=defaultArt.id;
+            }
+        }else if(useFor=='page'){
+            let defaultPage:PageClassifyEntity=await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:Alias}).getOne();
+            if(defaultPage==null){
+                let classify =new PageClassifyEntity();
+                classify.groupId=1;
+                classify.classifyName='默认分类';
+                classify.classifyAlias='默认分类';
+                classify.describe='默认分类';
+                const result=await this.pageRepository.createQueryBuilder().insert().into(PageClassifyEntity).values(classify).output('id').execute();
+                let str:string=JSON.stringify(result);
+                let newstr:string=str.replace('{','').replace('}','').replace('[','').replace(']','');
+                let finalStr:string[]=newstr.replace('"','').replace('"','').split(':');
+                numId=Number(finalStr[1]);
+            }else{
+                numId=defaultPage.id;
+            }
+        }
+        return numId;
+    }
+    /**
+     * JSON----Map
+     * @param obj
+     * @returns {Map<string, string>}
+     */
+    objToStrMap(obj):Map<string,string> {
+        let strMap=new Map();
+        for (let k of Object.keys(obj)) {
+            strMap.set(k, obj[k]);
+        }
+        return strMap;
     }
 }
