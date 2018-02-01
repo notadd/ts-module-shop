@@ -90,7 +90,14 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
             article.classify='默认分类';
-         let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
+        let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
+        let time =new Date();
+        if(article.publishedTime==null){
+            article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        }
+        if(article.topPlace==null){
+            article.topPlace='cancel';
+        }
          return create;
       }
 
@@ -213,13 +220,13 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let num:number=await this.classifyService.findLevel(article.classifyId).then(a=>{return a});
         let level:string=this.classifyService.interfaceChange(num);
         if(level=='level1'){
-            article.topPlace=`global,current`;
+            article.topPlace=`cancel,global,current`;
         }else if(level=='level2'){
-            article.topPlace=`global,level1,current`;
+            article.topPlace=`cancel,global,level1,current`;
         }else if(level=='level3'){
-            article.topPlace=`global,level1,current,level2`;
+            article.topPlace=`cancel,global,level1,current,level2`;
         }else{
-            article.topPlace=`global,level1,level2,level3,current`;
+            article.topPlace=`cancel,global,level1,level2,level3,current`;
         }
         let newArticle:ArticleEntity=article;
         Array.push(newArticle);

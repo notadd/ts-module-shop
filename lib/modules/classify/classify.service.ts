@@ -565,13 +565,32 @@ export class ClassifyService{
         if(groupId==0){
             groupId=1;
         }
+
         classify.groupId=groupId;
+        let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
+        let newArray:number[]=Array.from(new Set(array));
+        this.resetTheSetTop(newArray);
         let time =new Date();
         classify.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
         let newClassify:ClassifyEntity=classify;
         this.repository.updateById(newClassify.id,newClassify);
         return this.findAllClassifyArt(1);
 
+    }
+
+    /**
+     * 重置置顶关系
+     * @param {number[]} arr
+     * @returns {Promise<void>}
+     */
+    public async resetTheSetTop(arr:number[]){
+        for(let t in arr){
+            let arr=new ArticleEntity;
+            arr.topPlace='cancel';
+            await this.artRepository.updateById(arr[t],arr);
+
+        }
     }
     /**
      * 页面分类移动
@@ -729,7 +748,9 @@ export class ClassifyService{
             entity.sourceUrl=art[t].sourceUrl;
             entity.topPlace=art[t].topPlace;
             entity.abstract=art[t].abstract;
+            entity.hidden=art[t].hidden;
             entity.id=art[t].id;
+            entity.recycling=art[t].recycling;
             result.push(entity);
         }
         return result;
