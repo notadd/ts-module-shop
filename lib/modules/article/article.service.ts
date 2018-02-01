@@ -1,11 +1,12 @@
 import {Component, Inject} from "@nestjs/common";
-import { Repository} from "typeorm";
+import {getManager, Repository} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {HistoryEntity} from "../entity/history.entity";
 import {HistoryService} from "../history/history.service";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
+import {PageClassifyEntity} from "../entity/pageClassify.entity";
 
 @Component()
 export class ArticleService{
@@ -183,13 +184,18 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
     }
 
     /**
-     * 回收站内根据分类查找文章
+     * 回收站内根据分类查找当前分类及子分类下的文章
      * @param {number} id
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
     async reductionClassity(id:number,limit?:number):Promise<ArticleEntity[]>{
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId"= :classifyId  and recycling=true',{classifyId:id}).orderBy('id','ASC').limit(limit).getMany();
+        let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(id);
+        if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        let array:number[]=await this.classifyService.getClassifyId(id).then(a=>{return a});
+        array.push(id);
+        let newArray:number[]=Array.from(new Set(array));
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').limit(limit).getMany();
         return result;
     }
 

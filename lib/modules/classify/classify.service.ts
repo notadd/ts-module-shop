@@ -712,7 +712,7 @@ export class ClassifyService{
             let newTime:Date=art[t].updateAt;
             let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
             let publish:Date=art[t].publishedTime;
-            let publishDate:Date=new Date(publish.getTime()+publish.getTimezoneOffset()*2*30*1000);
+            let publishDate:Date=publish;
             entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
             entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
             entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
@@ -747,4 +747,5 @@ export class ClassifyService{
         }
         return result;
     }
+
 }
