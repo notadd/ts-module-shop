@@ -6,13 +6,15 @@ import {getManager} from "typeorm";
 import {Article, ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {Page, PageEntity} from "../entity/page.entity";
+import {PagerService, ReturnPage} from "../database/common.paging";
 
 @Component()
 export class ClassifyService{
     constructor(@Inject('ClassifyRepositoryToken') private readonly repository:Repository<ClassifyEntity>,
                 @Inject('ArticleRepositoryToken') private readonly artRepository:Repository<ArticleEntity>,
                 @Inject('PageClassifyRepositoryToken') private readonly pageRepository:Repository<PageClassifyEntity>,
-                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>){}
+                @Inject('PageRepositoryToken') private readonly repositoryPage:Repository<PageEntity>,
+                private readonly pageService:PagerService){}
 
     /**
      * 新增文章分类
@@ -737,34 +739,37 @@ export class ClassifyService{
     async TimestampArt(art:ArticleEntity[]){
         let result:Article[]=[];
         for(let t in art){
-            let entity=new Article();
-            let time:Date= art[t].createAt;
-            let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
-            let newTime:Date=art[t].updateAt;
-            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
-            if(art[t].publishedTime!=null){
-                let publish:Date=art[t].publishedTime;
-                let publishDate:Date=publish;
-                entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
+            if(art[t].id!=null){
+                let entity=new Article();
+                let time:Date= art[t].createAt;
+                let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+                let newTime:Date=art[t].updateAt;
+                let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
+                if(art[t].publishedTime!=null){
+                    let publish:Date=art[t].publishedTime;
+                    let publishDate:Date=publish;
+                    entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
+                }
+                entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+                entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
+                entity.id=art[t].id;
+                entity.name=art[t].name;
+                entity.classifyId=art[t].classifyId;
+                entity.classify=art[t].classify;
+                entity.abstract=art[t].abstract;
+                entity.content=art[t].content;
+                entity.url=art[t].url;
+                entity.source=art[t].source;
+                entity.sourceUrl=art[t].sourceUrl;
+                entity.topPlace=art[t].topPlace;
+                entity.abstract=art[t].abstract;
+                entity.hidden=art[t].hidden;
+                entity.id=art[t].id;
+                entity.recycling=art[t].recycling;
+                result.push(entity);
             }
-            entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
-            entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
-            entity.id=art[t].id;
-            entity.name=art[t].name;
-            entity.classifyId=art[t].classifyId;
-            entity.classify=art[t].classify;
-            entity.abstract=art[t].abstract;
-            entity.content=art[t].content;
-            entity.url=art[t].url;
-            entity.source=art[t].source;
-            entity.sourceUrl=art[t].sourceUrl;
-            entity.topPlace=art[t].topPlace;
-            entity.abstract=art[t].abstract;
-            entity.hidden=art[t].hidden;
-            entity.id=art[t].id;
-            entity.recycling=art[t].recycling;
-            result.push(entity);
-        }
+            }
+
         return result;
     }
     /**
@@ -790,5 +795,24 @@ export class ClassifyService{
         }
         return result;
     }
+    async pageServiceArt(art:ArticleEntity[],limit?:number,page?:number){
+        for(let t in art){
+            if(art[t].totalItems>0){
+                console.log(art[t].totalItems);
+                let result=this.pageService.getPager(art[t].totalItems,page,limit);
+                let res=new ReturnPage();
+                    res.totalItems=result.totalItems;
+                    res.currentPage=result.currentPage;
+                    res.pageSize=result.pageSize;
+                    res.totalPages=result.totalPages;
+                    res.startPage=result.startPage;
+                    res.endPage= result.endPage;
+                    res.startIndex=result.startIndex;
+                    res.endIndex= result.endIndex;
+                    res.pages= result.pages;
+                return res;
+            }
+        }
 
+    }
 }
