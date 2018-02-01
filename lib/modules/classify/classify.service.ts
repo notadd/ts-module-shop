@@ -711,15 +711,25 @@ export class ClassifyService{
             let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
             let newTime:Date=art[t].updateAt;
             let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
-            let publish:Date=art[t].publishedTime;
-            let publishDate:Date=publish;
+            if(art[t].publishedTime!=null){
+                let publish:Date=art[t].publishedTime;
+                let publishDate:Date=publish;
+                entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
+            }
             entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
             entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
-            entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
             entity.id=art[t].id;
             entity.name=art[t].name;
             entity.classifyId=art[t].classifyId;
             entity.classify=art[t].classify;
+            entity.abstract=art[t].abstract;
+            entity.content=art[t].content;
+            entity.url=art[t].url;
+            entity.source=art[t].source;
+            entity.sourceUrl=art[t].sourceUrl;
+            entity.topPlace=art[t].topPlace;
+            entity.abstract=art[t].abstract;
+            entity.id=art[t].id;
             result.push(entity);
         }
         return result;
