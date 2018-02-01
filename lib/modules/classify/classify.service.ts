@@ -535,7 +535,7 @@ export class ClassifyService{
      * @param {number} level
      * @returns {string}
      */
-    public interfaceChange(level:number):string{
+    public interfaceChange(level?:number):string{
         let finalLevel:string;
         if(level==1){
             finalLevel='level1';

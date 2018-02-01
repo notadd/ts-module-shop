@@ -219,11 +219,34 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }else if(level=='level3'){
             article.topPlace=`global,level1,current,level2`;
         }else{
-            article.topPlace=`global,level1,,level2,level3,current`;
+            article.topPlace=`global,level1,level2,level3,current`;
         }
         let newArticle:ArticleEntity=article;
         Array.push(newArticle);
         return Array;
+    }
+
+    /**
+     * 根据分类id获取层级
+     * @param {number} id
+     * @returns {Promise<string>}
+     */
+    async getLevelByClassifyId(id:number):Promise<string>{
+        let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(id);
+        if(entity==null) throw new MessageCodeError('delete:recycling:idMissing');
+        let num:number=await this.classifyService.findLevel(entity.id).then(a=>{return a});
+        let level:string=this.classifyService.interfaceChange(num);
+        let topPlace:string='';
+        if(level=='level1'){
+            topPlace=`global,current`;
+        }else if(level=='level2'){
+           topPlace=`global,level1,current`;
+        }else if(level=='level3'){
+            topPlace=`global,level1,current,level2`;
+        }else{
+            topPlace=`global,level1,level2,level3,current`;
+        }
+        return topPlace;
     }
 
 }
