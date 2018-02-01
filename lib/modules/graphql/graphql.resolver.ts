@@ -1,6 +1,6 @@
 import {Mutation, Query, Resolver} from "@nestjs/graphql";
 import {ArticleService} from "../article/article.service";
-import {ArticleEntity} from "../entity/article.entity";
+import {Article, ArticleEntity} from "../entity/article.entity";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {PageService} from "../page/page.service";
@@ -9,6 +9,7 @@ import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
+import {ArticleValue, ReturnPage} from "../database/common.paging";
 
 @Resolver()
 export class GraphqlResolver{
@@ -33,9 +34,13 @@ export class GraphqlResolver{
         if(getArticle!=null || getArticle!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticle);
-            let entity:ArticleEntity[]=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;
+            let entity:ArticleEntity[]=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'),amap.get('pages'));
+            let resultPage=await this.classifyService.pageServiceArt(entity,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let result:Article[]=await this.classifyService.TimestampArt(entity);
+            let Article=new ArticleValue();
+            Article.pagination=resultPage;
+            Article.articles=result;
+            return Article;
         }
         let keywordsSerach=map.get('keywordsSerach');
         if(keywordsSerach!=null || keywordsSerach!=undefined){

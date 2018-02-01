@@ -30,6 +30,21 @@ type Article{
     #修改时间
     updateAt:String,
 }
+type ArticlePagination{
+    pagination:ReturnPage,
+    articles:[Article]
+}
+type ReturnPage{
+    totalItems: Int,
+    currentPage: Int,
+    pageSize: Int,
+    totalPages: Int,
+    startPage: Int,
+    endPage: Int,
+    startIndex: Int,
+    endIndex: Int,
+    pages: Int
+}
 enum stick{
     global,
     current,
@@ -170,7 +185,9 @@ input ArticleAll{
     #分页
     limitNum:Int,
     #是否隐藏
-    hidden:Boolean
+    hidden:Boolean,
+    #第几页
+    pages:Int
 }
 input Keywords{
     #关键字
@@ -281,7 +298,7 @@ input ArticleIdArray{
 type Query {
     #Get articles.
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
-        reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
+        reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) :ArticlePagination,
     #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
     #get pages
