@@ -83,7 +83,8 @@ export class GraphqlResolver{
         if(getArticleById!=null || getArticleById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleById);
-            const result= this.articleService.getArticleById(amap.get('id'));
+            let entity:ArticleEntity[]= await this.articleService.getArticleById(amap.get('id'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let superiorArticle=map.get('superiorArticle');
@@ -193,8 +194,10 @@ export class GraphqlResolver{
         let createArt=map.get('createArt');
         if(createArt!=null || createArt !=undefined){
             let art:ArticleEntity=createArt;
-            let date:string=art.publishedTime.toString();
-            art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            if(art.publishedTime!=null){
+                let date:string=art.publishedTime.toString();
+                art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            }
             let newArticle:ArticleEntity=art;
             const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
             let final:string=JSON.stringify(result);
@@ -203,8 +206,10 @@ export class GraphqlResolver{
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
             let art:ArticleEntity=updateArt;
-            let date:string=art.publishedTime.toString();
-            art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            if(art.publishedTime!=null){
+                let date:string=art.publishedTime.toString();
+                art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            }
             let newArticle:ArticleEntity=art;
             const result=await this.articleService.updateArticle(newArticle).then(a=>{return a});
             let final:string=JSON.stringify(result);

@@ -53,7 +53,7 @@ input ArticleInput{
     #是否隐藏
     hidden:Boolean!,
     #发布时间
-    publishedTime:String!,
+    publishedTime:String,
     #来源
     source:String,
     #来源链接
