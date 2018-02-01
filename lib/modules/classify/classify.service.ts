@@ -241,6 +241,11 @@ export class ClassifyService{
         const result =await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
         let resultArray:ClassifyEntity[]=result;
         await getManager().query("update public.article_classify_table set \"parentId\"=null");
+        let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
+        let newArray:number[]=Array.from(new Set(array));
+        let artiicles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).getMany();
+        if(artiicles.length>0) throw new MessageCodeError('delete:art:ClassifyIdIncludeArts');
         let res:number[]=await this.deleteClassifyArt(id,result);
         return this.findAllClassifyArt(1);
     }

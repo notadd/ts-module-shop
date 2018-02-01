@@ -73,5 +73,11 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'Cannot delete the data of id=1 (root node).',
         userMessage:'Cannot delete the data of id=1 (root node).',
+    },
+    'delete:art:ClassifyIdIncludeArts':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'There are articles under the current classification and cannot be deleted.',
+        userMessage:'There are articles under the current classification and cannot be deleted.'
     }
 };
