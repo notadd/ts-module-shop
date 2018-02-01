@@ -194,10 +194,14 @@ input Keywords{
     keywords:String!,
     #分页
     limitNum:Int
+    #第几页
+    pages:Int
 }
 input recycleLimit{
     #分页
     limitNum:Int
+    #第几页
+    pages:Int
 }
 input recycleClasssifyId{
     #分类id
@@ -206,6 +210,8 @@ input recycleClasssifyId{
     limitNum:Int,
     #是否显示置顶文章
     show:Boolean
+    #第几页
+    pages:Int
 }
 input ArticleId{
     #文章id
@@ -228,6 +234,8 @@ input Array{
     id:[Int],
     #分页
     limitNum:Int
+    #第几页
+    pages:Int
 }
 input ClassifyCreateNew{
     #适用
@@ -272,6 +280,8 @@ input CreatePage{
     classifyId:Int!,
     #分页
     limitNum:Int
+    #第几页
+    pages:Int
 }
 input UpdatePage{
     #页面id
@@ -288,6 +298,8 @@ input UpdatePage{
     classifyId:Int,
     #分页
     limitNum:Int
+    #第几页
+    pages:Int
 }
 input ArticleIdArray{
     #置顶分类

@@ -57,7 +57,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async serachArticles(name:string,limit?:number,pages?:number):Promise<ArticleEntity[]>{
         let str:string=`%${name}%`;
-        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').limit(limit).getMany();
+        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
         let newArt =new ArticleEntity();
         newArt.totalItems=title;
@@ -144,8 +144,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-      async recycleFind(limit?:number):Promise<ArticleEntity[]>{
-          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).limit(limit).getMany();
+      async recycleFind(limit?:number,pages?:number):Promise<ArticleEntity[]>{
+          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).skip(limit*(pages-1)+1).take(limit).getMany();
+          let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
+          let newArt =new ArticleEntity();
+              newArt.totalItems=title;
+              result.push(newArt);
           return result;
       }
 
