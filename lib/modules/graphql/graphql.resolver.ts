@@ -46,9 +46,13 @@ export class GraphqlResolver{
         if(keywordsSerach!=null || keywordsSerach!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(keywordsSerach);
-            let entity:ArticleEntity[]=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;
+            let entity:ArticleEntity[]=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),,amap.get('pages'));
+            let resultPage=await this.classifyService.pageServiceArt(entity,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let result:Article[]=await this.classifyService.TimestampArt(entity);
+            let Article=new ArticleValue();
+            Article.pagination=resultPage;
+            Article.articles=result;
+            return Article;
         }
         let recycleFind=map.get('recycleFind');
         if(recycleFind!=null || recycleFind !=undefined){

@@ -55,9 +55,13 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async serachArticles(name:string,limit?:number):Promise<ArticleEntity[]>{
+    async serachArticles(name:string,limit?:number,pages?:number):Promise<ArticleEntity[]>{
         let str:string=`%${name}%`;
         let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').limit(limit).getMany();
+        let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
+        let newArt =new ArticleEntity();
+        newArt.totalItems=title;
+        resultAll.push(newArt);
         return resultAll;
     }
 
