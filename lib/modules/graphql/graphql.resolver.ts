@@ -101,6 +101,13 @@ export class GraphqlResolver{
             const result= this.classifyService.showCurrentArticles(amap.get('id'));
             return result;
         }
+        let getLevelByClassifyId=map.get('getLevelByClassifyId');
+        if(getLevelByClassifyId!=null || getLevelByClassifyId !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getLevelByClassifyId);
+            const result= this.articleService.getLevelByClassifyId(amap.get('id'));
+            return result;
+        }
 
     }
 

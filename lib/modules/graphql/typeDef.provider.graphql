@@ -279,12 +279,18 @@ input ArticleIdArray{
     display:[Int]
 }
 type Query {
+    #Get articles.
     getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
+    #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
+    #get pages
     getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
 }
 type Mutation{
+    #the method to modify article,return string
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray):String
+    #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
+    #the method to modify page,return page array
     PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):[Page],
 }
