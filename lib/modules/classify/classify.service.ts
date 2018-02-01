@@ -231,12 +231,14 @@ export class ClassifyService{
             if(deleteArray.length==0){
                 deleteArray.push(id);
             }
-            this.updateArticleClassify(deleteArray,'art');
+           // this.updateArticleClassify(deleteArray,'art');
             await this.repository.deleteById(id);
             return deleteArray;
 
     }
     async deleteMethodFirst(id:number){
+        let classify:ClassifyEntity = await this.repository.findOneById(id);
+        if(classify==null) throw new MessageCodeError('update:classify:updateById');
         await getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
         const result =await this.repository.createQueryBuilder('article_classify_table').innerJoinAndSelect('article_classify_table.childrens','childrens').orderBy('article_classify_table.id').getMany();
         let resultArray:ClassifyEntity[]=result;
@@ -259,7 +261,12 @@ export class ClassifyService{
         if(classify==null) throw new MessageCodeError('update:classify:updateById');
         await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
         const result =await this.pageRepository.createQueryBuilder('page_classify_table').innerJoinAndSelect('page_classify_table.childrens','childrens').orderBy('page_classify_table.id').getMany();
-        let resultArray:PageClassifyEntity[]=result;
+        await getManager().query("update public.page_classify_table set \"parentId\"=null");
+        let array:number[]=await this.getClassifyId(id).then(a=>{return a});
+        array.push(id);
+        let newArray:number[]=Array.from(new Set(array));
+        let artiicles:PageEntity[]=await this.repositoryPage.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).getMany();
+        if(artiicles.length>0) throw new MessageCodeError('delete:page:ClassifyIdIncludePages');
         let res:number[]=await this.deleteClassifyPage(id,result);
         return this.findAllClassifyPage(1);
     }
@@ -291,7 +298,7 @@ export class ClassifyService{
         if(deleteArray.length==0){
             deleteArray.push(id);
         }
-        this.updateArticleClassify(deleteArray,'page');
+        //this.updateArticleClassify(deleteArray,'page');
         await this.pageRepository.deleteById(id);
         return deleteArray;
     }

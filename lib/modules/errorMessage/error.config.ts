@@ -79,5 +79,11 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         httpStatus: HttpStatus.BAD_REQUEST,
         errorMessage:'There are articles under the current classification and cannot be deleted.',
         userMessage:'There are articles under the current classification and cannot be deleted.'
-    }
+    },
+    'delete:page:ClassifyIdIncludePages':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'There are pages under the current classification and cannot be deleted.',
+        userMessage:'There are pages under the current classification and cannot be deleted.'
+    },
 };
