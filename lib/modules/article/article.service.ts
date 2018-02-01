@@ -7,37 +7,45 @@ import {HistoryService} from "../history/history.service";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {PagerService} from "../database/common.paging";
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
             private readonly historyService:HistoryService,
-            private readonly classifyService:ClassifyService,){}
+            private readonly classifyService:ClassifyService){}
 
     /**
      * 返回所有数据,依据提供limit进行分页
      * @returns {Promise<ArticleEntity[]>}
      */
-    async  getArticleAll(limit?:number,hidden?:boolean):Promise<ArticleEntity[]>{
+    async  getArticleAll(limit?:number,hidden?:boolean,pages?:number):Promise<ArticleEntity[]>{
+        let title:number=0;
         let resultAll:ArticleEntity[]=[];
         if(hidden==true){
             let newArray:ArticleEntity[]=[];
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=true',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
             for(let t in newresult){
                 if(newresult[t].hidden){
                     newArray.push(newresult[t]);
                 }
             }
+            title= await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).getCount();
             resultAll.push(...newArray);
         }else if(hidden==false){
             console.log('false='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
+            title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).getCount();
             resultAll.push(...newresult);
         }else if(hidden==undefined){
             console.log('undefined='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").limit(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
+            title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
             resultAll.push(...newresult);
         }
+        let newArt =new ArticleEntity();
+        newArt.totalItems=title;
+        resultAll.push(newArt);
         return resultAll;
     }
 
@@ -90,7 +98,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
             article.classify='默认分类';
-        let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
         let time =new Date();
         if(article.publishedTime==null){
             article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
@@ -98,6 +105,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(article.topPlace==null){
             article.topPlace='cancel';
         }
+        article.recycling=false;
+        let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
          return create;
       }
 

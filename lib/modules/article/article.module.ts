@@ -11,7 +11,7 @@ import {ClassifyModule} from "../classify/classify.module";
     modules:[DatabaseModule,HistoryModule,ClassifyModule],
     controllers:[ArticleController],
     components:[...respositoryProvider,ArticleService],
-    exports:[ArticleService]
+    exports:[ArticleService],
 })
 
 export class ArticleModule{}
