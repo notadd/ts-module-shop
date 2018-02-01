@@ -41,42 +41,48 @@ export class GraphqlResolver{
         if(keywordsSerach!=null || keywordsSerach!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(keywordsSerach);
-            const result=this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'));
+            let entity:ArticleEntity[]=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let recycleFind=map.get('recycleFind');
         if(recycleFind!=null || recycleFind !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(recycleFind);
-            const result=this.articleService.recycleFind(amap.get('limitNum'));
+            let entity:ArticleEntity[]=await this.articleService.recycleFind(amap.get('limitNum'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let reductionGetByClassifyId=map.get('reductionGetByClassifyId');
         if(reductionGetByClassifyId!=null || reductionGetByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(reductionGetByClassifyId);
-            const result=this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'));
+            let entity:ArticleEntity[]=await this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let showNext=map.get('showNext');
         if(showNext!=null || showNext !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(showNext);
-            const result=this.classifyService.showNextTitle(amap.get('id'));
+            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let getArticleByClassifyId=map.get('getArticleByClassifyId');
         if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleByClassifyId);
-            const result=this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'));
+            let entity:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let findTopPlace=map.get('findTopPlace');
         if(findTopPlace!=null || findTopPlace !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(findTopPlace);
-            const result= this.articleService.findTopPlace(amap.get('limitNum'));
+            let entity:ArticleEntity[]=await this.articleService.findTopPlace(amap.get('limitNum'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let getArticleById=map.get('getArticleById');

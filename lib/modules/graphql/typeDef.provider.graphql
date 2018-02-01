@@ -41,15 +41,15 @@ input ArticleInput{
     #文章名
     name:String!,
     #分类名称
-    classify:String,
+    classify:String!,
     #分类Id
-    classifyId:Int,
+    classifyId:Int!,
     #摘要
     abstract:String,
     #内容
     content:String,
     #置顶
-    topPlace:stick!,
+    topPlace:stick,
     #是否隐藏
     hidden:Boolean!,
     #发布时间
@@ -114,7 +114,7 @@ input ClassifyCreate{
     #颜色
     color:String,
     #父节点
-    groupId:Int,
+    groupId:Int!,
 }
 input ClassifyUpdate{
     #分类id
@@ -250,9 +250,9 @@ input CreatePage{
     #页面内容
     content:[String],
     #页面分类名称
-    classify:String,
+    classify:String!,
     #页面分类Id
-    classifyId:Int,
+    classifyId:Int!,
     #分页
     limitNum:Int
 }
@@ -280,7 +280,8 @@ input ArticleIdArray{
 }
 type Query {
     #Get articles.
-    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit, reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
+    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
+        reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) : [Article],
     #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
     #get pages
