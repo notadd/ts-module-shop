@@ -24,7 +24,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let resultAll:ArticleEntity[]=[];
         if(hidden==true){
             let newArray:ArticleEntity[]=[];
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             for(let t in newresult){
                 if(newresult[t].hidden){
                     newArray.push(newresult[t]);
@@ -34,12 +34,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             resultAll.push(...newArray);
         }else if(hidden==false){
             console.log('false='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).getCount();
             resultAll.push(...newresult);
         }else if(hidden==undefined){
             console.log('undefined='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)+1).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
             resultAll.push(...newresult);
         }
@@ -54,7 +54,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async serachArticles(name:string,limit?:number,pages?:number){
         let str:string=`%${name}%`;
-        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
+        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').skip(limit*(pages-1)).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
         return {articles:resultAll,totalItems:title};
     }
@@ -139,7 +139,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
       async recycleFind(limit?:number,pages?:number){
-          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).skip(limit*(pages-1)+1).take(limit).getMany();
+          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).skip(limit*(pages-1)).take(limit).getMany();
           let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
           return {articles:result,totalItems:title};
       }
@@ -194,7 +194,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
     async findTopPlace(limit?:number,pages?:number){
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').skip(limit*(pages-1)).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).getCount();
         return {articles:result,totalItems:title};
     }
@@ -211,7 +211,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let array:number[]=await this.classifyService.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').skip(limit*(pages-1)).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).getCount();
         return {articles:result,totalItems:title}
     }

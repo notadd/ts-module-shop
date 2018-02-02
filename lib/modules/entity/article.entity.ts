@@ -45,6 +45,9 @@ export class ArticleEntity{
     @OneToMany(type => ClassifyEntity,ClassifyEntity=>ClassifyEntity.articles)
     classifications:ClassifyEntity[];
 
+    @Column({nullable:true})
+    totalItems:number;
+
 }
 export class Article{
     id:number;
