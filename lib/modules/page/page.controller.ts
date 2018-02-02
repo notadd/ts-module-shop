@@ -52,10 +52,10 @@ export class PageController{
     @ApiOperation({title:'delete pages'})
     @Post('deletePages')
     public async deletePages(@Response() res,@Body() array:DeleteArticleId){
-        let result:PageEntity[]=await this.pageService.deletePages(array.id).then(a=>{return a.pages});
-        console.log('num='+result)
-        let deleteNum=`已经成功删除${result}个页面`;
-        return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
+        let resultAll=await this.pageService.deletePages(array.id,array.limitNumber,array.pages).then(a=>{return a});
+        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultAll.pages);
+        let pagination=await this.classifyService.pageServiceArt(resultAll.totalItems,array.limitNumber,array.pages);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:pagination,pages:PageReturn}));
     }
 
     /**
@@ -78,8 +78,10 @@ export class PageController{
             contents.push(newContent);
         }
         console.log('contents='+JSON.stringify(contents));
-        let result:PageEntity[]=await this.pageService.createPages(newPage,contents).then(a=>{return a.pages});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultAll=await this.pageService.createPages(newPage,contents,page.limitNum,page.pages).then(a=>{return a});
+        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultAll.pages);
+        let pagination=await this.classifyService.pageServiceArt(resultAll.totalItems,page.limitNum,page.pages);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:pagination,pages:PageReturn}));
     }
 
     /**

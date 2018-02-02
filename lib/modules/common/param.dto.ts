@@ -60,9 +60,14 @@ export class DeleteArticleId{
     @ApiModelProperty({type:Array})
     @IsInt()
     readonly id;
+
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly limitNumber;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 }
 
 export class CreateArticle{
@@ -292,6 +297,14 @@ export class CreatePage{
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly classify;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly limitNum;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 
 }
 export class ContentMap{
