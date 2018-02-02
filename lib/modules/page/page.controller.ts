@@ -9,12 +9,14 @@ import {showNextDto} from "../common/param.dto";
 import {GetLimit} from "../common/param.dto";
 import {UpdatePage} from "../common/param.dto";
 import {ContentMap} from "../common/param.dto";
-import {PageEntity} from "../entity/page.entity";
+import {Page, PageEntity} from "../entity/page.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
+import {ClassifyService} from "../classify/classify.service";
 
 @Controller('page')
 export class PageController{
-    constructor( private readonly pageService:PageService){}
+    constructor( private readonly pageService:PageService,
+                 private readonly classifyService:ClassifyService){}
     /**
      * 获取全部页面
      * @param res
@@ -22,8 +24,10 @@ export class PageController{
     @ApiOperation({title:'get All pages'})
     @Get('getAllPage')
     public async getAllPage(@Response() res,@Body() getLimit:GetLimit){
-        let result:PageEntity[]=await this.pageService.getAllPage(getLimit.limitNumber).then(a=>{return a.pages});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultALl=await this.pageService.getAllPage(getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultALl.pages);
+        let pagination=await this.classifyService.pageServiceArt(resultALl.totalItems,getLimit.limitNumber,getLimit.pages);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:pagination,pages:PageReturn}));
     }
 
     /**

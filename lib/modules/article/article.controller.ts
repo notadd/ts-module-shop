@@ -170,8 +170,10 @@ export class ArticleController{
     @ApiOperation({title:'Get the top article for pagination.'})
     @Post('findTopPlace')
     public async findTopPlace(@Response() res,@Body() getLimit:GetLimit){
-        let result:ArticleEntity[]= await this.articleService.findTopPlace(getLimit.limitNumber).then(a=>{return a.articles});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultAll= await this.articleService.findTopPlace(getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let resultPage=await this.classifyService.pageServiceArt(resultAll.totalItems,getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let result:Article[]=await this.classifyService.TimestampArt(resultAll.articles);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:resultPage,articles:result}));
     }
 
     /**
@@ -183,8 +185,10 @@ export class ArticleController{
     @ApiOperation({title:'Get the  article from  reduction by classify id.'})
     @Post('reductionGetByClassifyId')
     public async reductionGetByClassifyId(@Response() res,@Body() getLimit:GetClassifyLimit){
-        let result:ArticleEntity[]=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber).then(a=>{return a.articles});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultAll=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let resultPage=await this.classifyService.pageServiceArt(resultAll.totalItems,getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let result:Article[]=await this.classifyService.TimestampArt(resultAll.articles);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:resultPage,articles:result}));
     }
     /**
      * 通过文章id获取文章
