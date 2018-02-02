@@ -23,7 +23,7 @@ export class ArticleController{
     @ApiResponse({status:500,description:'Internal server error'})
     @Post('findAll')
     public async getArticleAll(@Response() res,@Body() limitNum:GetLimit){
-        let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden);
+        let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden).then(a=>{return a.articles});
         return res.status(HttpStatus.OK).send(JSON.stringify(findAll));
     }
 

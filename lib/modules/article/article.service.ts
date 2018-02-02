@@ -19,7 +19,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * 返回所有数据,依据提供limit进行分页
      * @returns {Promise<ArticleEntity[]>}
      */
-    async  getArticleAll(limit?:number,hidden?:boolean,pages?:number):Promise<ArticleEntity[]>{
+    async  getArticleAll(limit?:number,hidden?:boolean,pages?:number){
         let title:number=0;
         let resultAll:ArticleEntity[]=[];
         if(hidden==true){
@@ -43,10 +43,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
             resultAll.push(...newresult);
         }
-        let newArt =new ArticleEntity();
-        newArt.totalItems=title;
-        resultAll.push(newArt);
-        return resultAll;
+        return {articles:resultAll,totalItems:title};
     }
 
     /**
@@ -202,8 +199,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async findTopPlace(limit?:number):Promise<ArticleEntity[]>{
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+    async findTopPlace(limit?:number,pages?:number):Promise<ArticleEntity[]>{
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
+        let title:number=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).getCount();
+        let newArt =new ArticleEntity();
+        newArt.totalItems=title;
+        result.push(newArt);
         return result;
     }
 
@@ -213,13 +214,17 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async reductionClassity(id:number,limit?:number):Promise<ArticleEntity[]>{
+    async reductionClassity(id:number,limit?:number,pages?:number):Promise<ArticleEntity[]>{
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let array:number[]=await this.classifyService.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').limit(limit).getMany();
+        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
+        let title:number=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).getCount();
+        let newArt =new ArticleEntity();
+        newArt.totalItems=title;
+        result.push(newArt);
         return result;
     }
 
