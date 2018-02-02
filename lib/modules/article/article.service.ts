@@ -52,14 +52,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async serachArticles(name:string,limit?:number,pages?:number):Promise<ArticleEntity[]>{
+    async serachArticles(name:string,limit?:number,pages?:number){
         let str:string=`%${name}%`;
         let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
-        let newArt =new ArticleEntity();
-        newArt.totalItems=title;
-        resultAll.push(newArt);
-        return resultAll;
+        return {articles:resultAll,totalItems:title};
     }
 
     /**
@@ -141,13 +138,10 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-      async recycleFind(limit?:number,pages?:number):Promise<ArticleEntity[]>{
+      async recycleFind(limit?:number,pages?:number){
           let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).skip(limit*(pages-1)+1).take(limit).getMany();
           let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
-          let newArt =new ArticleEntity();
-              newArt.totalItems=title;
-              result.push(newArt);
-          return result;
+          return {articles:result,totalItems:title};
       }
 
     /**
@@ -199,13 +193,10 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async findTopPlace(limit?:number,pages?:number):Promise<ArticleEntity[]>{
+    async findTopPlace(limit?:number,pages?:number){
         let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).getCount();
-        let newArt =new ArticleEntity();
-        newArt.totalItems=title;
-        result.push(newArt);
-        return result;
+        return {articles:result,totalItems:title};
     }
 
     /**
@@ -214,7 +205,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async reductionClassity(id:number,limit?:number,pages?:number):Promise<ArticleEntity[]>{
+    async reductionClassity(id:number,limit?:number,pages?:number){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let array:number[]=await this.classifyService.getClassifyId(id).then(a=>{return a});
@@ -222,10 +213,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let newArray:number[]=Array.from(new Set(array));
         let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').skip(limit*(pages-1)+1).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).getCount();
-        let newArt =new ArticleEntity();
-        newArt.totalItems=title;
-        result.push(newArt);
-        return result;
+        return {articles:result,totalItems:title}
     }
 
     /**
