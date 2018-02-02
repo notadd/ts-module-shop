@@ -28,11 +28,19 @@ export class GetClassifyLimit{
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly limitNumber;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 }
 export class GetLimitNum{
     @ApiModelProperty({type:Number})
     @IsInt()
     readonly limitNumber;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 }
 export class KeyWords{
     @ApiModelProperty({type:Number})
@@ -42,6 +50,10 @@ export class KeyWords{
     @ApiModelProperty({type:String})
     @IsString()
     readonly keyWords;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 }
 
 export class DeleteArticleId{

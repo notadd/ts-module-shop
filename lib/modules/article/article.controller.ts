@@ -40,8 +40,10 @@ export class ArticleController{
     @ApiResponse({status:500,description:'Internal server error'})
     @Post('serach')
     public async keywordsSerach(@Response() res,@Body() key:KeyWords){
-        let findAll:ArticleEntity[]=await this.articleService.serachArticles(key.keyWords,key.limitNumber).then(a=>{return a.articles});
-        return res.status(HttpStatus.OK).send(JSON.stringify(findAll));
+        let findAll=await this.articleService.serachArticles(key.keyWords,key.limitNumber,key.pages).then(a=>{return a});
+        let resultPage=await this.classifyService.pageServiceArt(findAll.totalItems,key.limitNumber,key.pages).then(a=>{return a});
+        let result:Article[]=await this.classifyService.TimestampArt(findAll.articles);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:resultPage,articles:result}));
     }
 
     /**
@@ -128,8 +130,10 @@ export class ArticleController{
     @ApiOperation({title:'The article in the recycle bin.'})
     @Post('recycle')
     public async recycleFind(@Response() res,@Body() limit:GetLimitNum){
-        let result:ArticleEntity[] =await this.articleService.recycleFind(limit.limitNumber).then(a=>{return a.articles});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultAll =await this.articleService.recycleFind(limit.limitNumber,limit.pages).then(a=>{return a});
+        let resultPage=await this.classifyService.pageServiceArt(resultAll.totalItems,limit.limitNumber,limit.pages).then(a=>{return a});
+        let result:Article[]=await this.classifyService.TimestampArt(resultAll.articles);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:resultPage,articles:result}));
     }
 
     /**
