@@ -21,9 +21,10 @@ export class PageService{
      * 获取所有页面
      * @returns {Promise<PageEntity[]>}
      */
-    async getAllPage(limit?:number):Promise<PageEntity[]>{
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").limit(limit).getMany();
-        return pages;
+    async getAllPage(limit?:number,page?:number){
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").skip(limit*(page-1)).take(limit).getMany();
+        let title:number=await this.repository.createQueryBuilder().getCount();
+        return {pages:pages,totalItems:title};
     }
 
     /**
@@ -31,18 +32,19 @@ export class PageService{
      * @param {string} keywords
      * @returns {Promise<PageEntity[]>}
      */
-    async serachKeywords(keywords:string,limit?:number):Promise<PageEntity[]>{
+    async serachKeywords(keywords:string,limit?:number,page?:number){
         let words=`%${keywords}%`;
         console.log('page的关键字'+words);
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').limit(limit).getMany();
-        return pages;
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').skip(limit*(page-1)).take(limit).getMany();
+        let title:number=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).getCount();
+        return {pages:pages,totalItems:title};
     }
     /**
      * 批量或者单个删除页面
      * @param {number[]} array
      * @returns {Promise<number>}
      */
-    async deletePages(array:number[],limit?:number):Promise<PageEntity[]>{
+    async deletePages(array:number[],limit?:number,page?:number){
         let deleteNum:number;
         let hisArray:HistoryEntity[]=[];
         for(let t in array){
@@ -57,7 +59,7 @@ export class PageService{
             this.repository.deleteById(page.id);
         }
         this.historyService.createHistory(hisArray);
-        return this.getAllPage(limit);
+        return  this.getAllPage(limit,page);
     }
 
     /**
@@ -65,7 +67,7 @@ export class PageService{
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async createPages(page:PageEntity,contents:PageContentEntity[],limit?:number):Promise<PageEntity[]>{
+    async createPages(page:PageEntity,contents:PageContentEntity[],limit?:number,pages?:number){
         if(page.title==null) throw new MessageCodeError('create:page:missingTitle');
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
@@ -83,14 +85,14 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-        return this.getAllPage(limit);
+        return this.getAllPage(limit,pages);
     }
     /**
      * 修改页面,暂时不能确定别名是否可以重复
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
-    async updatePages(page:PageEntity,content:PageContentEntity[],limit?:number):Promise<PageEntity[]>{
+    async updatePages(page:PageEntity,content:PageContentEntity[],limit?:number,pages?:number){
         if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
@@ -114,7 +116,7 @@ export class PageService{
                 await this.contentRepository.updateById(newContent.id,newContent);
             }
         }
-        return this.getAllPage(limit);
+        return this.getAllPage(limit,pages);
     }
 
     /**
@@ -122,14 +124,13 @@ export class PageService{
      * @param {number} id
      * @returns {Promise<PageEntity>}
      */
-    async findPageById(id:number):Promise<PageEntity[]>{
-        let array:PageEntity[]=[];
+    async findPageById(id:number):Promise<PageEntity>{
         let entity:PageEntity=await this.repository.findOneById(id);
         if(entity==null) throw new MessageCodeError('delete:page:deleteById');
         let children:PageContentEntity[]=await this.contentRepository.createQueryBuilder().where('"parentId"= :parentId',{parentId:entity.id}).orderBy('id','ASC').getMany();
         entity.contents=children;
-        array.push(entity);
-        return array;
+        entity.classify=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:entity.classifyId}).getOne().then(a=>{return a.classifyName});
+        return entity;
     }
 
     /**
@@ -138,14 +139,15 @@ export class PageService{
      * @param {number} limit
      * @returns {Promise<PageEntity[]>}
      */
-    async findPageByClassifyId(id:number,limit?:number):Promise<PageEntity[]>{
+    async findPageByClassifyId(id:number,limit?:number,page?:number){
         let entityClassify:PageClassifyEntity=await this.classifyService.findOnePageClassifyById(id);
         if(entityClassify==null) throw new MessageCodeError('delete:page:deleteById');
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('id','ASC').limit(limit).getMany();
-        return entity;
+        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('id','ASC').skip(limit*(page-1)).take(limit).getMany();
+        let title:number=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).getCount();
+        return {pages:entity,totalItems:title};
     }
 
     /**
