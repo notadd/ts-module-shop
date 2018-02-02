@@ -17,14 +17,14 @@ export class GraphqlResolver{
                 private readonly pageService:PageService){}
 
     /**
-     * 文章的查询方法
+     * 文章分页的查询方法
      * @param obj
      * @param arg
      * @returns {Promise<ArticleEntity[]>}
      */
 
     @Query()
-    async getArticles(obj,arg){
+    async getArticlesLimit(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -64,14 +64,6 @@ export class GraphqlResolver{
             resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             result=await this.classifyService.TimestampArt(resultArt.articles);
         }
-        let showNext=map.get('showNext');
-        if(showNext!=null || showNext !=undefined){
-            let amap=new Map();
-            amap=this.objToStrMap(showNext);
-            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;
-        }
         let getArticleByClassifyId=map.get('getArticleByClassifyId');
         if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
             let amap=new Map();
@@ -87,6 +79,30 @@ export class GraphqlResolver{
             let resultArt=await this.articleService.findTopPlace(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             result=await this.classifyService.TimestampArt(resultArt.articles)
+        }
+        return {pagination:resultPage,articles:result};
+
+    }
+
+    /**
+     * 不分页获取文章
+     * @param obj
+     * @param arg
+     * @returns {Promise<any>}
+     */
+    @Query()
+    async getArticlesLimit(obj,arg) {
+        const str: string = JSON.stringify(arg);
+        let bToJSon = JSON.parse(str);
+        let map = new Map();
+        map = this.objToStrMap(bToJSon);
+        let showNext=map.get('showNext');
+        if(showNext!=null || showNext !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(showNext);
+            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id'));
+            const result=this.classifyService.TimestampArt(entity);
+            return result;
         }
         let getArticleById=map.get('getArticleById');
         if(getArticleById!=null || getArticleById !=undefined){
@@ -117,10 +133,8 @@ export class GraphqlResolver{
             const result= this.articleService.getLevelByClassifyId(amap.get('id'));
             return result;
         }
-        return {pagination:resultPage,articles:result};
 
     }
-
     /**
      * 获取分类
      * @param obj

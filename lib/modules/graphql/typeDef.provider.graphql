@@ -34,6 +34,7 @@ type ArticlePagination{
     pagination:ReturnPage,
     articles:[Article]
 }
+
 type ReturnPage{
     totalItems: Int,
     currentPage: Int,
@@ -43,7 +44,7 @@ type ReturnPage{
     endPage: Int,
     startIndex: Int,
     endIndex: Int,
-    pages: Int
+    pages: [Int]
 }
 enum stick{
     global,
@@ -309,8 +310,9 @@ input ArticleIdArray{
 }
 type Query {
     #Get articles.
-    getArticles(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
-        reductionGetByClassifyId: recycleClasssifyId, showNext: ArticleId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit, getArticleById: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId) :ArticlePagination,
+    getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
+        reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit) :ArticlePagination,
+    getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article]
     #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
     #get pages
