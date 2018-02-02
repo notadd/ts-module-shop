@@ -22,7 +22,7 @@ export class PageController{
     @ApiOperation({title:'get All pages'})
     @Get('getAllPage')
     public async getAllPage(@Response() res,@Body() getLimit:GetLimit){
-        let result:PageEntity[]=await this.pageService.getAllPage(getLimit.limitNumber);
+        let result:PageEntity[]=await this.pageService.getAllPage(getLimit.limitNumber).then(a=>{return a.pages});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -34,7 +34,7 @@ export class PageController{
     @ApiOperation({title:'get pages by keywords'})
     @Post('serachPages')
     public async serachPages(@Response() res,@Body() keywords:PageSerach){
-        let result:PageEntity[]=await this.pageService.serachKeywords(keywords.keyWords);
+        let result:PageEntity[]=await this.pageService.serachKeywords(keywords.keyWords).then(a=>{return a.pages});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -46,7 +46,7 @@ export class PageController{
     @ApiOperation({title:'delete pages'})
     @Post('deletePages')
     public async deletePages(@Response() res,@Body() array:DeleteArticleId){
-        let result:PageEntity[]=await this.pageService.deletePages(array.id);
+        let result:PageEntity[]=await this.pageService.deletePages(array.id).then(a=>{return a.pages});
         console.log('num='+result)
         let deleteNum=`已经成功删除${result}个页面`;
         return res.status(HttpStatus.OK).send(JSON.stringify(deleteNum));
@@ -72,7 +72,7 @@ export class PageController{
             contents.push(newContent);
         }
         console.log('contents='+JSON.stringify(contents));
-        let result:PageEntity[]=await this.pageService.createPages(newPage,contents);
+        let result:PageEntity[]=await this.pageService.createPages(newPage,contents).then(a=>{return a.pages});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -98,7 +98,7 @@ export class PageController{
             contents.push(newContent);
         }
         console.log('contents='+JSON.stringify(content));
-        let result:PageEntity[]=await this.pageService.updatePages(newPage,contents);
+        let result:PageEntity[]=await this.pageService.updatePages(newPage,contents).then(a=>{return a.pages});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -112,7 +112,7 @@ export class PageController{
     @Post('findPageById')
     public async findPageById(@Response() res,@Body() page:showNextDto){
         let id:number=page.id;
-        let result:PageEntity[]=await this.pageService.findPageById(id);
+        let result:PageEntity=await this.pageService.findPageById(id);
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -125,7 +125,7 @@ export class PageController{
     @ApiOperation({title:'find pages by classification id'})
     @Post('getPagesByClassifyId')
     public async getPagesByClassifyId(@Response() res,@Body() getLimit:GetClassifyLimit){
-        let result:PageEntity[]=await this.pageService.findPageByClassifyId(getLimit.id,getLimit.limitNumber);
+        let result:PageEntity[]=await this.pageService.findPageByClassifyId(getLimit.id,getLimit.limitNumber).then(a=>{return a.pages});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
