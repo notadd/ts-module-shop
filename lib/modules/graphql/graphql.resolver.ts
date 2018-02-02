@@ -4,7 +4,7 @@ import {Article, ArticleEntity} from "../entity/article.entity";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
 import {PageService} from "../page/page.service";
-import {PageEntity} from "../entity/page.entity";
+import {Page, PageEntity} from "../entity/page.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
@@ -91,7 +91,7 @@ export class GraphqlResolver{
      * @returns {Promise<any>}
      */
     @Query()
-    async getArticlesLimit(obj,arg) {
+    async getArticlesNoLimit(obj,arg) {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
@@ -100,7 +100,7 @@ export class GraphqlResolver{
         if(showNext!=null || showNext !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(showNext);
-            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id'));
+            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id')).then(a=>{return a});
             const result=this.classifyService.TimestampArt(entity);
             return result;
         }
@@ -116,21 +116,23 @@ export class GraphqlResolver{
         if(superiorArticle!=null || superiorArticle !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(superiorArticle);
-            const result= this.classifyService.showBeforeTitle(amap.get('id'));
+            let entity:ArticleEntity[]=await this.classifyService.showBeforeTitle(amap.get('id'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let getCurrentClassifyArticles=map.get('getCurrentClassifyArticles');
         if(getCurrentClassifyArticles!=null || getCurrentClassifyArticles !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getCurrentClassifyArticles);
-            const result= this.classifyService.showCurrentArticles(amap.get('id'));
+            let entity:ArticleEntity[]=await this.classifyService.showCurrentArticles(amap.get('id'));
+            const result=this.classifyService.TimestampArt(entity);
             return result;
         }
         let getLevelByClassifyId=map.get('getLevelByClassifyId');
         if(getLevelByClassifyId!=null || getLevelByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getLevelByClassifyId);
-            const result= this.articleService.getLevelByClassifyId(amap.get('id'));
+            const result=this.articleService.getLevelByClassifyId(amap.get('id'));
             return result;
         }
 
@@ -173,33 +175,53 @@ export class GraphqlResolver{
      * @returns {Promise<PageEntity[]>}
      */
     @Query()
-    async getPages(obj,arg){
+    async getPagesLimit(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
+        let PageReturn:Page[];
+        let pagination;
         let getAllPage=map.get('getAllPage');
         if(getAllPage!=null || getAllPage !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getAllPage);
-            let entity:PageEntity[]=await this.pageService.getAllPage(amap.get('limitNum'));
-            const result=this.classifyService.TimestampPage(entity);
-            return result;
+            let resultPage=await this.pageService.getAllPage(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
         let serachPages=map.get('serachPages');
         if(serachPages!=null || serachPages !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(serachPages);
-            const result=this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'));
-            return result;
+            let resultPage=await this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
         let getPagesByClassifyId=map.get('getPagesByClassifyId');
         if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getPagesByClassifyId);
-            const result=this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'));
-            return result;
+            let resultPage=await this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
+
+        return{pagination:pagination,pages:PageReturn};
+    }
+
+    /**
+     * 获取单个页面
+     * @param obj
+     * @param arg
+     * @returns {Promise<PageEntity[]>}
+     */
+    @Query()
+    getPageById(obj,arg) {
+        const str: string = JSON.stringify(arg);
+        let bToJSon = JSON.parse(str);
+        let map = new Map();
+        map = this.objToStrMap(bToJSon);
         let findPageById=map.get('findPageById');
         if(findPageById!=null || findPageById !=undefined){
             let amap=new Map();
@@ -373,11 +395,13 @@ export class GraphqlResolver{
 
     }
     @Mutation()
-    PageCUD(obj,arg) {
+    async PageCUD(obj,arg) {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
         map = this.objToStrMap(bToJSon);
+        let PageReturn:Page[];
+        let pagination;
         let createPages = map.get('createPages');
         if (createPages != null || createPages != undefined) {
             let amap = new Map();
@@ -394,8 +418,9 @@ export class GraphqlResolver{
                 newContent.content=strFinal[t];
                 contents.push(newContent);
             }
-            const result=this.pageService.createPages(page,contents,amap.get('limitNum'));
-            return result;
+            let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
         let updatePages=map.get('updatePages');
         if(updatePages != null || updatePages != undefined){
@@ -415,18 +440,21 @@ export class GraphqlResolver{
                 newContent.id=strFinal[t].id;
                 contents.push(newContent);
             }
-            const result=this.pageService.updatePages(page,contents,amap.get('limitNum'));
-            return result;
+            let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+
         }
         let deletePages=map.get('deletePages');
         if(deletePages != null || deletePages != undefined) {
             let amap = new Map();
             amap = this.objToStrMap(deletePages);
             let array:[number]=amap.get('id');
-            const result=this.pageService.deletePages(array,amap.get('limitNum'));
-            return result;
-
+            let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
+        return{pagination:pagination,pages:PageReturn};
     }
     /**
      * JSON----Map

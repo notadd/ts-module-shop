@@ -34,7 +34,6 @@ type ArticlePagination{
     pagination:ReturnPage,
     articles:[Article]
 }
-
 type ReturnPage{
     totalItems: Int,
     currentPage: Int,
@@ -174,6 +173,10 @@ type Page{
     #内容
     contents:[Content]
 }
+type PagePagination{
+    pagination:ReturnPage,
+    pages:[Page]
+}
 type Content{
     #内容id
     id:Int,
@@ -276,7 +279,7 @@ input CreatePage{
     #页面内容
     content:[String],
     #页面分类名称
-    classify:String!,
+    classify:String,
     #页面分类Id
     classifyId:Int!,
     #分页
@@ -309,14 +312,17 @@ input ArticleIdArray{
     display:[Int]
 }
 type Query {
-    #Get articles.
+    #Get the articles by paging.
     getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
         reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit) :ArticlePagination,
+   #Get the articles No paging.
     getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article]
     #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
-    #get pages
-    getPages(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId, findPageById: ArticleId) : [Page],
+    #get pages by paging.
+    getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
+    #get a page by page.id
+    getPageById(findPageById: ArticleId):Page
 }
 type Mutation{
     #the method to modify article,return string
@@ -324,5 +330,5 @@ type Mutation{
     #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
     #the method to modify page,return page array
-    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):[Page],
+    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):PagePagination,
 }
