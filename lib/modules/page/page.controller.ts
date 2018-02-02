@@ -24,9 +24,9 @@ export class PageController{
     @ApiOperation({title:'get All pages'})
     @Get('getAllPage')
     public async getAllPage(@Response() res,@Body() getLimit:GetLimit){
-        let resultALl=await this.pageService.getAllPage(getLimit.limitNumber,getLimit.pages).then(a=>{return a});
-        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultALl.pages);
-        let pagination=await this.classifyService.pageServiceArt(resultALl.totalItems,getLimit.limitNumber,getLimit.pages);
+        let resultAll=await this.pageService.getAllPage(getLimit.limitNumber,getLimit.pages).then(a=>{return a});
+        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultAll.pages);
+        let pagination=await this.classifyService.pageServiceArt(resultAll.totalItems,getLimit.limitNumber,getLimit.pages);
         return res.status(HttpStatus.OK).send(JSON.stringify({pagination:pagination,pages:PageReturn}));
     }
 
@@ -38,8 +38,10 @@ export class PageController{
     @ApiOperation({title:'get pages by keywords'})
     @Post('serachPages')
     public async serachPages(@Response() res,@Body() keywords:PageSerach){
-        let result:PageEntity[]=await this.pageService.serachKeywords(keywords.keyWords).then(a=>{return a.pages});
-        return res.status(HttpStatus.OK).send(JSON.stringify(result));
+        let resultAll=await this.pageService.serachKeywords(keywords.keyWords,keywords.limitNum,keywords.pages).then(a=>{return a});
+        let PageReturn:Page[]=await this.classifyService.TimestampPage(resultAll.pages);
+        let pagination=await this.classifyService.pageServiceArt(resultAll.totalItems,keywords.limitNum,keywords.pages);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:pagination,pages:PageReturn}));
     }
 
     /**

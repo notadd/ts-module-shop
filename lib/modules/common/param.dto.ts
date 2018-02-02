@@ -249,6 +249,15 @@ export class PageSerach{
     @ApiModelProperty({type:String})
     @IsString()
     readonly keyWords;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly limitNum;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
+
 }
 export class MobileClassify{
     @ApiModelProperty({type:String,required:true})
