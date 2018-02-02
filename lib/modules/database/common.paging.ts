@@ -1,5 +1,4 @@
 import * as _ from 'underscore';
-import {Article, ArticleEntity} from "../entity/article.entity";
 
 export class PagerService {
     getPager(totalItems: number, currentPage?: number, pageSize?: number) {
