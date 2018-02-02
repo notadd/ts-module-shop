@@ -90,6 +90,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
         let num:number=await this.classifyService.findLevel(article.classifyId);
         let level:string=this.classifyService.interfaceChange(num);
+        if(article.topPlace==null){
+            article.topPlace='cancel';
+        }
         let levelGive:string=article.topPlace.toString();
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
@@ -99,9 +102,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let time =new Date();
         if(article.publishedTime==null){
             article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
-        if(article.topPlace==null){
-            article.topPlace='cancel';
         }
         article.recycling=false;
         let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});

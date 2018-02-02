@@ -57,7 +57,4 @@ export class  ReturnPage{
     endIndex: number;
     pages: number;
 }
-export class ArticleValue{
-    pagination:ReturnPage;
-    articles:Article[];
-}
+
