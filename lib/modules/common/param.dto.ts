@@ -15,6 +15,10 @@ export class GetLimit{
     @ApiModelProperty({type:Boolean})
     @IsBoolean()
     readonly hidden;
+
+    @ApiModelProperty({type:Number})
+    @IsInt()
+    readonly pages;
 }
 export class GetClassifyLimit{
     @ApiModelProperty({type:Number})

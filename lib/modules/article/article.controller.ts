@@ -8,11 +8,13 @@ import {GetClassifyLimit} from "../common/param.dto";
 import {GetLimitNum} from "../common/param.dto";
 import {UpdateArticle} from "../common/param.dto";
 import {KeyWords} from "../common/param.dto";
-import {ArticleEntity} from "../entity/article.entity";
+import {Article, ArticleEntity} from "../entity/article.entity";
+import {ClassifyService} from "../classify/classify.service";
 
 @Controller('article')
 export class ArticleController{
-    constructor(private  readonly articleService:ArticleService){};
+    constructor(private  readonly articleService:ArticleService,
+                private  readonly classifyService:ClassifyService){};
 
     /**
      * 分页所有所有文章
@@ -23,8 +25,10 @@ export class ArticleController{
     @ApiResponse({status:500,description:'Internal server error'})
     @Post('findAll')
     public async getArticleAll(@Response() res,@Body() limitNum:GetLimit){
-        let findAll:ArticleEntity[]=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden).then(a=>{return a.articles});
-        return res.status(HttpStatus.OK).send(JSON.stringify(findAll));
+        let findAll=await this.articleService.getArticleAll(limitNum.limitNumber,limitNum.hidden,limitNum.pages).then(a=>{return a});
+        let resultPage=await this.classifyService.pageServiceArt(findAll.totalItems,limitNum.limitNumber,limitNum.pages).then(a=>{return a});
+        let result:Article[]=await this.classifyService.TimestampArt(findAll.articles);
+        return res.status(HttpStatus.OK).send(JSON.stringify({pagination:resultPage,articles:result}));
     }
 
     /**
