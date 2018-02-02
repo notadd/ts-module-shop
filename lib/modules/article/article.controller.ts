@@ -36,7 +36,7 @@ export class ArticleController{
     @ApiResponse({status:500,description:'Internal server error'})
     @Post('serach')
     public async keywordsSerach(@Response() res,@Body() key:KeyWords){
-        let findAll:ArticleEntity[]=await this.articleService.serachArticles(key.keyWords,key.limitNumber);
+        let findAll:ArticleEntity[]=await this.articleService.serachArticles(key.keyWords,key.limitNumber).then(a=>{return a.articles});
         return res.status(HttpStatus.OK).send(JSON.stringify(findAll));
     }
 
@@ -124,7 +124,7 @@ export class ArticleController{
     @ApiOperation({title:'The article in the recycle bin.'})
     @Post('recycle')
     public async recycleFind(@Response() res,@Body() limit:GetLimitNum){
-        let result:ArticleEntity[] =await this.articleService.recycleFind(limit.limitNumber);
+        let result:ArticleEntity[] =await this.articleService.recycleFind(limit.limitNumber).then(a=>{return a.articles});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -162,7 +162,7 @@ export class ArticleController{
     @ApiOperation({title:'Get the top article for pagination.'})
     @Post('findTopPlace')
     public async findTopPlace(@Response() res,@Body() getLimit:GetLimit){
-        let result:ArticleEntity[]= await this.articleService.findTopPlace(getLimit.limitNumber);
+        let result:ArticleEntity[]= await this.articleService.findTopPlace(getLimit.limitNumber).then(a=>{return a.articles});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
 
@@ -175,7 +175,7 @@ export class ArticleController{
     @ApiOperation({title:'Get the  article from  reduction by classify id.'})
     @Post('reductionGetByClassifyId')
     public async reductionGetByClassifyId(@Response() res,@Body() getLimit:GetClassifyLimit){
-        let result:ArticleEntity[]=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber);
+        let result:ArticleEntity[]=await this.articleService.reductionClassity(getLimit.id,getLimit.limitNumber).then(a=>{return a.articles});
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
     /**

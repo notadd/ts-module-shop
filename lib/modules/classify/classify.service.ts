@@ -437,7 +437,7 @@ export class ClassifyService{
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
-    async getArticelsByClassifyId(id:number,limit?:number,show?:Boolean):Promise<ArticleEntity[]>{
+    async getArticelsByClassifyId(id:number,limit?:number,show?:Boolean,pages?:number){
         let articles:ArticleEntity[]=[];
         let entity:ClassifyEntity=await this.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
@@ -447,7 +447,7 @@ export class ClassifyService{
         let newArray:number[]=Array.from(new Set(array));
         if(show==true || show==undefined){
             let global:ArticleEntity[]=[];
-            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
             for(let t in globalArts){
                 if(globalArts[t].display!=null){
                     let newArray:string[]=globalArts[t].display.split(',');
@@ -465,25 +465,35 @@ export class ClassifyService{
             level=4;
         }
         if(level==1){
-            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else if(level==2){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else if(level==3){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'grobal\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else{
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','ASC').limit(limit).getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
-        return articles;
+        let returnArt:ArticleEntity[]=await this.Fenji(articles,limit,pages);
+        let num:number=articles.length;
+        console.log('num='+num+',length='+articles.length);
+        console.log('articles='+JSON.stringify(articles.length));
+        return {articles:returnArt,totalItems:num};
+    }
+    async Fenji(art:ArticleEntity[],limit?:number,pages?:number):Promise<ArticleEntity[]>{
+        let newArt:ArticleEntity[]=[];
+        newArt=art.splice(limit*(pages-1),limit);
+        return newArt;
+
     }
     /**
      * 获取当前分类所有子分类id
@@ -599,11 +609,15 @@ export class ClassifyService{
      * @returns {Promise<void>}
      */
     public async resetTheSetTop(arr:number[]){
-        for(let t in arr){
+        console.log('arr='+JSON.stringify(arr));
+        let articles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:arr}).getMany();
+        let time =new Date();
+        for(let t in articles){
             let arr=new ArticleEntity;
+            arr=articles[t];
             arr.topPlace='cancel';
-            await this.artRepository.updateById(arr[t],arr);
-
+            arr.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            await this.artRepository.updateById(arr.id,arr);
         }
     }
     /**
@@ -755,7 +769,8 @@ export class ClassifyService{
                 entity.id=art[t].id;
                 entity.name=art[t].name;
                 entity.classifyId=art[t].classifyId;
-                entity.classify=art[t].classify;
+                let timeOne=await this.repository.createQueryBuilder().where('"id"= :id',{id:art[t].classifyId}).getOne().then(a=>{return a.classifyName});
+                entity.classify=timeOne;
                 entity.abstract=art[t].abstract;
                 entity.content=art[t].content;
                 entity.url=art[t].url;
@@ -790,29 +805,26 @@ export class ClassifyService{
             entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
             entity.id=art[t].id;
             entity.classifyId=art[t].classifyId;
-            entity.classify=art[t].classify;
+            let timeOne=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:art[t].classifyId}).getOne().then(a=>{return a.classifyName});
+            entity.classify=timeOne;
+            entity.title=art[t].title;
+            entity.alias=art[t].alias;
             result.push(entity);
         }
         return result;
     }
-    async pageServiceArt(art:ArticleEntity[],limit?:number,page?:number){
-        for(let t in art){
-            if(art[t].totalItems>0){
-                console.log(art[t].totalItems);
-                let result=this.pageService.getPager(art[t].totalItems,page,limit);
-                let res=new ReturnPage();
-                    res.totalItems=result.totalItems;
-                    res.currentPage=result.currentPage;
-                    res.pageSize=result.pageSize;
-                    res.totalPages=result.totalPages;
-                    res.startPage=result.startPage;
-                    res.endPage= result.endPage;
-                    res.startIndex=result.startIndex;
-                    res.endIndex= result.endIndex;
-                    res.pages= result.pages;
-                return res;
-            }
-        }
-
+    async pageServiceArt(totalItems?:number,limit?:number,page?:number){
+        let result=this.pageService.getPager(totalItems,page,limit);
+        let res=new ReturnPage();
+            res.totalItems=result.totalItems;
+            res.currentPage=result.currentPage;
+            res.pageSize=result.pageSize;
+            res.totalPages=result.totalPages;
+            res.startPage=result.startPage;
+            res.endPage= result.endPage;
+            res.startIndex=result.startIndex;
+            res.endIndex= result.endIndex;
+            res.pages= result.pages;
+         return res;
     }
 }
