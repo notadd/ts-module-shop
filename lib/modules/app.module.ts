@@ -1,3 +1,4 @@
+/*
 import { Module, NestModule} from "@nestjs/common";
 import {MiddlewaresConsumer} from "@nestjs/common";
 import {graphqlExpress,graphiqlExpress} from "apollo-server-express";
@@ -25,8 +26,40 @@ export class ApplicationModule implements NestModule{
             .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
     }
      createSchema() {
-         const typeDefs = this.graphqlFactory.mergeTypesByPaths('./**/*.graphql');
+         const typeDefs = this.graphqlFactory.mergeTypesByPaths('./!**!/!*.graphql');
          const schema = this.graphqlFactory.createSchema({ typeDefs });
          return schema;
      }
+}
+*/
+import { Module} from "@nestjs/common";
+import {MiddlewaresConsumer} from "@nestjs/common";
+import {graphiqlExpress,graphqlExpress} from "apollo-server-express";
+import {RequestMethod} from "@nestjs/common";
+import {GraphQLFactory,GraphQLModule} from "@nestjs/graphql";
+import {NestModule} from "@nestjs/common";
+import {SitemapModule} from "./siteMapXml/sitemap.module";
+
+@Module({
+    modules :[GraphQLModule,SitemapModule/*DatabaseModule,SitemapModule*/],
+})
+
+export class ApplicationModule implements NestModule{
+    constructor(private readonly graphqlFactory:GraphQLFactory){}
+    //中间件设置
+    configure(consumer:MiddlewaresConsumer){
+
+        const schema =this.createSchema();
+        console.log(JSON.stringify(schema));
+        consumer.apply(graphiqlExpress({ endpointURL: '/graphql' }))
+            .forRoutes({ path: '/graphiql', method: RequestMethod.GET })
+            .apply(graphqlExpress(req => ({ schema, rootValue: req })))
+            .forRoutes({ path: '/graphql', method: RequestMethod.ALL })
+
+    }
+    createSchema() {
+        const typeDefs = this.graphqlFactory.mergeTypesByPaths('./**/*.graphql');
+        const schema = this.graphqlFactory.createSchema({ typeDefs });
+        return schema;
+    }
 }
