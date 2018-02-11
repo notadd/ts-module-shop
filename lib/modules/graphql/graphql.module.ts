@@ -5,7 +5,7 @@ import {PageModule} from "../page/page.module";
 import {ClassifyModule} from "../classify/classify.module";
 
 @Module({
-    modules:[ArticleModule,PageModule,ClassifyModule],
-    components:[GraphqlResolver],
+    modules:[ArticleModule,PageModule,ClassifyModule/*SitemapModule*/],
+    components:[/*GraphqlResolver*/],
 })
 export class GraphqlModule{}

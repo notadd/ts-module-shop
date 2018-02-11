@@ -9,12 +9,22 @@ import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
-
-@Resolver()
+import {CreateParamDto} from "../siteMapXml/interfaces/createParamDto";
+/*@Resolver()*/
 export class GraphqlResolver{
     constructor(private readonly articleService:ArticleService,
                 private readonly classifyService:ClassifyService,
-                private readonly pageService:PageService){}
+                private readonly pageService:PageService,
+               ){}
+     @Query()
+     async createFile(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let createxml:CreateParamDto=map.get('buildxml');
+       return createxml;
+    }
 
     /**
      * 文章分页的查询方法
@@ -38,7 +48,6 @@ export class GraphqlResolver{
             let resultArt=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'),amap.get('pages')).then(a=>{return a});
             resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             result=await this.classifyService.TimestampArt(resultArt.articles);
-
         }
         let keywordsSerach=map.get('keywordsSerach');
         if(keywordsSerach!=null || keywordsSerach!=undefined){

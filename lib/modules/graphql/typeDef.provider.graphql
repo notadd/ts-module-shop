@@ -327,7 +327,21 @@ input ArticleIdArray{
     #不显示分类
     display:[Int]
 }
-type Query {
+input createXml{
+    #生成xml地图
+    lc_is_Enabled_XML_Sitemap:Boolean,
+    #xml文件名
+    lc_XML_FileName:Boolean,
+    #只包括最近的文章(1000以内)
+    lc_post_limit1000:Boolean,
+    #当发布文章时更新sitemap
+    lc_is_update_sitemap_when_post:Boolean,
+    #链接包括：文章
+    lc_post_select:Boolean,
+    #链接包括：页面
+    lc_page_select:Boolean
+}
+type Query{
     #Get the articles by paging.
     getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
         reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit) :ArticlePagination,
@@ -338,7 +352,9 @@ type Query {
     #get pages by paging.
     getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
     #get a page by page
-    getPageById(findPageById: ArticleId):Page
+    getPageById(findPageById: ArticleId):Page,
+
+    createFile(buildxml:createXml):String
 }
 type Mutation{
     #the method to modify article,return string
