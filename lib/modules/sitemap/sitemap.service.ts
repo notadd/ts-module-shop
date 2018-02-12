@@ -27,6 +27,7 @@ export class SitemapService{
                 fileName='sitemap_baidu';
             }else{fileName='sitemap';}
             sitemap.lc_XML_FileName=fileName;
+            console.log('array='+JSON.stringify(array_baidu_sitemap_options));
             await this.siteRepository.updateById(1,sitemap);
         }
         if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']){
