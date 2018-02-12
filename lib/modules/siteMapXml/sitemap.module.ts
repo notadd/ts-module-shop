@@ -9,14 +9,12 @@ import {CommandHandlers} from "./commands/handlers";
 import {PageSagas} from "./sagas/page.sagas";
 import {EventHandlers} from "./events/handlers";
 import {PageModule} from "../page/page.module";
-import {GraphqlModule} from "../graphql/graphql.module";
 import {ClassifyModule} from "../classify/classify.module";
 import {ArticleModule} from "../article/article.module";
 import {SiteMapModule} from "../sitemap/sitemap.module";
 
 @Module({
     modules:[CQRSModule,PageModule,ClassifyModule,ArticleModule,SiteMapModule],
-    //controllers:[SitemapController],
     components:[SitemapResolver,SitemapXMLService,PageRepository,...CommandHandlers,...EventHandlers,PageSagas],
 
 })
@@ -33,6 +31,6 @@ export class SitemapModule implements OnModuleInit{
 
         this.event$.register(EventHandlers);
         this.command$.register(CommandHandlers);
-        this.event$.combineSagas([this.PageSagas.deletePages]);
+        this.event$.combineSagas([this.PageSagas.updatePages]);
     }
 }
