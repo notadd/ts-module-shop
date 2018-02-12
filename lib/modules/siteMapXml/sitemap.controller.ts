@@ -26,10 +26,20 @@ export class SitemapResolver{
         map=this.objToStrMap(bToJSon);
         let createxml:CreateParamDto=map.get('buildxml');
         const result=this.sitemapService.createXml(createxml);
-        console.log('controller='+JSON.stringify(result));
+        console.log('controller='+JSON.stringify(createxml));
         return createxml;
     }
-
+    @Query()
+    async updateFile(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let createxml:CreateParamDto=map.get('upateFile');
+        const result=this.sitemapService.upDateXml();
+        console.log('controller='+JSON.stringify(createxml));
+        return createxml;
+    }
     /**
      * 文章分页的查询方法
      * @param obj
@@ -239,7 +249,8 @@ export class SitemapResolver{
         if(findPageById!=null || findPageById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(findPageById);
-            const result=this.pageService.findPageById(amap.get('id'));
+            const result=this.sitemapService.getAllPage(amap.get('id'));
+            //const result=this.pageService.findPageById(amap.get('id'));
             return result;
         }
     }
