@@ -1,3 +1,4 @@
+/*
 import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
 import {PageCreateEvent} from "../impl/page-create.event";
 import {PageService} from "../../../page/page.service";
@@ -14,4 +15,4 @@ export class PageCreateHandler implements IEventHandler<PageCreateEvent>{
         console.log(clc.yellowBright('Async create HeroFoundItemEvent...'));
         return 'hehe';
     }
-}
+}*/
