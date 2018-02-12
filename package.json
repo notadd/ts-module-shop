@@ -13,6 +13,7 @@
     "@nestjs/core": "^4.3.0",
     "@nestjs/graphql": "^2.0.0",
     "@nestjs/swagger": "^1.1.3",
+    "@nestjs/cqrs": "^4.0.1",
     "glob": "^7.1.2",
     "apollo-server-express": "^1.3.2",
     "graphql": "^0.11.7",
