@@ -266,7 +266,9 @@ export class SitemapResolver{
         if(findPageById!=null || findPageById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(findPageById);
-            const result=this.sitemapService.getAllPage(amap.get('id'));
+            let pageParam:GetPageVm=new GetPageVm();
+            pageParam.classifyId=amap.get('id');
+            const result=this.sitemapService.getPages(pageParam);
             //const result=this.pageService.findPageById(amap.get('id'));
             return result;
         }

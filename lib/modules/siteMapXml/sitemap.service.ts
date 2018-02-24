@@ -5,6 +5,8 @@ import {CreateParamCommand} from "./commands/impl/create-param.command";
 import {DeleteParamCommand} from "./commands/impl/delete-param.command";
 import {PageParamCommand} from "./commands/impl/page-param.command";
 import {CreatePageVm} from "./models/view/create-page.vm";
+import {GetPageVm} from "./models/view/get-page.vm";
+import {GetPageParamCommand} from "./commands/impl/get-page-param.command";
 
 
 @Component()
@@ -58,6 +60,17 @@ export class SitemapXMLService{
     async deletePages(deletePageDto:CreatePageVm){
         const result=await this.commonbus.execute(new PageParamCommand(deletePageDto.page,deletePageDto.content,deletePageDto.limit,deletePageDto.pages,deletePageDto.array));
         return result;
+    }
+
+    /**
+     * 获取页面
+     * @param {GetPageVm} getPageDto
+     * @returns {Promise<any>}
+     */
+    async getPages(getPageDto:GetPageVm){
+        const result=await this.commonbus.execute(new GetPageParamCommand(getPageDto.limit,getPageDto.pages,getPageDto.keywords,getPageDto.classifyId,getPageDto.id,getPageDto.getAll));
+        return result;
+
     }
 
 }
