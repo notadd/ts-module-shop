@@ -11,7 +11,6 @@ export class DeletePageHandler implements ICommandHandler<PageParamCommand>{
 
     async execute(command:PageParamCommand,resolver:(value?)=>void){
         console.log(clc.greenBright('handlerCommand delete KillDragonCommand...'));
-        // const id=command;
         const com=command;
         let id:string='0';
         const page=this.publisher.mergeObjectContext(await this.repositoty.find(id));
