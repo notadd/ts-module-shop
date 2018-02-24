@@ -12,6 +12,7 @@ import {MessageCodeError} from "../errorMessage/error.interface";
 import {CreateParamDto} from "../siteMapXml/interfaces/createParamDto";
 import {SitemapXMLService} from "./sitemap.service";
 import {CreatePageVm} from "./models/view/create-page.vm";
+import {GetPageVm} from "./models/view/get-page.vm";
 @Resolver()
 export class SitemapResolver{
     constructor(private readonly articleService:ArticleService,
@@ -210,7 +211,12 @@ export class SitemapResolver{
         if(getAllPage!=null || getAllPage !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getAllPage);
-            let resultPage=await this.pageService.getAllPage(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let pageParam:GetPageVm=new GetPageVm();
+            pageParam.getAll=true;
+            pageParam.limit=amap.get('limitNum');
+            pageParam.pages=amap.get('pages');
+            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+            //let resultPage=await this.pageService.getAllPage(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
@@ -218,7 +224,12 @@ export class SitemapResolver{
         if(serachPages!=null || serachPages !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(serachPages);
-            let resultPage=await this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let pageParam:GetPageVm=new GetPageVm();
+            pageParam.keywords=amap.get('keywords');
+            pageParam.limit=amap.get('limitNum');
+            pageParam.pages=amap.get('pages');
+            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+            //let resultPage=await this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
@@ -226,7 +237,12 @@ export class SitemapResolver{
         if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getPagesByClassifyId);
-            let resultPage=await this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let pageParam:GetPageVm=new GetPageVm();
+            pageParam.classifyId=amap.get('id');
+            pageParam.limit=amap.get('limitNum');
+            pageParam.pages=amap.get('pages');
+            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+           // let resultPage=await this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
