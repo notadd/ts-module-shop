@@ -45,6 +45,7 @@ export class PageService{
      * @returns {Promise<number>}
      */
     async deletePages(array:number[],limit?:number,page?:number){
+        console.log('array='+array);
         let deleteNum:number;
         let hisArray:HistoryEntity[]=[];
         for(let t in array){
@@ -85,10 +86,10 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-        return this.getAllPage(limit,pages);
+       // return this.getAllPage(limit,pages);
     }
     /**
-     * 修改页面,暂时不能确定别名是否可以重复
+     * 修改页面,别名不可重复
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
@@ -100,8 +101,10 @@ export class PageService{
         if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let time =new Date();
         page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+       // console.log('pageservice='+JSON.stringify(page));
         let newPage:PageEntity =page;
-        this.repository.updateById(page.id,newPage);
+       // console.log('newPage='+JSON.stringify(newPage));
+        await this.repository.updateById(page.id,newPage).then(a=>{console.log(JSON.stringify(a))});
         for(let t in content){
             if(content[t].id==0){
                 let newContent:PageContentEntity=new PageContentEntity();
