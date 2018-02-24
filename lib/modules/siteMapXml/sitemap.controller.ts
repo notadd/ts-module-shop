@@ -11,6 +11,7 @@ import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {CreateParamDto} from "../siteMapXml/interfaces/createParamDto";
 import {SitemapXMLService} from "./sitemap.service";
+import {CreatePageVm} from "./models/view/create-page.vm";
 @Resolver()
 export class SitemapResolver{
     constructor(private readonly articleService:ArticleService,
@@ -442,7 +443,14 @@ export class SitemapResolver{
                 newContent.content=strFinal[t];
                 contents.push(newContent);
             }
-            let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let createParam:CreatePageVm=new CreatePageVm();
+            createParam.page=page;
+            createParam.content=contents;
+            createParam.limit=amap.get('limitNum');
+            createParam.pages=amap.get('pages');
+            let resultPage= await this.sitemapService.createPage(createParam).then(a=>{return a});
+
+            //let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }
@@ -464,7 +472,13 @@ export class SitemapResolver{
                 newContent.id=strFinal[t].id;
                 contents.push(newContent);
             }
-            let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let createParam:CreatePageVm=new CreatePageVm();
+            createParam.page=page;
+            createParam.content=contents;
+            createParam.limit=amap.get('limitNum');
+            createParam.pages=amap.get('pages');
+            let resultPage=await this.sitemapService.updatePages(createParam).then(a=>{return a});
+            //let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
 
@@ -474,7 +488,12 @@ export class SitemapResolver{
             let amap = new Map();
             amap = this.objToStrMap(deletePages);
             let array:[number]=amap.get('id');
-            let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            let createParam:CreatePageVm=new CreatePageVm();
+            createParam.limit=amap.get('limitNum');
+            createParam.pages=amap.get('pages');
+            createParam.array=array;
+            let resultPage=await this.sitemapService.deletePages(createParam).then(a=>{return a});
+           // let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
         }

@@ -29,13 +29,13 @@ export class PageSagas{
                 return new DeleteParamCommand(event.heroId, itemId);
             })
     };*/
-   /* createPages=(events$:EventObservable<any>):Observable<ICommand> =>{
+    createPages=(events$:EventObservable<any>):Observable<ICommand> =>{
        return events$.ofType(PageCreateEvent)
-           .delay(2000)
+           .delay(1000)
            .map(event=>{
                console.log(clc.redBright('Inside create [HeroesGameSagas] Saga'));
                return new CreateParamCommand(event.lc_XML_FileName,event.lc_is_Enabled_Html_Sitemap,event.lc_is_Enabled_XML_Sitemap,
                event.lc_category_select,event.lc_post_limit1000,event.lc_page_select)
            })
-   }*/
+   }
 }
