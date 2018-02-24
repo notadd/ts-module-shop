@@ -424,7 +424,7 @@ export class SitemapResolver{
             amap=this.objToStrMap(mobileTheClassify);
             let useFor:string=amap.get('useFor');
             let id:number=amap.get('id');
-            let parentId:number=amap.get('parentId')
+            let parentId:number=amap.get('parentId');
             if(parentId==null || parentId==0){
                 parentId=1;
             } let result;
