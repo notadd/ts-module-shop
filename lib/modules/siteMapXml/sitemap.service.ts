@@ -4,6 +4,7 @@ import {CreateParamDto} from "./interfaces/createParamDto";
 import {CreateParamCommand} from "./commands/impl/create-param.command";
 import {DeleteParamCommand} from "./commands/impl/delete-param.command";
 import {PageParamCommand} from "./commands/impl/page-param.command";
+import {CreatePageVm} from "./models/view/create-page.vm";
 
 
 @Component()
@@ -25,7 +26,38 @@ export class SitemapXMLService{
      * @returns {Promise<any>}
      */
     async getAllPage(id:number){
-        const result=await this.commonbus.execute(new PageParamCommand(id)).then(a=>{console.log('service='+JSON.stringify(a));return a;});
+       // const result=await this.commonbus.execute(new PageParamCommand(id)).then(a=>{console.log('service='+JSON.stringify(a));return a;});
+      //  return result;
+    }
+
+    /**
+     * 新增页面
+     * @param {CreatePageVm} createPageDto
+     * @returns {Promise<any>}
+     */
+    async createPage(createPageDto:CreatePageVm){
+        const result=await this.commonbus.execute(new PageParamCommand(createPageDto.page,createPageDto.content,createPageDto.limit,createPageDto.pages));
         return result;
     }
+
+    /**
+     * 修改页面
+     * @param {CreatePageVm} updateDto
+     * @returns {Promise<any>}
+     */
+    async updatePages(updateDto:CreatePageVm){
+        const result=await this.commonbus.execute(new PageParamCommand(updateDto.page,updateDto.content,updateDto.limit,updateDto.pages));
+        return result;
+    }
+
+    /**
+     * 删除页面
+     * @param {CreatePageVm} deletePageDto
+     * @returns {Promise<any>}
+     */
+    async deletePages(deletePageDto:CreatePageVm){
+        const result=await this.commonbus.execute(new PageParamCommand(deletePageDto.page,deletePageDto.content,deletePageDto.limit,deletePageDto.pages,deletePageDto.array));
+        return result;
+    }
+
 }
