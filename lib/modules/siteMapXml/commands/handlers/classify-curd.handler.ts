@@ -8,7 +8,7 @@ const clc=require('cli-color');
 export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand>{
     constructor(private readonly repositoty:PageRepository,
                 private readonly publisher:EventPublisher,
-                readonly classifyService: ClassifyService){console.log('start')}
+                readonly classifyService: ClassifyService){}
 
     async execute(command:ClassifyParamCommand,resolver:(value) => void):Promise<any>{
         console.log(clc.greenBright('handlerCommand classify_curd Command...'));
