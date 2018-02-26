@@ -112,9 +112,11 @@ export class ClassifyService{
          let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
          //别名不能重复
          if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
-         let parentClassify:PageClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
-         //通过父级别名确定父级是否存在
-         if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+         if(entity.groupId!=null){
+             let parentClassify:PageClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
+             //通过父级别名确定父级是否存在
+             if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+         }
          let time =new Date();
          entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
          let finalClassify:PageClassifyEntity =entity;

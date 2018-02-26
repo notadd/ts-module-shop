@@ -1,5 +1,4 @@
 import {CommandHandler, EventPublisher, ICommandHandler} from "@nestjs/cqrs";
-import {CreateParamCommand} from "../impl/create-param.command";
 import {PageRepository} from "../../repository/pageRepository";
 import {DeleteParamCommand} from "../impl/delete-param.command";
 const clc=require('cli-color');
