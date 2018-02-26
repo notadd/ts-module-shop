@@ -41,6 +41,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             console.log('undefined='+hidden);
             let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
+            console.log(JSON.stringify(newresult));
+            console.log('title='+title);
             resultAll.push(...newresult);
         }
         return {articles:resultAll,totalItems:title};
@@ -64,7 +66,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<number>}
      */
-     async deleteArticles(array:[number]):Promise<number>{
+     async deleteArticles(array:number[]):Promise<number>{
         let count:number=0;
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
@@ -139,7 +141,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
       async recycleFind(limit?:number,pages?:number){
-          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).skip(limit*(pages-1)).take(limit).getMany();
+          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).orderBy('id','ASC').skip(limit*(pages-1)).take(limit).getMany();
           let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
           return {articles:result,totalItems:title};
       }
@@ -149,7 +151,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<number>}
      */
-    async recycleDelete(array:[number]):Promise<number>{
+    async recycleDelete(array:number[]):Promise<number>{
         let count:number=0;
         let history:HistoryEntity[] =[];
         for(let t in array){
@@ -172,7 +174,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<ArticleEntity[]>}
      */
-    async reductionArticle(array:[number]):Promise<number>{
+    async reductionArticle(array:number[]):Promise<number>{
         let num:number=0;
         for(let t in array){
             let article:ArticleEntity=await this.respository.findOneById(array[t]);

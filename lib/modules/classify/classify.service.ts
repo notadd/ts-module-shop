@@ -421,7 +421,7 @@ export class ClassifyService{
     }
 
     /**
-     * 全局置顶和当前分类文章
+     * 当前分类文章
      * @param {number} id
      * @returns {Promise<ArticleEntity[]>}
      */
@@ -429,9 +429,10 @@ export class ClassifyService{
         let classify:ClassifyEntity=await this.repository.findOneById(id);
         if(classify==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let articles:ArticleEntity[]=[];
-        let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
-        let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).andWhere('"topPlace"<> :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
-        articles.push(...globalArts);
+        //let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
+        //let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).andWhere('"topPlace"<> :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
+       //articles.push(...globalArts);
+        let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).orderBy('"updateAt"','ASC').getMany();
         articles.push(...current);
         return articles;
     }
