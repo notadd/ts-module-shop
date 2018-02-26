@@ -23,4 +23,6 @@ export class ArticleCurdVm{
         showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number/*,
         getLevelByClassifyId?:number*/
     };
+    //是否隐藏
+    public hidden?:boolean;
 }
