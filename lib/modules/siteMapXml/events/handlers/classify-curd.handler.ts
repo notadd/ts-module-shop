@@ -4,7 +4,7 @@ import {ClassifyService} from "../../../classify/classify.service";
 
 const clc=require('cli-color');
 @EventsHandler(ClassifyCurdEvents)
-export class ClassifyCurdHandler implements IEventHandler<ClassifyCurdEvents> {
+export class ClassifyCurdEvent implements IEventHandler<ClassifyCurdEvents> {
     constructor(readonly classifyservice: ClassifyService) {
     }
     async handle(event: ClassifyCurdEvents) {
