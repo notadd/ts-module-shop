@@ -353,12 +353,13 @@ type Query{
     getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
     #get a page by page
     getPageById(findPageById: ArticleId):Page,
-
+    updateFile(upateFile:createXml):String,
     createFile(buildxml:createXml):String
 }
 type Mutation{
     #the method to modify article,return string
-    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray):String
+    ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray,limitNum:Int
+        pages:Int,hidden:Boolean):ArticlePagination
     #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
     #the method to modify page,return page array

@@ -143,6 +143,7 @@ export class SitemapResolver{
             //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             //result=await this.classifyService.TimestampArt(resultArt.articles)
         }
+        articleVM.getAllArticles=true;
         let resultArt=await this.sitemapService.articleCurd(articleVM);
         resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         result=await this.classifyService.TimestampArt(resultArt.articles);
@@ -188,7 +189,8 @@ export class SitemapResolver{
             let amap=new Map();
             amap=this.objToStrMap(superiorArticle);
             articleVM.getArticles={superiorArticle:amap.get('id')};
-           /* let entity:ArticleEntity[]=await this.classifyService.showBeforeTitle(amap.get('id'));
+           /* let entity:ArticleEntity[]=await t        articleVM.getAllArticles=true;
+his.classifyService.showBeforeTitle(amap.get('id'));
             const result=this.classifyService.TimestampArt(entity);
             return result;*/
         }
@@ -201,14 +203,16 @@ export class SitemapResolver{
             const result=this.classifyService.TimestampArt(entity);
             return result;*/
         }
-        let getLevelByClassifyId=map.get('getLevelByClassifyId');
+        //未定是否开放
+      /*  let getLevelByClassifyId=map.get('getLevelByClassifyId');
         if(getLevelByClassifyId!=null || getLevelByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getLevelByClassifyId);
             articleVM.getArticles={getLevelByClassifyId:amap.get('id')};
-           /* const result=this.articleService.getLevelByClassifyId(amap.get('id'));
-            return result;*/
-        }
+           /!* const result=this.articleService.getLevelByClassifyId(amap.get('id'));
+            return result;*!/
+        }*/
+        articleVM.getAllArticles=true;
         let entity:ArticleEntity[]=await this.sitemapService.articleCurd(articleVM);
         result=await this.classifyService.TimestampArt(entity);
         return result;
@@ -264,17 +268,18 @@ export class SitemapResolver{
         let PageReturn:Page[];
         let pagination;
         let getAllPage=map.get('getAllPage');
+        let pageParam:GetPageVm=new GetPageVm();
         if(getAllPage!=null || getAllPage !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getAllPage);
-            let pageParam:GetPageVm=new GetPageVm();
             pageParam.getAll=true;
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+            /*let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
             //let resultPage=await this.pageService.getAllPage(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,pageParam.limit,pageParam.pages);*/
+
         }
         let serachPages=map.get('serachPages');
         if(serachPages!=null || serachPages !=undefined){
@@ -284,10 +289,10 @@ export class SitemapResolver{
             pageParam.keywords=amap.get('keywords');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+           /* let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
             //let resultPage=await this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
         let getPagesByClassifyId=map.get('getPagesByClassifyId');
         if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
@@ -297,12 +302,14 @@ export class SitemapResolver{
             pageParam.classifyId=amap.get('id');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-            let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+           /* let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
            // let resultPage=await this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
-
+        let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
+        PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+        pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,pageParam.limit,pageParam.pages);
         return{pagination:pagination,pages:PageReturn};
     }
 
@@ -344,6 +351,10 @@ export class SitemapResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let createArt=map.get('createArt');
+        let articleVM:ArticleCurdVm=new ArticleCurdVm();
+        articleVM.limitNum=map.get('limitNum');
+        articleVM.pages=map.get('pages');
+        articleVM.hidden=map.get('hidden');
         if(createArt!=null || createArt !=undefined){
             let art:ArticleEntity=createArt;
             if(art.publishedTime!=null){
@@ -351,9 +362,10 @@ export class SitemapResolver{
                 art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
             }
             let newArticle:ArticleEntity=art;
-            const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
+            articleVM.createArticle=newArticle;
+            /*const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
             let final:string=JSON.stringify(result);
-            return final;
+            return final;*/
         }
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
@@ -363,37 +375,44 @@ export class SitemapResolver{
                 art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
             }
             let newArticle:ArticleEntity=art;
-            const result=await this.articleService.updateArticle(newArticle).then(a=>{return a});
+            articleVM.updateArticle=newArticle;
+           /* const result=await this.articleService.updateArticle(newArticle).then(a=>{return a});
             let final:string=JSON.stringify(result);
-            return final;
+            return final;*/
         }
         let deleteById=map.get('deleteById');
         if(deleteById!=null || deleteById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(deleteById);
             let array:[number]=amap.get('id');
-            let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
+            articleVM.deleteById=array;
+            //let result=await this.sitemapService.articleCurd(articleVM);
+            //return result;
+           /* let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
             let strResult:string=`已成功将${JSON.stringify(result)}条数据放入回收站`;
-            return strResult;
+            return strResult;*/
         }
         let recycleDelete=map.get('recycleDelete');
         if(recycleDelete!=null || recycleDelete !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(recycleDelete);
             let array:[number]=amap.get('id');
-            let num:number=await this.articleService.recycleDelete(array);
+            articleVM.recycleDelete=array;
+           /* let num:number=await this.articleService.recycleDelete(array);
             let string=`已经成功删除${num}条数据`;
-            return string;
+            return string;*/
         }
         let reductionArticle=map.get('reductionArticle');
         if(reductionArticle!=null || reductionArticle !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(reductionArticle);
             let array:[number]=amap.get('id');
-            const num=await this.articleService.reductionArticle(array);
+            articleVM.reductionArticle=array;
+           /* const num=await this.articleService.reductionArticle(array);
             let result:string=`成功将${num}条数据还原`;
-            return result;
+            return result;*/
         }
+        //批量反向置顶,暂不修改
         let classifyTopPlace=map.get('classifyTopPlace');
         if(classifyTopPlace!=null || classifyTopPlace !=undefined){
             let amap=new Map();
@@ -403,6 +422,10 @@ export class SitemapResolver{
             let result:string=`成功将${num}条数据置顶`;
             return result;
         }
+        let resultArt=await this.sitemapService.articleCurd(articleVM);
+        let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        let result=await this.classifyService.TimestampArt(resultArt.articles);
+        return {pagination:resultPage,articles:result};
     }
 
     /**
