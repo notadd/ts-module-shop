@@ -7,6 +7,8 @@ import {PageParamCommand} from "./commands/impl/page-param.command";
 import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {GetPageParamCommand} from "./commands/impl/get-page-param.command";
+import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
+import {ClassifyParamCommand} from "./commands/impl/classify-param.command";
 
 
 @Component()
@@ -22,16 +24,6 @@ export class SitemapXMLService{
     async upDateXml(){
         const  result=await this.commonbus.execute(new DeleteParamCommand('10000','10000'));
     }
-
-    /**
-     * 根据id获取页面
-     * @returns {Promise<any>}
-     */
-    async getAllPage(id:number){
-       // const result=await this.commonbus.execute(new PageParamCommand(id)).then(a=>{console.log('service='+JSON.stringify(a));return a;});
-      //  return result;
-    }
-
     /**
      * 新增页面
      * @param {CreatePageVm} createPageDto
@@ -58,7 +50,8 @@ export class SitemapXMLService{
      * @returns {Promise<any>}
      */
     async deletePages(deletePageDto:CreatePageVm){
-        const result=await this.commonbus.execute(new PageParamCommand(deletePageDto.page,deletePageDto.content,deletePageDto.limit,deletePageDto.pages,deletePageDto.array));
+        const result=await this.commonbus.execute(new PageParamCommand(deletePageDto.page,
+            deletePageDto.content,deletePageDto.limit,deletePageDto.pages,deletePageDto.array));
         return result;
     }
 
@@ -68,7 +61,19 @@ export class SitemapXMLService{
      * @returns {Promise<any>}
      */
     async getPages(getPageDto:GetPageVm){
-        const result=await this.commonbus.execute(new GetPageParamCommand(getPageDto.limit,getPageDto.pages,getPageDto.keywords,getPageDto.classifyId,getPageDto.id,getPageDto.getAll));
+        const result=await this.commonbus.execute(new GetPageParamCommand(getPageDto.limit,getPageDto.pages,getPageDto.keywords,
+            getPageDto.classifyId,getPageDto.id,getPageDto.getAll));
+        return result;
+
+    }
+
+    /**
+     * 分类增删改查
+     * @param {ClassifyCurdVm} getClassifyDto
+     * @returns {Promise<any>}
+     */
+    async classifyCurd(getClassifyDto:ClassifyCurdVm){
+        const result= this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
         return result;
 
     }
