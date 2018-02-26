@@ -9,6 +9,8 @@ import {GetPageVm} from "./models/view/get-page.vm";
 import {GetPageParamCommand} from "./commands/impl/get-page-param.command";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ClassifyParamCommand} from "./commands/impl/classify-param.command";
+import {ArticleCurdVm} from "./models/view/article-curd.vm";
+import {ArticleParamCommand} from "./commands/impl/article-param.command";
 
 
 @Component()
@@ -76,6 +78,17 @@ export class SitemapXMLService{
         const result= this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
         return result;
 
+    }
+
+    /**
+     * 文章增删改查
+     * @param {ArticleCurdVm} getArticleDto
+     * @returns {Promise<void>}
+     */
+    async articleCurd(getArticleDto:ArticleCurdVm){
+        console.log('start='+JSON.stringify(getArticleDto));
+        const result=this.commonbus.execute(new ArticleParamCommand(getArticleDto));
+        return result;
     }
 
 }

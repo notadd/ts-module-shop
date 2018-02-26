@@ -14,6 +14,7 @@ import {SitemapXMLService} from "./sitemap.service";
 import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
+import {ArticleCurdVm} from "./models/view/article-curd.vm";
 @Resolver()
 export class SitemapResolver{
     constructor(private readonly articleService:ArticleService,
@@ -73,53 +74,78 @@ export class SitemapResolver{
         let resultPage;
         let result:Article[];
         let getArticle=map.get('getArticleAll');
+        let articleVM:ArticleCurdVm=new ArticleCurdVm();
         if(getArticle!=null || getArticle!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticle);
-            let resultArt=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'),amap.get('pages')).then(a=>{return a});
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles);
+            articleVM.getArticles={getArticleAll:amap.get('hidden')};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+           // let resultArt=await this.sitemapService.articleCurd(articleVM);
+            //let resultArt=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'),amap.get('pages')).then(a=>{return a});
+          //  resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+          //  result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let keywordsSerach=map.get('keywordsSerach');
         if(keywordsSerach!=null || keywordsSerach!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(keywordsSerach);
-            let resultArt=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles);
+            articleVM.getArticles={keywordsSerach:amap.get('keywords')};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+            //let resultArt=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            // let resultArt=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let recycleFind=map.get('recycleFind');
         if(recycleFind!=null || recycleFind !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(recycleFind);
-            let resultArt=await this.articleService.recycleFind(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles);
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            articleVM.getArticles={recycleFind:true};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+            //let resultArt=await this.articleService.recycleFind(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //result=await this.classifyService.TimestampArt(resultArt.articles);
+            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
         }
         let reductionGetByClassifyId=map.get('reductionGetByClassifyId');
         if(reductionGetByClassifyId!=null || reductionGetByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(reductionGetByClassifyId);
-            let resultArt=await this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles);
+            articleVM.getArticles={reductionGetByClassifyId:amap.get('id')};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+            // let resultArt=await this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let getArticleByClassifyId=map.get('getArticleByClassifyId');
+        //未知是否添加是否置顶选项
         if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleByClassifyId);
-            let resultArt=await this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'),amap.get('pages')).then(a=>{return a});
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles);
+            articleVM.getArticles={getArticleByClassifyId:amap.get('id')};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+            //let resultArt=await this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'),amap.get('pages')).then(a=>{return a});
+            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let findTopPlace=map.get('findTopPlace');
         if(findTopPlace!=null || findTopPlace !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(findTopPlace);
-            let resultArt=await this.articleService.findTopPlace(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            result=await this.classifyService.TimestampArt(resultArt.articles)
+            articleVM.getArticles={findTopPlace:true};
+            articleVM.limitNum=amap.get('limitNum');
+            articleVM.pages=amap.get('pages');
+            //let resultArt=await this.articleService.findTopPlace(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
+            //result=await this.classifyService.TimestampArt(resultArt.articles)
         }
+        let resultArt=await this.sitemapService.articleCurd(articleVM);
+        resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        result=await this.classifyService.TimestampArt(resultArt.articles);
         return {pagination:resultPage,articles:result};
 
     }
@@ -136,45 +162,56 @@ export class SitemapResolver{
         let bToJSon = JSON.parse(str);
         let map = new Map();
         map = this.objToStrMap(bToJSon);
+        let articleVM:ArticleCurdVm=new ArticleCurdVm();
         let showNext=map.get('showNext');
+        let result:Article[];
         if(showNext!=null || showNext !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(showNext);
-            let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id')).then(a=>{return a});
-            const result=this.classifyService.TimestampArt(entity);
-            return result;
+            articleVM.getArticles={showNext:amap.get('id')};
+          /*  let entity:ArticleEntity[]=await this.sitemapService.articleCurd(articleVM);
+            //let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id')).then(a=>{return a});
+             result=await this.classifyService.TimestampArt(entity);
+            return result;*/
         }
         let getArticleById=map.get('getArticleById');
         if(getArticleById!=null || getArticleById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleById);
-            let entity:ArticleEntity[]= await this.articleService.getArticleById(amap.get('id'));
+            articleVM.getArticles={getArticleById:amap.get('id')};
+          /*  let entity:ArticleEntity[]= await this.articleService.getArticleById(amap.get('id'));
             const result=this.classifyService.TimestampArt(entity);
-            return result;
+            return result;*/
         }
         let superiorArticle=map.get('superiorArticle');
         if(superiorArticle!=null || superiorArticle !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(superiorArticle);
-            let entity:ArticleEntity[]=await this.classifyService.showBeforeTitle(amap.get('id'));
+            articleVM.getArticles={superiorArticle:amap.get('id')};
+           /* let entity:ArticleEntity[]=await this.classifyService.showBeforeTitle(amap.get('id'));
             const result=this.classifyService.TimestampArt(entity);
-            return result;
+            return result;*/
         }
         let getCurrentClassifyArticles=map.get('getCurrentClassifyArticles');
         if(getCurrentClassifyArticles!=null || getCurrentClassifyArticles !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getCurrentClassifyArticles);
-            let entity:ArticleEntity[]=await this.classifyService.showCurrentArticles(amap.get('id'));
+            articleVM.getArticles={getCurrentClassifyArticles:amap.get('id')};
+          /*  let entity:ArticleEntity[]=await this.classifyService.showCurrentArticles(amap.get('id'));
             const result=this.classifyService.TimestampArt(entity);
-            return result;
+            return result;*/
         }
         let getLevelByClassifyId=map.get('getLevelByClassifyId');
         if(getLevelByClassifyId!=null || getLevelByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getLevelByClassifyId);
-            const result=this.articleService.getLevelByClassifyId(amap.get('id'));
-            return result;
+            articleVM.getArticles={getLevelByClassifyId:amap.get('id')};
+           /* const result=this.articleService.getLevelByClassifyId(amap.get('id'));
+            return result;*/
         }
+        let entity:ArticleEntity[]=await this.sitemapService.articleCurd(articleVM);
+        result=await this.classifyService.TimestampArt(entity);
+        return result;
 
     }
     /**
