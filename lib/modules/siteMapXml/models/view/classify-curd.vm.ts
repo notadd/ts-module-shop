@@ -11,4 +11,6 @@ export class ClassifyCurdVm{
     public deleteClassify?:number;
     //移动分类
     public mobileClassifyId?:{id:number,parentId:number};
+    //获取分类
+    public getAllClassify?:boolean;
 }

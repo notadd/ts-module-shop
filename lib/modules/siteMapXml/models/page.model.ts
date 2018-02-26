@@ -4,6 +4,8 @@ import {PageCreateEvent} from "../events/impl/page-create.event";
 import {PageCurdEvent} from "../events/impl/page-curd.event";
 import {PageEntity} from "../../entity/page.entity";
 import {CreatePageVm} from "./view/create-page.vm";
+import {ClassifyCurdVm} from "./view/classify-curd.vm";
+import {ClassifyCurdEvents} from "../events/impl/classify-curd.events";
 const clc=require('cli-color');
 export class Page extends AggregateRoot{
     constructor(private readonly id:string){super();}
@@ -23,7 +25,11 @@ export class Page extends AggregateRoot{
         //this.apply(new PageCurdEvent(id));
     }
     createPage(data:CreatePageVm){
-        console.log(clc.greenBright('页面增删改查...'));
+        console.log(clc.greenBright('页面增删改...'));
         this.apply(new PageCurdEvent(data.page,data.content,data.array));
+    }
+    createClassify(data:ClassifyCurdVm){
+        console.log(clc.greenBright('分类增删改移动...'));
+        this.apply(new ClassifyCurdEvents(data))
     }
 }
