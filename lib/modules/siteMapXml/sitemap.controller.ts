@@ -21,6 +21,13 @@ export class SitemapResolver{
                 private readonly pageService:PageService,
                 private readonly sitemapService:SitemapXMLService
     ){}
+
+    /**
+     * 创建地图xml文件
+     * @param obj
+     * @param arg
+     * @returns {Promise<CreateParamDto>}
+     */
     @Query()
     async createFile(obj,arg){
         const str:string=JSON.stringify(arg);
@@ -32,6 +39,13 @@ export class SitemapResolver{
         console.log('controller='+JSON.stringify(createxml));
         return createxml;
     }
+
+    /**
+     * 修改地图xml文件
+     * @param obj
+     * @param arg
+     * @returns {Promise<CreateParamDto>}
+     */
     @Query()
     async updateFile(obj,arg){
         const str:string=JSON.stringify(arg);
@@ -113,7 +127,7 @@ export class SitemapResolver{
     /**
      * 不分页获取文章
      * @param obj
-     * @param arg
+     * @param argclassify_curd
      * @returns {Promise<any>}
      */
     @Query()

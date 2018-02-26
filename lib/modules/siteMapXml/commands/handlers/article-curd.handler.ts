@@ -63,6 +63,14 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         if(command.article.getArticles.superiorArticle){
             result=await this.classifyService.showBeforeTitle(command.article.getArticles.superiorArticle);
         }
+        //显示当前分类文章
+        if(command.article.getArticles.getCurrentClassifyArticles){
+            result=await this.classifyService.showCurrentArticles(command.article.getArticles.getCurrentClassifyArticles);
+        }
+        //显示分类层级
+        if(command.article.getArticles.getLevelByClassifyId){
+            result=await this.articleService.getLevelByClassifyId(command.article.getArticles.getLevelByClassifyId);
+        }
         page.commit();
         resolver(result);
     }
