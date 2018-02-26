@@ -13,4 +13,14 @@ export class ArticleCurdVm{
     public reductionArticle?:number[];
     //获取所有文章
     public getAllArticles?:boolean;
+    //每页条数
+    public limitNum?:number;
+    //第几页
+    public pages?:number;
+    //查找文章
+    public getArticles?:{getArticleAll?:boolean,keywordsSerach?:string,recycleFind?:boolean,
+        reductionGetByClassifyId?:number,getArticleByClassifyId?:number,findTopPlace?:boolean,
+        showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number/*,
+        getLevelByClassifyId?:number*/
+    };
 }
