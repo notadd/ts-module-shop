@@ -86,7 +86,7 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-       // return this.getAllPage(limit,pages);
+        return this.getAllPage(limit,pages);
     }
     /**
      * 修改页面,别名不可重复
@@ -94,17 +94,14 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async updatePages(page:PageEntity,content:PageContentEntity[],limit?:number,pages?:number){
-        if(page.id==null) throw new MessageCodeError('delete:page:deleteById');
+        let entityPage:PageEntity=await this.repository.findOneById(page.id);
+        if(entityPage==null) throw new MessageCodeError('delete:page:deleteById');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
         if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let time =new Date();
         page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-       // console.log('pageservice='+JSON.stringify(page));
-        let newPage:PageEntity =page;
-       // console.log('newPage='+JSON.stringify(newPage));
-        await this.repository.updateById(page.id,newPage).then(a=>{console.log(JSON.stringify(a))});
         for(let t in content){
             if(content[t].id==0){
                 let newContent:PageContentEntity=new PageContentEntity();
@@ -119,6 +116,13 @@ export class PageService{
                 await this.contentRepository.updateById(newContent.id,newContent);
             }
         }
+        if(page.alias==null) page.alias=entityPage.alias;
+        if(page.title==null) page.title=entityPage.title;
+        if(page.classifyId==null) page.classifyId=entityPage.classifyId;
+        if(page.classify==null) page.classify=entityPage.classify;
+        let newPage:PageEntity =page;
+        console.log('-------修改后页面='+JSON.stringify(newPage));
+        await this.repository.updateById(entityPage.id,newPage);
         return this.getAllPage(limit,pages);
     }
 

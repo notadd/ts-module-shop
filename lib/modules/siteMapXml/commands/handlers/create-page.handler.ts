@@ -13,7 +13,7 @@ export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
                 private readonly publisher:EventPublisher,
                 readonly pageService: PageService){}
 
-                async execute(command:PageParamCommand,resolver:(value/*:PageEntity | HttpException*/) => void):Promise<any>{
+                async execute(command:PageParamCommand,resolver:(value) => void):Promise<any>{
                 console.log(clc.greenBright('handlerCommand  PageFindByIdCommand...'));
                 let id:string='0';
                 const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
