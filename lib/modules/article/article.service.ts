@@ -41,7 +41,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             console.log('undefined='+hidden);
             let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
-            console.log(JSON.stringify(newresult));
             console.log('title='+title);
             resultAll.push(...newresult);
         }
@@ -115,7 +114,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async updateArticle(article:ArticleEntity):Promise<number>{
+      async updateArticle(article:ArticleEntity){
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
@@ -123,16 +122,17 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
             article.classify='默认分类';
-        let num:number=await this.classifyService.findLevel(article.classifyId);
+          let num:number=await this.classifyService.findLevel(article.classifyId);
           let level:string=this.classifyService.interfaceChange(num);
-          let levelGive:string=article.topPlace.toString();
-          if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
+          let levelGive:string=article.topPlace;
+        if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
           if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
           let time =new Date();
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =article;
-          let result=await this.respository.createQueryBuilder().update(ArticleEntity).set(newArt).where('"id"= :id',{id:newArt.id}).output('id').execute().then(a=>{return a});
-          return result;
+          await this.respository.updateById(newArt.id,newArt);
+         // let result=await this.respository.createQueryBuilder().update(ArticleEntity).set(newArt).where('"id"= :id',{id:newArt.id}).output('id').execute().then(a=>{return a});
+          //return result;
       }
 
     /**

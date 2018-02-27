@@ -8,7 +8,7 @@ export class PageEntity{
    //页面标题
     @Column({length:200}) title:string;
     //页面别名
-    @Column({length:200}) alias:string;
+    @Column({length:200,nullable:true}) alias:string;
     //页面分类Id
     @Column({nullable:true}) classifyId:number;
     //页面分类Id
