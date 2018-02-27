@@ -20,7 +20,8 @@ export class ArticleCurdVm{
     //查找文章
     public getArticles?:{getArticleAll?:boolean,keywordsSerach?:string,recycleFind?:boolean,
         reductionGetByClassifyId?:number,getArticleByClassifyId?:number,findTopPlace?:boolean,
-        showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number/*,
+        showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number,
+        hidden?:boolean/*,
         getLevelByClassifyId?:number*/
     };
     //是否隐藏

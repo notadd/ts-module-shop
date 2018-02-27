@@ -28,7 +28,7 @@ export class Page extends AggregateRoot{
     }
     createPage(data:CreatePageVm){
         console.log(clc.greenBright('页面增删改...'));
-        this.apply(new PageCurdEvent(data.page,data.content,data.array));
+        this.apply(new PageCurdEvent(data));
     }
     createClassify(data:ClassifyCurdVm){
         console.log(clc.greenBright('分类增删改移动...'));
