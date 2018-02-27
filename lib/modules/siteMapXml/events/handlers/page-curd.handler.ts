@@ -9,19 +9,19 @@ export class PageCurdHandle implements IEventHandler<PageCurdEvent> {
     }
     async handle(event: PageCurdEvent) {
         console.log('start='+JSON.stringify(event));
-        let array:number[]=event.array;
+        let array:number[]=event.pageEntity.array;
         //新增页面
-        if(event.page!=null && event.page.id==null){
-            this.pageService.createPages(event.page,event.content);
+        if(event.pageEntity.page!=null && event.pageEntity.page.id==null){
+            this.pageService.createPages(event.pageEntity.page,event.pageEntity.content);
         }
         //修改页面
-        if(event.page!=null && event.page.id>=1){
-            console.log(clc.greenBright('updatePage='+JSON.stringify(event.page)));
-            this.pageService.updatePages(event.page,event.content);
+        if(event.pageEntity.page!=null && event.pageEntity.page.id>=1){
+            console.log(clc.greenBright('updatePage='+JSON.stringify(event.pageEntity)));
+            this.pageService.updatePages(event.pageEntity.page,event.pageEntity.content);
         }
         //删除页面
-        if(event.page ==null && array.length>=1){
-            console.log('deleteArray='+JSON.stringify(event.array));
+        if(event.pageEntity.page ==null && array.length>=1){
+            console.log('deleteArray='+JSON.stringify(event.pageEntity.array));
             this.pageService.deletePages(array);
         }
 
