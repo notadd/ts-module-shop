@@ -9,7 +9,7 @@ import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
-import {CreateParamDto} from "../siteMapXml/interfaces/createParamDto";
+import {CreateXmlVm} from "../siteMapXml/models/view/create-xml-vm";
 /*@Resolver()*/
 export class GraphqlResolver{
     constructor(private readonly articleService:ArticleService,
@@ -22,7 +22,7 @@ export class GraphqlResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let createxml:CreateParamDto=map.get('buildxml');
+        let createxml:CreateXmlVm=map.get('buildxml');
        return createxml;
     }
 

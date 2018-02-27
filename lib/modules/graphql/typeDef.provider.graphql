@@ -353,7 +353,7 @@ type Query{
     getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
     #get a page by page
     getPageById(findPageById: ArticleId):Page,
-    updateFile(upateFile:createXml):String,
+    updateFile(updateFile:createXml):String,
     createFile(buildxml:createXml):String
 }
 type Mutation{
