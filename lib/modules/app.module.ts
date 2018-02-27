@@ -50,7 +50,6 @@ export class ApplicationModule implements NestModule{
     configure(consumer:MiddlewaresConsumer){
 
         const schema =this.createSchema();
-        //console.log(JSON.stringify(schema));
         consumer.apply(graphiqlExpress({ endpointURL: '/graphql' }))
             .forRoutes({ path: '/graphiql', method: RequestMethod.GET })
             .apply(graphqlExpress(req => ({ schema, rootValue: req })))
