@@ -1,26 +1,35 @@
 import {EventObservable, ICommand} from "@nestjs/cqrs";
 import {Observable} from "rxjs/Observable";
-import {PageDeletedEvent} from "../events/impl/page-deleted.event";
 import {DeleteParamCommand} from "../commands/impl/delete-param.command";
 import {Component} from "@nestjs/common";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
-import {PageCreateEvent} from "../events/impl/page-create.event";
-import {CreateParamCommand} from "../commands/impl/create-param.command";
-import {SitemapUpdateEvent} from "../events/impl/sitemap-update.event";
-
+import {PageCurdEvent} from "../events/impl/page-curd.event";
+import {ArticleCurdEvents} from "../events/impl/article-curd.events";
 const clc=require('cli-color');
 const itemId='0';
 @Component()
 export class PageSagas{
-    updatePages =(events$:EventObservable<any>):Observable<ICommand> =>{
-        return events$.ofType(SitemapUpdateEvent)
+    //文章增删改合并修改生成xml文件
+    articleXml =(events$:EventObservable<any>):Observable<ICommand> =>{
+        return events$.ofType(ArticleCurdEvents)
             .delay(1000)
             .map(event => {
-                console.log(clc.redBright('Inside [HeroesGameSagas] Saga'));
+                console.log(clc.redBright('Inside [PageSagas] Saga articleXml'));
                 return new DeleteParamCommand(event.heroId, itemId);
             })
     };
+    //页面增删改合并修改生成xml文件
+    pageXml =(events$:EventObservable<any>):Observable<ICommand> =>{
+        return events$.ofType(PageCurdEvent)
+            .delay(1000)
+            .map(event =>{
+                console.log(clc.redBright('Inside [PageSagas] Saga pagexml'));
+                return new DeleteParamCommand(event.heroId,itemId);
+            })
+    }
+    //页面增删改合并修改生成xml文件
+
     /*deletePages =(events$:EventObservable<any>):Observable<ICommand> =>{
         return events$.ofType(PageDeletedEvent)
             .delay(1000)
@@ -29,13 +38,12 @@ export class PageSagas{
                 return new DeleteParamCommand(event.heroId, itemId);
             })
     };*/
-    createPages=(events$:EventObservable<any>):Observable<ICommand> =>{
+    /*createPages=(events$:EventObservable<any>):Observable<ICommand> =>{
        return events$.ofType(PageCreateEvent)
            .delay(1000)
            .map(event=>{
                console.log(clc.redBright('Inside create [HeroesGameSagas] Saga'));
-               return new CreateParamCommand(event.lc_XML_FileName,event.lc_is_Enabled_Html_Sitemap,event.lc_is_Enabled_XML_Sitemap,
-               event.lc_category_select,event.lc_post_limit1000,event.lc_page_select)
+               return new CreateParamCommand(event);
            })
-   }
+   }*/
 }

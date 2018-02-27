@@ -9,7 +9,7 @@ import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
-import {CreateParamDto} from "../siteMapXml/interfaces/createParamDto";
+import {CreateXmlVm} from "./models/view/create-xml-vm";
 import {SitemapXMLService} from "./sitemap.service";
 import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
@@ -35,7 +35,7 @@ export class SitemapResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let createxml:CreateParamDto=map.get('buildxml');
+        let createxml:CreateXmlVm=map.get('buildxml');
         const result=this.sitemapService.createXml(createxml);
         console.log('controller='+JSON.stringify(createxml));
         return createxml;
@@ -53,7 +53,7 @@ export class SitemapResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let createxml:CreateParamDto=map.get('upateFile');
+        let createxml:CreateXmlVm=map.get('updateFile');
         const result=this.sitemapService.upDateXml();
         console.log('controller='+JSON.stringify(createxml));
         return createxml;
@@ -442,6 +442,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let createArt=map.get('createClass');
+        let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
         if(createArt!=null || createArt !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(createArt);
@@ -451,10 +452,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             if(id==null || id==0){
                 id=1;
             }
-            let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.createClassify=amap.get('createClass');
-            let result=this.sitemapService.classifyCurd(classifyVM);
            /* if(useFor=='art'){
                 let newClass:ClassifyEntity=amap.get('createClass');
                 result=this.classifyService.createClassifyArt(newClass,id);
@@ -462,7 +461,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 let newClass:PageClassifyEntity=amap.get('createClass');
                 result=this.classifyService.createClassifyPage(newClass,id);
             }*/
-            return result;
+           // return result;
         }
         let updateClass=map.get('updateClass');
         if(updateClass!=null || updateClass !=undefined){
@@ -474,10 +473,10 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 id=1;
             }
             //let result;
-            let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
+            //let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.updateClassify=amap.get('updateClass');
-            let result=this.sitemapService.classifyCurd(classifyVM);
+           // let result=this.sitemapService.classifyCurd(classifyVM);
            /* if(useFor=='art'){
                 let newClass:ClassifyEntity=amap.get('updateClass');
                 result=this.classifyService.updateClassifyArt(newClass,id);
@@ -485,7 +484,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 let newClass:PageClassifyEntity=amap.get('updateClass');
                 result=this.classifyService.updateClassifyPage(newClass,id);
             }*/
-            return result;
+            //return result;
         }
         let deleteClassifyById=map.get('deleteClassifyById');
         if(deleteClassifyById!=null || deleteClassifyById !=undefined){
@@ -497,17 +496,17 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 id=1;
             }
             if(id==1) throw new MessageCodeError('drop:table:ById1');
-            let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
+           // let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.deleteClassify=id;
-            let result=this.sitemapService.classifyCurd(classifyVM);
+            //let result=this.sitemapService.classifyCurd(classifyVM);
            // let result;
           /*  if(useFor=='art'){
                 result=this.classifyService.deleteMethodFirst(id);
             }else if(useFor=='page'){
                 result=this.classifyService.deleteMethodSecond(id);
             }*/
-            return result;
+            //return result;
         }
         let mobileTheClassify=map.get('mobileTheClassify');
         if(mobileTheClassify!=null || mobileTheClassify !=undefined){
@@ -519,18 +518,20 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             if(parentId==null || parentId==0){
                 parentId=1;
             }
-            let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
+            //let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
-            let result=this.sitemapService.classifyCurd(classifyVM);
+            //let result=this.sitemapService.classifyCurd(classifyVM);
             /*let result;
             if(useFor=='art'){
                 result=this.classifyService.mobileClassifyArt(id,parentId);
             }else if(useFor=='page'){
                 result=this.classifyService.mobileClassifyPage(id,parentId);
             }*/
-            return result;
+           // return result;
         }
+        let result=this.sitemapService.classifyCurd(classifyVM);
+          return result;
 
     }
     @Mutation()
