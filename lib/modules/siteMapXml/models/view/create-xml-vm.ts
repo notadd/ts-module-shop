@@ -1,6 +1,4 @@
-import {ApiModelProperty} from "@nestjs/swagger";
-
-export interface CreateParamDto{
+export class CreateXmlVm{
     //生成xml地图
    lc_is_Enabled_XML_Sitemap:boolean;
 
