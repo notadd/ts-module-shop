@@ -17,8 +17,8 @@ export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
                 console.log(clc.greenBright('handlerCommand  PageFindByIdCommand...'));
                 let id:string='0';
                 const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
-                page.createPage({page:command.page,content:command.content,limit:command.limit,pages:command.pages,array:command.array});
-                let result=await this.pageService.getAllPage(command.limit,command.pages);
+                page.createPage(command.pageEntity);
+                let result=await this.pageService.getAllPage(command.pageEntity.limit,command.pageEntity.pages);
                 page.commit();
                 resolver(result);
     }
