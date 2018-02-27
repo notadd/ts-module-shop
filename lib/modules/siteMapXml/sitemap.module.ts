@@ -31,6 +31,6 @@ export class SitemapModule implements OnModuleInit{
 
         this.event$.register(EventHandlers);
         this.command$.register(CommandHandlers);
-        this.event$.combineSagas([this.PageSagas.createPages]);
+        this.event$.combineSagas([this.PageSagas.articleXml,this.PageSagas.pageXml]);
     }
 }
