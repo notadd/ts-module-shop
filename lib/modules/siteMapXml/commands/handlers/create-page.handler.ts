@@ -18,9 +18,8 @@ export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
                 let id:string='0';
                 const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
                 page.createPage({page:command.page,content:command.content,limit:command.limit,pages:command.pages,array:command.array});
-                console.log('command='+JSON.stringify(command));
                 let result=await this.pageService.getAllPage(command.limit,command.pages);
-                console.log('result='+JSON.stringify(result));
+                //console.log('result='+JSON.stringify(result));
                 page.commit();
                 resolver(result);
     }
