@@ -6,6 +6,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import {PageCurdEvent} from "../events/impl/page-curd.event";
 import {ArticleCurdEvents} from "../events/impl/article-curd.events";
+import {GetPageParamCommand} from "../commands/impl/get-page-param.command";
+import {GetArticleParamCommand} from "../commands/impl/get-article-param.command";
+import {ClassifyCurdEvents} from "../events/impl/classify-curd.events";
+import {ClassifyCurdEvent} from "../events/handlers/classify-curd.handler";
+import {GetClassifyParamCommand} from "../commands/impl/get-classify-param.command";
 const clc=require('cli-color');
 const itemId='0';
 @Component()
@@ -27,23 +32,32 @@ export class PageSagas{
                 console.log(clc.redBright('Inside [PageSagas] Saga pagexml'));
                 return new DeleteParamCommand(event.heroId,itemId);
             })
-    }
-    //页面增删改合并修改生成xml文件
-
-    /*deletePages =(events$:EventObservable<any>):Observable<ICommand> =>{
-        return events$.ofType(PageDeletedEvent)
+    };
+    //获取全部页面
+    getPages=(events$:EventObservable<any>):Observable<ICommand> =>{
+        return events$.ofType(PageCurdEvent)
+            .delay(1000)
+            .map(event =>{
+                console.log(clc.redBright('Inside [PageSagas] Saga getPages'));
+                return new GetPageParamCommand({limit:event.pageEntity.limit,pages:event.pageEntity.pages,getAll:true});
+            })
+    };
+    //获取全部文章
+    getArticles=(events$:EventObservable<any>):Observable<ICommand> =>{
+        return events$.ofType(ArticleCurdEvents)
             .delay(1000)
             .map(event => {
-                console.log(clc.redBright('Inside [HeroesGameSagas] Saga'));
-                return new DeleteParamCommand(event.heroId, itemId);
+                console.log(clc.redBright('Inside [PageSagas] Saga getArticles'));
+                return new GetArticleParamCommand({limitNum:event.article.limitNum,pages:event.article.pages});
             })
-    };*/
-    /*createPages=(events$:EventObservable<any>):Observable<ICommand> =>{
-       return events$.ofType(PageCreateEvent)
-           .delay(1000)
-           .map(event=>{
-               console.log(clc.redBright('Inside create [HeroesGameSagas] Saga'));
-               return new CreateParamCommand(event);
-           })
-   }*/
+    };
+    //获取全部分类
+    getClassification=(events$:EventObservable<any>):Observable<ICommand> =>{
+        return events$.ofType(ClassifyCurdEvents)
+            .delay(1000)
+            .map(event => {
+                console.log(clc.redBright('Inside [PageSagas] Saga getClassify'));
+                return new GetClassifyParamCommand({useFor:event.classify.useFor});
+            })
+    };
 }

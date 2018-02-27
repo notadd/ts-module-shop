@@ -78,7 +78,7 @@ export class SitemapResolver{
         if(getArticle!=null || getArticle!=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticle);
-            articleVM.getArticles={getArticleAll:amap.get('hidden')};
+            articleVM.getArticles={getArticleAll:true,hidden:amap.get('hidden')};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
            // let resultArt=await this.sitemapService.articleCurd(articleVM);
@@ -242,7 +242,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.getAllClassify=true;
-            let result=this.sitemapService.classifyCurd(classifyVM);
+            let result=this.sitemapService.getClassify(classifyVM);
            /* let result;
             if(useFor=='art'){
                 result=this.classifyService.findAllClassifyArt(id);
@@ -423,6 +423,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             return result;
         }
         let resultArt=await this.sitemapService.articleCurd(articleVM);
+        console.log('resultArt='+JSON.stringify(resultArt));
         let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         let result=await this.classifyService.TimestampArt(resultArt.articles);
         return {pagination:resultPage,articles:result};
@@ -563,7 +564,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-            let resultPage= await this.sitemapService.createPage(createParam).then(a=>{return a});
+            let resultPage= await this.sitemapService.pageCurd(createParam).then(a=>{return a});
 
             //let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
@@ -592,7 +593,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-            let resultPage=await this.sitemapService.updatePages(createParam).then(a=>{return a});
+            let resultPage=await this.sitemapService.pageCurd(createParam).then(a=>{return a});
             //let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
@@ -607,7 +608,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
             createParam.array=array;
-            let resultPage=await this.sitemapService.deletePages(createParam).then(a=>{return a});
+            let resultPage=await this.sitemapService.pageCurd(createParam).then(a=>{return a});
            // let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
             PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
             pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
