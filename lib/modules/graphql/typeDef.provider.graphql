@@ -153,9 +153,9 @@ input ClassifyUpdate{
     #分类id
     id:Int,
     #分类名称
-    classifyName:String!,
+    classifyName:String,
     #分类别名
-    classifyAlias:String!,
+    classifyAlias:String,
     #内链
     chainUrl:String,
     #描述
