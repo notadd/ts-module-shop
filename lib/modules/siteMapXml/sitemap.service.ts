@@ -40,9 +40,9 @@ export class SitemapXMLService{
     async pageCurd(updateDto:CreatePageVm){
         this.commonbus.execute(new PageParamCommand(updateDto));
        // const result=await this.commonbus.execute(new GetPageParamCommand({getAll:true,limit:updateDto.limit,pages:updateDto.pages})).then(a=>{return a});
-        let returnValue=await this.pageService.getAllPage(updateDto.limit,updateDto.pages);
-        console.log('执行另一个函数='+JSON.stringify(returnValue));
-        return returnValue;
+        //let returnValue=await this.pageService.getAllPage(updateDto.limit,updateDto.pages);
+       // console.log('执行另一个函数='+JSON.stringify(returnValue));
+      //  return returnValue;
     }
     /**
      * 获取页面

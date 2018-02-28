@@ -147,8 +147,9 @@ export class SitemapResolver{
         }
         articleVM.getAllArticles=true;
         let resultArt=await this.sitemapService.articleCurd(articleVM);
-        resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
-        result=await this.classifyService.TimestampArt(resultArt.articles);
+        let resultArtAgain=await this.articleService.getArticleAll(articleVM.limitNum,articleVM.hidden,articleVM.pages);
+        resultPage=await this.classifyService.pageServiceArt(resultArtAgain.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        result=await this.classifyService.TimestampArt(resultArtAgain.articles);
         return {pagination:resultPage,articles:result};
 
     }
@@ -525,16 +526,17 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             classifyVM.useFor=useFor;
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
             //let result=this.sitemapService.classifyCurd(classifyVM);
-            /*let result;
-            if(useFor=='art'){
-                result=this.classifyService.mobileClassifyArt(id,parentId);
-            }else if(useFor=='page'){
-                result=this.classifyService.mobileClassifyPage(id,parentId);
-            }*/
-           // return result;
+
         }
-        let result=this.sitemapService.classifyCurd(classifyVM);
-          return result;
+        this.sitemapService.classifyCurd(classifyVM);
+        let result;
+        if(classifyVM.useFor=='art'){
+            result=this.classifyService.findAllClassifyArt(1);
+        }else if(classifyVM.useFor=='page'){
+            result=this.classifyService.findAllClassifyPage(1);
+        }
+        return result;
+          //return result;
 
     }
     @Mutation()
@@ -546,6 +548,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
         let PageReturn:Page[];
         let pagination;
         let createPages = map.get('createPages');
+        let createParam:CreatePageVm=new CreatePageVm();
+        let resultPage;
         if (createPages != null || createPages != undefined) {
             let amap = new Map();
             amap = this.objToStrMap(createPages);
@@ -561,16 +565,14 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 newContent.content=strFinal[t];
                 contents.push(newContent);
             }
-            let createParam:CreatePageVm=new CreatePageVm();
             createParam.page=page;
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-            let resultPage= await this.sitemapService.pageCurd(createParam).then(a=>{return a});
 
             //let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+          /*  PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
         let updatePages=map.get('updatePages');
         if(updatePages != null || updatePages != undefined){
@@ -590,15 +592,13 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 newContent.id=strFinal[t].id;
                 contents.push(newContent);
             }
-            let createParam:CreatePageVm=new CreatePageVm();
             createParam.page=page;
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-            let resultPage=await this.sitemapService.pageCurd(createParam).then(a=>{return a});
             //let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+           /* PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
+            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
 
         }
         let deletePages=map.get('deletePages');
@@ -606,15 +606,17 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let amap = new Map();
             amap = this.objToStrMap(deletePages);
             let array:[number]=amap.get('id');
-            let createParam:CreatePageVm=new CreatePageVm();
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
             createParam.array=array;
-            let resultPage=await this.sitemapService.pageCurd(createParam).then(a=>{return a});
+
            // let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));
+
         }
+        this.sitemapService.pageCurd(createParam).then(a=>{console.log('执行时间='+new Date().getTime())});
+        let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
+        PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
+        pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);
         return{pagination:pagination,pages:PageReturn};
     }
     /**
