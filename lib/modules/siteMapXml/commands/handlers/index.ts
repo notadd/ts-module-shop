@@ -9,4 +9,4 @@ import {ArticleCurdHandler} from "./article-curd.handler";
 import {GetArticleHandler} from "./get-article.handler";
 import {GetClassifyHandler} from "./get-classify.handler";
 
-export const CommandHandlers = [CreatePageHandler,CreateSitemapHandler,UpdateSitemapHandler,GetPageHandler,ClassifyCurdHandler,ArticleCurdHandler,GetArticleHandler,GetClassifyHandler];
+export const CommandHandlers = [CreatePageHandler,CreateSitemapHandler,UpdateSitemapHandler,GetPageHandler,ClassifyCurdHandler,ArticleCurdHandler/*,GetArticleHandler*/,GetClassifyHandler];
