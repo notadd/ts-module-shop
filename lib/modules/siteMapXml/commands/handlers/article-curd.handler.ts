@@ -17,18 +17,17 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         console.log(clc.greenBright('handlerCommand article_curd Command...'));
         let id:string='0';
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
-        //分类增删改查
         let result;
+        console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));
         if(!command.article.getAllArticles){
-            //增加、修改、删除、移动分类
+            //增加、修改、删除、文章
             page.createArticle(command.article);
-            //分页获取全部文章
-            result=await this.articleService.getArticleAll(command.article.limitNum,command.article.hidden,command.article.pages);
-            console.log('command='+JSON.stringify(command));
+            console.log("Article#########"+JSON.stringify(command.article));
+            console.log("commandTime="+new Date());
         }
         //分页获取全部文章：可以选择是否隐藏
         if(command.article.getAllArticles && command.article.getArticles.getArticleAll){
-            result=await this.articleService.getArticleAll(command.article.limitNum,command.article.getArticles.getArticleAll,command.article.pages);
+            result=await this.articleService.getArticleAll(command.article.limitNum,command.article.getArticles.hidden,command.article.pages);
         }
         //根据id获取单独页面
         if(command.article.getAllArticles && command.article.getArticles.getArticleById){

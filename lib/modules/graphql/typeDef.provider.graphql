@@ -29,6 +29,8 @@ type Article{
     createAt:String,
     #修改时间
     updateAt:String,
+    #全选
+    check:Boolean
 }
 type ArticlePagination{
     #分页
@@ -187,7 +189,9 @@ type Page{
     #修改时间
     updateAt:String,
     #内容
-    contents:[Content]
+    contents:[Content],
+    #全选
+    check:Boolean
 }
 type PagePagination{
     pagination:ReturnPage,
@@ -359,7 +363,7 @@ type Query{
 type Mutation{
     #the method to modify article,return string
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray,limitNum:Int
-        pages:Int,hidden:Boolean):ArticlePagination
+        pages:Int,hidden:Boolean):String
     #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
     #the method to modify page,return page array
