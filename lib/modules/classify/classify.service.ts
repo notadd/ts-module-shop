@@ -7,6 +7,7 @@ import {Article, ArticleEntity} from "../entity/article.entity";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {Page, PageEntity} from "../entity/page.entity";
 import {PagerService, ReturnPage} from "../database/common.paging";
+import {isNumber} from "util";
 
 @Component()
 export class ClassifyService{
@@ -91,9 +92,11 @@ export class ClassifyService{
             let newClassify:ClassifyEntity[] = await this.repository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
             //别名不能重复
             if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
-            let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
-            //通过父级别名确定父级是否存在
-            if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+            if(isNumber(entity.groupId)){
+                let parentClassify:ClassifyEntity = await this.repository.findOneById(entity.groupId);
+                //通过父级别名确定父级是否存在
+                if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
+            }
             let time =new Date();
             entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let finalClassify:ClassifyEntity =entity;
@@ -112,7 +115,7 @@ export class ClassifyService{
          let newClassify:PageClassifyEntity[] = await this.pageRepository.createQueryBuilder().where('"classifyAlias"= :classifyAlias',{classifyAlias:entity.classifyAlias}).getMany();
          //别名不能重复
          if(newClassify.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
-         if(entity.groupId!=null){
+         if(isNumber(entity.groupId)){
              let parentClassify:PageClassifyEntity = await this.pageRepository.findOneById(entity.groupId);
              //通过父级别名确定父级是否存在
              if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
@@ -120,7 +123,7 @@ export class ClassifyService{
          let time =new Date();
          entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
          let finalClassify:PageClassifyEntity =entity;
-         await this.pageRepository.updateById(entity.id,finalClassify);
+         await this.pageRepository.updateById(entity.id,entity);
          return this.findAllClassifyPage(id);
      }
 
@@ -784,6 +787,7 @@ export class ClassifyService{
                 entity.hidden=art[t].hidden;
                 entity.id=art[t].id;
                 entity.recycling=art[t].recycling;
+                entity.check=false;
                 result.push(entity);
             }
             }
@@ -812,6 +816,7 @@ export class ClassifyService{
             entity.classify=timeOne;
             entity.title=art[t].title;
             entity.alias=art[t].alias;
+            entity.check=false;
             result.push(entity);
         }
         return result;
