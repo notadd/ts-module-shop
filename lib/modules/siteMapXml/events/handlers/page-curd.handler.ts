@@ -7,11 +7,12 @@ const clc=require('cli-color');
 export class PageCurdHandle implements IEventHandler<PageCurdEvent> {
     constructor(readonly pageService: PageService) {
     }
-    async handle(event: PageCurdEvent) {
+    async handle(event: PageCurdEvent):Promise<any> {
         console.log('start='+JSON.stringify(event));
         let array:number[]=event.pageEntity.array;
         //新增页面
         if(event.pageEntity.page!=null && event.pageEntity.page.id==null){
+            console.log(clc.greenBright('createPage='+JSON.stringify(event.pageEntity)));
             this.pageService.createPages(event.pageEntity.page,event.pageEntity.content);
         }
         //修改页面
@@ -24,6 +25,5 @@ export class PageCurdHandle implements IEventHandler<PageCurdEvent> {
             console.log('deleteArray='+JSON.stringify(event.pageEntity.array));
             this.pageService.deletePages(array);
         }
-
     }
 }
