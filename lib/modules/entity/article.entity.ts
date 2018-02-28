@@ -64,5 +64,6 @@ export class Article{
     createAt:string;
     updateAt:string;
     classifications:ClassifyEntity[];
+    check:boolean;
 
 }

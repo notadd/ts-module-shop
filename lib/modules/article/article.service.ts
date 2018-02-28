@@ -32,16 +32,17 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             }
             title= await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).getCount();
             resultAll.push(...newArray);
-        }else if(hidden==false){
+        }
+        if(hidden==false){
             console.log('false='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
-            title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull and hidden=false',{recycling:true}).getCount();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
+            title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=false',{recycling:true}).getCount();
             resultAll.push(...newresult);
-        }else if(hidden==undefined){
+        }
+        if(hidden==undefined){
             console.log('undefined='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling',{recycling:true}).orderBy('id',"ASC").skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling or recycling isnull',{recycling:true}).getCount();
-            console.log('title='+title);
             resultAll.push(...newresult);
         }
         return {articles:resultAll,totalItems:title};
