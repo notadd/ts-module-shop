@@ -15,6 +15,8 @@ import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ArticleCurdVm} from "./models/view/article-curd.vm";
+
+const clc=require('cli-color');
 @Resolver()
 export class SitemapResolver{
     constructor(private readonly articleService:ArticleService,
@@ -422,11 +424,11 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let result:string=`成功将${num}条数据置顶`;
             return result;
         }
+        console.log(clc.blueBright('articleCurd='+JSON.stringify(articleVM)));
         let resultArt=await this.sitemapService.articleCurd(articleVM);
-        console.log('resultArt='+JSON.stringify(resultArt));
-        let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
-        let result=await this.classifyService.TimestampArt(resultArt.articles);
-        return {pagination:resultPage,articles:result};
+        //let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        //let result=await this.classifyService.TimestampArt(resultArt.articles);
+       // return {pagination:resultPage,articles:result};
     }
 
     /**
