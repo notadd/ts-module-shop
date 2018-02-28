@@ -14,6 +14,18 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         errorMessage:'The current id corresponding to the data does not exist.',
         userMessage:'The current id corresponding to the data does not exist.',
     },
+    'remove:articles:removeSuccess':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'删除数据成功.',
+        userMessage:'删除数据成功',
+    },
+    'remove:articles:removeFailure':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'删除数据失败.',
+        userMessage:'删除数据失败',
+    },
     'create:publishedTime:lessThan':{
         type: 'BadRequest',
         httpStatus: HttpStatus.BAD_REQUEST,
