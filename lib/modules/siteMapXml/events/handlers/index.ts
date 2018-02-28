@@ -5,5 +5,6 @@ import {SitemapUpdateHandler} from "./sitemap-update.handler";
 import {PageCurdHandle} from "./page-curd.handler";
 import {ClassifyCurdEvent} from "./classify-curd.handler";
 import {ArticleCurdEvent} from "./article-curd.handler";
+import {TestCurdHandler} from "./test-curd.handler";
 
-export const EventHandlers=[/*PageDeleteHandler,PageCreateHandler,*/SitemapCreateHandler,SitemapUpdateHandler,PageCurdHandle,ClassifyCurdEvent,ArticleCurdEvent];
+export const EventHandlers=[/*PageDeleteHandler,PageCreateHandler,*/SitemapCreateHandler,SitemapUpdateHandler,PageCurdHandle,ClassifyCurdEvent,ArticleCurdEvent,TestCurdHandler];
