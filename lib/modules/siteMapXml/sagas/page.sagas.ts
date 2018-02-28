@@ -15,7 +15,7 @@ const clc=require('cli-color');
 const itemId='0';
 @Component()
 export class PageSagas{
-    //文章增删改合并修改生成xml文件
+    //文章、页面　增删改合并修改生成xml文件
     articleXml =(events$:EventObservable<any>):Observable<ICommand> =>{
         return events$.ofType(ArticleCurdEvents)
             .delay(1000)
@@ -33,7 +33,7 @@ export class PageSagas{
                 return new DeleteParamCommand(event.heroId,itemId);
             })
     };
-    //获取全部页面
+  /*  //获取全部页面
     getPages=(events$:EventObservable<any>):Observable<ICommand> =>{
         return events$.ofType(PageCurdEvent)
             .delay(1000)
@@ -57,7 +57,8 @@ export class PageSagas{
             .delay(1000)
             .map(event => {
                 console.log(clc.redBright('Inside [PageSagas] Saga getClassify'));
+                console.log('commandValue='+JSON.stringify(new GetClassifyParamCommand({useFor:event.classify.useFor})));
                 return new GetClassifyParamCommand({useFor:event.classify.useFor});
             })
-    };
+    };*/
 }
