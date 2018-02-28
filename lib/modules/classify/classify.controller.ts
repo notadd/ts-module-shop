@@ -151,7 +151,7 @@ export class ClassifyController{
     @ApiResponse({status:500,description:'Internal server error'})
     @Post('getArticles')
     public async getArticleByClassifyId(@Response() res,@Body() getId:GetClassifyLimit){
-        let result:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(getId.id,getId.limitNumber);
+        let result:ArticleEntity[]=await this.classifyService.getArticelsByClassifyId(getId.id,getId.limitNumber).then((a=>{return a.articles}));
         return res.status(HttpStatus.OK).send(JSON.stringify(result));
     }
     /**

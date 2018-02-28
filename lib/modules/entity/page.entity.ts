@@ -28,4 +28,5 @@ export class Page{
    classify:string;
    createAt:string;
    updateAt:string;
+   check:boolean;
 }
