@@ -451,21 +451,12 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let amap=new Map();
             amap=this.objToStrMap(createArt);
             let useFor:string=amap.get('useFor');
-            //let result;
             let id:number=amap.get('id');
             if(id==null || id==0){
                 id=1;
             }
             classifyVM.useFor=useFor;
             classifyVM.createClassify=amap.get('createClass');
-           /* if(useFor=='art'){
-                let newClass:ClassifyEntity=amap.get('createClass');
-                result=this.classifyService.createClassifyArt(newClass,id);
-            }else if(useFor=='page'){
-                let newClass:PageClassifyEntity=amap.get('createClass');
-                result=this.classifyService.createClassifyPage(newClass,id);
-            }*/
-           // return result;
         }
         let updateClass=map.get('updateClass');
         if(updateClass!=null || updateClass !=undefined){
@@ -476,19 +467,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             if(id==null || id==0){
                 id=1;
             }
-            //let result;
-            //let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.updateClassify=amap.get('updateClass');
-           // let result=this.sitemapService.classifyCurd(classifyVM);
-           /* if(useFor=='art'){
-                let newClass:ClassifyEntity=amap.get('updateClass');
-                result=this.classifyService.updateClassifyArt(newClass,id);
-            }else if(useFor=='page'){
-                let newClass:PageClassifyEntity=amap.get('updateClass');
-                result=this.classifyService.updateClassifyPage(newClass,id);
-            }*/
-            //return result;
         }
         let deleteClassifyById=map.get('deleteClassifyById');
         if(deleteClassifyById!=null || deleteClassifyById !=undefined){
@@ -500,17 +480,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
                 id=1;
             }
             if(id==1) throw new MessageCodeError('drop:table:ById1');
-           // let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.deleteClassify=id;
-            //let result=this.sitemapService.classifyCurd(classifyVM);
-           // let result;
-          /*  if(useFor=='art'){
-                result=this.classifyService.deleteMethodFirst(id);
-            }else if(useFor=='page'){
-                result=this.classifyService.deleteMethodSecond(id);
-            }*/
-            //return result;
         }
         let mobileTheClassify=map.get('mobileTheClassify');
         if(mobileTheClassify!=null || mobileTheClassify !=undefined){
@@ -522,11 +493,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             if(parentId==null || parentId==0){
                 parentId=1;
             }
-            //let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
-            //let result=this.sitemapService.classifyCurd(classifyVM);
-
         }
         this.sitemapService.classifyCurd(classifyVM);
         let result;
@@ -536,8 +504,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             result=this.classifyService.findAllClassifyPage(1);
         }
         return result;
-          //return result;
-
     }
     @Mutation()
     async PageCUD(obj,arg) {
@@ -569,10 +535,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-
-            //let resultPage= await this.pageService.createPages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-          /*  PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
         let updatePages=map.get('updatePages');
         if(updatePages != null || updatePages != undefined){
@@ -596,10 +558,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
-            //let resultPage=await this.pageService.updatePages(page,contents,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-           /* PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
-
         }
         let deletePages=map.get('deletePages');
         if(deletePages != null || deletePages != undefined) {
@@ -609,15 +567,12 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.limit=amap.get('limitNum');
             createParam.pages=amap.get('pages');
             createParam.array=array;
-
-           // let resultPage=await this.pageService.deletePages(array,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-
         }
-        this.sitemapService.pageCurd(createParam).then(a=>{console.log('执行时间='+new Date().getTime())});
-        let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
-        PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
-        pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);
-        return{pagination:pagination,pages:PageReturn};
+        this.sitemapService.pageCurd(createParam);//.then(a=>{console.log('执行时间='+new Date().getTime())});
+       // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
+        //PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
+        //pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);
+        //return{pagination:pagination,pages:PageReturn};
     }
     /**
      * JSON----Map
