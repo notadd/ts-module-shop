@@ -16,7 +16,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
         if(!command.classify.getAllClassify){
             //增加、修改、删除、移动分类
             page.createClassify(command.classify);
-            console.log('command='+JSON.stringify(command));
         }
         page.commit();
         resolver();

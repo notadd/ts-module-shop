@@ -22,8 +22,6 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         if(!command.article.getAllArticles){
             //增加、修改、删除、文章
             page.createArticle(command.article);
-            console.log("Article#########"+JSON.stringify(command.article));
-            console.log("commandTime="+new Date());
         }
         //分页获取全部文章：可以选择是否隐藏
         if(command.article.getAllArticles && command.article.getArticles.getArticleAll){
