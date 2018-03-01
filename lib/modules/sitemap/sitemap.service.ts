@@ -36,10 +36,6 @@ export class SitemapService{
             if(array_baidu_sitemap_options['lc_post_limit1000']) sitemap.lc_post_limit1000=array_baidu_sitemap_options['lc_post_limit1000'];
             await this.siteRepository.updateById(1,sitemap);
         }
-    /*    if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']){
-            this.buildSitemapXml(url);
-        }*/
-        //this.tableObserver.init(url);
     }
     public async UpdateXMLFile($mes=0,url:string){
         let sitemap:SitemapEntity=await this.siteRepository.findOneById(1);
