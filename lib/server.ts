@@ -3,6 +3,12 @@ import { NestFactory } from '@nestjs/core';
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {ApplicationModule} from "./modules/app.module";
 
+/**
+ * 跨域问题
+ * @param req
+ * @param res
+ * @param next
+ */
 const cross =(req,res,next) =>{
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control-Allow-Methods","GET,PUT,POST,DELETE,OPTIONS");

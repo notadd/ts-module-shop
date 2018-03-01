@@ -10,7 +10,7 @@ import {pageClassifyProvider} from "../classify/respository.provider";
 
 @Module({
     modules:[DatabaseModule,HistoryModule,ClassifyModule],
-    controllers:[PageController],
+ /*   controllers:[PageController],*/
     components:[...pagerespositoryProvider,...contentrespositoryProvider,...pageClassifyProvider,PageService],
     exports:[PageService]
 })
