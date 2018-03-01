@@ -2,15 +2,13 @@ import {Mutation, Query, Resolver} from "@nestjs/graphql";
 import {ArticleService} from "../article/article.service";
 import {Article, ArticleEntity} from "../entity/article.entity";
 import {ClassifyService} from "../classify/classify.service";
-import {ClassifyEntity} from "../entity/classify.entity";
 import {PageService} from "../page/page.service";
 import {Page, PageEntity} from "../entity/page.entity";
-import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
 import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {CreateXmlVm} from "./models/view/create-xml-vm";
-import {SitemapXMLService} from "./sitemap.service";
+import {CqrsService} from "./cqrs.service";
 import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
@@ -18,11 +16,11 @@ import {ArticleCurdVm} from "./models/view/article-curd.vm";
 
 const clc=require('cli-color');
 @Resolver()
-export class SitemapResolver{
+export class CqrsResolver{
     constructor(private readonly articleService:ArticleService,
                 private readonly classifyService:ClassifyService,
                 private readonly pageService:PageService,
-                private readonly sitemapService:SitemapXMLService
+                private readonly sitemapService:CqrsService
     ){}
 
     /**
@@ -147,9 +145,9 @@ export class SitemapResolver{
         }
         articleVM.getAllArticles=true;
         let resultArt=await this.sitemapService.articleCurd(articleVM);
-        let resultArtAgain=await this.articleService.getArticleAll(articleVM.limitNum,articleVM.hidden,articleVM.pages);
-        resultPage=await this.classifyService.pageServiceArt(resultArtAgain.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
-        result=await this.classifyService.TimestampArt(resultArtAgain.articles);
+       // let resultArtAgain=await this.articleService.getArticleAll(articleVM.limitNum,articleVM.hidden,articleVM.pages);
+        resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        result=await this.classifyService.TimestampArt(resultArt.articles);
         return {pagination:resultPage,articles:result};
 
     }
@@ -246,12 +244,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             classifyVM.useFor=useFor;
             classifyVM.getAllClassify=true;
             let result=this.sitemapService.getClassify(classifyVM);
-           /* let result;
-            if(useFor=='art'){
-                result=this.classifyService.findAllClassifyArt(id);
-            }else if(useFor=='page'){
-                result=this.classifyService.findAllClassifyPage(id);
-            }*/
             return result;
         }
     }
@@ -497,13 +489,13 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
         }
         this.sitemapService.classifyCurd(classifyVM);
-        let result;
+      /*  let result;
         if(classifyVM.useFor=='art'){
             result=this.classifyService.findAllClassifyArt(1);
         }else if(classifyVM.useFor=='page'){
             result=this.classifyService.findAllClassifyPage(1);
         }
-        return result;
+        return result;*/
     }
     @Mutation()
     async PageCUD(obj,arg) {
