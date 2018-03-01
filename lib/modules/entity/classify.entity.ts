@@ -9,7 +9,7 @@ export class ClassifyEntity{
     //分类Id
     @PrimaryGeneratedColumn() id:number;
     //分类名称
-    @Column({nullable:false,length:120}) classifyName:string;
+    @Column({nullable:false,length:120}) title:string;
     //分类别名
     @Column({nullable:false,length:120}) classifyAlias:string;
     //内链
@@ -24,9 +24,9 @@ export class ClassifyEntity{
     @Column({nullable:true}) level:number;
 
     @OneToMany(type => ClassifyEntity,ClassifyEntity =>ClassifyEntity.parent,{cascadeInsert:true})
-    childrens: ClassifyEntity[];
+    children: ClassifyEntity[];
 
-    @ManyToOne(type => ClassifyEntity,ClassifyEntity =>ClassifyEntity.childrens,{cascadeInsert:true})
+    @ManyToOne(type => ClassifyEntity,ClassifyEntity =>ClassifyEntity.children,{cascadeInsert:true})
     parent:ClassifyEntity;
     //创建时间
     @CreateDateColumn() createAt:Date;

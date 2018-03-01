@@ -9,7 +9,7 @@ export class SitemapEntity{
     lc_XML_FileName:string;
     //生成xml地图
     @Column()
-    lc_is_Enabled_Html_Sitemap:boolean;
+    lc_is_Enabled_XML_Sitemap:boolean;
     //只更新最近文章(1000以内)
     @Column()
     lc_post_limit1000:boolean;
@@ -22,6 +22,10 @@ export class SitemapEntity{
     //当发布文章时更新
     @Column()
     lc_is_update_sitemap_when_post:boolean;
+    //是否开启
+    @Column()
+    open:boolean;
     //创建时间
     @CreateDateColumn() createAt:Date;
+
 }

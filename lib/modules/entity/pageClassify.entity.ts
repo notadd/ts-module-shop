@@ -8,7 +8,7 @@ export class PageClassifyEntity{
     //分类Id
     @PrimaryGeneratedColumn() id:number;
     //分类名称
-    @Column({nullable:false,length:120}) classifyName:string;
+    @Column({nullable:false,length:120}) title:string;
     //分类别名
     @Column({nullable:false,length:120}) classifyAlias:string;
     //内链
@@ -21,9 +21,9 @@ export class PageClassifyEntity{
     @Column({nullable:true}) groupId:number;
 
     @OneToMany(type => PageClassifyEntity,PageClassifyEntity =>PageClassifyEntity.parent,{cascadeInsert:true})
-    childrens: PageClassifyEntity[];
+    children: PageClassifyEntity[];
 
-    @ManyToOne(type => PageClassifyEntity,PageClassifyEntity =>PageClassifyEntity.childrens,{cascadeInsert:true})
+    @ManyToOne(type => PageClassifyEntity,PageClassifyEntity =>PageClassifyEntity.children,{cascadeInsert:true})
     parent:PageClassifyEntity;
 
     //创建时间
