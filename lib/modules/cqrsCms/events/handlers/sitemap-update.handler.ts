@@ -7,9 +7,12 @@ const clc=require('cli-color');
 export  class SitemapUpdateHandler implements IEventHandler<SitemapUpdateEvent>{
     constructor(readonly sitemapService:SitemapService){}
     async handle(event:SitemapUpdateEvent){
-        let url:string='www.xml.xml.com';
-        this.sitemapService.UpdateXMLFile(0,url);
         console.log(clc.yellowBright('Async update SitemapFoundItemEvent...'));
+        let url:string='www.baidu.com';
+        const result=await this.sitemapService.findSitemap(1).then(a=>{return a});
+        if(result.open){
+            this.sitemapService.UpdateXMLFile(0,url);
+        }
     }
 
 }

@@ -7,6 +7,7 @@ const clc=require('cli-color');
 export class SitemapCreateHandler implements IEventHandler<SitemapCreateEvent>{
     constructor(readonly sitemapService:SitemapService){}
     async handle(event:SitemapCreateEvent){
+        console.log(clc.yellowBright('Async create SitemapFoundItemEvent...'));
         let url:string='www.baidu.com';
         let array_baidu_sitemap_options ={
             lc_XML_FileName:event.createXml.lc_XML_FileName,
@@ -14,8 +15,8 @@ export class SitemapCreateHandler implements IEventHandler<SitemapCreateEvent>{
             lc_is_update_sitemap_when_post:event.createXml.lc_is_update_sitemap_when_post,
             lc_post_limit1000:event.createXml.lc_post_limit1000,
             lc_page_select:event.createXml.lc_page_select,
-            lc_post_select:event.createXml.lc_post_select};
+            lc_post_select:event.createXml.lc_post_select,
+            open:event.createXml.open};
         this.sitemapService.commitXML(array_baidu_sitemap_options,url);
-        console.log(clc.yellowBright('Async create SitemapFoundItemEvent...'));
     }
 }
