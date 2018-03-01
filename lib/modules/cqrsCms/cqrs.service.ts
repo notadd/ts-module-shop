@@ -18,13 +18,10 @@ import {ClassifyCurdEvents} from "./events/impl/classify-curd.events";
 import {GetArticleParamCommand} from "./commands/impl/get-article-param.command";
 import {PageService} from "../page/page.service";
 
-
 @Component()
-export class SitemapXMLService{
+export class CqrsService{
     //CommandBus是一个命令流。它将命令委托给相应的处理程序。每个命令都必须有相应的命令处理程序:
-    constructor(private readonly commonbus:CommandBus,
-                private readonly classifyService: ClassifyService,
-                private readonly pageService:PageService){}
+    constructor(private readonly commonbus:CommandBus){}
     async createXml(createxmlDto:CreateXmlVm){
         const result= await this.commonbus.execute(new CreateParamCommand(createxmlDto));
         return result;
@@ -39,10 +36,6 @@ export class SitemapXMLService{
      */
     async pageCurd(updateDto:CreatePageVm){
         this.commonbus.execute(new PageParamCommand(updateDto));
-       // const result=await this.commonbus.execute(new GetPageParamCommand({getAll:true,limit:updateDto.limit,pages:updateDto.pages})).then(a=>{return a});
-        //let returnValue=await this.pageService.getAllPage(updateDto.limit,updateDto.pages);
-       // console.log('执行另一个函数='+JSON.stringify(returnValue));
-      //  return returnValue;
     }
     /**
      * 获取页面
@@ -62,18 +55,6 @@ export class SitemapXMLService{
      */
     async classifyCurd(getClassifyDto:ClassifyCurdVm){
         const result= this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
-        //const result=this.commonbus.execute(new GetClassifyParamCommand(getClassifyDto));
-        //this.sagas.getClassification(ClassifyCurdEvents).filter;
-
-     /*   console.log('start');
-        if(getClassifyDto.useFor=='page'){
-            result=await this.classifyService.findAllClassifyPage(1);
-        }
-        //文章分类无极限
-        if(getClassifyDto.useFor=='art'){
-            result=await this.classifyService.findAllClassifyArt(1);
-        }*/
-        console.log('result='+result);
         return result;
 
     }
@@ -88,7 +69,6 @@ export class SitemapXMLService{
      * @returns {Promise<void>}
      */
     async articleCurd(getArticleDto:ArticleCurdVm){
-        console.log('start='+JSON.stringify(getArticleDto));
         const result=this.commonbus.execute(new ArticleParamCommand(getArticleDto));
         return result;
     }
