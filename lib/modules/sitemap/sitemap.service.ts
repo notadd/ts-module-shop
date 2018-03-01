@@ -8,7 +8,7 @@ import {SitemapEntity} from "../entity/sitemap.entity";
 export class SitemapService{
     constructor(@Inject('ArticleRepositoryToken') private readonly artRepository:Repository<ArticleEntity>,
                 @Inject('PageRepositoryToken') private readonly pageRepository:Repository<PageEntity>,
-                @Inject('SiteRepositoryToken') private readonly siteRepository:Repository<SitemapEntity>,
+                @Inject('SiteRepositoryToken') private readonly siteRepository:Repository<SitemapEntity>
                ){}
     public async commitXML(array_baidu_sitemap_options,url:string){
         let sitemap:SitemapEntity=await this.siteRepository.findOneById(1);
@@ -27,18 +27,36 @@ export class SitemapService{
                 fileName='sitemap_baidu';
             }else{fileName='sitemap';}
             sitemap.lc_XML_FileName=fileName;
-            console.log('array='+JSON.stringify(array_baidu_sitemap_options));
+            if(array_baidu_sitemap_options['open']) sitemap.open=array_baidu_sitemap_options['open'];
+            console.log('open='+array_baidu_sitemap_options['open']);
+            if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']) sitemap.lc_is_Enabled_XML_Sitemap=array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap'];
+            if(array_baidu_sitemap_options['lc_page_select']) sitemap.lc_page_select=array_baidu_sitemap_options['lc_page_select'];
+            if(array_baidu_sitemap_options['lc_post_select']) sitemap.lc_post_select=array_baidu_sitemap_options['lc_post_select'];
+            if(array_baidu_sitemap_options['lc_is_update_sitemap_when_post']) sitemap.lc_is_update_sitemap_when_post=array_baidu_sitemap_options['lc_is_update_sitemap_when_post'];
+            if(array_baidu_sitemap_options['lc_post_limit1000']) sitemap.lc_post_limit1000=array_baidu_sitemap_options['lc_post_limit1000'];
             await this.siteRepository.updateById(1,sitemap);
         }
-        if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']){
+    /*    if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']){
             this.buildSitemapXml(url);
-        }
+        }*/
         //this.tableObserver.init(url);
     }
     public async UpdateXMLFile($mes=0,url:string){
-        this.buildSitemapXml(url);
+        let sitemap:SitemapEntity=await this.siteRepository.findOneById(1);
+        if(sitemap.lc_is_Enabled_XML_Sitemap){
+            this.buildSitemapXml(url);
+        }
     }
 
+    /**
+     * 获取sitemap实体
+     * @param {number} id
+     * @returns {Promise<SitemapEntity>}
+     */
+    public async findSitemap(id:number){
+        let sitemap:SitemapEntity=await this.siteRepository.findOneById(id);
+        return sitemap;
+    }
     /**
      * 函数判断
      * @returns {any[]}

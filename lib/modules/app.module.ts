@@ -38,10 +38,10 @@ import {graphiqlExpress,graphqlExpress} from "apollo-server-express";
 import {RequestMethod} from "@nestjs/common";
 import {GraphQLFactory,GraphQLModule} from "@nestjs/graphql";
 import {NestModule} from "@nestjs/common";
-import {SitemapModule} from "./siteMapXml/sitemap.module";
+import {CqrsModule} from "./cqrsCms/cqrs.module";
 
 @Module({
-    modules :[GraphQLModule,SitemapModule/*DatabaseModule,SitemapModule*/],
+    modules :[GraphQLModule,CqrsModule/*DatabaseModule,SitemapModule*/],
 })
 
 export class ApplicationModule implements NestModule{
