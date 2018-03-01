@@ -81,10 +81,6 @@ export class CqrsResolver{
             articleVM.getArticles={getArticleAll:true,hidden:amap.get('hidden')};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-           // let resultArt=await this.sitemapService.articleCurd(articleVM);
-            //let resultArt=await this.articleService.getArticleAll(amap.get('limitNum'),amap.get('hidden'),amap.get('pages')).then(a=>{return a});
-          //  resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-          //  result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let keywordsSerach=map.get('keywordsSerach');
         if(keywordsSerach!=null || keywordsSerach!=undefined){
@@ -93,10 +89,6 @@ export class CqrsResolver{
             articleVM.getArticles={keywordsSerach:amap.get('keywords')};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-            //let resultArt=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            // let resultArt=await this.articleService.serachArticles(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let recycleFind=map.get('recycleFind');
         if(recycleFind!=null || recycleFind !=undefined){
@@ -105,9 +97,6 @@ export class CqrsResolver{
             articleVM.getArticles={recycleFind:true};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-            //let resultArt=await this.articleService.recycleFind(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //result=await this.classifyService.TimestampArt(resultArt.articles);
-            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
         }
         let reductionGetByClassifyId=map.get('reductionGetByClassifyId');
         if(reductionGetByClassifyId!=null || reductionGetByClassifyId !=undefined){
@@ -116,9 +105,6 @@ export class CqrsResolver{
             articleVM.getArticles={reductionGetByClassifyId:amap.get('id')};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-            // let resultArt=await this.articleService.reductionClassity(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let getArticleByClassifyId=map.get('getArticleByClassifyId');
         //未知是否添加是否置顶选项
@@ -128,9 +114,6 @@ export class CqrsResolver{
             articleVM.getArticles={getArticleByClassifyId:amap.get('id')};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-            //let resultArt=await this.classifyService.getArticelsByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('show'),amap.get('pages')).then(a=>{return a});
-            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //result=await this.classifyService.TimestampArt(resultArt.articles);
         }
         let findTopPlace=map.get('findTopPlace');
         if(findTopPlace!=null || findTopPlace !=undefined){
@@ -139,13 +122,9 @@ export class CqrsResolver{
             articleVM.getArticles={findTopPlace:true};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
-            //let resultArt=await this.articleService.findTopPlace(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            //result=await this.classifyService.TimestampArt(resultArt.articles)
         }
         articleVM.getAllArticles=true;
         let resultArt=await this.sitemapService.articleCurd(articleVM);
-       // let resultArtAgain=await this.articleService.getArticleAll(articleVM.limitNum,articleVM.hidden,articleVM.pages);
         resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         result=await this.classifyService.TimestampArt(resultArt.articles);
         return {pagination:resultPage,articles:result};
@@ -171,38 +150,24 @@ export class CqrsResolver{
             let amap=new Map();
             amap=this.objToStrMap(showNext);
             articleVM.getArticles={showNext:amap.get('id')};
-          /*  let entity:ArticleEntity[]=await this.sitemapService.articleCurd(articleVM);
-            //let entity:ArticleEntity[]=await this.classifyService.showNextTitle(amap.get('id')).then(a=>{return a});
-             result=await this.classifyService.TimestampArt(entity);
-            return result;*/
         }
         let getArticleById=map.get('getArticleById');
         if(getArticleById!=null || getArticleById !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleById);
             articleVM.getArticles={getArticleById:amap.get('id')};
-          /*  let entity:ArticleEntity[]= await this.articleService.getArticleById(amap.get('id'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;*/
         }
         let superiorArticle=map.get('superiorArticle');
         if(superiorArticle!=null || superiorArticle !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(superiorArticle);
             articleVM.getArticles={superiorArticle:amap.get('id')};
-           /* let entity:ArticleEntity[]=await t        articleVM.getAllArticles=true;
-his.classifyService.showBeforeTitle(amap.get('id'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;*/
         }
         let getCurrentClassifyArticles=map.get('getCurrentClassifyArticles');
         if(getCurrentClassifyArticles!=null || getCurrentClassifyArticles !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getCurrentClassifyArticles);
             articleVM.getArticles={getCurrentClassifyArticles:amap.get('id')};
-          /*  let entity:ArticleEntity[]=await this.classifyService.showCurrentArticles(amap.get('id'));
-            const result=this.classifyService.TimestampArt(entity);
-            return result;*/
         }
         //未定是否开放
       /*  let getLevelByClassifyId=map.get('getLevelByClassifyId');
@@ -270,11 +235,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             pageParam.getAll=true;
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-            /*let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
-            //let resultPage=await this.pageService.getAllPage(amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,pageParam.limit,pageParam.pages);*/
-
         }
         let serachPages=map.get('serachPages');
         if(serachPages!=null || serachPages !=undefined){
@@ -284,10 +244,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             pageParam.keywords=amap.get('keywords');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-           /* let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
-            //let resultPage=await this.pageService.serachKeywords(amap.get('keywords'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
         let getPagesByClassifyId=map.get('getPagesByClassifyId');
         if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
@@ -297,10 +253,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             pageParam.classifyId=amap.get('id');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
-           /* let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
-           // let resultPage=await this.pageService.findPageByClassifyId(amap.get('id'),amap.get('limitNum'),amap.get('pages')).then(a=>{return a});
-            PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-            pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,amap.get('limitNum'),amap.get('pages'));*/
         }
         let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
         PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
@@ -327,7 +279,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let pageParam:GetPageVm=new GetPageVm();
             pageParam.classifyId=amap.get('id');
             const result=this.sitemapService.getPages(pageParam);
-            //const result=this.pageService.findPageById(amap.get('id'));
             return result;
         }
     }
@@ -358,9 +309,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             }
             let newArticle:ArticleEntity=art;
             articleVM.createArticle=newArticle;
-            /*const result=await this.articleService.createArticle(newArticle).then(a=>{return a});
-            let final:string=JSON.stringify(result);
-            return final;*/
         }
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
@@ -371,9 +319,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             }
             let newArticle:ArticleEntity=art;
             articleVM.updateArticle=newArticle;
-           /* const result=await this.articleService.updateArticle(newArticle).then(a=>{return a});
-            let final:string=JSON.stringify(result);
-            return final;*/
         }
         let deleteById=map.get('deleteById');
         if(deleteById!=null || deleteById !=undefined){
@@ -381,11 +326,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             amap=this.objToStrMap(deleteById);
             let array:[number]=amap.get('id');
             articleVM.deleteById=array;
-            //let result=await this.sitemapService.articleCurd(articleVM);
-            //return result;
-           /* let result:number=await this.articleService.deleteArticles(array).then(a=>{return a});
-            let strResult:string=`已成功将${JSON.stringify(result)}条数据放入回收站`;
-            return strResult;*/
         }
         let recycleDelete=map.get('recycleDelete');
         if(recycleDelete!=null || recycleDelete !=undefined){
@@ -393,9 +333,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             amap=this.objToStrMap(recycleDelete);
             let array:[number]=amap.get('id');
             articleVM.recycleDelete=array;
-           /* let num:number=await this.articleService.recycleDelete(array);
-            let string=`已经成功删除${num}条数据`;
-            return string;*/
         }
         let reductionArticle=map.get('reductionArticle');
         if(reductionArticle!=null || reductionArticle !=undefined){
@@ -403,9 +340,6 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             amap=this.objToStrMap(reductionArticle);
             let array:[number]=amap.get('id');
             articleVM.reductionArticle=array;
-           /* const num=await this.articleService.reductionArticle(array);
-            let result:string=`成功将${num}条数据还原`;
-            return result;*/
         }
         //批量反向置顶,暂不修改
         let classifyTopPlace=map.get('classifyTopPlace');
@@ -417,8 +351,8 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             let result:string=`成功将${num}条数据置顶`;
             return result;
         }
-        console.log(clc.blueBright('articleCurd='+JSON.stringify(articleVM)));
-        let resultArt=await this.sitemapService.articleCurd(articleVM);
+        console.log(clc.blueBright('/****ArticleCU*******/='+JSON.stringify(articleVM)));
+        await this.sitemapService.articleCurd(articleVM);
         //let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         //let result=await this.classifyService.TimestampArt(resultArt.articles);
        // return {pagination:resultPage,articles:result};
@@ -488,6 +422,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             classifyVM.useFor=useFor;
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
         }
+        console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(classifyVM)));
         this.sitemapService.classifyCurd(classifyVM);
       /*  let result;
         if(classifyVM.useFor=='art'){
@@ -560,6 +495,7 @@ his.classifyService.showBeforeTitle(amap.get('id'));
             createParam.pages=amap.get('pages');
             createParam.array=array;
         }
+        console.log(clc.blueBright('/****PageCUD*******/='+JSON.stringify(createParam)));
         this.sitemapService.pageCurd(createParam);//.then(a=>{console.log('执行时间='+new Date().getTime())});
        // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
         //PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
