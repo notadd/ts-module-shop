@@ -22,6 +22,7 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async getAllPage(limit?:number,page?:number){
+        console.log('获取时间='+new Date().getTime());
         let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").skip(limit*(page-1)).take(limit).getMany();
         let title:number=await this.repository.createQueryBuilder().getCount();
         return {pages:pages,totalItems:title};
@@ -136,7 +137,7 @@ export class PageService{
         if(entity==null) throw new MessageCodeError('delete:page:deleteById');
         let children:PageContentEntity[]=await this.contentRepository.createQueryBuilder().where('"parentId"= :parentId',{parentId:entity.id}).orderBy('id','ASC').getMany();
         entity.contents=children;
-        entity.classify=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:entity.classifyId}).getOne().then(a=>{return a.classifyName});
+        entity.classify=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:entity.classifyId}).getOne().then(a=>{return a.title});
         return entity;
     }
 
@@ -169,10 +170,10 @@ export class PageService{
         let array:number[]=[];
         for(let t in firstArray){
             array.push(firstArray[t].id);
-            if(firstArray[t].childrens.length>0){
-                for(let h in firstArray[t].childrens){
-                    array.push(firstArray[t].childrens[h].id);
-                    array.push(...await this.getClassifyId(firstArray[t].childrens[h].id));
+            if(firstArray[t].children.length>0){
+                for(let h in firstArray[t].children){
+                    array.push(firstArray[t].children[h].id);
+                    array.push(...await this.getClassifyId(firstArray[t].children[h].id));
                 }
             }
         }

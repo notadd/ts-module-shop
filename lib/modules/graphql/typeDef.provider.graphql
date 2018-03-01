@@ -120,7 +120,7 @@ type Classify{
     #分类Id
     id:Int,
     #分类名称
-    classifyName:String,
+    title:String,
     #分类别名
     classifyAlias:String,
     #内链
@@ -132,12 +132,12 @@ type Classify{
     #父节点
     groupId:Int,
     #子节点
-    childrens:[Classify],
+    children:[Classify],
 }
 input ClassifyCreate{
     useFor:useFor
     #分类名称
-    classifyName:String!,
+    title:String!,
     #分类别名
     classifyAlias:String!,
     #内链
@@ -153,7 +153,7 @@ input ClassifyUpdate{
     #分类id
     id:Int,
     #分类名称
-    classifyName:String,
+    title:String,
     #分类别名
     classifyAlias:String,
     #内链
@@ -343,7 +343,9 @@ input createXml{
     #链接包括：文章
     lc_post_select:Boolean,
     #链接包括：页面
-    lc_page_select:Boolean
+    lc_page_select:Boolean,
+    #是否开启
+    open:Boolean
 }
 type Query{
     #Get the articles by paging.
@@ -365,7 +367,7 @@ type Mutation{
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray,limitNum:Int
         pages:Int,hidden:Boolean):String
     #the method to modify classification,return classify array
-    ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):[Classify]
+    ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):String
     #the method to modify page,return page array
-    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):PagePagination,
+    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):String,
 }
