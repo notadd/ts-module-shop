@@ -9,7 +9,7 @@ import {ClassifyModule} from "../classify/classify.module";
 
 @Module({
     modules:[DatabaseModule,HistoryModule,ClassifyModule],
-    controllers:[ArticleController],
+   /* controllers:[ArticleController],*/
     components:[...respositoryProvider,ArticleService],
     exports:[ArticleService],
 })

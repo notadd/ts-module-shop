@@ -1,4 +1,4 @@
-import {Component, Inject} from "@nestjs/common";
+import {Component, HttpException, Inject} from "@nestjs/common";
 import {getManager, Repository} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
@@ -12,7 +12,7 @@ import {PagerService} from "../database/common.paging";
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
-            private readonly historyService:HistoryService,
+            //private readonly historyService:HistoryService,
             private readonly classifyService:ClassifyService){}
 
     /**
@@ -152,22 +152,17 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {[number]} array
      * @returns {Promise<number>}
      */
-    async recycleDelete(array:number[]):Promise<number>{
-        let count:number=0;
-        let history:HistoryEntity[] =[];
-        for(let t in array){
-            let article:ArticleEntity=await this.respository.findOneById(array[t]);
-            if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
-            let id:number=article.id;
-            let his:HistoryEntity =new HistoryEntity();
-            his.articleId =id;
-            his.articleName =article.name;
-            this.respository.deleteById(id);
-            count++;
-            history.push(his);
+    async recycleDelete(array:number[]){
+        let result;
+        try{
+             result=await this.respository.createQueryBuilder().delete()
+                 .from(ArticleEntity).whereInIds(array)
+                 .output('id').execute()
+                 .then(a=>{return a});
+        }catch (err){
+            throw new HttpException('删除错误'+err.toString(),401);
         }
-        this.historyService.createHistory(history);
-        return count;
+        return result;
     }
 
     /**
@@ -188,6 +183,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             num++;
 
         }
+        //批量修改的方法
+        //await this.respository.createQueryBuilder().update().set(ArticleEntity).whereInIds(array).output('id').execute();
         return num;
     }
 
