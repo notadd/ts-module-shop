@@ -277,7 +277,7 @@ export class CqrsResolver{
             let amap=new Map();
             amap=this.objToStrMap(findPageById);
             let pageParam:GetPageVm=new GetPageVm();
-            pageParam.classifyId=amap.get('id');
+            pageParam.id=amap.get('id');
             const result=this.sitemapService.getPages(pageParam);
             return result;
         }
@@ -452,10 +452,12 @@ export class CqrsResolver{
             page.classify=amap.get('classify');
             page.classifyId=amap.get('classifyId');
             let contents:PageContentEntity[]=[];
-            let strFinal:string[]=amap.get('content');
+            let strFinal:ContentMap[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
-                newContent.content=strFinal[t];
+                newContent.content=strFinal[t].content;
+               // newContent.path=strFinal[t].path;
+                //newContent.num=strFinal[t].num;
                 contents.push(newContent);
             }
             createParam.page=page;
@@ -479,6 +481,8 @@ export class CqrsResolver{
                 let newContent:PageContentEntity=new PageContentEntity;
                 newContent.content=strFinal[t].content;
                 newContent.id=strFinal[t].id;
+                //newContent.path=strFinal[t].path;
+                //newContent.num=strFinal[t].num;
                 contents.push(newContent);
             }
             createParam.page=page;
