@@ -2,17 +2,12 @@ import {Component, HttpException, Inject} from "@nestjs/common";
 import {getManager, Repository} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
-import {HistoryEntity} from "../entity/history.entity";
-import {HistoryService} from "../history/history.service";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
-import {PageClassifyEntity} from "../entity/pageClassify.entity";
-import {PagerService} from "../database/common.paging";
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
-            //private readonly historyService:HistoryService,
             private readonly classifyService:ClassifyService){}
 
     /**
@@ -132,8 +127,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =article;
           await this.respository.updateById(newArt.id,newArt);
-         // let result=await this.respository.createQueryBuilder().update(ArticleEntity).set(newArt).where('"id"= :id',{id:newArt.id}).output('id').execute().then(a=>{return a});
-          //return result;
       }
 
     /**
@@ -181,7 +174,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let newArticle:ArticleEntity=article;
             this.respository.updateById(newArticle.id,newArticle);
             num++;
-
         }
         //批量修改的方法
         //await this.respository.createQueryBuilder().update().set(ArticleEntity).whereInIds(array).output('id').execute();
