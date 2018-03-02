@@ -17,7 +17,8 @@ export class PageEntity{
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
-   /* @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.pages)*/
+    //页面内容
+    @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.page)
     contents:PageContentEntity[];
 }
 export class Page{
