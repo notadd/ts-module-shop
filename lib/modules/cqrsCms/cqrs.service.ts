@@ -35,7 +35,8 @@ export class CqrsService{
      * @returns {Promise<any>}
      */
     async pageCurd(updateDto:CreatePageVm){
-        this.commonbus.execute(new PageParamCommand(updateDto));
+       const result=await this.commonbus.execute(new PageParamCommand(updateDto));
+       return result;
     }
     /**
      * 获取页面

@@ -303,11 +303,29 @@ input UpdatePage{
     #页面别名
     alias:String,
     #页面内容
-    content:[ContentArray],
+    content:[String],
     #页面分类名称
     classify:String,
     #页面分类id
     classifyId:Int,
+    #分页
+    limitNum:Int
+    #第几页
+    pages:Int
+}
+input CreatePage{
+    #页面id
+    id:Int,
+    #页面名称
+    title:String!,
+    #页面别名
+    alias:String!,
+    #页面内容
+    content:[String],
+    #页面分类名称
+    classify:String,
+    #页面分类id
+    classifyId:Int!,
     #分页
     limitNum:Int
     #第几页
@@ -357,5 +375,5 @@ type Mutation{
     #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):String
     #the method to modify page,return page array
-    PageCUD(createPages:UpdatePage,updatePages:UpdatePage,deletePages:Array):String,
+    PageCUD(createPages:CreatePage,updatePages:UpdatePage,deletePages:Array):String,
 }
