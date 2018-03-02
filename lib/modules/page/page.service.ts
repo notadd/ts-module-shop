@@ -1,4 +1,4 @@
-import {Component, Inject} from "@nestjs/common";
+import {Component, HttpException, Inject} from "@nestjs/common";
 import {getManager, Repository} from "typeorm";
 import {PageEntity} from "../entity/page.entity";
 import {HistoryService} from "../history/history.service";
@@ -63,6 +63,7 @@ export class PageService{
         if(page.alias==null) throw new MessageCodeError('create:page:missingAlias');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
         if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
+        if(entity==null) throw new MessageCodeError('update:classify:updateById');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let id:number= await this.repository.createQueryBuilder().insert().into(PageEntity).values(page).output('id').execute();
@@ -74,9 +75,33 @@ export class PageService{
             let newContent:PageContentEntity=new PageContentEntity();
              newContent=contents[t];
              newContent.parentId=idNum;
-            await this.contentRepository.insert(newContent);
+            await this.contentRepository.save(newContent);
         }
         //return this.getAllPage(limit,pages);
+    }
+
+    /**
+     * 基本校验
+     * @param {string} alias
+     * @param {number} classifyId
+     * @returns {Promise<void>}
+     */
+    async curdCheck(alias?:string,classifyId?:number){
+        let result:string;
+        let update:boolean=true;
+        if(alias){
+            let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:alias}).getMany();
+            if(aliasEntity.length>0) result="别名不能重复";update=false;
+        }
+        if(classifyId){
+            let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(classifyId);
+            if(entity==null) result="对应分类不存在";update=false;
+        }
+        if(!result){
+            update=true;
+        }
+        console.log('测试='+JSON.stringify({MessageCodeError:result,Continue:update}));
+        return {MessageCodeError:result,Continue:update};
     }
     /**
      * 修改页面,别名不可重复

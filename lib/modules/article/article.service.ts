@@ -1,9 +1,11 @@
 import {Component, HttpException, Inject} from "@nestjs/common";
-import {getManager, Repository} from "typeorm";
+import {Repository} from "typeorm";
 import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
+import {PageEntity} from "../entity/page.entity";
+import {PageClassifyEntity} from "../entity/pageClassify.entity";
 
 @Component()
 export class ArticleService{
@@ -256,6 +258,32 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             topPlace=`global,level1,level2,level3,current`;
         }
         return topPlace;
+    }
+
+    /**
+     * 文章修改基本校验
+     * @param {number} classifyId
+     * @param {number} id
+     * @returns {Promise<{MessageCodeError: string; Continue: boolean}>}
+     * @constructor
+     */
+    async CurdArticleCheck(classifyId?:number,id?:number){
+        console.log('');
+        let result:string;
+        let update:boolean=true;
+        if(id){
+            let aliasEntity:ArticleEntity=await this.respository.findOneById(id);
+            if(aliasEntity==null) result="当前文章不存在";update=false;
+        }
+        if(classifyId){
+            let entity:PageClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
+            if(entity==null) result="对应分类不存在";update=false;
+        }
+        if(!result){
+            update=true;
+        }
+        console.log('测试='+JSON.stringify({MessageCodeError:result,Continue:update}));
+        return {MessageCodeError:result,Continue:update};
     }
 
 }
