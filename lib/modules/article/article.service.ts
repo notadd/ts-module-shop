@@ -268,21 +268,19 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @constructor
      */
     async CurdArticleCheck(classifyId?:number,id?:number){
-        console.log('');
         let result:string;
         let update:boolean=true;
         if(id){
             let aliasEntity:ArticleEntity=await this.respository.findOneById(id);
             if(aliasEntity==null) result="当前文章不存在";update=false;
         }
-        if(classifyId){
+        if(classifyId && classifyId>0){
             let entity:PageClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
             if(entity==null) result="对应分类不存在";update=false;
         }
         if(!result){
             update=true;
         }
-        console.log('测试='+JSON.stringify({MessageCodeError:result,Continue:update}));
         return {MessageCodeError:result,Continue:update};
     }
 

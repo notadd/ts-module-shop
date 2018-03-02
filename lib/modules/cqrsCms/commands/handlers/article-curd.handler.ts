@@ -21,15 +21,21 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));
         //增删改需要重新写
         if(!command.article.getAllArticles){
+            let value,MessageCodeError;
             //增加、修改、删除、文章
             if(command.article.createArticle){
-                result=await this.articleService.CurdArticleCheck(command.article.createArticle.classifyId).then(a=>{return a});
+                let result=await this.articleService.CurdArticleCheck(command.article.createArticle.classifyId).then(a=>{return a});
+                value=result.Continue;
+                MessageCodeError=result.MessageCodeError;
             }
             if(command.article.updateArticle){
-                result=await this.articleService.CurdArticleCheck(command.article.updateArticle.id,command.article.updateArticle.classifyId);
+                const result=await this.articleService.CurdArticleCheck(command.article.updateArticle.classifyId,command.article.updateArticle.id);
+                value=result.Continue;
+                MessageCodeError=result.MessageCodeError
             }
-            console.log('curd='+JSON.stringify(result));
-            page.createArticle(command.article);
+            if(value==undefined) value=true;
+            if(value)page.createArticle(command.article);
+            resolver({MessageCodeError:MessageCodeError});
         }
         //分页获取全部文章：可以选择是否隐藏
         if(command.article.getAllArticles && command.article.getArticles.getArticleAll){
