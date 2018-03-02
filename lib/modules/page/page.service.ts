@@ -12,7 +12,6 @@ import {ClassifyEntity} from "../entity/classify.entity";
 @Component()
 export class PageService{
     constructor(@Inject('PageRepositoryToken') private readonly repository:Repository<PageEntity>,
-                private readonly historyService:HistoryService,
                 private readonly classifyService:ClassifyService,
                 @Inject('ContentRepositoryToken') private readonly contentRepository:Repository<PageContentEntity>,
                 @Inject('PageClassifyRepositoryToken') private readonly pageRepository:Repository<PageClassifyEntity>,) {}
@@ -22,7 +21,6 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async getAllPage(limit?:number,page?:number){
-        console.log('获取时间='+new Date().getTime());
         let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").skip(limit*(page-1)).take(limit).getMany();
         let title:number=await this.repository.createQueryBuilder().getCount();
         return {pages:pages,totalItems:title};
@@ -46,22 +44,13 @@ export class PageService{
      * @returns {Promise<number>}
      */
     async deletePages(array:number[],limit?:number,page?:number){
-        console.log('array='+array);
-        let deleteNum:number;
-        let hisArray:HistoryEntity[]=[];
         for(let t in array){
             let page:PageEntity = await this.repository.findOneById(array[t]);
             if(page==null) throw new MessageCodeError('delete:page:deleteById');
             await this.contentRepository.createQueryBuilder().delete().from(PageContentEntity).where('"parentId"= :parentId',{parentId:page.id}).execute();
-            let history=new HistoryEntity();
-            history.articleId =page.id;
-            history.articleName =page.title;
-            hisArray.push(history);
-            deleteNum++;
             this.repository.deleteById(page.id);
         }
-        this.historyService.createHistory(hisArray);
-        return  this.getAllPage(limit,page);
+        //return  this.getAllPage(limit,page);
     }
 
     /**
@@ -87,7 +76,7 @@ export class PageService{
              newContent.parentId=idNum;
             await this.contentRepository.insert(newContent);
         }
-        return this.getAllPage(limit,pages);
+        //return this.getAllPage(limit,pages);
     }
     /**
      * 修改页面,别名不可重复
@@ -122,9 +111,11 @@ export class PageService{
         if(page.classifyId==null) page.classifyId=entityPage.classifyId;
         if(page.classify==null) page.classify=entityPage.classify;
         let newPage:PageEntity =page;
-        console.log('-------修改后页面='+JSON.stringify(newPage));
-        await this.repository.updateById(entityPage.id,newPage);
-        return this.getAllPage(limit,pages);
+        try{
+            await this.repository.updateById(entityPage.id,newPage);
+        }catch (error){
+            throw new MessageCodeError('dataBase:curd:error');
+        }
     }
 
     /**
@@ -135,10 +126,8 @@ export class PageService{
     async findPageById(id:number):Promise<PageEntity>{
         let entity:PageEntity=await this.repository.findOneById(id);
         if(entity==null) throw new MessageCodeError('delete:page:deleteById');
-        let children:PageContentEntity[]=await this.contentRepository.createQueryBuilder().where('"parentId"= :parentId',{parentId:entity.id}).orderBy('id','ASC').getMany();
-        entity.contents=children;
-        entity.classify=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:entity.classifyId}).getOne().then(a=>{return a.title});
-        return entity;
+        let result:PageEntity=await this.repository.findOneById(id,{relations:['contents']});
+        return result;
     }
 
     /**
