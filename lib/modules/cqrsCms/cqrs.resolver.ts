@@ -456,8 +456,6 @@ export class CqrsResolver{
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
                 newContent.content=strFinal[t].content;
-               // newContent.path=strFinal[t].path;
-                //newContent.num=strFinal[t].num;
                 contents.push(newContent);
             }
             createParam.page=page;
@@ -481,8 +479,6 @@ export class CqrsResolver{
                 let newContent:PageContentEntity=new PageContentEntity;
                 newContent.content=strFinal[t].content;
                 newContent.id=strFinal[t].id;
-                //newContent.path=strFinal[t].path;
-                //newContent.num=strFinal[t].num;
                 contents.push(newContent);
             }
             createParam.page=page;
