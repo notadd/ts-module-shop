@@ -9,7 +9,6 @@ export class GetClassifyHandler implements ICommandHandler<GetClassifyParamComma
     async execute(command:GetClassifyParamCommand,resolver:(value) => void){
         console.log(clc.greenBright('handlerCommand getClassify Command...'));
         let result;
-        console.log('usedFor='+JSON.stringify(command.getClassify.useFor));
         //页面分类无极限
         if(command.getClassify.useFor=='page'){
             result=await this.classifyService.findAllClassifyPage(1);
@@ -18,7 +17,6 @@ export class GetClassifyHandler implements ICommandHandler<GetClassifyParamComma
         if(command.getClassify.useFor=='art'){
             result=await this.classifyService.findAllClassifyArt(1);
         }
-        console.log('command='+JSON.stringify(command));
         resolver(result);
     }
 }
