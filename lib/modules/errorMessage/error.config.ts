@@ -98,4 +98,10 @@ export const errorMessagesConfig: { [messageCode: string]: IErrorMessages } = {
         errorMessage:'There are pages under the current classification and cannot be deleted.',
         userMessage:'There are pages under the current classification and cannot be deleted.'
     },
+    'dataBase:curd:error':{
+        type: 'BadRequest',
+        httpStatus: HttpStatus.BAD_REQUEST,
+        errorMessage:'数据库错误.',
+        userMessage:'数据库错误.'
+    }
 };
