@@ -55,7 +55,7 @@ export class CqrsService{
      * @returns {Promise<any>}
      */
     async classifyCurd(getClassifyDto:ClassifyCurdVm){
-        const result= this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
+        const result=await this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
         return result;
 
     }
@@ -70,7 +70,7 @@ export class CqrsService{
      * @returns {Promise<void>}
      */
     async articleCurd(getArticleDto:ArticleCurdVm){
-        const result=this.commonbus.execute(new ArticleParamCommand(getArticleDto));
+        const result=await this.commonbus.execute(new ArticleParamCommand(getArticleDto));
         return result;
     }
 

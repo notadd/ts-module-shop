@@ -66,13 +66,7 @@ export class PageService{
         if(entity==null) throw new MessageCodeError('update:classify:updateById');
         let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:page.alias}).getMany();
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
-        //let id:number= await this.repository.createQueryBuilder().insert().into(PageEntity).values(page).output('id').execute();
         let id:number =await this.repository.save(page).then(a=>{return a.id});
-        console.log('插入页面,id='+id);
-        /*const str:string=JSON.stringify(id);
-        let newstr:string=str.replace('{','').replace('}','').replace('[','').replace(']','');
-        let finalStr:string[]=newstr.replace('"','').replace('"','').split(':');
-        let idNum:number=Number(finalStr[1]);*/
         for(let t in contents){
             let newContent:PageContentEntity=new PageContentEntity();
              newContent=contents[t];
