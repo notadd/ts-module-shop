@@ -352,7 +352,8 @@ export class CqrsResolver{
             return result;
         }
         console.log(clc.blueBright('/****ArticleCU*******/='+JSON.stringify(articleVM)));
-        await this.sitemapService.articleCurd(articleVM);
+        const result=await this.sitemapService.articleCurd(articleVM);
+        return JSON.stringify(result);
         //let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         //let result=await this.classifyService.TimestampArt(resultArt.articles);
        // return {pagination:resultPage,articles:result};

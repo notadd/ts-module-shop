@@ -74,7 +74,7 @@ input ArticleInput{
     #文章名
     name:String!,
     #分类名称
-    classify:String!,
+    classify:String,
     #分类Id
     classifyId:Int!,
     #摘要
