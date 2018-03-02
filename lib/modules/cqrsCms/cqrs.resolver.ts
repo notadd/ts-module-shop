@@ -367,7 +367,7 @@ export class CqrsResolver{
      * @constructor
      */
     @Mutation()
-    ClassifyCU(obj,arg){
+    async ClassifyCU(obj,arg){
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -424,7 +424,8 @@ export class CqrsResolver{
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
         }
         console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(classifyVM)));
-        this.sitemapService.classifyCurd(classifyVM);
+        const  result=await this.sitemapService.classifyCurd(classifyVM);
+        return result;
       /*  let result;
         if(classifyVM.useFor=='art'){
             result=this.classifyService.findAllClassifyArt(1);
