@@ -19,8 +19,16 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
         let result;
         console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));
+        //增删改需要重新写
         if(!command.article.getAllArticles){
             //增加、修改、删除、文章
+            if(command.article.createArticle){
+                result=await this.articleService.CurdArticleCheck(command.article.createArticle.classifyId).then(a=>{return a});
+            }
+            if(command.article.updateArticle){
+                result=await this.articleService.CurdArticleCheck(command.article.updateArticle.id,command.article.updateArticle.classifyId);
+            }
+            console.log('curd='+JSON.stringify(result));
             page.createArticle(command.article);
         }
         //分页获取全部文章：可以选择是否隐藏
