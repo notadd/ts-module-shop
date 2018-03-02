@@ -11,14 +11,22 @@ const clc=require('cli-color');
 @CommandHandler(PageParamCommand)
 export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
     constructor(private readonly repositoty:PageRepository,
-                private readonly publisher:EventPublisher){}
+                private readonly publisher:EventPublisher,
+                private readonly pageService:PageService){}
 
                 async execute(command:PageParamCommand,resolver:(value?) => void):Promise<any>{
                 console.log(clc.greenBright('handlerCommand  PageFindByIdCommand...'));
                 let id:string='0';
+                let result;
                 const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
-                page.createPage(command.pageEntity);
+                if(!command.pageEntity.array){
+                    result=await this.pageService.curdCheck(command.pageEntity.page.alias,command.pageEntity.page.classifyId);
+                    console.log("curd="+JSON.stringify(result));
+                    if(result.Continue){page.createPage(command.pageEntity)}
+                }else{
+                    page.createPage(command.pageEntity);
+                }
                 page.commit();
-                resolver();
+                resolver(result);
     }
 }
