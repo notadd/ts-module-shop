@@ -196,6 +196,8 @@ export class CqrsResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
+        let result;
+        let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
         let getAllClassify=map.get('getAllClassify');
         if(getAllClassify!=null || getAllClassify !=undefined){
             let amap=new Map();
@@ -205,12 +207,33 @@ export class CqrsResolver{
             if(id==null || id==0){
                 id=1;
             }
-            let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
             classifyVM.useFor=useFor;
             classifyVM.getAllClassify=true;
-            let result=this.sitemapService.getClassify(classifyVM);
-            return result;
         }
+        result=this.sitemapService.getClassify(classifyVM);
+        return result;
+    }
+    @Query()
+   async getClassifyById(obj,arg){
+        const str:string=JSON.stringify(arg);
+        let bToJSon=JSON.parse(str);
+        let map =new Map();
+        map=this.objToStrMap(bToJSon);
+        let result;
+        let classifyVM:ClassifyCurdVm=new ClassifyCurdVm();
+        let getClassifyById=map.get('getClassifyById');
+        if(getClassifyById!=null || getClassifyById !=undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(getClassifyById);
+            let useFor:string=amap.get('useFor');
+            let id:number=amap.get('id');
+            if(id==null || id==0){
+                id=1;
+            }
+            classifyVM.getClassifyById={useFor:useFor,id:id};
+        }
+        result=await this.sitemapService.getClassify(classifyVM);
+        return result;
     }
 
     /**
@@ -425,7 +448,7 @@ export class CqrsResolver{
         }
         console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(classifyVM)));
         const  result=await this.sitemapService.classifyCurd(classifyVM);
-        return result;
+        return JSON.stringify(result);
       /*  let result;
         if(classifyVM.useFor=='art'){
             result=this.classifyService.findAllClassifyArt(1);

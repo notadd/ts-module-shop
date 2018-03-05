@@ -56,12 +56,13 @@ export class CqrsService{
      */
     async classifyCurd(getClassifyDto:ClassifyCurdVm){
         const result=await this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
+        console.log('service='+JSON.stringify(result));
         return result;
 
     }
     //获取分类
     async getClassify(getClassifyDto:ClassifyCurdVm){
-        const result=this.commonbus.execute(new GetClassifyParamCommand(getClassifyDto));
+        const result=await this.commonbus.execute(new GetClassifyParamCommand(getClassifyDto));
         return result;
     }
     /**
