@@ -123,7 +123,23 @@ export class CqrsResolver{
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
         }
+        let serachArticle=map.get('serachArticle');
+        if(serachArticle !=null || serachArticle != undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(serachArticle);
+            let keyWords:string=amap.get('keyWords');
+            let limitNum:number=amap.get('limitNum');
+            let pages:number=amap.get('pages');
+            let groupId:number=amap.get('classifyId');
+            let findTop:boolean=amap.get('topPlace');
+            if(keyWords) articleVM.getArticles={keywordsSerach:keyWords};
+            if(groupId)  articleVM.getArticles={getArticleByClassifyId:groupId};
+            if(findTop)  articleVM.getArticles={findTopPlace:findTop};
+            articleVM.limitNum=limitNum;
+            articleVM.pages=pages;
+        }
         articleVM.getAllArticles=true;
+        console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         let resultArt=await this.sitemapService.articleCurd(articleVM);
         resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         result=await this.classifyService.TimestampArt(resultArt.articles);
