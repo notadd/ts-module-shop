@@ -9,7 +9,7 @@ import {pagerespositoryProvider} from "./respository.provider";
 
 @Module({
     modules:[DatabaseModule],
-    controllers:[ClassifyController],
+   /* controllers:[ClassifyController],*/
     components:[...clarespositoryProvider,...respositoryProvider,...pageClassifyProvider,...pagerespositoryProvider,ClassifyService],
     exports:[ClassifyService]
 })
