@@ -406,7 +406,12 @@ export class CqrsResolver{
                 id=1;
             }
             classifyVM.useFor=useFor;
-            classifyVM.createClassify=amap.get('createClass');
+            if(useFor=="art"){
+                classifyVM.createClassify={art:amap.get('createClass')};
+            }
+            if(useFor=='page'){
+                classifyVM.createClassify={page:amap.get('createClass')};
+            }
         }
         let updateClass=map.get('updateClass');
         if(updateClass!=null || updateClass !=undefined){
@@ -418,7 +423,12 @@ export class CqrsResolver{
                 id=1;
             }
             classifyVM.useFor=useFor;
-            classifyVM.updateClassify=amap.get('updateClass');
+            if(useFor=="art"){
+                classifyVM.updateClassify={art:amap.get('updateClass')};
+            }
+            if(useFor=='page'){
+                classifyVM.updateClassify={page:amap.get('updateClass')};
+            }
         }
         let deleteClassifyById=map.get('deleteClassifyById');
         if(deleteClassifyById!=null || deleteClassifyById !=undefined){
