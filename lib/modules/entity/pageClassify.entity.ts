@@ -2,6 +2,8 @@ import {
     Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
+import {ArticleEntity} from "./article.entity";
+import {PageEntity} from "./page.entity";
 
 @Entity('page_classify_table')
 export class PageClassifyEntity{
@@ -30,4 +32,7 @@ export class PageClassifyEntity{
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
+
+    @ManyToOne(type => PageEntity,PageEntity=>PageEntity.classifications)
+    pages:PageEntity;
 }

@@ -1,5 +1,7 @@
 import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {PageContentEntity} from "./page.content.entity";
+import {ClassifyEntity} from "./classify.entity";
+import {PageClassifyEntity} from "./pageClassify.entity";
 
 @Entity('page_entity_table')
 export class PageEntity{
@@ -20,6 +22,9 @@ export class PageEntity{
     //页面内容
     @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.page)
     contents:PageContentEntity[];
+
+    @OneToMany(type => PageClassifyEntity,PageClassifyEntity=>PageClassifyEntity.pages)
+    classifications:PageClassifyEntity[];
 }
 export class Page{
    id:number;
