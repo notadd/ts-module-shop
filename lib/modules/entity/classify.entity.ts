@@ -22,6 +22,15 @@ export class ClassifyEntity{
     @Column({nullable:true}) groupId:number;
     //层级
     @Column({nullable:true}) level:number;
+    //是否显示当前分类文章
+    @Column({nullable:true}) isCurrentType:boolean;
+    //是否显示子级分类文章
+    @Column({nullable:true}) isChildType:boolean;
+    //是否显示全局置顶文章
+    @Column({nullable:true}) isAllTop:boolean;
+    //是否显示上级置顶文章
+    @Column({nullable:true}) isPreTop:boolean;
+
 
     @OneToMany(type => ClassifyEntity,ClassifyEntity =>ClassifyEntity.parent,{cascadeInsert:true})
     children: ClassifyEntity[];

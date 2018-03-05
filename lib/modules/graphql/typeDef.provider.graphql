@@ -131,6 +131,14 @@ type Classify{
     color:String,
     #父节点
     groupId:Int,
+    #是否显示当前分类文章
+    isCurrentType:Boolean,
+    #是否显示子级分类文章
+    isChildType:Boolean
+    #是否显示全局置顶文章
+    isAllTop:Boolean
+    #是否显示上级置顶文章
+    isPreTop:Boolean
     #子节点
     children:[Classify],
 }
@@ -148,10 +156,19 @@ input ClassifyCreate{
     color:String,
     #父节点
     groupId:Int!,
+    #是否显示当前分类文章
+    isCurrentType:Boolean!,
+    #是否显示子级分类文章
+    isChildType:Boolean!,
+    #是否显示全局置顶文章
+    isAllTop:Boolean!,
+    #是否显示上级置顶文章
+    isPreTop:Boolean!
+
 }
 input ClassifyUpdate{
     #分类id
-    id:Int,
+    id:Int!,
     #分类名称
     title:String,
     #分类别名
@@ -164,6 +181,14 @@ input ClassifyUpdate{
     color:String,
     #父节点
     groupId:Int,
+    #是否显示当前分类文章
+    isCurrentType:Boolean,
+    #是否显示子级分类文章
+    isChildType:Boolean
+    #是否显示全局置顶文章
+    isAllTop:Boolean
+    #是否显示上级置顶文章
+    isPreTop:Boolean
 }
 input ContentArray{
     #内容id
@@ -196,6 +221,10 @@ type Page{
 type PagePagination{
     pagination:ReturnPage,
     pages:[Page]
+}
+type ClassifyOne{
+    classifyEntity:[Classify],
+    MessageCodeError:String
 }
 type Content{
     #内容id
@@ -358,9 +387,11 @@ type Query{
     getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
         reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit) :ArticlePagination,
    #Get the articles No paging.
-    getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article]
+    getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article],
     #Get classification
     getClassifys(getAllClassify: AllClassify) : [Classify],
+
+    getClassifyById(getClassifyById:AllClassify):ClassifyOne,
     #get pages by paging.
     getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
     #get a page by page
