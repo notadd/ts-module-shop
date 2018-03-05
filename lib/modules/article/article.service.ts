@@ -275,7 +275,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             if(aliasEntity==null) result="当前文章不存在";update=false;
         }
         if(classifyId && classifyId>0){
-            let entity:PageClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
+            let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
             if(entity==null) result="对应分类不存在";update=false;
         }
         if(!result){

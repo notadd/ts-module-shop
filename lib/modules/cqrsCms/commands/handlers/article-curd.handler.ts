@@ -35,7 +35,7 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
             }
             if(value==undefined) value=true;
             if(value)page.createArticle(command.article);
-            resolver({MessageCodeError:MessageCodeError});
+            resolver({MessageCodeError:MessageCodeError,Continue:value});
         }
         //分页获取全部文章：可以选择是否隐藏
         if(command.article.getAllArticles && command.article.getArticles.getArticleAll){
@@ -51,7 +51,6 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         }
         //回收站获取文章
         if(command.article.getAllArticles && command.article.getArticles.recycleFind){
-            console.log('回收站');
             result=await this.articleService.recycleFind(command.article.limitNum,command.article.pages).then(a=>{return  a});
         }
         //回收站内根据分类id获取文章
