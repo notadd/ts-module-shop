@@ -157,13 +157,13 @@ input ClassifyCreate{
     #父节点
     groupId:Int!,
     #是否显示当前分类文章
-    isCurrentType:Boolean!,
+    isCurrentType:Boolean,
     #是否显示子级分类文章
-    isChildType:Boolean!,
+    isChildType:Boolean,
     #是否显示全局置顶文章
-    isAllTop:Boolean!,
+    isAllTop:Boolean,
     #是否显示上级置顶文章
-    isPreTop:Boolean!
+    isPreTop:Boolean
 
 }
 input ClassifyUpdate{
