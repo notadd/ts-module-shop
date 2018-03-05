@@ -256,9 +256,15 @@ input Keywords{
 }
 input recycleLimit{
     #分页
-    limitNum:Int
+    limitNum:Int,
     #第几页
-    pages:Int
+    pages:Int,
+    #关键字
+    keyWords:String,
+    #分类
+    classifyId:Int,
+    #置顶
+    topPlace:Boolean
 }
 input recycleClasssifyId{
     #分类id
@@ -385,7 +391,7 @@ input createXml{
 type Query{
     #Get the articles by paging.
     getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
-        reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit) :ArticlePagination,
+        reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit,serachArticle:recycleLimit) :ArticlePagination,
    #Get the articles No paging.
     getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article],
     #Get classification
