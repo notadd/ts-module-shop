@@ -17,6 +17,9 @@ export class GetClassifyHandler implements ICommandHandler<GetClassifyParamComma
         if(command.getClassify.useFor=='art'){
             result=await this.classifyService.findAllClassifyArt(1);
         }
+        if(command.getClassify.getClassifyById){
+            result=await this.classifyService.findClassifyById(command.getClassify.getClassifyById.useFor,command.getClassify.getClassifyById.id).then(a=>{return a});
+        }
         resolver(result);
     }
 }

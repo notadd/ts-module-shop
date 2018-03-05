@@ -17,32 +17,44 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
         let value,MessageCodeError;
         if(!command.classify.getAllClassify){
             //增加、修改、删除、移动分类
-            if(command.classify.createClassify || command.classify.updateClassify){
+            if(command.classify.createClassify){
                 const result=await this.classifyService.classifyCheck(
                     command.classify.useFor,
                     command.classify.createClassify.id,
                     command.classify.createClassify.groupId,
                     command.classify.createClassify.classifyAlias);
                 value=result.Continue;
+                console.log('createClassify='+JSON.stringify(command.classify.createClassify));
                 MessageCodeError=result.MessageCodeError;
             }
             if(command.classify.updateClassify){
-                const result=await this.classifyService.classifyCheck(command.classify.useFor,
+                const result=await this.classifyService.classifyCheck(
+                    command.classify.useFor,
                     command.classify.updateClassify.id,
                     command.classify.updateClassify.groupId,
-                    command.classify.createClassify.classifyAlias);
+                    command.classify.updateClassify.classifyAlias);
+                value=result.Continue;
+                console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
+                MessageCodeError=result.MessageCodeError;
+            }
+            if(command.classify.mobileClassifyId){
+                const result=await this.classifyService.classifyCheck(command.classify.useFor,
+                    command.classify.mobileClassifyId.id,
+                    command.classify.mobileClassifyId.parentId);
                 value=result.Continue;
                 MessageCodeError=result.MessageCodeError
             }
             if(command.classify.deleteClassify){
                 const  result=await this.classifyService.classifyCheck(command.classify.useFor,0,0,'',command.classify.deleteClassify);
                 value=result.Continue;
-                MessageCodeError=result.MessageCodeError
+                MessageCodeError=result.MessageCodeError;
+                console.log('result='+result);
             }
             if(value==undefined) value=true;
             if(value)page.createClassify(command.classify);
         }
+        console.log({MessageCodeError:MessageCodeError,Continue:value});
         page.commit();
-        resolver({MessageCodeError:MessageCodeError});
+        resolver({MessageCodeError:MessageCodeError,Continue:value});
     }
 }
