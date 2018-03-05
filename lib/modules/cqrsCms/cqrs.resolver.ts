@@ -263,7 +263,6 @@ export class CqrsResolver{
         if(serachPages!=null || serachPages !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(serachPages);
-            let pageParam:GetPageVm=new GetPageVm();
             pageParam.keywords=amap.get('keywords');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');
@@ -272,7 +271,6 @@ export class CqrsResolver{
         if(getPagesByClassifyId!=null || getPagesByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getPagesByClassifyId);
-            let pageParam:GetPageVm=new GetPageVm();
             pageParam.classifyId=amap.get('id');
             pageParam.limit=amap.get('limitNum');
             pageParam.pages=amap.get('pages');

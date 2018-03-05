@@ -18,24 +18,49 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
         if(!command.classify.getAllClassify){
             //增加、修改、删除、移动分类
             if(command.classify.createClassify){
-                const result=await this.classifyService.classifyCheck(
-                    command.classify.useFor,
-                    command.classify.createClassify.id,
-                    command.classify.createClassify.groupId,
-                    command.classify.createClassify.classifyAlias);
-                value=result.Continue;
-                console.log('createClassify='+JSON.stringify(command.classify.createClassify));
-                MessageCodeError=result.MessageCodeError;
+                if(command.classify.createClassify.art){
+                    const result=await this.classifyService.classifyCheck(
+                        command.classify.useFor,
+                        command.classify.createClassify.art.id,
+                        command.classify.createClassify.art.groupId,
+                        command.classify.createClassify.art.classifyAlias);
+                    value=result.Continue;
+                    console.log('createClassify='+JSON.stringify(command.classify.createClassify));
+                    MessageCodeError=result.MessageCodeError;
+                }
+               if(command.classify.createClassify.page){
+                   const result=await this.classifyService.classifyCheck(
+                       command.classify.useFor,
+                       command.classify.createClassify.page.id,
+                       command.classify.createClassify.page.groupId,
+                       command.classify.createClassify.page.classifyAlias);
+                   value=result.Continue;
+                   console.log('createClassify='+JSON.stringify(command.classify.createClassify));
+                   MessageCodeError=result.MessageCodeError;
+               }
             }
             if(command.classify.updateClassify){
-                const result=await this.classifyService.classifyCheck(
-                    command.classify.useFor,
-                    command.classify.updateClassify.id,
-                    command.classify.updateClassify.groupId,
-                    command.classify.updateClassify.classifyAlias);
-                value=result.Continue;
-                console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
-                MessageCodeError=result.MessageCodeError;
+                if(command.classify.updateClassify.page){
+                    const result=await this.classifyService.classifyCheck(
+                        command.classify.useFor,
+                        command.classify.updateClassify.page.id,
+                        command.classify.updateClassify.page.groupId,
+                        command.classify.updateClassify.page.classifyAlias);
+                    value=result.Continue;
+                    console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
+                    MessageCodeError=result.MessageCodeError;
+                }
+                if(command.classify.updateClassify.art){
+                    const result=await this.classifyService.classifyCheck(
+                        command.classify.useFor,
+                        command.classify.updateClassify.art.id,
+                        command.classify.updateClassify.art.groupId,
+                        command.classify.updateClassify.art.classifyAlias);
+                    value=result.Continue;
+                    console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
+                    MessageCodeError=result.MessageCodeError;
+                }
+
             }
             if(command.classify.mobileClassifyId){
                 const result=await this.classifyService.classifyCheck(command.classify.useFor,
