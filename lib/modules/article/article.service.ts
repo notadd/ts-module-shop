@@ -86,7 +86,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
       async createArticle(article:ArticleEntity){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-        if(article.publishedTime<new Date()) throw new MessageCodeError('create:publishedTime:lessThan');
+        //if(article.publishedTime<new Date() && article.publishedTime!=null) throw new MessageCodeError('create:publishedTime:lessThan');
         let num:number=await this.classifyService.findLevel(article.classifyId);
         let level:string=this.classifyService.interfaceChange(num);
         if(article.topPlace==null){
@@ -219,7 +219,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let Array:ArticleEntity[]=[];
         let article:ArticleEntity=await this.respository.findOneById(id);
         if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
-        let parent:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
+       /* let parent:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(parent==null) throw new MessageCodeError('delete:recycling:idMissing');
         let num:number=await this.classifyService.findLevel(article.classifyId).then(a=>{return a});
         let level:string=this.classifyService.interfaceChange(num);
@@ -231,7 +231,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             article.topPlace=`cancel,global,level1,current,level2`;
         }else{
             article.topPlace=`cancel,global,level1,level2,level3,current`;
-        }
+        }*/
         let newArticle:ArticleEntity=article;
         Array.push(newArticle);
         return Array;
@@ -293,8 +293,13 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<{bucketName: string; name: string; type: string}>}
      */
     async upLoadPicture(bucketName: string, rawName: string, base64: string ){
-        const result=await this.storeService.upload(bucketName,rawName,base64);
-        return result;
+       // const result=await this.storeService.upload(bucketName,rawName,base64);
+        try {
+            await this.storeService.upload(bucketName,rawName,base64);
+        }catch(err) {
+          throw new Error("错误")
+        }
+       // return result;
     }
 
 }
