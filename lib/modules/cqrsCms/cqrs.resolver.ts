@@ -133,8 +133,9 @@ export class CqrsResolver{
             let groupId:number=amap.get('classifyId');
             let findTop:boolean=amap.get('topPlace');
             if(keyWords) articleVM.getArticles={keywordsSerach:keyWords};
-            if(groupId)  articleVM.getArticles={getArticleByClassifyId:groupId};
-            if(findTop)  articleVM.getArticles={findTopPlace:findTop};
+           // if(groupId)  articleVM.getArticles.getArticleByClassifyId={classifyId:groupId,top:findTop};
+            if(groupId)  articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop}};
+            //if(findTop)  articleVM.getArticles={findTopPlace:findTop};
             articleVM.limitNum=limitNum;
             articleVM.pages=pages;
         }
