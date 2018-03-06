@@ -60,8 +60,8 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         }
         //页面内根据分类id获取文章，可以选择是否包含置顶文章
         if(command.article.getAllArticles && command.article.getArticles.getArticleByClassifyId){
-            result=await this.classifyService.getArticelsByClassifyId(command.article.getArticles.getArticleByClassifyId,command.article.limitNum,
-                false,command.article.pages);
+            result=await this.classifyService.getArticelsByClassifyId(command.article.getArticles.getArticleByClassifyId.classifyId,command.article.limitNum,
+                command.article.getArticles.getArticleByClassifyId.top,command.article.pages);
         }
         //获取置顶文章
         if(command.article.getAllArticles && command.article.getArticles.findTopPlace){
