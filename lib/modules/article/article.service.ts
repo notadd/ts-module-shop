@@ -4,13 +4,13 @@ import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
-import {PageEntity} from "../entity/page.entity";
-import {PageClassifyEntity} from "../entity/pageClassify.entity";
+import {StoreComponent} from "../ext-local-store/src/export/StoreComponentProvider";
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
-            private readonly classifyService:ClassifyService){}
+            private readonly classifyService:ClassifyService,
+            private readonly storeService:StoreComponent){}
 
     /**
      * 返回所有数据,依据提供limit进行分页
@@ -270,18 +270,31 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
     async CurdArticleCheck(classifyId?:number,id?:number){
         let result:string;
         let update:boolean=true;
-        if(id){
+        if(id>0){
             let aliasEntity:ArticleEntity=await this.respository.findOneById(id);
             if(aliasEntity==null) result="当前文章不存在";update=false;
         }
-        if(classifyId && classifyId>0){
+        if(classifyId>0){
             let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
+            console.log('entity='+JSON.stringify(entity));
             if(entity==null) result="对应分类不存在";update=false;
         }
         if(!result){
             update=true;
         }
         return {MessageCodeError:result,Continue:update};
+    }
+
+    /**
+     * 上传图片
+     * @param {string} bucketName
+     * @param {string} rawName
+     * @param {string} base64
+     * @returns {Promise<{bucketName: string; name: string; type: string}>}
+     */
+    async upLoadPicture(bucketName: string, rawName: string, base64: string ){
+        const result=await this.storeService.upload(bucketName,rawName,base64);
+        return result;
     }
 
 }
