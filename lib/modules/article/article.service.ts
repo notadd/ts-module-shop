@@ -109,9 +109,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
         article.recycling=false;
         let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
-        console.log('number='+create);
+        let str:string=JSON.stringify(create).split(':')[1];
+        let numb:string=str.substring(0,str.lastIndexOf('}'));
+        let newId:number=Number(numb);
         if(bucketName){
-            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,create);
+            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,newId);
         }
       }
 
@@ -305,7 +307,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async upLoadPicture(req:any,bucketName: string, rawName: string, base64: string,id?:number ){
         try {
-            let entity:ArticleEntity=await this.respository.findOneById(42);
+            let entity:ArticleEntity=await this.respository.findOneById(id);
             //删除图片
             if(entity.bucketName!=null){
                 await this.storeService.delete(entity.bucketName,entity.pictureName,entity.type)
@@ -325,7 +327,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let requestClass=new RequestClass();
             requestClass.host=host;
             let request={protocol:protocal,host:host};
-            console.log('req='+JSON.stringify(request));
             let url=await this.storeService.getUrl(request,bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             entity.type=type;
             entity.bucketName=bucket;

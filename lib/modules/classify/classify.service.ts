@@ -494,8 +494,8 @@ export class ClassifyService{
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
-        let returnArt:ArticleEntity[]=await this.Fenji(articles,limit,pages);
         let num:number=articles.length;
+        let returnArt:ArticleEntity[]=await this.Fenji(articles,limit,pages);
         return {articles:returnArt,totalItems:num};
     }
     async Fenji(art:ArticleEntity[],limit?:number,pages?:number):Promise<ArticleEntity[]>{
