@@ -18,18 +18,18 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         let id:string='0';
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
         let result;
-        console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));
+        /*console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));*/
         //增删改需要重新写
         if(!command.article.getAllArticles){
             let value,MessageCodeError;
             //增加、修改、删除、文章
             if(command.article.createArticle){
-                let result=await this.articleService.CurdArticleCheck(command.article.createArticle.classifyId).then(a=>{return a});
+                let result=await this.articleService.CurdArticleCheck(command.article.createArticle.article.classifyId,0).then(a=>{return a});
                 value=result.Continue;
                 MessageCodeError=result.MessageCodeError;
             }
             if(command.article.updateArticle){
-                const result=await this.articleService.CurdArticleCheck(command.article.updateArticle.classifyId,command.article.updateArticle.id);
+                const result=await this.articleService.CurdArticleCheck(command.article.updateArticle.article.classifyId,command.article.updateArticle.article.id);
                 value=result.Continue;
                 MessageCodeError=result.MessageCodeError
             }
