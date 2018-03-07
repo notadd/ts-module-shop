@@ -2,9 +2,9 @@ import {ArticleEntity} from "../../../entity/article.entity";
 
 export class ArticleCurdVm{
     //新增文章
-    public createArticle?:ArticleEntity;
+    public createArticle?:{article:ArticleEntity,picture?:{bucketName: string, rawName: string, base64: string,url:any}};
     //修改文章
-    public updateArticle?:ArticleEntity;
+    public updateArticle?:{article:ArticleEntity,picture?:{bucketName: string, rawName: string, base64: string,url:any}};
     //放入回收站
     public deleteById?:number[];
     //回收站删除
@@ -19,11 +19,13 @@ export class ArticleCurdVm{
     public pages?:number;
     //查找文章
     public getArticles?:{getArticleAll?:boolean,keywordsSerach?:string,recycleFind?:boolean,
-        reductionGetByClassifyId?:number,getArticleByClassifyId?:number,findTopPlace?:boolean,
+        reductionGetByClassifyId?:number,getArticleByClassifyId?:{classifyId:number,top:boolean},findTopPlace?:boolean,
         showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number,
-        hidden?:boolean/*,
+        hidden?:boolean,findTopPlace3?:{classifyId:number,top:boolean}/*,
         getLevelByClassifyId?:number*/
     };
+    //图片本地上传
+    public pictureUpload?:{bucketName: string, rawName: string, base64: string,url:any};
     //是否隐藏
     public hidden?:boolean;
 }
