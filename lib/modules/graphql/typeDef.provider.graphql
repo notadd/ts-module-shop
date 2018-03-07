@@ -397,16 +397,16 @@ input createXml{
 }
 input Picture{
     #空间名
-    bucketName:String,
+    bucketName:String!,
     #文件名
-    rawName:String,
+    rawName:String!,
     #base64编码
-    base64:String
+    base64:String!
 }
 type Query{
     #Get the articles by paging.
-    getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
-        reductionGetByClassifyId: recycleClasssifyId, getArticleByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit,serachArticle:recycleLimit) :ArticlePagination,
+    getArticlesLimit(getArticleAll: ArticleAll, recycleFind: recycleLimit,
+        reductionGetByClassifyId: recycleClasssifyId, findTopPlace: recycleLimit,serachArticle:recycleLimit) :ArticlePagination,
    #Get the articles No paging.
     getArticlesNoLimit(getArticleById: ArticleId,showNext: ArticleId,superiorArticle:ArticleId,getCurrentClassifyArticles:ArticleId):[Article],
     #Get classification

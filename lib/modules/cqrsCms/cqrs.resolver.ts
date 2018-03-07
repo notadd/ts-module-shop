@@ -363,7 +363,7 @@ export class CqrsResolver{
                         base64:amap.get('base64'),
                         url:url}};
             }else{
-                articleVM.createArticle={article:newArticle};
+                articleVM.createArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}};
             }
 
         }
@@ -381,12 +381,17 @@ export class CqrsResolver{
             let newArt=new Map();
             newArt=this.objToStrMap(updateArt);
             let amap =new Map();
-            amap=this.objToStrMap(newArt.get('pictureUpload'));
-            let url=obj.protocol+'://'+obj.get('host');
-            articleVM.updateArticle={article:newArticle, picture:{bucketName:amap.get('bucketName'),
-                    rawName:amap.get('rawName'),
-                    base64:amap.get('base64'),
-                    url:url}};
+            if(newArt.get('pictureUpload')){
+                amap=this.objToStrMap(newArt.get('pictureUpload'));
+                let url=obj.protocol+'://'+obj.get('host');
+                articleVM.updateArticle={article:newArticle, picture:{bucketName:amap.get('bucketName'),
+                        rawName:amap.get('rawName'),
+                        base64:amap.get('base64'),
+                        url:url}};
+            }else{
+                articleVM.updateArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}}
+            }
+
         }
         let deleteById=map.get('deleteById');
         if(deleteById!=null || deleteById !=undefined){
