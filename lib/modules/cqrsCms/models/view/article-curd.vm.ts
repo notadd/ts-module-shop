@@ -21,8 +21,7 @@ export class ArticleCurdVm{
     public getArticles?:{getArticleAll?:boolean,keywordsSerach?:string,recycleFind?:boolean,
         reductionGetByClassifyId?:number,getArticleByClassifyId?:{classifyId:number,top:boolean},findTopPlace?:boolean,
         showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number,
-        hidden?:boolean,findTopPlace3?:{classifyId:number,top:boolean}/*,
-        getLevelByClassifyId?:number*/
+        hidden?:boolean,findTopPlace3?:{classifyId:number,top:boolean}
     };
     //图片本地上传
     public pictureUpload?:{bucketName: string, rawName: string, base64: string,url:any};

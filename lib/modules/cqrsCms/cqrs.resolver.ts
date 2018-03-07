@@ -83,14 +83,6 @@ export class CqrsResolver{
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
         }
-        let keywordsSerach=map.get('keywordsSerach');
-        if(keywordsSerach!=null || keywordsSerach!=undefined){
-            let amap=new Map();
-            amap=this.objToStrMap(keywordsSerach);
-            articleVM.getArticles={keywordsSerach:amap.get('keywords')};
-            articleVM.limitNum=amap.get('limitNum');
-            articleVM.pages=amap.get('pages');
-        }
         let recycleFind=map.get('recycleFind');
         if(recycleFind!=null || recycleFind !=undefined){
             let amap=new Map();
@@ -104,15 +96,6 @@ export class CqrsResolver{
             let amap=new Map();
             amap=this.objToStrMap(reductionGetByClassifyId);
             articleVM.getArticles={reductionGetByClassifyId:amap.get('id')};
-            articleVM.limitNum=amap.get('limitNum');
-            articleVM.pages=amap.get('pages');
-        }
-        let getArticleByClassifyId=map.get('getArticleByClassifyId');
-        //未知是否添加是否置顶选项
-        if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
-            let amap=new Map();
-            amap=this.objToStrMap(getArticleByClassifyId);
-            articleVM.getArticles={getArticleByClassifyId:{classifyId:amap.get('id'),top:amap.get('')}};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
         }
@@ -134,9 +117,7 @@ export class CqrsResolver{
             let groupId:number=amap.get('classifyId');
             let findTop:boolean=amap.get('topPlace');
             if(keyWords) articleVM.getArticles={keywordsSerach:keyWords};
-           // if(groupId)  articleVM.getArticles.getArticleByClassifyId={classifyId:groupId,top:findTop};
             if(groupId)  articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop}};
-            //if(findTop)  articleVM.getArticles={findTopPlace:findTop};
             articleVM.limitNum=limitNum;
             articleVM.pages=pages;
         }
