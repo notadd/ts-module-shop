@@ -12,11 +12,11 @@ import {PageModule} from "../page/page.module";
 import {ClassifyModule} from "../classify/classify.module";
 import {ArticleModule} from "../article/article.module";
 import {SiteMapModule} from "../sitemap/sitemap.module";
+import {LocalModule} from "../ext-local-store/src/LocalModule";
 
 @Module({
     modules:[CQRSModule,PageModule,ClassifyModule,ArticleModule,SiteMapModule],
     components:[CqrsResolver,CqrsService,PageRepository,...CommandHandlers,...EventHandlers,PageSagas],
-
 })
 export class CqrsModule implements OnModuleInit{
     constructor(

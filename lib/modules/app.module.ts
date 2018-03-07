@@ -5,9 +5,10 @@ import {RequestMethod} from "@nestjs/common";
 import {GraphQLFactory,GraphQLModule} from "@nestjs/graphql";
 import {NestModule} from "@nestjs/common";
 import {CqrsModule} from "./cqrsCms/cqrs.module";
+import {LocalModule} from "./ext-local-store/src/LocalModule";
 
 @Module({
-    modules :[GraphQLModule,CqrsModule],
+    modules :[GraphQLModule,CqrsModule,LocalModule],
 })
 
 export class ApplicationModule implements NestModule{
