@@ -4,13 +4,18 @@ import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
-import {StoreComponent} from "../ext-local-store/src/export/StoreComponentProvider";
+import {StoreComponentProvider} from "../ext-local-store/src/export/StoreComponentProvider";
+import {LocalModule} from "../ext-local-store/src/LocalModule";
+import {ImagePreProcessInfo, RequestClass} from "../common/error.interface";
+import {request} from "http";
+const clc=require('cli-color');
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
             private readonly classifyService:ClassifyService,
-            private readonly storeService:StoreComponent){}
+        /*    private readonly storeService:StoreComponent*/
+            @Inject('StoreComponentToken') private storeService){}
 
     /**
      * 返回所有数据,依据提供limit进行分页
@@ -83,7 +88,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async createArticle(article:ArticleEntity){
+      async createArticle(article:ArticleEntity,requestUrl?:any,bucketName?:string,rawName?:string,baseb4?:string){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         //if(article.publishedTime<new Date() && article.publishedTime!=null) throw new MessageCodeError('create:publishedTime:lessThan');
@@ -104,7 +109,10 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
         article.recycling=false;
         let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
-         return create;
+        console.log('number='+create);
+        if(bucketName){
+            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,create);
+        }
       }
 
     /**
@@ -112,7 +120,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async updateArticle(article:ArticleEntity){
+      async updateArticle(article:ArticleEntity,requestUrl?:any,bucketName?:string,rawName?:string,baseb4?:string){
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
@@ -129,6 +137,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
           let newArt:ArticleEntity =article;
           await this.respository.updateById(newArt.id,newArt);
+        if(bucketName){
+            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,article.id);
+        }
       }
 
     /**
@@ -292,14 +303,51 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {string} base64
      * @returns {Promise<{bucketName: string; name: string; type: string}>}
      */
-    async upLoadPicture(bucketName: string, rawName: string, base64: string ){
-       // const result=await this.storeService.upload(bucketName,rawName,base64);
+    async upLoadPicture(req:any,bucketName: string, rawName: string, base64: string,id?:number ){
         try {
-            await this.storeService.upload(bucketName,rawName,base64);
+            let entity:ArticleEntity=await this.respository.findOneById(42);
+            //删除图片
+            if(entity.bucketName!=null){
+                await this.storeService.delete(entity.bucketName,entity.pictureName,entity.type)
+            }
+            let imagePreProcessInfo=new ImagePreProcessInfo();
+            imagePreProcessInfo.watermark=false;
+            //上传图片
+            let result=await this.storeService.upload(bucketName,rawName,base64,imagePreProcessInfo).then(a=>{return a});
+            let map=this.objToStrMap(result);
+            let bucket=map.get('bucketName');
+            let name=map.get('name');
+            let type=map.get('type');
+            let str:string=req.toString();
+            //获取图片地址
+            let protocal=str.split(':')[0];
+            let host=str.substring(str.lastIndexOf('/')+1,str.length);
+            let requestClass=new RequestClass();
+            requestClass.host=host;
+            let request={protocol:protocal,host:host};
+            console.log('req='+JSON.stringify(request));
+            let url=await this.storeService.getUrl(request,bucket,name,type,imagePreProcessInfo).then(a=>{return a});
+            entity.type=type;
+            entity.bucketName=bucket;
+            entity.pictureName=name;
+            entity.pictureUrl=url;
+           await this.respository.updateById(entity.id,entity);
         }catch(err) {
-          throw new Error("错误")
+          console.log(clc.redBright(JSON.stringify(err)));
         }
        // return result;
+    }
+    /**
+     * JSON----Map
+     * @param obj
+     * @returns {Map<string, string>}
+     */
+    objToStrMap(obj):Map<string,string> {
+        let strMap=new Map();
+        for (let k of Object.keys(obj)) {
+            strMap.set(k, obj[k]);
+        }
+        return strMap;
     }
 
 }
