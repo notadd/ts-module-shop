@@ -456,7 +456,7 @@ export class ClassifyService{
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
         if(entity.id==1) show=false;
-        if(show==true || show==undefined){
+        if(show==true){
             let global:ArticleEntity[]=[];
             let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
             for(let t in globalArts){
@@ -843,6 +843,7 @@ export class ClassifyService{
                 entity.topPlace=art[t].topPlace;
                 entity.abstract=art[t].abstract;
                 entity.hidden=art[t].hidden;
+                entity.pictureUrl=art[t].pictureUrl;
                 entity.id=art[t].id;
                 entity.recycling=art[t].recycling;
                 entity.check=false;

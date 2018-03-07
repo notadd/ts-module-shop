@@ -28,27 +28,22 @@ export interface Tailor{
     y:number
     gravity:string
 }
-export interface Blur{
-    redius:number
-    sigma:number
-}
 
-export interface ImagePreProcessInfo{
-    resize?:Resize
-    tailor?:Tailor
-    watermark?:boolean
-    rotate?:number
+export class ImagePreProcessInfo{
+    public  resize?:Resize
+    public tailor?:Tailor
+    public watermark?:boolean
+    public rotate?:number
 }
-export interface ImagePostProcessInfo{
-    resize?:Resize
-    tailor?:Tailor
-    watermark?:boolean
-    rotate?:number
-    blur?:Blur
-    sharpen?:boolean
-    format?:string
-    lossless?:boolean
-    quality?:number
-    progressive?:boolean
-    strip?:boolean
+export class RequestClass{
+    private _host:string;
+
+
+    set host(value: string) {
+        this._host = value;
+    }
+
+    get host(): string {
+        return this._host;
+    }
 }
