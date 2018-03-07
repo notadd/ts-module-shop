@@ -1,7 +1,7 @@
 {
-  "name": "content_manager",
+  "name": "cms_content_manager",
   "version": "1.0.0",
-  "description": "Nestjs graphql typescript",
+  "description": "基于nestjs的cms插件",
   "author": "lvying",
   "license": "MIT",
   "scripts": {
@@ -14,6 +14,11 @@
     "@nestjs/graphql": "^2.0.0",
     "@nestjs/swagger": "^1.1.3",
     "@nestjs/cqrs": "^4.0.1",
+    "@nestjs/testing": "^4.4.0",
+    "@nestjs/microservices": "^4.4.0",
+    "@nestjs/websockets": "^4.4.0",
+    "@nestjs/typeorm": "^2.0.0",
+    "@types/sharp": "^0.17.6",
     "glob": "^7.1.2",
     "apollo-server-express": "^1.3.2",
     "graphql": "^0.11.7",
@@ -22,7 +27,15 @@
     "typescript": "^2.4.2",
     "typeorm": "^0.1.9",
     "pg": "^7.4.0",
-    "pg-hstore": "^2.3.2"
+    "mysql": "^2.15.0",
+    "mime": "^2.2.0",
+    "redis": "^2.7.1",
+    "pg-hstore": "^2.3.2",
+    "gm": "^1.23.1",
+    "sharp": "^0.20.0",
+    "formidable": "^1.1.1",
+    "request": "^2.83.0",
+    "reflect-metadata": "^0.1.12"
   },
   "devDependencies": {
     "@types/node": "^7.0.41",

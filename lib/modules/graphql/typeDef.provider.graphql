@@ -25,6 +25,8 @@ type Article{
     abstract:String,
     #内容
     content:String,
+    #图片地址
+    pictureUrl:String,
     #创建时间
     createAt:String,
     #修改时间
@@ -91,6 +93,9 @@ input ArticleInput{
     source:String,
     #来源链接
     sourceUrl:String,
+    #上传图片
+    pictureUpload:Picture
+
 }
 input ArticleUpdate{
     #文章Id
@@ -115,6 +120,8 @@ input ArticleUpdate{
     source:String,
     #来源链接
     sourceUrl:String,
+    #上传图片
+    pictureUpload:Picture
 }
 type Classify{
     #分类Id
@@ -388,6 +395,14 @@ input createXml{
     #是否开启
     open:Boolean
 }
+input Picture{
+    #空间名
+    bucketName:String,
+    #文件名
+    rawName:String,
+    #base64编码
+    base64:String
+}
 type Query{
     #Get the articles by paging.
     getArticlesLimit(getArticleAll: ArticleAll, keywordsSerach: Keywords, recycleFind: recycleLimit,
@@ -408,7 +423,7 @@ type Query{
 type Mutation{
     #the method to modify article,return string
     ArticleCU(createArt:ArticleInput,updateArt:ArticleUpdate,deleteById:Array,recycleDelete:Array,reductionArticle:Array,classifyTopPlace:ArticleIdArray,limitNum:Int
-        pages:Int,hidden:Boolean):String
+        pages:Int,hidden:Boolean):String,
     #the method to modify classification,return classify array
     ClassifyCU(createClass:ClassifyCreateNew,updateClass:ClassifyUpdateNew,deleteClassifyById:deleteClassify,mobileTheClassify:mobileClassify):String
     #the method to modify page,return page array
