@@ -13,6 +13,7 @@ import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ArticleCurdVm} from "./models/view/article-curd.vm";
+import {HttpStatus} from "@nestjs/common";
 
 const clc=require('cli-color');
 @Resolver()
@@ -330,6 +331,7 @@ export class CqrsResolver{
      */
     @Mutation()
     async ArticleCU(obj,arg){
+        console.log(obj.type);
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -341,22 +343,45 @@ export class CqrsResolver{
         articleVM.hidden=map.get('hidden');
         if(createArt!=null || createArt !=undefined){
             let art:ArticleEntity=createArt;
-            if(art.publishedTime!=null){
+            let TimeNum:number=art.publishedTime.toString().length;
+            if(art.publishedTime!=null && TimeNum>0){
                 let date:string=art.publishedTime.toString();
                 art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+            }else{
+                art.publishedTime=null;
             }
+            let newArt=new Map();
+            newArt=this.objToStrMap(createArt);
+            let amap =new Map();
+            amap=this.objToStrMap(newArt.get('pictureUpload'));
             let newArticle:ArticleEntity=art;
-            articleVM.createArticle=newArticle;
+            let url=obj.protocol+'://'+obj.get('host');
+            articleVM.createArticle={article:newArticle,
+                picture:{bucketName:amap.get('bucketName'),
+                    rawName:amap.get('rawName'),
+                    base64:amap.get('base64'),
+                    url:url}};
         }
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
             let art:ArticleEntity=updateArt;
-            if(art.publishedTime!=null){
+            let TimeNum:number=art.publishedTime.toString().length;
+            if(art.publishedTime!=null && TimeNum>0){
                 let date:string=art.publishedTime.toString();
-                art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+                art.publishedTime=new Date(Date.parse(date.replace(/- /g,"/")));
+            }else{
+                art.publishedTime=null;
             }
             let newArticle:ArticleEntity=art;
-            articleVM.updateArticle=newArticle;
+            let newArt=new Map();
+            newArt=this.objToStrMap(updateArt);
+            let amap =new Map();
+            amap=this.objToStrMap(newArt.get('pictureUpload'));
+            let url=obj.protocol+'://'+obj.get('host');
+            articleVM.updateArticle={article:newArticle, picture:{bucketName:amap.get('bucketName'),
+                    rawName:amap.get('rawName'),
+                    base64:amap.get('base64'),
+                    url:url}};
         }
         let deleteById=map.get('deleteById');
         if(deleteById!=null || deleteById !=undefined){
@@ -389,7 +414,18 @@ export class CqrsResolver{
             let result:string=`成功将${num}条数据置顶`;
             return result;
         }
-        console.log(clc.blueBright('/****ArticleCU*******/='+JSON.stringify(articleVM)));
+        let pictureUpload = map.get('pictureUpload');
+        if(pictureUpload != null || pictureUpload != undefined){
+            let amap=new Map();
+            amap=this.objToStrMap(pictureUpload);
+            let url=obj.protocol+'://'+obj.get('host');
+            articleVM.pictureUpload={bucketName:amap.get('bucketName'),
+                rawName:amap.get('rawName'),
+                base64:amap.get('base64'),
+                url:url
+            };
+        }
+      //  console.log(clc.blueBright('/****ArticleCU*******/='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
         return JSON.stringify(result);
         //let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
