@@ -112,7 +112,7 @@ export class CqrsResolver{
         if(getArticleByClassifyId!=null || getArticleByClassifyId !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(getArticleByClassifyId);
-            articleVM.getArticles={getArticleByClassifyId:amap.get('id')};
+            articleVM.getArticles={getArticleByClassifyId:{classifyId:amap.get('id'),top:amap.get('')}};
             articleVM.limitNum=amap.get('limitNum');
             articleVM.pages=amap.get('pages');
         }
@@ -353,14 +353,19 @@ export class CqrsResolver{
             let newArt=new Map();
             newArt=this.objToStrMap(createArt);
             let amap =new Map();
-            amap=this.objToStrMap(newArt.get('pictureUpload'));
             let newArticle:ArticleEntity=art;
-            let url=obj.protocol+'://'+obj.get('host');
-            articleVM.createArticle={article:newArticle,
-                picture:{bucketName:amap.get('bucketName'),
-                    rawName:amap.get('rawName'),
-                    base64:amap.get('base64'),
-                    url:url}};
+            if(newArt.get('pictureUpload')){
+                amap=this.objToStrMap(newArt.get('pictureUpload'));
+                let url=obj.protocol+'://'+obj.get('host');
+                articleVM.createArticle={article:newArticle,
+                    picture:{bucketName:amap.get('bucketName'),
+                        rawName:amap.get('rawName'),
+                        base64:amap.get('base64'),
+                        url:url}};
+            }else{
+                articleVM.createArticle={article:newArticle};
+            }
+
         }
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
