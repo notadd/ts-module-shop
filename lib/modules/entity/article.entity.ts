@@ -41,6 +41,14 @@ export class ArticleEntity{
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
+    //空间名
+    @Column({nullable:true,length:20}) bucketName:string;
+    //图片名
+    @Column({nullable:true,length:500}) pictureName:string;
+    //图片类型
+    @Column({nullable:true,length:30}) type:string;
+    //图片地址
+    @Column({nullable:true,length:500}) pictureUrl:string;
 
     @OneToMany(type => ClassifyEntity,ClassifyEntity=>ClassifyEntity.articles)
     classifications:ClassifyEntity[];
@@ -63,6 +71,7 @@ export class Article{
     display:string;
     createAt:string;
     updateAt:string;
+    pictureUrl:string;
     classifications:ClassifyEntity[];
     check:boolean;
 
