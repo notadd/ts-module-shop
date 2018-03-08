@@ -552,18 +552,23 @@ export class CqrsResolver{
             page.classify=amap.get('classify');
             page.classifyId=amap.get('classifyId');
             let contents:PageContentEntity[]=[];
-            let strFinal:string[]=amap.get('content');
+            //let strFinal:ContentMap[]=amap.get('content');
+           let strFinal:string[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
                 let amap = new Map();
-                console.log('strFinal='+strFinal[t]);
-                amap=this.objToStrMap(JSON.parse(strFinal[t]));
-                let id=amap.get('id');
-                console.log(clc.redBright('id='+id+",content="+amap.get('content')));
-                /*newContent.content=strFinal[t].content;
-                newContent.id=strFinal[t].id;*/
-                newContent.content=amap.get('content');
-                newContent.id=amap.get('id');
+              //  amap=this.objToStrMap(JSON.parse(strFinal[t]));
+                let str:string=strFinal[t].substring(0,strFinal[t].indexOf("'"));
+                let firstId:string=str.split(',')[0];
+                let secondContent:string=strFinal[t].substring(strFinal[t].indexOf("'")+1,strFinal[t].lastIndexOf("'"));
+                let id=firstId.substring(firstId.lastIndexOf(':')+1,firstId.length);
+                console.log('id='+id+",content="+secondContent);
+                //let id=amap.get('id');
+              //  console.log(clc.redBright('id='+id+",content="+amap.get('content')));
+                  newContent.id=Number(id);
+                 newContent.content=secondContent;
+         /*       newContent.content=amap.get('content');
+                newContent.id=amap.get('id');*/
                 contents.push(newContent);
             }
             createParam.page=page;
@@ -582,7 +587,7 @@ export class CqrsResolver{
         }
         console.log(clc.blueBright('/****PageCUD*******/='+JSON.stringify(createParam)));
         const result=await this.sitemapService.pageCurd(createParam);
-        return JSON.stringify(result);//.then(a=>{console.log('执行时间='+new Date().getTime())});
+        return JSON.stringify(result);///.then(a=>{console.log('执行时间='+new Date().getTime())});
        // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
         //PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
         //pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);

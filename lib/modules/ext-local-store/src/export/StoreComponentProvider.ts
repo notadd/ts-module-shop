@@ -1,34 +1,26 @@
 import { ImagePostProcessInfo, ImagePreProcessInfo } from '../interface/file/ImageProcessInfo';
-import {Component, HttpException, Inject} from '@nestjs/common';
+import { HttpException, Component, Inject } from '@nestjs/common';
 import { ImageMetadata } from '../interface/file/ImageMetadata';
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
 import { Repository, Connection } from 'typeorm';
 import { TokenUtil } from '../util/TokenUtil';
 import { FileUtil } from '../util/FileUtil';
-import { KindUtil} from "../util/KindUtil";
+import { KindUtil } from '../util/KindUtil';
 import { Bucket } from '../model/Bucket';
 import { Image } from '../model/Image';
 import * as path from 'path';
 
-@Component()
-export class StoreComponent {
+ class StoreComponent {
 
     constructor(
         @Inject(KindUtil) private readonly kindUtil: KindUtil,
         @Inject(FileUtil) private readonly fileUtil: FileUtil,
         @Inject(TokenUtil) private readonly tokenUtil: TokenUtil,
         @Inject(ImageProcessUtil) private readonly imageProcessUtil: ImageProcessUtil,
-        @Inject('ImageRepositoryToken') private readonly imageRepository: Repository<Image>,
-        @Inject('BucketRepositoryToken') private readonly bucketRepository: Repository<Bucket>
+        @Inject('LocalModule.ImageRepository') private readonly imageRepository: Repository<Image>,
+        @Inject('LocalModule.BucketRepository') private readonly bucketRepository: Repository<Bucket>
     ) {}
 
-    /**
-     * 删除文件
-     * @param {string} bucketName
-     * @param {string} name
-     * @param {string} type
-     * @returns {Promise<void>}
-     */
     async delete(bucketName: string, name: string, type: string): Promise<void> {
         //验证参数
         if (!bucketName || !name || !type) {
@@ -57,18 +49,9 @@ export class StoreComponent {
         await this.fileUtil.delete(realPath)
     }
 
-    /**
-     * 上传文件
-     * @param {string} bucketName
-     * @param {string} rawName
-     * @param {string} base64
-     * @param {ImagePreProcessInfo} imagePreProcessInfo
-     * @returns {Promise<{bucketName: string; name: string; type: string}>}
-     */
-
     async upload(bucketName: string, rawName: string, base64: string , imagePreProcessInfo?:ImagePreProcessInfo): Promise<{ bucketName: string, name: string, type: string }> {
-        let tempPath: string = path.resolve(__dirname, '../', 'store', 'temp', (+new Date()) + '' + rawName);
-        console.log('tempPath='+tempPath);
+        console.log("rawName="+rawName+",bucketName="+bucketName);
+        let tempPath: string = path.resolve(__dirname, '../', 'store', 'temp', (+new Date()) + '' + rawName)
         if (!bucketName || !rawName || !base64) {
             throw new HttpException('缺少参数', 400)
         }
@@ -76,23 +59,21 @@ export class StoreComponent {
         let bucket: Bucket = await this.bucketRepository.createQueryBuilder('bucket')
             .leftJoinAndSelect('bucket.image_config', 'image_config')
             .where('bucket.name = :name', { name: bucketName })
-            .getOne();
-        if (bucket==null) {
-            throw new Error('指定空间' + bucketName + '不存在');
+            .getOne()
+        if (!bucket) {
+            throw new HttpException('指定空间' + bucketName + '不存在', 401)
         }
-        console.log('bucket='+JSON.stringify(bucket));
+        console.log('temPath='+tempPath);
         await this.fileUtil.write(tempPath, Buffer.from(base64, 'base64'))
         let metadata: ImageMetadata
         let type: string = rawName.substring(rawName.lastIndexOf('.') + 1)
         //根据文件种类
-        console.log('type='+type);
         let kind: string = this.kindUtil.getKind(type)
-        console.log("kind="+kind);
+        console.log('kind='+kind);
         try {
             if (kind === 'image') {
                 let imagePostProcessInfo:ImagePostProcessInfo = imagePreProcessInfo
                 let format = bucket.image_config.format || 'raw'
-                console.log('format='+format);
                 //根据不同的图片保存类型，处理并且存储图片，返回处理后元数据
                 if (format === 'raw') {
                     imagePostProcessInfo.strip = true
@@ -108,7 +89,7 @@ export class StoreComponent {
                     imagePostProcessInfo.watermark = false 
                 }
                 metadata = await this.imageProcessUtil.processAndStore(tempPath, bucket, imagePostProcessInfo)
-                console.log('meadata='+JSON.stringify(metadata));
+                console.log('data='+metadata);
                 let image: Image = new Image()
                 image.bucket = bucket
                 image.raw_name = rawName
@@ -118,7 +99,6 @@ export class StoreComponent {
                 image.height = metadata.height
                 image.size = metadata.size
                 let isExist: Image = await this.imageRepository.findOne({ name: metadata.name, bucketId: bucket.id })
-                console.log('isExit='+isExist);
                 //只有指定路径图片不存在时才会保存
                 if (!isExist) {
                     try {
@@ -141,25 +121,18 @@ export class StoreComponent {
         return { bucketName, name: metadata.name, type: metadata.format }
     }
 
-    /**
-     * 获取路径
-     * @param req
-     * @param {string} bucketName
-     * @param {string} name
-     * @param {string} type
-     * @param {ImagePostProcessInfo} imagePostProcessInfo
-     * @returns {Promise<string>}
-     */
-    async getUrl(req: any, bucketName: string, name: string, type: string, imagePostProcessInfo: ImagePostProcessInfo): Promise<string> {
+    async getUrl(req: any, bucketName: string, name: string, type: string, imagePostProcessInfo?: ImagePostProcessInfo): Promise<string> {
+        console.log('req='+req+",bucketName="+bucketName+",name="+name+",type="+type+",imagePost="+JSON.stringify(imagePostProcessInfo));
+        console.log('req.protocal='+req.protocol+',host='+req.host);
         //验证参数
-        if (!bucketName || !name || !type || !req || !req.protocol || !req.get('host')) {
+        if (!bucketName || !name || !type || !req || !req.protocol || !req.host) {
             throw new HttpException('缺少参数', 400)
         }
         let bucket: Bucket = await this.bucketRepository.findOne({ name: bucketName })
         if (!bucket) {
             throw new HttpException('指定空间' + bucketName + '不存在', 401)
         }
-        let url: string = req.protocol + '://' + req.get('host') + '/local/file/visit'
+        let url: string = req.protocol + '://' + req.host + '/local/file/visit'
         //根据文件种类，查找、删除数据库
         let kind = this.kindUtil.getKind(type)
         if (kind === 'image') {
@@ -194,6 +167,6 @@ export const StoreComponentProvider = {
     useFactory: (kindUtil: KindUtil, fileUtil: FileUtil, tokenUtil: TokenUtil, imageProcessUtil: ImageProcessUtil, imageRepository: Repository<Image>, bucketRepository: Repository<Bucket>) => {
         return new StoreComponent(kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository)
     },
-    inject: [KindUtil, FileUtil, TokenUtil, ImageProcessUtil, 'ImageRepositoryToken', 'BucketRepositoryToken']
+    inject: [KindUtil, FileUtil, TokenUtil, ImageProcessUtil, 'LocalModule.ImageRepository', 'LocalModule.BucketRepository']
 
 }
