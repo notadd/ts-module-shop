@@ -339,7 +339,7 @@ input mobileClassify{
 }
 input UpdatePage{
     #页面id
-    id:Int!,
+    id:Int,
     #页面名称
     title:String,
     #页面别名

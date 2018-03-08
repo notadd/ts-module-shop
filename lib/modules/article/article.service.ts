@@ -335,6 +335,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             entity.pictureUrl=url;
            await this.respository.updateById(entity.id,entity);
         }catch(err) {
+            console.log(err);
           console.log(clc.redBright(JSON.stringify(err)));
         }
        // return result;
