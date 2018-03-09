@@ -12,6 +12,7 @@ import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ArticleCurdVm} from "./models/view/article-curd.vm";
+import {ContentMap} from "../common/param.dto";
 
 const clc=require('cli-color');
 @Resolver()
@@ -502,11 +503,8 @@ export class CqrsResolver{
         let bToJSon = JSON.parse(str);
         let map = new Map();
         map = this.objToStrMap(bToJSon);
-        let PageReturn:Page[];
-        let pagination;
         let createPages = map.get('createPages');
         let createParam:CreatePageVm=new CreatePageVm();
-        let resultPage;
         if (createPages != null || createPages != undefined) {
             let amap = new Map();
             amap = this.objToStrMap(createPages);
@@ -516,7 +514,6 @@ export class CqrsResolver{
             page.classify=amap.get('classify');
             page.classifyId=amap.get('classifyId');
             let contents:PageContentEntity[]=[];
-            //let strFinal:ContentMap[]=amap.get('content');
             let strFinal:string[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
@@ -542,10 +539,14 @@ export class CqrsResolver{
             //console.log(JSON.parse(amap.get('content')));
             //const strFinal=JSON.parse(amap.get('content'));
 
-           /* let homeNew=[{"id":"hehe","content":"<p>测试1</p>"},{"id":"hehe","content":"<p>测试2</p>"}];
+          /*  let homeNew=[{"id":"hehe","content":"<p>测试1</p>"},{"id":"hehe","content":"<p>测试2</p>"}];
             let home = JSON.parse(JSON.stringify(homeNew));
             console.log('home='+home);*/
+         /* console.log('contents='+amap.get('content'));
+           let str:string=amap.get('content');
+           str.replace("'",'"');
             const  strFinal=JSON.parse(JSON.stringify(amap.get('content')));
+            let strFin:
             console.log("strfinal="+strFinal);
             for(let t in strFinal){
                 console.log(clc.redBright(strFinal[t]));
@@ -557,7 +558,7 @@ export class CqrsResolver{
                 let id=newMap.get('id');
                 let content=newMap.get('content');
                 console.log('id='+id+",content="+content);
-            }
+            }*/
 
 
           /*  for(let t in amap.get('content')){
@@ -569,29 +570,19 @@ export class CqrsResolver{
             }*/
 
 
-            //let strFinal:ContentMap[]=amap.get('content');
-          /* let strFinal:string[]=amap.get('content');
+            let strFinal:ContentMap[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
                 let amap = new Map();
-              //  amap=this.objToStrMap(JSON.parse(strFinal[t]));
-                let str:string=strFinal[t].substring(0,strFinal[t].indexOf("'"));
-                let firstId:string=str.split(',')[0];
-                let secondContent:string=strFinal[t].substring(strFinal[t].indexOf("'")+1,strFinal[t].lastIndexOf("'"));
-                let id=firstId.substring(firstId.lastIndexOf(':')+1,firstId.length);
-                console.log('id='+id+",content="+secondContent);
-                //let id=amap.get('id');
-              //  console.log(clc.redBright('id='+id+",content="+amap.get('content')));
-                  newContent.id=Number(id);
-                 newContent.content=secondContent;
-         /!*       newContent.content=amap.get('content');
-                newContent.id=amap.get('id');*!/
+                amap=this.objToStrMap(strFinal[t]);
+                newContent.content=amap.get('content');
+                newContent.id=amap.get('id');
                 contents.push(newContent);
             }
             createParam.page=page;
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
-            createParam.pages=amap.get('pages');*/
+            createParam.pages=amap.get('pages');
         }
         let deletePages=map.get('deletePages');
         if(deletePages != null || deletePages != undefined) {
@@ -603,9 +594,9 @@ export class CqrsResolver{
             createParam.array=array;
         }
         console.log(clc.blueBright('/****PageCUD*******/='+JSON.stringify(createParam)));
-       // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
-        /*const result=await this.sitemapService.pageCurd(createParam);
-        return JSON.stringify(result)*/;///.then(a=>{console.log('执行时间='+new Date().getTime())});
+        //let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
+        const result=await this.sitemapService.pageCurd(createParam);
+        return JSON.stringify(result);
     }
     /**
      * JSON----Map
