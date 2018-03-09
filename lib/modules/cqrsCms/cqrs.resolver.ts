@@ -116,8 +116,16 @@ export class CqrsResolver{
             let pages:number=amap.get('pages');
             let groupId:number=amap.get('classifyId');
             let findTop:boolean=amap.get('topPlace');
-            if(keyWords) articleVM.getArticles={keywordsSerach:keyWords};
-            if(groupId)  articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop}};
+            if(!keyWords) keyWords="";
+            articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop,name:keyWords}};
+          /*  if(keyWords){
+
+               /!* articleVM.getArticles={keywordsSerach:keyWords};
+                groupId=null;*!/
+            }else {
+                articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop}};
+            }*/
+           /* if(groupId>1 || !keyWords) */
             articleVM.limitNum=limitNum;
             articleVM.pages=pages;
         }
@@ -552,8 +560,30 @@ export class CqrsResolver{
             page.classify=amap.get('classify');
             page.classifyId=amap.get('classifyId');
             let contents:PageContentEntity[]=[];
+            //console.log(JSON.parse(amap.get('content')));
+            //const strFinal=JSON.parse(amap.get('content'));
+            const  strFinal=amap.get('content');
+            for(let t in strFinal){
+                let newMap=new Map();
+                newMap=this.objToStrMap(strFinal[t]);
+                console.log('newMap='+JSON.stringify(newMap));
+                let id=newMap.get('id');
+                let content=newMap.get('content');
+                console.log('id='+id+",content="+content);
+            }
+
+
+          /*  for(let t in amap.get('content')){
+                let amapNew=new Map();
+                amapNew=this.objToStrMap(JSON.parse(amap.get('content')[t]));
+                let id=amapNew.get('id');
+                let content=amapNew.get('content');
+                console.log('id='+id+",content="+content);
+            }*/
+
+
             //let strFinal:ContentMap[]=amap.get('content');
-           let strFinal:string[]=amap.get('content');
+          /* let strFinal:string[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;
                 let amap = new Map();
@@ -567,14 +597,14 @@ export class CqrsResolver{
               //  console.log(clc.redBright('id='+id+",content="+amap.get('content')));
                   newContent.id=Number(id);
                  newContent.content=secondContent;
-         /*       newContent.content=amap.get('content');
-                newContent.id=amap.get('id');*/
+         /!*       newContent.content=amap.get('content');
+                newContent.id=amap.get('id');*!/
                 contents.push(newContent);
             }
             createParam.page=page;
             createParam.content=contents;
             createParam.limit=amap.get('limitNum');
-            createParam.pages=amap.get('pages');
+            createParam.pages=amap.get('pages');*/
         }
         let deletePages=map.get('deletePages');
         if(deletePages != null || deletePages != undefined) {
@@ -586,9 +616,9 @@ export class CqrsResolver{
             createParam.array=array;
         }
         console.log(clc.blueBright('/****PageCUD*******/='+JSON.stringify(createParam)));
-        const result=await this.sitemapService.pageCurd(createParam);
-        return JSON.stringify(result);///.then(a=>{console.log('执行时间='+new Date().getTime())});
        // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
+        /*const result=await this.sitemapService.pageCurd(createParam);
+        return JSON.stringify(result)*/;///.then(a=>{console.log('执行时间='+new Date().getTime())});
         //PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
         //pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);
         //return{pagination:pagination,pages:PageReturn};

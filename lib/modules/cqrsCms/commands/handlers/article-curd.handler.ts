@@ -39,6 +39,7 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         }
         //分页获取全部文章：可以选择是否隐藏
         if(command.article.getAllArticles && command.article.getArticles.getArticleAll){
+            console.log('start');
             result=await this.articleService.getArticleAll(command.article.limitNum,command.article.getArticles.hidden,command.article.pages);
         }
         //根据id获取单独页面
@@ -61,7 +62,7 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         //页面内根据分类id获取文章，可以选择是否包含置顶文章
         if(command.article.getAllArticles && command.article.getArticles.getArticleByClassifyId){
             result=await this.classifyService.getArticelsByClassifyId(command.article.getArticles.getArticleByClassifyId.classifyId,command.article.limitNum,
-                command.article.getArticles.getArticleByClassifyId.top,command.article.pages);
+                command.article.getArticles.getArticleByClassifyId.top,command.article.pages,command.article.getArticles.getArticleByClassifyId.name);
         }
         //获取置顶文章
         if(command.article.getAllArticles && command.article.getArticles.findTopPlace){
