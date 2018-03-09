@@ -18,8 +18,8 @@ export class ArticleCurdVm{
     //第几页
     public pages?:number;
     //查找文章
-    public getArticles?:{getArticleAll?:boolean,keywordsSerach?:string,recycleFind?:boolean,
-        reductionGetByClassifyId?:number,getArticleByClassifyId?:{classifyId:number,top:boolean},findTopPlace?:boolean,
+    public getArticles?:{getArticleAll?:boolean,recycleFind?:boolean,
+        reductionGetByClassifyId?:number,getArticleByClassifyId?:{classifyId:number,top:boolean,name?:string},findTopPlace?:boolean,
         showNext?:number, getArticleById?:number,superiorArticle?:number,getCurrentClassifyArticles?:number,
         hidden?:boolean,findTopPlace3?:{classifyId:number,top:boolean}
     };
