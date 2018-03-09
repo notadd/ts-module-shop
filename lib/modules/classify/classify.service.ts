@@ -56,7 +56,6 @@ export class ClassifyService{
      * @returns {Promise<PageClassifyEntity[]>}
      */
     async createClassifyPage(entity:PageClassifyEntity,limit?:number):Promise<PageClassifyEntity[]>{
-        console.log('entity='+JSON.stringify(entity));
         let firstClass:PageClassifyEntity[] =await this.pageRepository.find();
         if(firstClass.length=0){
             let newClassify =new PageClassifyEntity();
@@ -448,7 +447,8 @@ export class ClassifyService{
      * 通过分类id获取文章(包含置顶)
      * @param {number} id
      */
-    async getArticelsByClassifyId(id:number,limit?:number,show?:Boolean,pages?:number){
+    async getArticelsByClassifyId(id:number,limit?:number,show?:Boolean,pages?:number,name?:string){
+        let str:string=`%${name}%`;
         let articles:ArticleEntity[]=[];
         let entity:ClassifyEntity=await this.findOneByIdArt(id);
         if(entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
@@ -456,10 +456,10 @@ export class ClassifyService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        if(entity.id==1) show=false;
+        //置顶：无 获取对应关键字或分类 对应的文章,是：获取对应分类下，置顶到1、2 、 3级分类的文章,否：获取对应分类下置顶到4、 5 分类的文章
         if(show==true){
             let global:ArticleEntity[]=[];
-            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
+            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             for(let t in globalArts){
                 if(globalArts[t].display!=null){
                     let newArray:string[]=globalArts[t].display.split(',');
@@ -473,26 +473,34 @@ export class ClassifyService{
 
             }
             articles.push(...global);
-        }else{
+        }
+        if(show==false){
+          let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in(:id)',{id:newArray}).andWhere('"topPlace"=\'current\' or "topPlace"=\'cancel\'').andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
+          articles.push(...newArticles);
+          level=5;
+         // console.log('newArticles='+JSON.stringify(articles));
+        }
+        if(show==undefined){
             level=4;
         }
         if(level==1){
-            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'global\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else if(level==2){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'global\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else if(level==3){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'global\'',{classifyId:id}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
-        }else{
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','ASC').getMany();
+        }else if(level==4){
+            console.log('start');
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id) and recycling=false' ,{id:newArray}).andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
         let num:number=articles.length;
@@ -501,7 +509,11 @@ export class ClassifyService{
     }
     async Fenji(art:ArticleEntity[],limit?:number,pages?:number):Promise<ArticleEntity[]>{
         let newArt:ArticleEntity[]=[];
-        newArt=art.splice(limit*(pages-1),limit);
+        if(limit){
+            newArt=art.splice(limit*(pages-1),limit);
+        }else {
+            newArt=art;
+        }
         return newArt;
 
     }
