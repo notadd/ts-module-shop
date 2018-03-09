@@ -5,7 +5,6 @@ import {ClassifyService} from "../classify/classify.service";
 import {PageService} from "../page/page.service";
 import {Page, PageEntity} from "../entity/page.entity";
 import {PageContentEntity} from "../entity/page.content.entity";
-import {ContentMap} from "../common/param.dto";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {CreateXmlVm} from "./models/view/create-xml-vm";
 import {CqrsService} from "./cqrs.service";
@@ -13,7 +12,6 @@ import {CreatePageVm} from "./models/view/create-page.vm";
 import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ArticleCurdVm} from "./models/view/article-curd.vm";
-import {HttpStatus} from "@nestjs/common";
 
 const clc=require('cli-color');
 @Resolver()
@@ -118,14 +116,6 @@ export class CqrsResolver{
             let findTop:boolean=amap.get('topPlace');
             if(!keyWords) keyWords="";
             articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop,name:keyWords}};
-          /*  if(keyWords){
-
-               /!* articleVM.getArticles={keywordsSerach:keyWords};
-                groupId=null;*!/
-            }else {
-                articleVM.getArticles={getArticleByClassifyId:{classifyId:groupId,top:findTop}};
-            }*/
-           /* if(groupId>1 || !keyWords) */
             articleVM.limitNum=limitNum;
             articleVM.pages=pages;
         }
@@ -424,12 +414,8 @@ export class CqrsResolver{
                 url:url
             };
         }
-      //  console.log(clc.blueBright('/****ArticleCU*******/='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
         return JSON.stringify(result);
-        //let resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
-        //let result=await this.classifyService.TimestampArt(resultArt.articles);
-       // return {pagination:resultPage,articles:result};
     }
 
     /**
@@ -509,13 +495,6 @@ export class CqrsResolver{
         console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(classifyVM)));
         const  result=await this.sitemapService.classifyCurd(classifyVM);
         return JSON.stringify(result);
-      /*  let result;
-        if(classifyVM.useFor=='art'){
-            result=this.classifyService.findAllClassifyArt(1);
-        }else if(classifyVM.useFor=='page'){
-            result=this.classifyService.findAllClassifyPage(1);
-        }
-        return result;*/
     }
     @Mutation()
     async PageCUD(obj,arg) {
@@ -627,9 +606,6 @@ export class CqrsResolver{
        // let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
         /*const result=await this.sitemapService.pageCurd(createParam);
         return JSON.stringify(result)*/;///.then(a=>{console.log('执行时间='+new Date().getTime())});
-        //PageReturn=await this.classifyService.TimestampPage(returnValue.pages);
-        //pagination=await this.classifyService.pageServiceArt(returnValue.totalItems,createParam.limit,createParam.pages);
-        //return{pagination:pagination,pages:PageReturn};
     }
     /**
      * JSON----Map
