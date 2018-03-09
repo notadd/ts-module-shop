@@ -562,11 +562,19 @@ export class CqrsResolver{
             let contents:PageContentEntity[]=[];
             //console.log(JSON.parse(amap.get('content')));
             //const strFinal=JSON.parse(amap.get('content'));
-            const  strFinal=amap.get('content');
+
+           /* let homeNew=[{"id":"hehe","content":"<p>测试1</p>"},{"id":"hehe","content":"<p>测试2</p>"}];
+            let home = JSON.parse(JSON.stringify(homeNew));
+            console.log('home='+home);*/
+            const  strFinal=JSON.parse(JSON.stringify(amap.get('content')));
+            console.log("strfinal="+strFinal);
             for(let t in strFinal){
+                console.log(clc.redBright(strFinal[t]));
+                let str=JSON.parse(JSON.stringify(strFinal[t]));
+                console.log(str);
                 let newMap=new Map();
-                newMap=this.objToStrMap(strFinal[t]);
-                console.log('newMap='+JSON.stringify(newMap));
+                newMap=this.objToStrMap(str);
+                //console.log('newMap='+JSON.stringify(newMap));
                 let id=newMap.get('id');
                 let content=newMap.get('content');
                 console.log('id='+id+",content="+content);
