@@ -197,12 +197,7 @@ input ClassifyUpdate{
     #是否显示上级置顶文章
     isPreTop:Boolean
 }
-input ContentArray{
-    #内容id
-    id:Int,
-    #页面内容
-    content:String
-}
+
 type Page{
     #页面id
     id:Int,
@@ -345,7 +340,7 @@ input UpdatePage{
     #页面别名
     alias:String,
     #页面内容
-    content:[String],
+    content:[ContentArray],
     #页面分类名称
     classify:String,
     #页面分类id
@@ -354,6 +349,12 @@ input UpdatePage{
     limitNum:Int
     #第几页
     pages:Int
+}
+input ContentArray{
+    #内容id
+    id:Int,
+    #页面内容
+    content:String
 }
 input CreatePage{
     #页面id

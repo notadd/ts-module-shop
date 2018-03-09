@@ -96,7 +96,6 @@ export class PageService{
         if(!result){
             update=true;
         }
-        console.log('测试='+JSON.stringify({MessageCodeError:result,Continue:update}));
         return {MessageCodeError:result,Continue:update};
     }
     /**
