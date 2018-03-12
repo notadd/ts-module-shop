@@ -13,8 +13,7 @@ export class Sitemap extends AggregateRoot{
 
     createxml(createParam: CreateXmlVm) {
         // logic
-        console.log('create xml model='+JSON.stringify(createParam));
-        return this.apply(new SitemapCreateEvent(createParam));
+        this.apply(new SitemapCreateEvent(createParam));
     }
 
 }

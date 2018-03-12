@@ -16,6 +16,4 @@ export class CreateXmlVm{
 
     //链接包括：页面
     lc_page_select:boolean;
-    //开启
-    open:boolean;
 }
