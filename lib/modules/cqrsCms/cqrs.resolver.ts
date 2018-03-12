@@ -322,10 +322,9 @@ export class CqrsResolver{
         articleVM.hidden=map.get('hidden');
         if(createArt!=null || createArt !=undefined){
             let art:ArticleEntity=createArt;
-            let TimeNum:number=art.publishedTime.toString().length;
-            if(art.publishedTime!=null && TimeNum>0){
+            if(art.publishedTime){
                 let date:string=art.publishedTime.toString();
-                art.publishedTime=new Date(Date.parse(date.replace(/-/g,"/")));
+                art.publishedTime=new Date(Date.parse(date.replace(/- /g,"/")));
             }else{
                 art.publishedTime=null;
             }
@@ -349,12 +348,9 @@ export class CqrsResolver{
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
             let art:ArticleEntity=updateArt;
-            let TimeNum:number=art.publishedTime.toString().length;
-            if(art.publishedTime!=null && TimeNum>0){
+            if(art.publishedTime){
                 let date:string=art.publishedTime.toString();
                 art.publishedTime=new Date(Date.parse(date.replace(/- /g,"/")));
-            }else{
-                art.publishedTime=null;
             }
             let newArticle:ArticleEntity=art;
             let newArt=new Map();

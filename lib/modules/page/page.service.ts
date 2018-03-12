@@ -1,13 +1,10 @@
-import {Component, HttpException, Inject} from "@nestjs/common";
+import {Component, Inject} from "@nestjs/common";
 import {getManager, Repository} from "typeorm";
 import {PageEntity} from "../entity/page.entity";
-import {HistoryService} from "../history/history.service";
-import {HistoryEntity} from "../entity/history.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {PageClassifyEntity} from "../entity/pageClassify.entity";
 import {ClassifyService} from "../classify/classify.service";
 import {PageContentEntity} from "../entity/page.content.entity";
-import {ClassifyEntity} from "../entity/classify.entity";
 
 @Component()
 export class PageService{
@@ -21,7 +18,7 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async getAllPage(limit?:number,page?:number){
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('id',"ASC").skip(limit*(page-1)).take(limit).getMany();
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
         let title:number=await this.repository.createQueryBuilder().getCount();
         return {pages:pages,totalItems:title};
     }
@@ -33,8 +30,7 @@ export class PageService{
      */
     async serachKeywords(keywords:string,limit?:number,page?:number){
         let words=`%${keywords}%`;
-        console.log('page的关键字'+words);
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('id','ASC').skip(limit*(page-1)).take(limit).getMany();
+        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
         let title:number=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).getCount();
         return {pages:pages,totalItems:title};
     }
@@ -162,7 +158,7 @@ export class PageService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('id','ASC').skip(limit*(page-1)).take(limit).getMany();
+        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
         let title:number=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).getCount();
         return {pages:entity,totalItems:title};
     }
