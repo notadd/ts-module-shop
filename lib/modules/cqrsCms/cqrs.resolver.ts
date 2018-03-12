@@ -37,8 +37,7 @@ export class CqrsResolver{
         map=this.objToStrMap(bToJSon);
         let createxml:CreateXmlVm=map.get('buildxml');
         const result=this.sitemapService.createXml(createxml);
-        console.log('controller='+JSON.stringify(createxml));
-        return createxml;
+        return result;
     }
 
     /**

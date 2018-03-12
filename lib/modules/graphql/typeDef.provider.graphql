@@ -70,7 +70,9 @@ enum stick{
     #二级分类
     level2,
     #三级分类
-    level3
+    level3,
+    #取消置顶
+    cancel
 }
 input ArticleInput{
     #文章名
@@ -392,9 +394,7 @@ input createXml{
     #链接包括：文章
     lc_post_select:Boolean,
     #链接包括：页面
-    lc_page_select:Boolean,
-    #是否开启
-    open:Boolean
+    lc_page_select:Boolean
 }
 input Picture{
     #空间名
