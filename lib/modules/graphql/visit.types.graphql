@@ -1,0 +1,47 @@
+type Query{
+    #get informations about all visits.
+    getAllVisits(limit:Int,pages:Int):[visit]
+}
+type Mutation{
+    createVisits(visit:createVisit):String
+}
+
+type visit{
+    #编号
+    id:Int,
+    #姓名
+    name:String,
+    #手机
+    telPhone:Int,
+    #微信
+    WeChat:String,
+    #邮箱
+    email:String,
+    #公司名称
+    companyName:String,
+    #所属行业
+    industryInvolved:String,
+    #公司人数
+    employees:String,
+    #预约日期
+    appointmentDate:String
+
+}
+input createVisit{
+    #姓名
+    name:String!,
+    #手机
+    telPhone:Int!,
+    #微信
+    WeChat:String!,
+    #邮箱
+    email:String!,
+    #公司名称
+    companyName:String!,
+    #所属行业
+    industryInvolved:String!,
+    #公司人数
+    employees:String!,
+    #预约日期
+    appointmentDate:String!
+}

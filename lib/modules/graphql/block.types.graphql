@@ -1,0 +1,42 @@
+type Query{
+    #get informations about all blocks.
+    getAllBlocks(limit:Int,pages:Int):[block]
+}
+type Mutation{
+    createBlocks(block:createBlock):String
+}
+
+type block{
+    #编号
+    id:Int,
+    #姓名
+    username:String,
+    #手机
+    telPhone:Int,
+    #微信
+    WeChat:String,
+    #公司名称
+    companyName:String,
+    #所属行业
+    industryInvolved:String,
+    #公司人数
+    employees:String,
+    #公司介绍
+    companyIntroduction:String,
+}
+input createBlock{
+    #姓名
+    username:String!,
+    #手机
+    telPhone:Int!,
+    #微信
+    WeChat:String!,
+    #公司名称
+    companyName:String!,
+    #所属行业
+    industryInvolved:String!,
+    #公司人数
+    employees:String!,
+    #公司介绍
+    companyIntroduction:String!,
+}
