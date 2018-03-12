@@ -26,7 +26,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let resultAll:ArticleEntity[]=[];
         if(hidden==true){
             let newArray:ArticleEntity[]=[];
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:false}).orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
             for(let t in newresult){
                 if(newresult[t].hidden){
                     newArray.push(newresult[t]);
@@ -37,13 +37,13 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
         if(hidden==false){
             console.log('false='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:false}).orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=false',{recycling:false}).getCount();
             resultAll.push(...newresult);
         }
         if(hidden==undefined){
             console.log('undefined='+hidden);
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('recycling=false or recycling is null').getCount();
             resultAll.push(...newresult);
         }
@@ -58,7 +58,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async serachArticles(name:string,limit?:number,pages?:number){
         let str:string=`%${name}%`;
-        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:false}).orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
         let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:false}).getCount();
         return {articles:resultAll,totalItems:title};
     }
@@ -151,7 +151,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @returns {Promise<ArticleEntity[]>}
      */
       async recycleFind(limit?:number,pages?:number){
-          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+          let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).orderBy('"publishedTime"','ASC').skip(limit*(pages-1)).take(limit).getMany();
           let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
           return {articles:result,totalItems:title};
       }
