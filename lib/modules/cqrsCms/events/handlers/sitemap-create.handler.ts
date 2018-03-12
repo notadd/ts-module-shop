@@ -15,8 +15,7 @@ export class SitemapCreateHandler implements IEventHandler<SitemapCreateEvent>{
             lc_is_update_sitemap_when_post:event.createXml.lc_is_update_sitemap_when_post,
             lc_post_limit1000:event.createXml.lc_post_limit1000,
             lc_page_select:event.createXml.lc_page_select,
-            lc_post_select:event.createXml.lc_post_select,
-            open:event.createXml.open};
+            lc_post_select:event.createXml.lc_post_select};
         this.sitemapService.commitXML(array_baidu_sitemap_options,url);
     }
 }
