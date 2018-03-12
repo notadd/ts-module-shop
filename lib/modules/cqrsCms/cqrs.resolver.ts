@@ -536,40 +536,6 @@ export class CqrsResolver{
             page.classify=amap.get('classify');
             page.classifyId=amap.get('classifyId');
             let contents:PageContentEntity[]=[];
-            //console.log(JSON.parse(amap.get('content')));
-            //const strFinal=JSON.parse(amap.get('content'));
-
-          /*  let homeNew=[{"id":"hehe","content":"<p>测试1</p>"},{"id":"hehe","content":"<p>测试2</p>"}];
-            let home = JSON.parse(JSON.stringify(homeNew));
-            console.log('home='+home);*/
-         /* console.log('contents='+amap.get('content'));
-           let str:string=amap.get('content');
-           str.replace("'",'"');
-            const  strFinal=JSON.parse(JSON.stringify(amap.get('content')));
-            let strFin:
-            console.log("strfinal="+strFinal);
-            for(let t in strFinal){
-                console.log(clc.redBright(strFinal[t]));
-                let str=JSON.parse(JSON.stringify(strFinal[t]));
-                console.log(str);
-                let newMap=new Map();
-                newMap=this.objToStrMap(str);
-                //console.log('newMap='+JSON.stringify(newMap));
-                let id=newMap.get('id');
-                let content=newMap.get('content');
-                console.log('id='+id+",content="+content);
-            }*/
-
-
-          /*  for(let t in amap.get('content')){
-                let amapNew=new Map();
-                amapNew=this.objToStrMap(JSON.parse(amap.get('content')[t]));
-                let id=amapNew.get('id');
-                let content=amapNew.get('content');
-                console.log('id='+id+",content="+content);
-            }*/
-
-
             let strFinal:ContentMap[]=amap.get('content');
             for(let t in strFinal){
                 let newContent:PageContentEntity=new PageContentEntity;

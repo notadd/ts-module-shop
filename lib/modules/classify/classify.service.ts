@@ -77,7 +77,6 @@ export class ClassifyService{
                 entity.groupId = 1;
             }
             let classify: PageClassifyEntity = entity;
-            console.log('classify=' + JSON.stringify(classify));
             await this.pageRepository.insert(classify);
         }
         return this.findAllClassifyPage(limit);
@@ -125,7 +124,6 @@ export class ClassifyService{
          }
          let time =new Date();
          entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-         let finalClassify:PageClassifyEntity =entity;
          await this.pageRepository.updateById(entity.id,entity);
          return this.findAllClassifyPage(id);
      }
@@ -229,7 +227,6 @@ export class ClassifyService{
                     if(array.length>0){
                         for(let h in array){
                             let numH = array[h].id;
-                            console.log('numH='+numH);
                             deleteArray.push(numH);
                             await this.repository.deleteById(numH);
                             await this.deleteClassifyArt(numH,result);
@@ -296,7 +293,6 @@ export class ClassifyService{
                 if(array.length>0){
                     for(let h in array){
                         let numH = array[h].id;
-                        console.log('numH='+numH);
                         deleteArray.push(numH);
                         await this.pageRepository.deleteById(numH);
                         await this.deleteClassifyPage(numH,result);
@@ -376,7 +372,8 @@ export class ClassifyService{
     async showNextTitle(id: number) : Promise < ArticleEntity[] > {
         let articles: ArticleEntity[] = [];
         let arrayNum: number[] = [];
-        let classifications: ClassifyEntity[] = await this.repository.createQueryBuilder().where('"groupId"= :groupId', {
+        let classifications: ClassifyEntity[] = await this.repository.createQueryBuilder()
+            .where('"groupId"= :groupId', {
             groupId: id
         }).getMany();
         for (let t in classifications) {
@@ -478,7 +475,6 @@ export class ClassifyService{
           let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in(:id)',{id:newArray}).andWhere('"topPlace"=\'current\' or "topPlace"=\'cancel\'').andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
           articles.push(...newArticles);
           level=5;
-         // console.log('newArticles='+JSON.stringify(articles));
         }
         if(show==undefined){
             level=4;
@@ -499,7 +495,6 @@ export class ClassifyService{
             let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...finalArticles);
         }else if(level==4){
-            console.log('start');
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id) and recycling=false' ,{id:newArray}).andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
             articles.push(...newArticles);
         }
@@ -659,7 +654,6 @@ export class ClassifyService{
      * @returns {Promise<void>}
      */
     public async resetTheSetTop(arr:number[]){
-        console.log('arr='+JSON.stringify(arr));
         let articles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:arr}).getMany();
         let time =new Date();
         for(let t in articles){
