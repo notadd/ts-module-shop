@@ -6,9 +6,10 @@ import {GraphQLFactory,GraphQLModule} from "@nestjs/graphql";
 import {NestModule} from "@nestjs/common";
 import {CqrsModule} from "./cqrsCms/cqrs.module";
 import {LocalModule} from "./ext-local-store/src/LocalModule";
+import {RegistrationModule} from "./enter/registration.module";
 
 @Module({
-    modules :[GraphQLModule,CqrsModule,LocalModule],
+    modules :[GraphQLModule,CqrsModule,LocalModule,RegistrationModule],
 })
 
 export class ApplicationModule implements NestModule{
