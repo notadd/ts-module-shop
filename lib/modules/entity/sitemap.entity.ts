@@ -22,9 +22,6 @@ export class SitemapEntity{
     //当发布文章时更新
     @Column({nullable:true})
     lc_is_update_sitemap_when_post:boolean;
-    //是否开启
-    @Column({nullable:true})
-    open:boolean;
     //创建时间
     @CreateDateColumn() createAt:Date;
 

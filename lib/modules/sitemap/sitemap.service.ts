@@ -10,6 +10,13 @@ export class SitemapService{
                 @Inject('PageRepositoryToken') private readonly pageRepository:Repository<PageEntity>,
                 @Inject('SiteRepositoryToken') private readonly siteRepository:Repository<SitemapEntity>
                ){}
+
+    /**
+     * 设置参数
+     * @param array_baidu_sitemap_options
+     * @param {string} url
+     * @returns {Promise<void>}
+     */
     public async commitXML(array_baidu_sitemap_options,url:string){
         let sitemap:SitemapEntity=await this.siteRepository.findOneById(1);
         if(sitemap==null){
@@ -27,8 +34,6 @@ export class SitemapService{
                 fileName='sitemap_baidu';
             }else{fileName='sitemap';}
             sitemap.lc_XML_FileName=fileName;
-            if(array_baidu_sitemap_options['open']) sitemap.open=array_baidu_sitemap_options['open'];
-            console.log('open='+array_baidu_sitemap_options['open']);
             if(array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap']) sitemap.lc_is_Enabled_XML_Sitemap=array_baidu_sitemap_options['lc_is_Enabled_XML_Sitemap'];
             if(array_baidu_sitemap_options['lc_page_select']) sitemap.lc_page_select=array_baidu_sitemap_options['lc_page_select'];
             if(array_baidu_sitemap_options['lc_post_select']) sitemap.lc_post_select=array_baidu_sitemap_options['lc_post_select'];
@@ -82,6 +87,7 @@ export class SitemapService{
     public async buildSitemapXml(url:string){
         let array_baidu_sitemap_options = await this.getBaiduOptions().then(a=>{return a});
         let lc_limit:number;
+        //只更新最近1000篇文章
         if(array_baidu_sitemap_options['lc_post_limit1000']){ lc_limit = 1000; } else { lc_limit = 10000;}
         let fs=require('fs');
         let file=`${(__dirname).substring(0,(__dirname).lastIndexOf('modules'))}modules/public/`;
