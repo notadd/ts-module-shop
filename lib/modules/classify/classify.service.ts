@@ -878,7 +878,6 @@ export class ClassifyService{
                 entity.activityAddress=art[t].activityAddress;
                 entity.peopleNum=art[t].peopleNum;
                 entity.organizer=art[t].organizer;
-                console.log('endTime='+entity.endTime+",startTime="+entity.startTime);
                 result.push(entity);
             }
             }
