@@ -91,7 +91,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
       async createArticle(article:ArticleEntity,requestUrl?:any,bucketName?:string,rawName?:string,baseb4?:string){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-        //if(article.publishedTime<new Date() && article.publishedTime!=null) throw new MessageCodeError('create:publishedTime:lessThan');
         let num:number=await this.classifyService.findLevel(article.classifyId);
         let level:string=this.classifyService.interfaceChange(num);
         if(article.topPlace==null){
@@ -100,9 +99,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let levelGive:string=article.topPlace.toString();
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
-        if(article.classifyId==0 ||article.classifyId==null)
+       /* if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
-            article.classify='默认分类';
+            article.classify='默认分类';*/
         let time =new Date();
         if(article.publishedTime){
             time=article.publishedTime;
@@ -124,8 +123,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let str:string=JSON.stringify(create).split(':')[1];
         let numb:string=str.substring(0,str.lastIndexOf('}'));
         let newId:number=Number(numb);
-
-        if(bucketName){
+        //上传图片
+        if(bucketName && rawName){
             this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,newId);
         }
       }
@@ -140,9 +139,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
           if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-          if(article.classifyId==0 ||article.classifyId==null)
+         /* if(article.classifyId==0 ||article.classifyId==null)
             article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
-            article.classify='默认分类';
+            article.classify='默认分类';*/
           let num:number=await this.classifyService.findLevel(article.classifyId);
           let level:string=this.classifyService.interfaceChange(num);
           let levelGive:string=article.topPlace;
@@ -164,7 +163,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
           let newArt:ArticleEntity =article;
           await this.respository.updateById(newArt.id,newArt);
-        if(bucketName){
+          //图片上传
+        if(bucketName && rawName){
             this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,article.id);
         }
       }
