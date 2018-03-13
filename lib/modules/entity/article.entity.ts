@@ -42,9 +42,9 @@ export class ArticleEntity{
     //結束时间
     @Column({nullable:true}) endTime:Date;
     //活动时间
-    @Column({nullable:true}) activitiesAddress:string;
+    @Column({nullable:true,length:300}) activityAddress:string;
     //主办单位
-    @Column({nullable:true}) organizer:string;
+    @Column({nullable:true,length:200}) organizer:string;
     //活动人数
     @Column({nullable:true}) peopleNum:number;
     //创建时间
