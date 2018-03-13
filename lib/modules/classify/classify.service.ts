@@ -845,13 +845,16 @@ export class ClassifyService{
                 let newTime:Date=art[t].updateAt;
                 let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
                 if(art[t].publishedTime!=null){
-                    let publish:Date=art[t].publishedTime;
-                    let publishDate:Date=publish;
-                    entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
+                    let publish:Date=new Date(art[t].publishedTime.getTime()+art[t].publishedTime.getTimezoneOffset()*60*1000);
+                    entity.publishedTime=`${publish.toLocaleDateString()} ${publish.toLocaleTimeString()}`;
                 }
                 if(art[t].endTime!=null){
-                    let endTime:Date=art[t].endTime;
+                    let endTime:Date=new Date(art[t].endTime.getTime()+art[t].endTime.getTimezoneOffset()*60*1000);
                     entity.endTime=`${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
+                }
+                if(art[t].startTime!=null){
+                    let startTime:Date=new Date(art[t].startTime.getTime()+art[t].startTime.getTimezoneOffset()*60*1000);
+                    entity.startTime=`${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
                 }
                 entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                 entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
@@ -872,6 +875,10 @@ export class ClassifyService{
                 entity.id=art[t].id;
                 entity.recycling=art[t].recycling;
                 entity.check=false;
+                entity.activityAddress=art[t].activityAddress;
+                entity.peopleNum=art[t].peopleNum;
+                entity.organizer=art[t].organizer;
+                console.log('endTime='+entity.endTime+",startTime="+entity.startTime);
                 result.push(entity);
             }
             }
