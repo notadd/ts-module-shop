@@ -314,7 +314,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
         if(classifyId>0){
             let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(classifyId);
-            console.log('entity='+JSON.stringify(entity));
             if(entity==null) result="对应分类不存在";update=false;
         }
         if(!result){

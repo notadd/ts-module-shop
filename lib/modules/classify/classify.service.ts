@@ -756,19 +756,6 @@ export class ClassifyService{
         return numId;
     }
     /**
-     * JSON----Map
-     * @param obj
-     * @returns {Map<string, string>}
-     */
-    objToStrMap(obj):Map<string,string> {
-        let strMap=new Map();
-        for (let k of Object.keys(obj)) {
-            strMap.set(k, obj[k]);
-        }
-        return strMap;
-    }
-
-    /**
      * 分类批量置顶到全局
      * @param {number} id
      * @returns {Promise<number>}
@@ -937,7 +924,6 @@ export class ClassifyService{
     async classifyCheck(useFor:string,id?:number,groupId?:number,alias?:string,deleteNum?:number){
         let result;
         let update:boolean=true;
-        console.log('useFor='+useFor+",id="+id+",groupId="+groupId+",deleteNum="+deleteNum);
         if(id>0){
             if(useFor=='art'){
                 let entity:ClassifyEntity=await this.repository.findOneById(id);
@@ -1016,7 +1002,6 @@ export class ClassifyService{
                 }
             }
         }
-        console.log('result='+result+",Continue="+update);
         if(!result){
             update=true;
         }
