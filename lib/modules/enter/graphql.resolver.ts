@@ -1,11 +1,18 @@
-import {Mutation, Resolver} from "@nestjs/graphql";
+import {Mutation, Query, Resolver} from "@nestjs/graphql";
 import {RegistrationService} from "./registration.service";
-import {Query} from "@nestjs/common";
 import {BlockEntity} from "../entity/block.entity";
 import {SiteEntity} from "../entity/site.entity";
 import {VisitEntity} from "../entity/visit.entity";
 
-@Resolver('Enter')
+function objToStrMap(obj):Map<string,string> {
+    let strMap=new Map();
+    for (let k of Object.keys(obj)) {
+        strMap.set(k, obj[k]);
+    }
+    return strMap;
+}
+
+@Resolver()
 export class EnterResolver {
     constructor(private readonly registration:RegistrationService){}
 
@@ -14,10 +21,10 @@ export class EnterResolver {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
-        let limit:number=map.get('limit');
+        map = objToStrMap(bToJSon);
         const result=await this.registration.getVisit(map.get('limit'),map.get('pages'));
-        return result;
+        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages'));
+        return {visits:result.visits,pagination:paging}
     }
 
     @Query('getAllSites')
@@ -25,9 +32,10 @@ export class EnterResolver {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
+        map = objToStrMap(bToJSon);
         const result=await this.registration.getSite(map.get('limit'),map.get('pages'));
-        return result;
+        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages'));
+        return {sites:result.sites,pagination:paging}
     }
 
     @Query('getAllBlocks')
@@ -35,17 +43,17 @@ export class EnterResolver {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
+        map = objToStrMap(bToJSon);
         const result=await this.registration.getAllBlocks(map.get('limit'),map.get('pages'));
-        return result;
+        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages'));
+        return {blocks:result.blocks,pagination:paging};
     }
-
     @Mutation('createBlocks')
     async createBlocks(obj,arg){
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
+        map = objToStrMap(bToJSon);
         let block:BlockEntity=map.get('block');
         const result=await this.registration.createBlock(block);
         return result;
@@ -56,8 +64,20 @@ export class EnterResolver {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
+        map = objToStrMap(bToJSon);
         let site:SiteEntity=map.get('site');
+        if(site.eventDate){
+            let date:string=site.eventDate.toString();
+            site.eventDate=new Date(Date.parse(date.replace(/- /g,"/")));
+        }
+        if(site.startTime){
+            let date:string=site.startTime.toString();
+            site.startTime=new Date(Date.parse(date.replace(/- /g,"/")));
+        }
+        if(site.endTime){
+            let date:string=site.endTime.toString();
+            site.endTime=new Date(Date.parse(date.replace(/- /g,"/")));
+        }
         const result=await this.registration.createSite(site);
         return result;
     }
@@ -67,23 +87,9 @@ export class EnterResolver {
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
-        map = this.objToStrMap(bToJSon);
+        map = objToStrMap(bToJSon);
         let visit:VisitEntity=map.get('visit');
         const result=await this.registration.createVisit(visit);
         return result;
     }
-
-    /**
-     * JSON----Map
-     * @param obj
-     * @returns {Map<string, string>}
-     */
-    objToStrMap(obj):Map<string,string> {
-        let strMap=new Map();
-        for (let k of Object.keys(obj)) {
-            strMap.set(k, obj[k]);
-        }
-        return strMap;
-    }
-
 }

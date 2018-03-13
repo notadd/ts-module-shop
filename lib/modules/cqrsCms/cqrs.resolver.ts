@@ -332,6 +332,10 @@ export class CqrsResolver{
                 let endTime:string=art.endTime.toString();
                 art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
             }
+            if(art.startTime){
+                let startTime:string=art.startTime.toString();
+                art.startTime=new Date(Date.parse(startTime.replace(/- /g,"/")))
+            }
             let newArt=new Map();
             newArt=this.objToStrMap(createArt);
             let amap =new Map();
@@ -356,17 +360,13 @@ export class CqrsResolver{
                 let date:string=art.publishedTime.toString();
                 art.publishedTime=new Date(Date.parse(date.replace(/- /g,"/")));
             }
-            if(art.endTime){
-                let endTime:string=art.endTime.toString();
-                if(endTime!=" "){
-                    art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
-                }else{
-                    let time:Date=new Date();
-                    art.endTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-                }
-            }else{
-                let time:Date=new Date();
-                art.endTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            if(art.startTime){
+                let startTime:string=art.startTime.toString();
+                art.startTime=new Date(Date.parse(startTime.replace(/- /g,"/")))
+            }
+            if(art.endTime) {
+                let endTime: string = art.endTime.toString();
+                art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
             }
             let newArticle:ArticleEntity=art;
             let newArt=new Map();
