@@ -21,6 +21,16 @@ type Article{
     recycling:Boolean,
     #发布时间
     publishedTime:String,
+    #开始时间
+    startTime:String,
+    #结束时间
+    endTime:String,
+    #活动地址
+    activityAddress:String,
+    #主办单位
+    organizer:String,
+    #活动人数
+    peopleNum:Int,
     #摘要
     abstract:String,
     #内容
@@ -91,6 +101,16 @@ input ArticleInput{
     hidden:Boolean!,
     #发布时间
     publishedTime:String,
+    #开始时间
+    startTime:String,
+    #结束时间
+    endTime:String,
+    #活动地址
+    activityAddress:String,
+    #主办单位
+    organizer:String,
+    #活动人数
+    peopleNum:Int,
     #来源
     source:String,
     #来源链接
@@ -118,6 +138,16 @@ input ArticleUpdate{
     hidden:Boolean,
     #发布时间
     publishedTime:String,
+    #开始时间
+    startTime:String,
+    #结束时间
+    endTime:String,
+    #活动地址
+    activityAddress:String,
+    #主办单位
+    organizer:String,
+    #活动人数
+    peopleNum:Int,
     #来源
     source:String,
     #来源链接

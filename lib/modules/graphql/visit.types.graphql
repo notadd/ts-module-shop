@@ -1,11 +1,17 @@
 type Query{
-    #get informations about all visits.
-    getAllVisits(limit:Int,pages:Int):[visit]
+    #获取参观预约所有信息
+    getAllVisits(limit:Int,pages:Int):visitPagination
 }
 type Mutation{
+    #增加参观预约信息
     createVisits(visit:createVisit):String
 }
-
+type visitPagination{
+    #分页
+    pagination:paging,
+    #文章列表
+    visits:[visit]
+}
 type visit{
     #编号
     id:Int,
