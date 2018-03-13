@@ -1,8 +1,9 @@
 type Query{
-    #get informations about all blocks.
+    #获取所有街区入驻信息
     getAllBlocks(limit:Int,pages:Int):blockPagination
 }
 type Mutation{
+    #增加街区入驻信息
     createBlocks(block:createBlock):String
 }
 

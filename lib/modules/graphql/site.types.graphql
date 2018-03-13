@@ -1,11 +1,17 @@
 type Query{
-    #get  informations about all sites.
-    getAllSites(limit:Int,pages:Int):[site]
+    #获取所有场地租用信息
+    getAllSites(limit:Int,pages:Int):sitePagination
 }
 type Mutation{
+    #增加场地租用信息
     createSites(site:createSite):String
 }
-
+type sitePagination{
+    #分页
+    pagination:paging,
+    #文章列表
+    sites:[site]
+}
 type site{
     #编号
     id:Int,
@@ -38,8 +44,6 @@ type site{
     descr:String
 }
 input createSite{
-    #编号
-    id:Int!,
     #申请人
     applicant:String!,
     #手机
@@ -55,9 +59,9 @@ input createSite{
     #人数规模
     peopleScale:People!,
     #场地选择
-    siteSelection:String!,
+    siteSelection:[String]!,
     #借用设备登记
-    equipment:String!,
+    equipment:[String]!,
     #活动介绍
     activityIntroduce:String!,
     #主要嘉宾信息
