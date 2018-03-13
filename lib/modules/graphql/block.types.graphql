@@ -1,6 +1,6 @@
 type Query{
     #get informations about all blocks.
-    getAllBlocks(limit:Int,pages:Int):[block]
+    getAllBlocks(limit:Int,pages:Int):blockPagination
 }
 type Mutation{
     createBlocks(block:createBlock):String
@@ -23,6 +23,32 @@ type block{
     employees:String,
     #公司介绍
     companyIntroduction:String,
+}
+type blockPagination{
+    #分页
+    pagination:paging,
+    #文章列表
+    blocks:[block]
+}
+type paging{
+    #总条数
+    totalItems: Int,
+    #当前页
+    currentPage: Int,
+    #当前页内有多少条数据
+    pageSize: Int,
+    #总页数
+    totalPages: Int,
+    #开始页
+    startPage: Int,
+    #结束页
+    endPage: Int,
+    #开始下标
+    startIndex: Int,
+    #结束下标
+    endIndex: Int,
+    #页码列表
+    pages: [Int]
 }
 input createBlock{
     #姓名
