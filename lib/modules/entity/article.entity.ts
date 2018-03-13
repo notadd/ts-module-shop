@@ -37,6 +37,16 @@ export class ArticleEntity{
     @Column({nullable:true,length:10000}) content:string;
     //不显示分类
     @Column({nullable:true}) display:string;
+    //开始时间
+    @Column({nullable:true}) startTime:Date;
+    //結束时间
+    @Column({nullable:true}) endTime:Date;
+    //活动时间
+    @Column({nullable:true}) activitiesAddress:string;
+    //主办单位
+    @Column({nullable:true}) organizer:string;
+    //活动人数
+    @Column({nullable:true}) peopleNum:number;
     //创建时间
     @CreateDateColumn() createAt:Date;
     //修改时间
@@ -66,6 +76,11 @@ export class Article{
     hidden:boolean;
     recycling:boolean;
     publishedTime:string;
+    endTime:string;
+    startTime:string;
+    activityAddress:string;
+    organizer:string;
+    peopleNum:number;
     abstract:string;
     content:string;
     display:string;

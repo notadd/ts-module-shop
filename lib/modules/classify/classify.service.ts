@@ -470,7 +470,7 @@ export class ClassifyService{
         //置顶：无 获取对应关键字或分类 对应的文章,是：获取对应分类下，置顶到1、2 、 3级分类的文章,否：获取对应分类下置顶到4、 5 分类的文章
         if(show==true){
             let global:ArticleEntity[]=[];
-            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             for(let t in globalArts){
                 if(globalArts[t].display!=null){
                     let newArray:string[]=globalArts[t].display.split(',');
@@ -486,7 +486,7 @@ export class ClassifyService{
             articles.push(...global);
         }
         if(show==false){
-          let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in(:id)',{id:newArray}).andWhere('"topPlace"=\'current\' or "topPlace"=\'cancel\'').andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
+          let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in(:id)',{id:newArray}).andWhere('"topPlace"=\'current\' or "topPlace"=\'cancel\'').andWhere('"name"like :name',{name:str}).orderBy('"publishedTime"','DESC').getMany();
           articles.push(...newArticles);
           level=5;
         }
@@ -494,22 +494,22 @@ export class ClassifyService{
             level=4;
         }
         if(level==1){
-            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId  and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...finalArticles);
         }else if(level==2){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level1\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...finalArticles);
         }else if(level==3){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level3'}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...newArticles);
-            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let finalArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"= :classifyId and "topPlace"<>\'level2\' and "topPlace"<>\'global\'',{classifyId:id}).andWhere('"name"like :name and recycling=false',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...finalArticles);
         }else if(level==4){
-            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id) and recycling=false' ,{id:newArray}).andWhere('"name"like :name',{name:str}).orderBy('"updateAt"','ASC').getMany();
+            let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id) and recycling=false' ,{id:newArray}).andWhere('"name"like :name',{name:str}).orderBy('"publishedTime"','DESC').getMany();
             articles.push(...newArticles);
         }
         let num:number=articles.length;
@@ -848,6 +848,10 @@ export class ClassifyService{
                     let publish:Date=art[t].publishedTime;
                     let publishDate:Date=publish;
                     entity.publishedTime=`${publishDate.toLocaleDateString()} ${publishDate.toLocaleTimeString()}`;
+                }
+                if(art[t].endTime!=null){
+                    let endTime:Date=art[t].endTime;
+                    entity.endTime=`${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
                 }
                 entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                 entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
