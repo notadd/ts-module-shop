@@ -13,19 +13,43 @@ export class RegistrationService{
                private readonly pageService:PagerService){}
        //街区入驻
        async createBlock(block:BlockEntity){
-        await this.blockRespository.save(block);
+       let message:string;
+       let code:number;
+       try{
+           await this.blockRespository.save(block);
+           message="添加成功";code=200;
+       }catch (err){
+           message="添加失败";code=500;
+       }
+         return{MessageCodeError:message,Code:code}
        }
        //场地租用
        async createSite(site:SiteEntity){
+            let message:string;
+            let code:number;
             let time:Date=site.startTime;
             site.startTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
             let newTime:Date=site.endTime;
             site.endTime=new Date(newTime.getTime()-newTime.getTimezoneOffset()*60*1000);
-            await this.siteRespository.save(site);
+            try{
+                await this.siteRespository.save(site);
+                message="添加成功";code=200;
+            }catch (err){
+                message="添加失败";code=500;
+            }
+           return{MessageCodeError:message,Code:code}
        }
        //参观预约
        async createVisit(visit:VisitEntity){
-       await this.visitRespository.save(visit);
+           let message:string;
+           let code:number;
+           try {
+               await this.visitRespository.save(visit);
+               message="添加成功";code=200;
+           }catch (err){
+               message="添加失败";code=500;
+           }
+           return{MessageCodeError:message,Code:code}
        }
        //获取街区入驻信息
        async getAllBlocks(limit?:number,pages?:number){

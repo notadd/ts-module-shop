@@ -56,7 +56,7 @@ export class EnterResolver {
         map = objToStrMap(bToJSon);
         let block:BlockEntity=map.get('block');
         const result=await this.registration.createBlock(block);
-        return result;
+        return JSON.stringify(result);
     }
 
     @Mutation('createSites')
@@ -79,7 +79,7 @@ export class EnterResolver {
             site.endTime=new Date(Date.parse(date.replace(/- /g,"/")));
         }
         const result=await this.registration.createSite(site);
-        return result;
+        return JSON.stringify(result);
     }
 
     @Mutation('createVisits')
@@ -90,6 +90,6 @@ export class EnterResolver {
         map = objToStrMap(bToJSon);
         let visit:VisitEntity=map.get('visit');
         const result=await this.registration.createVisit(visit);
-        return result;
+        return JSON.stringify(result);
     }
 }
