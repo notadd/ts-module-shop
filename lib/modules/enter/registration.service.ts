@@ -16,6 +16,7 @@ export class RegistrationService{
        let message:string;
        let code:number;
        try{
+           block.collapse=false;
            await this.blockRespository.save(block);
            message="添加成功";code=200;
        }catch (err){
@@ -32,6 +33,7 @@ export class RegistrationService{
             let newTime:Date=site.endTime;
             site.endTime=new Date(newTime.getTime()-newTime.getTimezoneOffset()*60*1000);
             try{
+                site.collapse=false;
                 await this.siteRespository.save(site);
                 message="添加成功";code=200;
             }catch (err){
@@ -44,6 +46,7 @@ export class RegistrationService{
            let message:string;
            let code:number;
            try {
+               visit.collapse=false;
                await this.visitRespository.save(visit);
                message="添加成功";code=200;
            }catch (err){
