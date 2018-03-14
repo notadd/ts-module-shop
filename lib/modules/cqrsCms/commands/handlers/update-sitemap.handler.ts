@@ -9,7 +9,6 @@ export class UpdateSitemapHandler implements  ICommandHandler<DeleteParamCommand
     }
     async execute(command: DeleteParamCommand, resolver: (value?) => void) {
         console.log(clc.greenBright('handlerCommand  UpdateXmlCommand...'));
-        console.log('command=' + JSON.stringify(command));
         const sitemap = this.publisher.mergeObjectContext(await this.repositoty.siteMap());
         sitemap.updatexml('0');
         sitemap.commit();

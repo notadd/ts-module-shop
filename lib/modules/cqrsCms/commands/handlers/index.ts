@@ -8,4 +8,4 @@ import {GetClassifyHandler} from "./get-classify.handler";
 
 export const CommandHandlers = [CreatePageHandler,CreateSitemapHandler,
     UpdateSitemapHandler,GetPageHandler,ClassifyCurdHandler,ArticleCurdHandler
-    /*,GetArticleHandler*/,GetClassifyHandler];
+    ,GetClassifyHandler];
