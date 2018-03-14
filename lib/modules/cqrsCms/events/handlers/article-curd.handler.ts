@@ -5,8 +5,7 @@ import {ArticleService} from "../../../article/article.service";
 const clc=require('cli-color');
 @EventsHandler(ArticleCurdEvents)
 export class ArticleCurdEvent implements IEventHandler<ArticleCurdEvents>{
-    constructor(private readonly articleService:ArticleService,
-                /*private readonly localStoreService:*/){}
+    constructor(private readonly articleService:ArticleService){}
     async handle(event:ArticleCurdEvents){
         console.log(clc.yellowBright('Async create curd  article...'));
         if(event.article.createArticle){
