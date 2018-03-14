@@ -37,4 +37,8 @@ export class VisitEntity{
     @Column({nullable:true})
     appointmentDate:Date;
 
+    //无用
+    @Column({nullable:true})
+    collapse:boolean
+
 }

@@ -30,7 +30,9 @@ type visit{
     #公司人数
     employees:String,
     #预约日期
-    appointmentDate:String
+    appointmentDate:String,
+    #无用
+    collapse:Boolean
 
 }
 input createVisit{
