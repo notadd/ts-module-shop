@@ -10,8 +10,8 @@ export class VisitEntity{
     name:string;
 
     //手机
-    @Column({nullable:true})
-    telPhone:number;
+    @Column({nullable:true,length:20})
+    telPhone:string;
 
     //微信
     @Column({nullable:true,length:100})
