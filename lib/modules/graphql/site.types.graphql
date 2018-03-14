@@ -41,7 +41,9 @@ type site{
     #拟邀媒体
     plansMedia:String,
     #备注说明
-    descr:String
+    descr:String,
+    #无用
+    collapse:Boolean
 }
 input createSite{
     #申请人

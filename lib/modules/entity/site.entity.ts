@@ -57,5 +57,8 @@ export class SiteEntity{
     @Column({nullable:true,length:700})
     descr:string;
 
+    //无用
+    @Column({nullable:true})
+    collapse:boolean
 
 }
