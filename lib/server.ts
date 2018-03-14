@@ -21,7 +21,9 @@ const cross =(req,res,next) =>{
 };
 async function bootstrap() {
     const app = await NestFactory.create(ApplicationModule);
+    var bodyParser=require('body-parser');
     app.use(cross);
+    app.use(bodyParser.json({ limit:'10000kb'}));
     await app.listen(3000);
 }
 bootstrap().then(()=>console.log('Application is listening on port 3000'));
