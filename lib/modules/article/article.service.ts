@@ -99,9 +99,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let levelGive:string=article.topPlace.toString();
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
-       /* if(article.classifyId==0 ||article.classifyId==null)
-            article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
-            article.classify='默认分类';*/
         let time =new Date();
         if(article.publishedTime){
             time=article.publishedTime;
@@ -358,10 +355,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             entity.pictureUrl=url;
            await this.respository.updateById(entity.id,entity);
         }catch(err) {
-            console.log(err);
           console.log(clc.redBright(JSON.stringify(err)));
         }
-       // return result;
     }
     /**
      * JSON----Map

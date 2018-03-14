@@ -426,7 +426,6 @@ export class CqrsResolver{
                 url:url
             };
         }
-        console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
         return JSON.stringify(result);
     }
