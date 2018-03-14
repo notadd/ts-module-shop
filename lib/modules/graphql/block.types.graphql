@@ -16,6 +16,8 @@ type block{
     telPhone:Int,
     #微信
     WeChat:String,
+    #邮箱
+    email:String,
     #公司名称
     companyName:String,
     #所属行业
@@ -58,6 +60,8 @@ input createBlock{
     telPhone:Int!,
     #微信
     WeChat:String!,
+    #邮箱
+    email:String,
     #公司名称
     companyName:String!,
     #所属行业

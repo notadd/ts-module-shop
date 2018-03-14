@@ -17,6 +17,10 @@ export class BlockEntity{
     @Column({nullable:true,length:100})
     WeChat:string;
 
+    //邮箱
+    @Column({nullable:true,length:70})
+    email:string;
+
     //公司名称
     @Column({nullable:true,length:200})
     companyName:string;
