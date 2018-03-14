@@ -6,7 +6,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node index.ts"
+    "start": "node index.ts",
+    "start:watch": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/ibenchu/cms_content_manager"
   },
   "dependencies": {
     "@nestjs/common": "^4.3.0",
@@ -39,6 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.41",
+    "nodemon": "^1.17.2",
     "ts-node": "^3.3.0"
   }
 }
