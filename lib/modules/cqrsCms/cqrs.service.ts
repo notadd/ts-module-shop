@@ -26,8 +26,9 @@ export class CqrsService{
         const result= await this.commonbus.execute(new CreateParamCommand(createxmlDto));
         return result;
     }
-    async upDateXml(){
+    async updateXml(){
         const  result=await this.commonbus.execute(new DeleteParamCommand('10000','10000'));
+        return result;
     }
     /**
      * 页面增删改

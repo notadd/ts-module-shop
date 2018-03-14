@@ -53,8 +53,7 @@ export class CqrsResolver{
         let map =new Map();
         map=this.objToStrMap(bToJSon);
         let createxml:CreateXmlVm=map.get('updateFile');
-        const result=this.sitemapService.upDateXml();
-        console.log('controller='+JSON.stringify(createxml));
+        const result=this.sitemapService.updateXml();
         return createxml;
     }
     /**
