@@ -9,7 +9,6 @@ export class GetPageHandler implements ICommandHandler<GetPageParamCommand>{
 
     async execute(command:GetPageParamCommand,resolver:(value) => void){
         console.log(clc.greenBright('handlerCommand getPage Command...'));
-        console.log('command='+JSON.stringify(command));
         let result;
         //关键字搜索
         if(command.getPage.keywords){

@@ -73,7 +73,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                 const  result=await this.classifyService.classifyCheck(command.classify.useFor,0,0,'',command.classify.deleteClassify);
                 value=result.Continue;
                 MessageCodeError=result.MessageCodeError;
-                console.log('result='+result);
             }
             if(value==undefined) value=true;
             if(value)page.createClassify(command.classify);
