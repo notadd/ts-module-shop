@@ -37,6 +37,11 @@ export class BlockEntity{
     @Column({nullable:true,length:700})
     companyIntroduction:string;
 
+    //无用
+    @Column({nullable:true})
+    collapse:boolean
+
+
 
 
 

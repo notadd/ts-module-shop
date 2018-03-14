@@ -26,6 +26,8 @@ type block{
     employees:String,
     #公司介绍
     companyIntroduction:String,
+    #无用
+    collapse:Boolean
 }
 type blockPagination{
     #分页
