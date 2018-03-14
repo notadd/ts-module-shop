@@ -19,7 +19,7 @@ type site{
     #申请人
     applicant:String,
     #手机
-    telPhone:Int,
+    telPhone:String,
     #活动名称
     activityName:String,
     #活动日期
@@ -49,7 +49,7 @@ input createSite{
     #申请人
     applicant:String!,
     #手机
-    telPhone:Int!,
+    telPhone:String!,
     #活动名称
     activityName:String!,
     #活动日期
