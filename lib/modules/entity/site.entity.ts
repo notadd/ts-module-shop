@@ -10,8 +10,8 @@ export class SiteEntity{
     applicant:string;
 
     //手机
-    @Column({nullable:true})
-    telPhone:number;
+    @Column({nullable:true,length:20})
+    telPhone:string;
 
     //活动名称
     @Column({nullable:true,length:160})
