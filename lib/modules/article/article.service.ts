@@ -343,11 +343,9 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let type=map.get('type');
             let str:string=req.toString();
             //获取图片地址
-            let protocal=str.split(':')[0];
-            let host=str.substring(str.lastIndexOf('/')+1,str.length);
-            let requestClass=new RequestClass();
-            requestClass.host=host;
-            let request={protocol:protocal,host:host};
+            let ws=new Map();
+            ws=req;
+            let request=ws.get('obj');
             let url=await this.storeService.getUrl(request,bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             entity.type=type;
             entity.bucketName=bucket;

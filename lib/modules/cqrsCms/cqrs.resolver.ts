@@ -339,14 +339,16 @@ export class CqrsResolver{
             newArt=this.objToStrMap(createArt);
             let amap =new Map();
             let newArticle:ArticleEntity=art;
+            let ws=new Map();
+            ws.set('obj',obj);
             if(newArt.get('pictureUpload')){
                 amap=this.objToStrMap(newArt.get('pictureUpload'));
-                let url=obj.protocol+'://'+obj.get('host');
                 articleVM.createArticle={article:newArticle,
                     picture:{bucketName:amap.get('bucketName'),
                         rawName:amap.get('rawName'),
                         base64:amap.get('base64'),
-                        url:url}};
+                        url:ws
+                }};
             }else{
                 articleVM.createArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}};
             }
@@ -368,16 +370,18 @@ export class CqrsResolver{
                 art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
             }
             let newArticle:ArticleEntity=art;
+            let ws=new Map();
+            ws.set('obj',obj);
             let newArt=new Map();
             newArt=this.objToStrMap(updateArt);
             let amap =new Map();
             if(newArt.get('pictureUpload')){
                 amap=this.objToStrMap(newArt.get('pictureUpload'));
-                let url=obj.protocol+'://'+obj.get('host');
                 articleVM.updateArticle={article:newArticle, picture:{bucketName:amap.get('bucketName'),
                         rawName:amap.get('rawName'),
                         base64:amap.get('base64'),
-                        url:url}};
+                        url:ws
+                }};
             }else{
                 articleVM.updateArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}}
             }
