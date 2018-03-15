@@ -325,7 +325,8 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let map=this.objToStrMap(result);
             let bucket=map.get('bucketName');
             let name=map.get('name');
-            let type=map.get('type');//获取图片地址
+            let type=map.get('type');
+            //获取图片地址
             let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
