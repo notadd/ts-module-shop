@@ -35,15 +35,3 @@ export class ImagePreProcessInfo{
     public watermark?:boolean
     public rotate?:number
 }
-export class RequestClass{
-    private _host:string;
-
-
-    set host(value: string) {
-        this._host = value;
-    }
-
-    get host(): string {
-        return this._host;
-    }
-}

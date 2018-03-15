@@ -3,7 +3,6 @@ import {PageRepository} from "../../repository/pageRepository";
 import {ArticleParamCommand} from "../impl/article-param.command";
 import {ArticleService} from "../../../article/article.service";
 import {ClassifyService} from "../../../classify/classify.service";
-import {isBoolean} from "util";
 
 const clc=require('cli-color');
 @CommandHandler(ArticleParamCommand)
@@ -18,7 +17,6 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         let id:string='0';
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
         let result;
-        /*console.log(clc.yellowBright('articleCommand='+JSON.stringify(command.article)));*/
         //增删改需要重新写
         if(!command.article.getAllArticles){
             let value,MessageCodeError;
