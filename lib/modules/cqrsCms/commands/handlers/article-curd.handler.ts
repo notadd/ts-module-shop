@@ -39,7 +39,6 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
                     command.article.pictureUpload.rawName,
                     command.article.pictureUpload.base64,
                    command.article.pictureUpload.id);
-               console.log('result='+JSON.stringify(result));
                value=false;
                resolver(result);
             }

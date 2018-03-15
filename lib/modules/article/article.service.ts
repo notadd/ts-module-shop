@@ -4,17 +4,13 @@ import {ArticleEntity} from "../entity/article.entity";
 import {MessageCodeError} from "../errorMessage/error.interface";
 import {ClassifyService} from "../classify/classify.service";
 import {ClassifyEntity} from "../entity/classify.entity";
-import {StoreComponentProvider} from "../ext-local-store/src/export/StoreComponentProvider";
-import {LocalModule} from "../ext-local-store/src/LocalModule";
-import {ImagePreProcessInfo, RequestClass} from "../common/error.interface";
-import {request} from "http";
+import {ImagePreProcessInfo} from "../common/error.interface";
 const clc=require('cli-color');
 
 @Component()
 export class ArticleService{
 constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repository<ArticleEntity>,
             private readonly classifyService:ClassifyService,
-        /*    private readonly storeService:StoreComponent*/
             @Inject('StoreComponentToken') private storeService){}
 
     /**
@@ -36,13 +32,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             resultAll.push(...newArray);
         }
         if(hidden==false){
-            console.log('false='+hidden);
             let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=false',{recycling:false}).getCount();
             resultAll.push(...newresult);
         }
         if(hidden==undefined){
-            console.log('undefined='+hidden);
             let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
             title=await this.respository.createQueryBuilder().where('recycling=false or recycling is null').getCount();
             resultAll.push(...newresult);
@@ -335,7 +329,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
-          console.log(clc.redBright(JSON.stringify(err)));
+          console.log(clc.redBright(err));
           return {MessageCodeError:"上传失败"}
         }
     }
