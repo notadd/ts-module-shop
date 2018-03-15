@@ -2,7 +2,6 @@ import {
     Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import {ArticleEntity} from "./article.entity";
 import {PageEntity} from "./page.entity";
 
 @Entity('page_classify_table')

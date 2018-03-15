@@ -1,6 +1,5 @@
 import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {PageContentEntity} from "./page.content.entity";
-import {ClassifyEntity} from "./classify.entity";
 import {PageClassifyEntity} from "./pageClassify.entity";
 
 @Entity('page_entity_table')

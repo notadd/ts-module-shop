@@ -1,6 +1,5 @@
 import {Connection} from "typeorm";
 import {BlockEntity} from "../entity/block.entity";
-import {ArticleEntity} from "../entity/article.entity";
 import {VisitEntity} from "../entity/visit.entity";
 import {SiteEntity} from "../entity/site.entity";
 

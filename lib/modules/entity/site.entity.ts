@@ -30,15 +30,15 @@ export class SiteEntity{
     endTime:Date;
 
     //人数规模
-    @Column({nullable:true,length:15})
+    @Column({nullable:true,length:20})
     peopleScale:string;
 
     //场地选择
-    @Column({nullable:true,length:22})
+    @Column({nullable:true,length:50})
     siteSelection:string;
 
     //借用设备登记
-    @Column({nullable:true,length:15})
+    @Column({nullable:true,length:150})
     equipment:string;
 
     //活动介绍
