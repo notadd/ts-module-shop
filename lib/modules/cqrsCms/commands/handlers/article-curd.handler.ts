@@ -33,6 +33,16 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
                 value=result.Continue;
                 MessageCodeError=result.MessageCodeError
             }
+            if(command.article.pictureUpload){
+               const result= await this.articleService.upLoadPicture(command.article.pictureUpload.url,
+                    command.article.pictureUpload.bucketName,
+                    command.article.pictureUpload.rawName,
+                    command.article.pictureUpload.base64,
+                   command.article.pictureUpload.id);
+               console.log('result='+JSON.stringify(result));
+               value=false;
+               resolver(result);
+            }
             if(value==undefined) value=true;
             if(value)page.createArticle(command.article);
             resolver({MessageCodeError:MessageCodeError,Continue:value});

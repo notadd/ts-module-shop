@@ -309,7 +309,6 @@ export class CqrsResolver{
      */
     @Mutation()
     async ArticleCU(obj,arg){
-        console.log(obj.type);
         const str:string=JSON.stringify(arg);
         let bToJSon=JSON.parse(str);
         let map =new Map();
@@ -339,20 +338,7 @@ export class CqrsResolver{
             newArt=this.objToStrMap(createArt);
             let amap =new Map();
             let newArticle:ArticleEntity=art;
-            let ws=new Map();
-            ws.set('obj',obj);
-            if(newArt.get('pictureUpload')){
-                amap=this.objToStrMap(newArt.get('pictureUpload'));
-                articleVM.createArticle={article:newArticle,
-                    picture:{bucketName:amap.get('bucketName'),
-                        rawName:amap.get('rawName'),
-                        base64:amap.get('base64'),
-                        url:ws
-                }};
-            }else{
-                articleVM.createArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}};
-            }
-
+            articleVM.createArticle={article:newArticle};
         }
         let updateArt=map.get('updateArt');
         if(updateArt!=null || updateArt !=undefined){
@@ -375,16 +361,7 @@ export class CqrsResolver{
             let newArt=new Map();
             newArt=this.objToStrMap(updateArt);
             let amap =new Map();
-            if(newArt.get('pictureUpload')){
-                amap=this.objToStrMap(newArt.get('pictureUpload'));
-                articleVM.updateArticle={article:newArticle, picture:{bucketName:amap.get('bucketName'),
-                        rawName:amap.get('rawName'),
-                        base64:amap.get('base64'),
-                        url:ws
-                }};
-            }else{
-                articleVM.updateArticle={article:newArticle,picture:{bucketName:"",rawName:"",base64:"",url:""}}
-            }
+            articleVM.updateArticle={article:newArticle}
 
         }
         let deleteById=map.get('deleteById');
@@ -422,13 +399,17 @@ export class CqrsResolver{
         if(pictureUpload != null || pictureUpload != undefined){
             let amap=new Map();
             amap=this.objToStrMap(pictureUpload);
-            let url=obj.protocol+'://'+obj.get('host');
+            let ws=new Map();
+            ws.set('obj',obj);
+            let id:number=amap.get('id');
             articleVM.pictureUpload={bucketName:amap.get('bucketName'),
                 rawName:amap.get('rawName'),
                 base64:amap.get('base64'),
-                url:url
-            };
+                url:ws,
+                id:amap.get('id')};
+            console.log(clc.redBright('id='+id));
         }
+        //console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
         return JSON.stringify(result);
     }
