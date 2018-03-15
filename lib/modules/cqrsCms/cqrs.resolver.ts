@@ -401,13 +401,11 @@ export class CqrsResolver{
             amap=this.objToStrMap(pictureUpload);
             let ws=new Map();
             ws.set('obj',obj);
-            let id:number=amap.get('id');
             articleVM.pictureUpload={bucketName:amap.get('bucketName'),
                 rawName:amap.get('rawName'),
                 base64:amap.get('base64'),
                 url:ws,
                 id:amap.get('id')};
-            console.log(clc.redBright('id='+id));
         }
         //console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
