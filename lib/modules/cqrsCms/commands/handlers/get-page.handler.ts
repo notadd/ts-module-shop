@@ -1,4 +1,4 @@
-import {CommandHandler, EventPublisher, ICommandHandler} from "@nestjs/cqrs";
+import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {PageService} from "../../../page/page.service";
 import {GetPageParamCommand} from "../impl/get-page-param.command";
 
