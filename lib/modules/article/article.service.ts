@@ -88,7 +88,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async createArticle(article:ArticleEntity,requestUrl?:any,bucketName?:string,rawName?:string,baseb4?:string){
+      async createArticle(article:ArticleEntity){
         let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
         if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let num:number=await this.classifyService.findLevel(article.classifyId);
@@ -116,14 +116,7 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             article.endTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
         }
         article.recycling=false;
-        let create:number=await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
-        let str:string=JSON.stringify(create).split(':')[1];
-        let numb:string=str.substring(0,str.lastIndexOf('}'));
-        let newId:number=Number(numb);
-        //上传图片
-        if(bucketName && rawName){
-            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,newId);
-        }
+        await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
       }
 
     /**
@@ -131,14 +124,11 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      * @param {ArticleEntity} article
      * @returns {Promise<void>}
      */
-      async updateArticle(article:ArticleEntity,requestUrl?:any,bucketName?:string,rawName?:string,baseb4?:string){
+      async updateArticle(article:ArticleEntity){
           let art:ArticleEntity =await this.respository.findOneById(article.id);
           if(art==null) throw new MessageCodeError('delete:recycling:idMissing');
           let entity:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
           if(article.classifyId!=null && article.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-         /* if(article.classifyId==0 ||article.classifyId==null)
-            article.classifyId=await this.classifyService.findTheDefaultByAlias('默认分类','art');
-            article.classify='默认分类';*/
           let num:number=await this.classifyService.findLevel(article.classifyId);
           let level:string=this.classifyService.interfaceChange(num);
           let levelGive:string=article.topPlace;
@@ -160,10 +150,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         }
           let newArt:ArticleEntity =article;
           await this.respository.updateById(newArt.id,newArt);
-          //图片上传
-        if(bucketName && rawName){
-            this.upLoadPicture(requestUrl,bucketName,rawName,baseb4,article.id);
-        }
       }
 
     /**
@@ -328,10 +314,15 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
      */
     async upLoadPicture(req:any,bucketName: string, rawName: string, base64: string,id?:number ){
         try {
-            let entity:ArticleEntity=await this.respository.findOneById(id);
-            //删除图片
-            if(entity.bucketName!=null){
-                await this.storeService.delete(entity.bucketName,entity.pictureName,entity.type)
+            if(id>0){
+                let entity:ArticleEntity=await this.respository.findOneById(id);
+                //删除图片
+                if(entity && entity.bucketName!=null){
+                    let entitys:ArticleEntity[]=await this.respository.find({pictureUrl:entity.pictureUrl});
+                    if(entitys.length==1){
+                        await this.storeService.delete(entity.bucketName,entity.pictureName,entity.type)
+                    }
+                }
             }
             let imagePreProcessInfo=new ImagePreProcessInfo();
             imagePreProcessInfo.watermark=false;
@@ -340,20 +331,12 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let map=this.objToStrMap(result);
             let bucket=map.get('bucketName');
             let name=map.get('name');
-            let type=map.get('type');
-            let str:string=req.toString();
-            //获取图片地址
-            let ws=new Map();
-            ws=req;
-            let request=ws.get('obj');
-            let url=await this.storeService.getUrl(request,bucket,name,type,imagePreProcessInfo).then(a=>{return a});
-            entity.type=type;
-            entity.bucketName=bucket;
-            entity.pictureName=name;
-            entity.pictureUrl=url;
-           await this.respository.updateById(entity.id,entity);
+            let type=map.get('type');//获取图片地址
+            let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
+            return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
           console.log(clc.redBright(JSON.stringify(err)));
+          return {MessageCodeError:"上传失败"}
         }
     }
     /**
