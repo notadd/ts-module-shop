@@ -50,7 +50,6 @@ import * as path from 'path';
     }
 
     async upload(bucketName: string, rawName: string, base64: string , imagePreProcessInfo?:ImagePreProcessInfo): Promise<{ bucketName: string, name: string, type: string }> {
-        console.log("rawName="+rawName+",bucketName="+bucketName);
         let tempPath: string = path.resolve(__dirname, '../', 'store', 'temp', (+new Date()) + '' + rawName)
         if (!bucketName || !rawName || !base64) {
             throw new HttpException('缺少参数', 400)
@@ -63,13 +62,11 @@ import * as path from 'path';
         if (!bucket) {
             throw new HttpException('指定空间' + bucketName + '不存在', 401)
         }
-        console.log('temPath='+tempPath);
         await this.fileUtil.write(tempPath, Buffer.from(base64, 'base64'))
         let metadata: ImageMetadata
         let type: string = rawName.substring(rawName.lastIndexOf('.') + 1)
         //根据文件种类
         let kind: string = this.kindUtil.getKind(type)
-        console.log('kind='+kind);
         try {
             if (kind === 'image') {
                 let imagePostProcessInfo:ImagePostProcessInfo = imagePreProcessInfo
@@ -89,7 +86,6 @@ import * as path from 'path';
                     imagePostProcessInfo.watermark = false 
                 }
                 metadata = await this.imageProcessUtil.processAndStore(tempPath, bucket, imagePostProcessInfo)
-                console.log('data='+metadata);
                 let image: Image = new Image()
                 image.bucket = bucket
                 image.raw_name = rawName
@@ -122,17 +118,15 @@ import * as path from 'path';
     }
 
     async getUrl(req: any, bucketName: string, name: string, type: string, imagePostProcessInfo?: ImagePostProcessInfo): Promise<string> {
-        console.log('req='+req+",bucketName="+bucketName+",name="+name+",type="+type+",imagePost="+JSON.stringify(imagePostProcessInfo));
-        console.log('req.protocal='+req.protocol+',host='+req.host);
-        //验证参数
-        if (!bucketName || !name || !type || !req || !req.protocol || !req.host) {
+        if (!bucketName || !name || !type || !req || !req.protocol || !req.get('host')) {
             throw new HttpException('缺少参数', 400)
         }
         let bucket: Bucket = await this.bucketRepository.findOne({ name: bucketName })
         if (!bucket) {
             throw new HttpException('指定空间' + bucketName + '不存在', 401)
         }
-        let url: string = req.protocol + '://' + req.host + '/local/file/visit'
+        let url: string = req.protocol + '://' + req.get('host') + '/local/file/visit'
+
         //根据文件种类，查找、删除数据库
         let kind = this.kindUtil.getKind(type)
         if (kind === 'image') {
