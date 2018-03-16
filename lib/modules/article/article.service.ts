@@ -192,8 +192,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             this.respository.updateById(newArticle.id,newArticle);
             num++;
         }
-        //批量修改的方法
-        //await this.respository.createQueryBuilder().update().set(ArticleEntity).whereInIds(array).output('id').execute();
         return num;
     }
 
@@ -234,19 +232,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
         let Array:ArticleEntity[]=[];
         let article:ArticleEntity=await this.respository.findOneById(id);
         if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
-       /* let parent:ClassifyEntity=await this.classifyService.findOneByIdArt(article.classifyId);
-        if(parent==null) throw new MessageCodeError('delete:recycling:idMissing');
-        let num:number=await this.classifyService.findLevel(article.classifyId).then(a=>{return a});
-        let level:string=this.classifyService.interfaceChange(num);
-        if(level=='level1'){
-            article.topPlace=`cancel,global,current`;
-        }else if(level=='level2'){
-            article.topPlace=`cancel,global,level1,current`;
-        }else if(level=='level3'){
-            article.topPlace=`cancel,global,level1,current,level2`;
-        }else{
-            article.topPlace=`cancel,global,level1,level2,level3,current`;
-        }*/
         let newArticle:ArticleEntity=article;
         Array.push(newArticle);
         return Array;
@@ -330,7 +315,6 @@ constructor(@Inject('ArticleRepositoryToken') private readonly respository:Repos
             let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
-          console.log(clc.redBright(err));
           return {MessageCodeError:"上传失败"}
         }
     }

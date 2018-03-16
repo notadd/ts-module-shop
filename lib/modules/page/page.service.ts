@@ -46,7 +46,6 @@ export class PageService{
             await this.contentRepository.createQueryBuilder().delete().from(PageContentEntity).where('"parentId"= :parentId',{parentId:page.id}).execute();
             this.repository.deleteById(page.id);
         }
-        //return  this.getAllPage(limit,page);
     }
 
     /**
@@ -69,7 +68,6 @@ export class PageService{
              newContent.parentId=id;
             await this.contentRepository.save(newContent);
         }
-        //return this.getAllPage(limit,pages);
     }
 
     /**
