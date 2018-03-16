@@ -119,7 +119,6 @@ export class CqrsResolver{
             articleVM.pages=pages;
         }
         articleVM.getAllArticles=true;
-        console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         let resultArt=await this.sitemapService.articleCurd(articleVM);
         resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
         result=await this.classifyService.TimestampArt(resultArt.articles);
@@ -406,9 +405,7 @@ export class CqrsResolver{
                 base64:amap.get('base64'),
                 url:ws,
                 id:amap.get('id')};
-            console.log(clc.redBright('id='+articleVM.pictureUpload.id+",bucket="+articleVM.pictureUpload.bucketName+",rawName="+articleVM.pictureUpload.rawName));
         }
-        //console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
         return JSON.stringify(result);
     }
@@ -487,7 +484,6 @@ export class CqrsResolver{
             classifyVM.useFor=useFor;
             classifyVM.mobileClassifyId={id:id,parentId:parentId};
         }
-        console.log(clc.blueBright('/****ClassifyCU*******/='+JSON.stringify(classifyVM)));
         const  result=await this.sitemapService.classifyCurd(classifyVM);
         return JSON.stringify(result);
     }
@@ -553,7 +549,6 @@ export class CqrsResolver{
             createParam.pages=amap.get('pages');
             createParam.array=array;
         }
-        console.log(clc.blueBright('/****PageCUD*******/='+JSON.stringify(createParam)));
         //let returnValue=await this.pageService.getAllPage(createParam.limit,createParam.pages);
         const result=await this.sitemapService.pageCurd(createParam);
         return JSON.stringify(result);
