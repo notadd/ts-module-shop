@@ -425,7 +425,6 @@ export class ClassifyService{
         let level:number=await this.findLevel(classify.groupId);
         if(level==1){
             let newArticles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level1'}).orderBy('"updateAt"','ASC').getMany();
-           console.log('final='+JSON.stringify(newArticles));
             articles.push(...newArticles);
         }else if(level==2){
             let newArticles=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).andWhere('"topPlace"= :topPlace',{topPlace:'level2'}).orderBy('"updateAt"','ASC').getMany();
@@ -446,9 +445,6 @@ export class ClassifyService{
         let classify:ClassifyEntity=await this.repository.findOneById(id);
         if(classify==null) throw new MessageCodeError('page:classify:classifyIdMissing');
         let articles:ArticleEntity[]=[];
-        //let globalArts:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
-        //let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).andWhere('"topPlace"<> :topPlace',{topPlace:'global'}).orderBy('"updateAt"','ASC').getMany();
-       //articles.push(...globalArts);
         let current:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId"=:id',{id:id}).orderBy('"updateAt"','ASC').getMany();
         articles.push(...current);
         return articles;

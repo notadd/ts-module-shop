@@ -50,15 +50,6 @@ export class SitemapService{
     }
 
     /**
-     * 获取sitemap实体
-     * @param {number} id
-     * @returns {Promise<SitemapEntity>}
-     */
-    public async findSitemap(id:number){
-        let sitemap:SitemapEntity=await this.siteRepository.findOneById(id);
-        return sitemap;
-    }
-    /**
      * 函数判断
      * @returns {any[]}
      */
