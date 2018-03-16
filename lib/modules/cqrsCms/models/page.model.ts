@@ -11,18 +11,15 @@ export class Page extends AggregateRoot{
     constructor(private readonly id:string){super();}
     //页面
     createPage(data:CreatePageVm){
-        console.log(clc.greenBright('页面增删改...'));
         this.apply(new PageCurdEvent(data));
         this.apply(new SitemapUpdateEvent('0'));
     }
     //分类
     createClassify(data:ClassifyCurdVm){
-        console.log(clc.greenBright('分类增删改移动...'));
         this.apply(new ClassifyCurdEvents(data))
     }
     //文章
     createArticle(data:ArticleCurdVm){
-        console.log(clc.greenBright('文章增删改'));
         this.apply(new ArticleCurdEvents(data));
         this.apply(new SitemapUpdateEvent('0'));
     }
