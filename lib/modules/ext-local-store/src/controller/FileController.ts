@@ -62,7 +62,7 @@ export class FileController {
         //文件类型响应头
         res.setHeader('Content-Type', mime.getType(fileName))
         //文件大小响应头
-        res.setHeader('Content-Length', Buffer.byteLength(buffer))
+        res.setHeader('Content-Length', Buffer.byteLength(buffer.toString()))
         //下载响应头，不管浏览器支持不支持显示文件mime，都会直接弹出下载
         res.setHeader('Content-Disposition', 'attachment; filename=' + fileName)
         //发送文件buffer
@@ -76,8 +76,9 @@ export class FileController {
     */
     @Post('/upload')
     @UseGuards(UploadParamGuard)
-    async upload( @Body() body): Promise<CommonData> {
+    async upload( @Body() body): Promise<CommonData&{url:string}> {
         let { uploadForm: obj, uploadFile: file } = body
+        let url:string
         //这里使用trycatch块主要是为了不论抛出神码异常，上传的临时文件都会被删除，最后异常仍旧会被过滤器处理
         try {
             //这里需要将图片、音频、视频配置关联查找出来，后面保存文件预处理要使用
@@ -101,7 +102,8 @@ export class FileController {
                 throw new HttpException('文件md5校验失败', 411)
             }
             //保存上传文件，对文件进行处理后保存在store目录下，将文件信息保存到数据库中
-            await this.fileService.saveUploadFile(bucket, file, obj)
+            url=await this.fileService.saveUploadFile(bucket, file, obj);
+
         } catch (err) {
             throw err
         } finally {
@@ -109,7 +111,8 @@ export class FileController {
         }
         return {
             code: 200,
-            message: '上传文件成功'
+            message: '上传文件成功',
+            url
         }
     }
 
@@ -177,7 +180,7 @@ export class FileController {
             //设置文件类型头信息
             res.setHeader('Content-Type', mime.getType(metadata.format))
             //设置文件大小头信息
-            res.setHeader('Content-Length', Buffer.byteLength(buffer))
+            //res.setHeader('Content-Length', Buffer.byteLength(buffer.toString()))
             //私有空间
             if (bucket.public_or_private === 'private') {
                 //文件不缓存，因为有token，暂时这样处理，也可以设置一个缓存时间

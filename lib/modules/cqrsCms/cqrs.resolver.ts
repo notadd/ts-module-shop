@@ -406,6 +406,7 @@ export class CqrsResolver{
                 base64:amap.get('base64'),
                 url:ws,
                 id:amap.get('id')};
+            console.log(clc.redBright('id='+articleVM.pictureUpload.id+",bucket="+articleVM.pictureUpload.bucketName+",rawName="+articleVM.pictureUpload.rawName));
         }
         //console.log(clc.redBright('articleVM='+JSON.stringify(articleVM)));
         const result=await this.sitemapService.articleCurd(articleVM);
