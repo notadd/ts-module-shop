@@ -25,17 +25,14 @@ export class ArticleCurdEvent implements IEventHandler<ArticleCurdEvents>{
         }
         if(event.article.recycleDelete){
             //回收站删除
-            //console.log(clc.blueBright('recycleDelete='+event.article.recycleDelete));
             await this.articleService.recycleDelete(event.article.recycleDelete);
         }
         if(event.article.reductionArticle){
             //回收站还原
-            //console.log(clc.blueBright('reductionArticle='+event.article.reductionArticle));
             await this.articleService.reductionArticle(event.article.reductionArticle);
         }
         if(event.article.pictureUpload){
             //图片上传
-           // console.log(clc.blueBright('pictureUpload='+JSON.stringify(event.article.pictureUpload)));
             await this.articleService.upLoadPicture(event.article.pictureUpload.url,event.article.pictureUpload.bucketName,event.article.pictureUpload.rawName,
                 event.article.pictureUpload.base64);
         }

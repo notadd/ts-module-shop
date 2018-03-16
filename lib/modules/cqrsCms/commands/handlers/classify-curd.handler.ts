@@ -25,7 +25,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                         command.classify.createClassify.art.groupId,
                         command.classify.createClassify.art.classifyAlias);
                     value=result.Continue;
-                    console.log('createClassify='+JSON.stringify(command.classify.createClassify));
                     MessageCodeError=result.MessageCodeError;
                 }
                if(command.classify.createClassify.page){
@@ -35,7 +34,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                        command.classify.createClassify.page.groupId,
                        command.classify.createClassify.page.classifyAlias);
                    value=result.Continue;
-                   console.log('createClassify='+JSON.stringify(command.classify.createClassify));
                    MessageCodeError=result.MessageCodeError;
                }
             }
@@ -47,7 +45,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                         command.classify.updateClassify.page.groupId,
                         command.classify.updateClassify.page.classifyAlias);
                     value=result.Continue;
-                    console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
                     MessageCodeError=result.MessageCodeError;
                 }
                 if(command.classify.updateClassify.art){
@@ -57,7 +54,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                         command.classify.updateClassify.art.groupId,
                         command.classify.updateClassify.art.classifyAlias);
                     value=result.Continue;
-                    console.log('updateClassify='+JSON.stringify(command.classify.updateClassify));
                     MessageCodeError=result.MessageCodeError;
                 }
 
