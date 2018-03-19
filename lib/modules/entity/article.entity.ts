@@ -34,7 +34,7 @@ export class ArticleEntity{
     //摘要
     @Column({nullable:true,length:500}) abstract:string;
     //内容
-    @Column({nullable:true,length:10000}) content:string;
+    @Column({nullable:true,length:65532}) content:string;
     //不显示分类
     @Column({nullable:true}) display:string;
     //开始时间
