@@ -1,23 +1,22 @@
 import{ArticleCurdEvents} from "../impl/article-curd.events";
 import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
-import {ArticleService} from "../../../article/article.service";
+import {ArticleService} from "../../service/article.service";
 
 const clc=require('cli-color');
 @EventsHandler(ArticleCurdEvents)
-export class TestCurdHandler implements IEventHandler<ArticleCurdEvents>{
+export class ArticleCurdEvent implements IEventHandler<ArticleCurdEvents>{
     constructor(private readonly articleService:ArticleService){}
     async handle(event:ArticleCurdEvents){
-        console.log(clc.yellowBright('Async create Test  article...'));
-        const result=await this.articleService.getArticleAll(event.article.limitNum,event.article.hidden,event.article.pages);
-      /*  if(event.article.createArticle){
+        console.log(clc.yellowBright('Async create curd  article...'));
+        if(event.article.createArticle){
             //新增文章
-            await this.articleService.createArticle(event.article.createArticle);
+            await this.articleService.createArticle(
+                event.article.createArticle.article);
         }
         if(event.article.updateArticle){
-            console.log('Test===='+JSON.stringify(event.article));
             //修改文章
-            await this.articleService.updateArticle(event.article.updateArticle);
-            console.log('TestTime='+new Date());
+            await this.articleService.updateArticle(
+                event.article.updateArticle.article);
         }
         if(event.article.deleteById){
             //放入回收站
@@ -31,6 +30,11 @@ export class TestCurdHandler implements IEventHandler<ArticleCurdEvents>{
         if(event.article.reductionArticle){
             //回收站还原
             await this.articleService.reductionArticle(event.article.reductionArticle);
-        }*/
+        }
+        if(event.article.pictureUpload){
+            //图片上传
+            await this.articleService.upLoadPicture(event.article.pictureUpload.url,event.article.pictureUpload.bucketName,event.article.pictureUpload.rawName,
+                event.article.pictureUpload.base64);
+        }
     }
 }
