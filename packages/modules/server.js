@@ -28,7 +28,7 @@ function bootstrap() {
         var bodyParser = require('body-parser');
         app.use(cross);
         app.use(bodyParser.json({ limit: '10000kb' }));
-        yield app.listen(3001);
+        yield app.listen(3000);
     });
 }
-bootstrap().then(() => console.log('Application is listening on port 3001'));
+bootstrap().then(() => console.log('Application is listening on port 3000'));
