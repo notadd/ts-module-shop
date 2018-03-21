@@ -1,0 +1,19 @@
+{
+  "name":"@notadd/CMS",
+  "version": "2.0.0",
+  "description": "Notadd CMS Package.",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/ibenchu/cms_content_manager"
+  },
+  "keywords": [
+    "Notadd",
+    "CMS",
+    "Web"
+  ],
+  "author": "EricAll",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "formidable": "^1.1.1"
+  }
+}
