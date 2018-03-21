@@ -7,6 +7,6 @@ module.exports= {
   "password": "123456",
   "database": "postgres",
   "entities": [`${SOURCE_PATH}/**/**.entity{.ts,.js}`],
-  "synchronize": true,
+  "synchronize": false,
   "logging":false
 }
