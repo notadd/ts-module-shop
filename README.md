@@ -1,1 +1,1 @@
-# cms_content_manager
+# ibenchu/cms
