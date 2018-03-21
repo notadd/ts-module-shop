@@ -1,4 +1,4 @@
-const SOURCE_PATH = process.env.NODE_ENV === 'packages' ? 'dist' : 'src';
+const SOURCE_PATH = process.env.NODE_ENV === 'development' ? 'packages' : 'src';
 module.exports= {
   "type": "postgres",
   "host": "localhost",
