@@ -9,3 +9,4 @@ npm-lock.json
 ormconfig.yml
 yarn.lock
 yarn-error.log
+package-lock.json
