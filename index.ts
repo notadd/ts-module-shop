@@ -1,4 +1,4 @@
 require('ts-node/register');
-require('./server/server');
+require('./src/modules/server');
 
 
