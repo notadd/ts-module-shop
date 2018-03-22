@@ -22,13 +22,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
-const ImageConfig_1 = require("../model/ImageConfig");
-const AudioConfig_1 = require("../model/AudioConfig");
-const VideoConfig_1 = require("../model/VideoConfig");
+const ImageConfig_entity_1 = require("../model/ImageConfig.entity");
+const AudioConfig_entity_1 = require("../model/AudioConfig.entity");
+const VideoConfig_entity_1 = require("../model/VideoConfig.entity");
+const typeorm_1 = require("@nestjs/typeorm");
+const Bucket_entity_1 = require("../model/Bucket.entity");
+const Image_entity_1 = require("../model/Image.entity");
 const FileUtil_1 = require("../util/FileUtil");
-const Bucket_1 = require("../model/Bucket");
-const Image_1 = require("../model/Image");
-const typeorm_1 = require("typeorm");
+const typeorm_2 = require("typeorm");
 const path = require("path");
 let ConfigService = class ConfigService {
     constructor(fileUtil, imageProcessUtil, imageRepository, bucketRepository, imageConfigRepository, audioConfigRepository, videoConfigRepository) {
@@ -67,10 +68,10 @@ let ConfigService = class ConfigService {
                 }
                 return;
             }
-            let bucket = new Bucket_1.Bucket();
-            let audio_config = new AudioConfig_1.AudioConfig();
-            let video_config = new VideoConfig_1.VideoConfig();
-            let image_config = new ImageConfig_1.ImageConfig();
+            let bucket = new Bucket_entity_1.Bucket();
+            let audio_config = new AudioConfig_entity_1.AudioConfig();
+            let video_config = new VideoConfig_entity_1.VideoConfig();
+            let image_config = new ImageConfig_entity_1.ImageConfig();
             if (body.isPublic) {
                 bucket.id = 1;
                 bucket.public_or_private = 'public';
@@ -158,7 +159,7 @@ let ConfigService = class ConfigService {
                 else if (format === 'webp_undamage') {
                     metadata = yield this.imageProcessUtil.processAndStore(file.path, buckets[i], { format: 'webp', lossless: true, strip: true, watermark: false });
                 }
-                let image = new Image_1.Image();
+                let image = new Image_entity_1.Image();
                 image.bucket = buckets[i];
                 image.raw_name = file.name;
                 image.name = metadata.name;
@@ -235,17 +236,17 @@ ConfigService = __decorate([
     common_1.Component(),
     __param(0, common_1.Inject(FileUtil_1.FileUtil)),
     __param(1, common_1.Inject(ImageProcessUtil_1.ImageProcessUtil)),
-    __param(2, common_1.Inject('LocalModule.ImageRepository')),
-    __param(3, common_1.Inject('LocalModule.BucketRepository')),
-    __param(4, common_1.Inject('LocalModule.ImageConfigRepository')),
-    __param(5, common_1.Inject('LocalModule.AudioConfigRepository')),
-    __param(6, common_1.Inject('LocalModule.VideoConfigRepository')),
+    __param(2, typeorm_1.InjectRepository(Image_entity_1.Image)),
+    __param(3, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
+    __param(4, typeorm_1.InjectRepository(ImageConfig_entity_1.ImageConfig)),
+    __param(5, typeorm_1.InjectRepository(AudioConfig_entity_1.AudioConfig)),
+    __param(6, typeorm_1.InjectRepository(VideoConfig_entity_1.VideoConfig)),
     __metadata("design:paramtypes", [FileUtil_1.FileUtil,
         ImageProcessUtil_1.ImageProcessUtil,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository])
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository])
 ], ConfigService);
 exports.ConfigService = ConfigService;
