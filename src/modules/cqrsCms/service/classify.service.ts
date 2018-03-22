@@ -524,6 +524,21 @@ export class ClassifyService{
         return newArt;
 
     }
+
+    /**
+     * 文章关键字搜索---对应资讯和活动
+     * @returns {Promise<number[]>}
+     */
+    async getClassifyIdForArt(){
+        let　custom:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"classifyAlias"=\'活动\' or "classifyAlias"=\'资讯\'').getMany();
+        let customArray:number[]=[];
+        for(let t in custom){
+            customArray.push(custom[t].id);
+            customArray.push(...await this.getClassifyId(custom[t].id).then(a=>{return a}));
+        }
+        customArray=Array.from(new Set(customArray));
+        return customArray
+    }
     /**
      * 获取当前分类所有子分类id
      * @param {number} id
@@ -826,7 +841,11 @@ export class ClassifyService{
             if(art[t].id!=null){
                 let entity=new Article();
                 let time:Date= art[t].createAt;
-                let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+                if(art[t].createAt !=null){
+                    let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+                    entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+                }
+
                 let newTime:Date=art[t].updateAt;
                 let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
                 if(art[t].publishedTime!=null){
@@ -841,7 +860,7 @@ export class ClassifyService{
                     let startTime:Date=new Date(art[t].startTime.getTime()+art[t].startTime.getTimezoneOffset()*60*1000);
                     entity.startTime=`${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
                 }
-                entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+
                 entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
                 entity.id=art[t].id;
                 entity.name=art[t].name;

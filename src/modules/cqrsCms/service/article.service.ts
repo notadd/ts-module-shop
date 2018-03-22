@@ -6,6 +6,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {ClassifyService} from "./classify.service";
 import {ClassifyEntity} from "../../entity/classify.entity";
 import {ImagePreProcessInfo} from "../common/error.interface";
+import {BlockEntity} from "../../entity/block.entity";
 
 const clc=require('cli-color');
 
@@ -52,11 +53,20 @@ export class ArticleService{
      * @param {number} limit
      * @returns {Promise<ArticleEntity[]>}
      */
-    async serachArticles(name:string,limit?:number,pages?:number){
-        let str:string=`%${name}%`;
-        let resultAll:ArticleEntity[]=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
-        let title:number=await this.respository.createQueryBuilder().where('"name"like :name',{name:str,}).andWhere('"recycling"<> :recycling or recycling isnull',{recycling:false}).getCount();
-        return {articles:resultAll,totalItems:title};
+    async searchArticles(name:string,limit?:number,pages?:number){
+        let strArt:string=`%${name}%`;
+        let array:number[]=await this.classifyService.getClassifyIdForArt();
+        let articles:ArticleEntity[]=await this.respository.createQueryBuilder()
+            .where('"classifyId" in (:id)',{id:array})
+            .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ',{name:strArt})
+            .orderBy('"publishedTime"','DESC')
+            .skip(limit*(pages-1))
+            .take(limit)
+            .getMany();
+        let num:Number=await this.respository.createQueryBuilder() .where('"classifyId" in (:id)',{id:array})
+            .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ',{name:strArt})
+            .getCount();
+        return {articles:articles,totalItems:num};
     }
 
     /**
