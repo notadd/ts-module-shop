@@ -23,10 +23,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
 const typeorm_1 = require("typeorm");
+const Image_entity_1 = require("../model/Image.entity");
 const TokenUtil_1 = require("../util/TokenUtil");
 const FileUtil_1 = require("../util/FileUtil");
 const KindUtil_1 = require("../util/KindUtil");
-const Image_1 = require("../model/Image");
 const path = require("path");
 let StoreComponent = class StoreComponent {
     constructor(kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository) {
@@ -101,7 +101,7 @@ let StoreComponent = class StoreComponent {
                         imagePostProcessInfo.watermark = false;
                     }
                     metadata = yield this.imageProcessUtil.processAndStore(tempPath, bucket, imagePostProcessInfo);
-                    let image = new Image_1.Image();
+                    let image = new Image_entity_1.Image();
                     image.bucket = bucket;
                     image.raw_name = rawName;
                     image.name = metadata.name;
@@ -187,5 +187,5 @@ exports.StoreComponentProvider = {
     useFactory: (kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository) => {
         return new StoreComponent(kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository);
     },
-    inject: [KindUtil_1.KindUtil, FileUtil_1.FileUtil, TokenUtil_1.TokenUtil, ImageProcessUtil_1.ImageProcessUtil, 'LocalModule.ImageRepository', 'LocalModule.BucketRepository']
+    inject: [KindUtil_1.KindUtil, FileUtil_1.FileUtil, TokenUtil_1.TokenUtil, ImageProcessUtil_1.ImageProcessUtil, 'ImageRepository', 'BucketRepository']
 };
