@@ -1,6 +1,6 @@
 import './vendor';
 import { NestFactory } from '@nestjs/core';
-import {CmsModule} from "../modules/cms.module";
+import {CmsModule} from "./cms.injection";
 
 /**
  * 跨域问题
