@@ -1,14 +1,14 @@
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
 import { UploadFile } from '../interface/file/UploadFile';
 import { UploadForm } from '../interface/file/UploadForm';
+import { Bucket } from '../model/Bucket.entity';
 import { TokenUtil } from '../util/TokenUtil';
+import { Audio } from '../model/Audio.entity';
+import { Video } from '../model/Video.entity';
+import { Image } from '../model/Image.entity';
 import { KindUtil } from '../util/KindUtil';
-import { Bucket } from '../model/Bucket';
-import { Audio } from '../model/Audio';
-import { Video } from '../model/Video';
-import { Image } from '../model/Image';
+import { File } from '../model/File.entity';
 import { Repository } from 'typeorm';
-import { File } from '../model/File';
 export declare class FileService {
     private readonly kindUtil;
     private readonly tokenUtil;

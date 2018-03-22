@@ -22,10 +22,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
+const typeorm_1 = require("@nestjs/typeorm");
+const Bucket_entity_1 = require("../model/Bucket.entity");
 const TokenUtil_1 = require("../util/TokenUtil");
+const Audio_entity_1 = require("../model/Audio.entity");
+const Video_entity_1 = require("../model/Video.entity");
+const Image_entity_1 = require("../model/Image.entity");
 const KindUtil_1 = require("../util/KindUtil");
-const Image_1 = require("../model/Image");
-const typeorm_1 = require("typeorm");
+const File_entity_1 = require("../model/File.entity");
+const typeorm_2 = require("typeorm");
 let FileService = class FileService {
     constructor(kindUtil, tokenUtil, imageProcessUtil, fileRepository, imageRepository, audioRepository, videoRepository, bucketRepository) {
         this.kindUtil = kindUtil;
@@ -72,7 +77,7 @@ let FileService = class FileService {
                 if (exist) {
                     return '/visit/' + bucket.name + '/' + exist.name + '.' + exist.type;
                 }
-                let image = new Image_1.Image();
+                let image = new Image_entity_1.Image();
                 image.bucket = bucket;
                 image.raw_name = file.name;
                 image.name = metadata.name;
@@ -128,18 +133,18 @@ FileService = __decorate([
     __param(0, common_1.Inject(KindUtil_1.KindUtil)),
     __param(1, common_1.Inject(TokenUtil_1.TokenUtil)),
     __param(2, common_1.Inject(ImageProcessUtil_1.ImageProcessUtil)),
-    __param(3, common_1.Inject('LocalModule.FileRepository')),
-    __param(4, common_1.Inject('LocalModule.ImageRepository')),
-    __param(5, common_1.Inject('LocalModule.AudioRepository')),
-    __param(6, common_1.Inject('LocalModule.VideoRepository')),
-    __param(7, common_1.Inject('LocalModule.BucketRepository')),
+    __param(3, typeorm_1.InjectRepository(File_entity_1.File)),
+    __param(4, typeorm_1.InjectRepository(Image_entity_1.Image)),
+    __param(5, typeorm_1.InjectRepository(Audio_entity_1.Audio)),
+    __param(6, typeorm_1.InjectRepository(Video_entity_1.Video)),
+    __param(7, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
     __metadata("design:paramtypes", [KindUtil_1.KindUtil,
         TokenUtil_1.TokenUtil,
         ImageProcessUtil_1.ImageProcessUtil,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository,
-        typeorm_1.Repository])
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository])
 ], FileService);
 exports.FileService = FileService;

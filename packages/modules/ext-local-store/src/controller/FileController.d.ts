@@ -5,12 +5,12 @@ import { Repository } from 'typeorm';
 import { PathParam } from '../interface/file/PathParam';
 import { FileService } from '../service/FileService';
 import { CommonData } from '../interface/Common';
+import { Bucket } from '../model/Bucket.entity';
 import { TokenUtil } from '../util/TokenUtil';
+import { Image } from '../model/Image.entity';
+import { File } from '../model/File.entity';
 import { FileUtil } from '../util/FileUtil';
 import { KindUtil } from '../util/KindUtil';
-import { Bucket } from '../model/Bucket';
-import { Image } from '../model/Image';
-import { File } from '../model/File';
 export declare class FileController {
     private readonly fileUtil;
     private readonly kindUtil;

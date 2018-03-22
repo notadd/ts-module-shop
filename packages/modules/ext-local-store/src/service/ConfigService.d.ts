@@ -4,12 +4,12 @@ import { ImageFormat } from '../interface/config/ImageFormat';
 import { AudioFormat } from '../interface/config/AudioFormat';
 import { VideoFormat } from '../interface/config/VideoFormat';
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
-import { ImageConfig } from '../model/ImageConfig';
-import { AudioConfig } from '../model/AudioConfig';
-import { VideoConfig } from '../model/VideoConfig';
+import { ImageConfig } from '../model/ImageConfig.entity';
+import { AudioConfig } from '../model/AudioConfig.entity';
+import { VideoConfig } from '../model/VideoConfig.entity';
+import { Bucket } from '../model/Bucket.entity';
+import { Image } from '../model/Image.entity';
 import { FileUtil } from '../util/FileUtil';
-import { Bucket } from '../model/Bucket';
-import { Image } from '../model/Image';
 import { Repository } from 'typeorm';
 export declare class ConfigService {
     private readonly fileUtil;

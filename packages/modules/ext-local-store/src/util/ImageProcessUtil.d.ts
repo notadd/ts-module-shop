@@ -2,7 +2,7 @@
 /// <reference types="sharp" />
 import { ImagePostProcessInfo, ImagePreProcessInfo, Resize, Tailor, Blur } from '../interface/file/ImageProcessInfo';
 import { ImageMetadata } from '../interface/file/ImageMetadata';
-import { Bucket } from '../model/Bucket';
+import { Bucket } from '../model/Bucket.entity';
 import { KindUtil } from './KindUtil';
 import { FileUtil } from './FileUtil';
 import { SharpInstance } from 'sharp';

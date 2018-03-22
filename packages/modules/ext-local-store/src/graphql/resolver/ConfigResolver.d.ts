@@ -7,12 +7,12 @@ import { ImageFormat } from '../../interface/config/ImageFormat';
 import { AudioFormat } from '../../interface/config/AudioFormat';
 import { VideoFormat } from '../../interface/config/VideoFormat';
 import { ConfigService } from '../../service/ConfigService';
+import { IncomingMessage } from 'http';
 import { CommonData } from '../../interface/Common';
+import { Bucket } from '../../model/Bucket.entity';
 import { KindUtil } from '../../util/KindUtil';
 import { FileUtil } from '../../util/FileUtil';
-import { Bucket } from '../../model/Bucket';
 import { Repository } from 'typeorm';
-import { IncomingMessage } from 'http';
 export declare class ConfigResolver {
     private readonly fileUtil;
     private readonly kindUtil;
