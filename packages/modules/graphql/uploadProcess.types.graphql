@@ -27,10 +27,10 @@ type  UploadProcessData{
     message:String
     #upload request url
     url:String
-    #upload request method
-    method:String
     #base url to visit image
     baseUrl:String
+    #upload request method
+    method:String
     #upload request form
     form:UploadProcessForm
 }
