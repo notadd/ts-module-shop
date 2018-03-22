@@ -181,6 +181,7 @@ StoreComponent = __decorate([
         typeorm_1.Repository,
         typeorm_1.Repository])
 ], StoreComponent);
+exports.StoreComponent = StoreComponent;
 exports.StoreComponentProvider = {
     provide: 'StoreComponentToken',
     useFactory: (kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository) => {

@@ -1,11 +1,11 @@
 import { ImagePostProcessInfo, ImagePreProcessInfo } from '../interface/file/ImageProcessInfo';
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
 import { Repository } from 'typeorm';
+import { Bucket } from '../model/Bucket.entity';
+import { Image } from '../model/Image.entity';
 import { TokenUtil } from '../util/TokenUtil';
 import { FileUtil } from '../util/FileUtil';
 import { KindUtil } from '../util/KindUtil';
-import { Bucket } from '../model/Bucket';
-import { Image } from '../model/Image';
 export declare class StoreComponent {
     private readonly kindUtil;
     private readonly fileUtil;

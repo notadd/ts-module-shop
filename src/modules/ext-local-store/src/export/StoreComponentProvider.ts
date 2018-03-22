@@ -11,7 +11,7 @@ import { KindUtil } from '../util/KindUtil';
 import * as path from 'path';
 
 
-class StoreComponent {
+export class StoreComponent {
 
     constructor(
         @Inject(KindUtil) private readonly kindUtil: KindUtil,
