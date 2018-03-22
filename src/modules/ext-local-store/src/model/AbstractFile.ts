@@ -1,5 +1,5 @@
 import { Entity,Column,PrimaryGeneratedColumn,Index,ManyToOne,JoinColumn,OneToOne,CreateDateColumn,UpdateDateColumn} from 'typeorm';
-import { Bucket } from './Bucket'
+import { Bucket } from './Bucket.entity'
 
 
 export class AbstractFile{

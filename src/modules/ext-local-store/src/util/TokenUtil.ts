@@ -1,6 +1,6 @@
 import { Component, HttpException } from '@nestjs/common';
 import * as crypto from 'crypto'
-import { Bucket } from '../model/Bucket'
+import { Bucket } from '../model/Bucket.entity'
 
 @Component()
 export class TokenUtil {

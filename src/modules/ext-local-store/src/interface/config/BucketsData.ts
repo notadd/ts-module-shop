@@ -1,10 +1,10 @@
 export interface BucketsData{
-    code:number,
-    message:string,
-    buckets:BucketInfo[],
+    code:number
+    message:string
+    buckets:BucketInfo[]
 }
 
- export interface BucketInfo{
+interface BucketInfo{
     id:number
     public_or_private:string
     name:string

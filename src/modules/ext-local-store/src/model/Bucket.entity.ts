@@ -1,12 +1,12 @@
 import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { ImageConfig } from './ImageConfig'
-import { AudioConfig } from './AudioConfig'
-import { VideoConfig } from './VideoConfig'
-import { Document } from './Document'
-import { Image } from './Image'
-import { Video } from './Video'
-import { Audio } from './Audio'
-import { File } from './File'
+import { ImageConfig } from './ImageConfig.entity'
+import { AudioConfig } from './AudioConfig.entity'
+import { VideoConfig } from './VideoConfig.entity'
+import { Document } from './Document.entity'
+import { Image } from './Image.entity'
+import { Video } from './Video.entity'
+import { Audio } from './Audio.entity'
+import { File } from './File.entity'
 
 @Entity({
   name: 'bucket'

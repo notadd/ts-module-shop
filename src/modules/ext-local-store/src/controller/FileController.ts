@@ -12,17 +12,18 @@ import { QueryParam } from '../interface/file/QueryParam';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { PathParam } from '../interface/file/PathParam';
 import { FileService } from '../service/FileService';
-import { CommonData } from '../interface/Common'
+import { InjectRepository } from '@nestjs/typeorm';
+import { Document } from '../model/Document.entity';
+import { CommonData } from '../interface/Common';
+import { Bucket } from '../model/Bucket.entity';
 import { TokenUtil } from '../util/TokenUtil';
-import { Document } from '../model/Document';
+import { Audio } from '../model/Audio.entity';
+import { Video } from '../model/Video.entity';
+import { Image } from '../model/Image.entity';
+import { File } from '../model/File.entity';
 import { FileUtil } from '../util/FileUtil';
 import { KindUtil } from '../util/KindUtil';
 import * as  formidable from 'formidable';
-import { Bucket } from '../model/Bucket';
-import { Audio } from '../model/Audio';
-import { Video } from '../model/Video';
-import { Image } from '../model/Image';
-import { File } from '../model/File';
 import * as crypto from 'crypto';
 import * as path from 'path';
 import * as mime from 'mime';
@@ -41,9 +42,9 @@ export class FileController {
         @Inject(TokenUtil) private readonly tokenUtil: TokenUtil,
         @Inject(FileService) private readonly fileService: FileService,
         @Inject(ImageProcessUtil) private readonly imageProcessUtil: ImageProcessUtil,
-        @Inject('LocalModule.FileRepository') private readonly fileRepository: Repository<File>,
-        @Inject('LocalModule.ImageRepository') private readonly imageRepository: Repository<Image>,
-        @Inject('LocalModule.BucketRepository') private readonly bucketRepository: Repository<Bucket>) {
+        @InjectRepository(File) private readonly fileRepository: Repository<File>,
+        @InjectRepository(Image) private readonly imageRepository: Repository<Image>,
+        @InjectRepository(Bucket) private readonly bucketRepository: Repository<Bucket>) {
     }
 
     /* 下载文件接口，文件路径在url中，文件存在直接返回，不存在返回错误码404 */

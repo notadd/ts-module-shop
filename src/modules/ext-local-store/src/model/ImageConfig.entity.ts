@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Bucket } from './Bucket'
+import { Bucket } from './Bucket.entity'
 /* 图片配置实体类 */
 @Entity({
   name: 'image_config'
