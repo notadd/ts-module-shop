@@ -21,13 +21,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
-const LocalExceptionFilter_1 = require("../../exception/LocalExceptionFilter");
+const ExceptionInterceptor_1 = require("../../interceptor/ExceptionInterceptor");
 const graphql_1 = require("@nestjs/graphql");
 const ConfigService_1 = require("../../service/ConfigService");
+const http_1 = require("http");
+const typeorm_1 = require("@nestjs/typeorm");
+const Bucket_entity_1 = require("../../model/Bucket.entity");
 const KindUtil_1 = require("../../util/KindUtil");
 const FileUtil_1 = require("../../util/FileUtil");
-const typeorm_1 = require("typeorm");
-const http_1 = require("http");
+const typeorm_2 = require("typeorm");
 let ConfigResolver = class ConfigResolver {
     constructor(fileUtil, kindUtil, configService, bucketRepository) {
         this.fileUtil = fileUtil;
@@ -42,106 +44,51 @@ let ConfigResolver = class ConfigResolver {
     }
     bucket(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: '空间配置保存成功'
-            };
-            try {
-                let { isPublic, name, token_expire, token_secret_key } = body;
-                if (isPublic === undefined || isPublic === null || !name) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (isPublic !== true && isPublic !== false) {
-                    throw new common_1.HttpException('isPublic参数不正确', 400);
-                }
-                if (!isPublic && (!token_expire || !token_secret_key)) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (!isPublic && (token_expire < 0 || token_expire > 1800)) {
-                    throw new common_1.HttpException('token超时不正确', 400);
-                }
-                yield this.configService.saveBucketConfig(body);
+            let { isPublic, name, token_expire, token_secret_key } = body;
+            if (isPublic === undefined || isPublic === null || !name) {
+                throw new common_1.HttpException('缺少参数', 400);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+            if (isPublic !== true && isPublic !== false) {
+                throw new common_1.HttpException('isPublic参数不正确', 400);
             }
-            return data;
+            if (!isPublic && (!token_expire || !token_secret_key)) {
+                throw new common_1.HttpException('缺少参数', 400);
+            }
+            if (!isPublic && (token_expire < 0 || token_expire > 1800)) {
+                throw new common_1.HttpException('token超时不正确', 400);
+            }
+            yield this.configService.saveBucketConfig(body);
+            return { code: 200, message: '空间配置保存成功' };
         });
     }
     imageFormat(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: "图片保存格式配置保存成功"
-            };
-            try {
-                let format = body.format;
-                if (format == undefined || format.length == 0) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (!this.image_format.has(format)) {
-                    throw new common_1.HttpException('保存格式不正确', 400);
-                }
-                yield this.configService.saveImageFormat(body);
+            let format = body.format;
+            if (format == undefined || format.length == 0) {
+                throw new common_1.HttpException('缺少参数', 400);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+            if (!this.image_format.has(format)) {
+                throw new common_1.HttpException('保存格式不正确', 400);
             }
-            return data;
+            yield this.configService.saveImageFormat(body);
+            return { code: 200, message: "图片保存格式配置保存成功" };
         });
     }
     enableImageWatermark(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: '图片水印启用配置保存成功'
-            };
-            try {
-                let enable = body.enable;
-                if (enable === null || enable === undefined) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (enable !== true && enable !== false) {
-                    throw new common_1.HttpException('参数enable错误', 400);
-                }
-                yield this.configService.saveEnableImageWatermark(body);
+            let enable = body.enable;
+            if (enable === null || enable === undefined) {
+                throw new common_1.HttpException('缺少参数', 400);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+            if (enable !== true && enable !== false) {
+                throw new common_1.HttpException('参数enable错误', 400);
             }
-            return data;
+            yield this.configService.saveEnableImageWatermark(body);
+            return { code: 200, message: '图片水印启用配置保存成功' };
         });
     }
     imageWatermark(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: '图片水印配置成功'
-            };
             let temp_path;
             try {
                 let { name, gravity, opacity, x, y, ws } = body;
@@ -189,115 +136,54 @@ let ConfigResolver = class ConfigResolver {
                 yield this.configService.saveImageWatermark(file, body);
             }
             catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+                throw err;
             }
             finally {
                 if (temp_path) {
                     yield this.fileUtil.deleteIfExist(temp_path);
                 }
             }
-            return data;
+            return { code: 200, message: '图片水印配置成功' };
         });
     }
     audioFormat(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: "音频保存格式配置保存成功"
-            };
-            try {
-                let format = body.format;
-                if (!format) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (format != 'raw' && format != 'mp3' && format != 'aac') {
-                    throw new common_1.HttpException('音频保存格式不正确', 400);
-                }
-                yield this.configService.saveAudioFormat(body);
+            let format = body.format;
+            if (!format) {
+                throw new common_1.HttpException('缺少参数', 400);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+            if (format != 'raw' && format != 'mp3' && format != 'aac') {
+                throw new common_1.HttpException('音频保存格式不正确', 400);
             }
-            return data;
+            yield this.configService.saveAudioFormat(body);
+            return { code: 200, message: "音频保存格式配置保存成功" };
         });
     }
     videoFormat(req, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: "视频保存格式配置保存成功"
-            };
-            try {
-                let { format, resolution } = body;
-                if (!format || !resolution) {
-                    throw new common_1.HttpException('缺少参数', 400);
-                }
-                if (format != 'raw' && format != 'vp9' && format != 'h264' && format != 'h265') {
-                    throw new common_1.HttpException('编码格式不正确', 400);
-                }
-                if (resolution != 'raw' && resolution != 'p1080' && resolution != 'p720' && resolution != 'p480') {
-                    throw new common_1.HttpException('分辨率格式不正确', 400);
-                }
-                yield this.configService.saveVideoFormat(body);
+            let { format, resolution } = body;
+            if (!format || !resolution) {
+                throw new common_1.HttpException('缺少参数', 400);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
+            if (format != 'raw' && format != 'vp9' && format != 'h264' && format != 'h265') {
+                throw new common_1.HttpException('编码格式不正确', 400);
             }
-            return data;
+            if (resolution != 'raw' && resolution != 'p1080' && resolution != 'p720' && resolution != 'p480') {
+                throw new common_1.HttpException('分辨率格式不正确', 400);
+            }
+            yield this.configService.saveVideoFormat(body);
+            return { code: 200, message: "视频保存格式配置保存成功" };
         });
     }
     buckets(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = {
-                code: 200,
-                message: '获取空间配置成功',
-                buckets: []
-            };
-            try {
-                let buckets = yield this.bucketRepository.createQueryBuilder('bucket')
-                    .select(['bucket.id', 'bucket.public_or_private', 'bucket.name'])
-                    .getMany();
-                if (buckets.length !== 2) {
-                    throw new common_1.HttpException('空间配置不存在', 401);
-                }
-                data.buckets = buckets;
+            let buckets = yield this.bucketRepository.createQueryBuilder('bucket')
+                .select(['bucket.id', 'bucket.public_or_private', 'bucket.name'])
+                .getMany();
+            if (buckets.length !== 2) {
+                throw new common_1.HttpException('空间配置不存在', 401);
             }
-            catch (err) {
-                if (err instanceof common_1.HttpException) {
-                    data.code = err.getStatus();
-                    data.message = err.getResponse() + '';
-                }
-                else {
-                    console.log(err);
-                    data.code = 500;
-                    data.message = '出现了意外错误' + err.toString();
-                }
-            }
-            return data;
+            return { code: 200, message: '获取空间配置成功', buckets };
         });
     }
 };
@@ -345,14 +231,14 @@ __decorate([
 ], ConfigResolver.prototype, "buckets", null);
 ConfigResolver = __decorate([
     graphql_1.Resolver('Config'),
-    common_1.UseFilters(new LocalExceptionFilter_1.LocalExceptionFilter()),
+    common_1.UseInterceptors(ExceptionInterceptor_1.ExceptionInterceptor),
     __param(0, common_1.Inject(FileUtil_1.FileUtil)),
     __param(1, common_1.Inject(KindUtil_1.KindUtil)),
     __param(2, common_1.Inject(ConfigService_1.ConfigService)),
-    __param(3, common_1.Inject('LocalModule.BucketRepository')),
+    __param(3, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
     __metadata("design:paramtypes", [FileUtil_1.FileUtil,
         KindUtil_1.KindUtil,
         ConfigService_1.ConfigService,
-        typeorm_1.Repository])
+        typeorm_2.Repository])
 ], ConfigResolver);
 exports.ConfigResolver = ConfigResolver;
