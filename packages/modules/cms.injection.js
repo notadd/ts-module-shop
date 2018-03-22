@@ -41,10 +41,14 @@ CmsModule = __decorate([
                 email: "admin@notadd.com",
                 username: "notadd",
             },
+            {
+                email: "1945320167@qq.com",
+                username: "EricAll",
+            },
         ],
-        identification: "module-demo",
-        name: "Module Demo",
-        version: "2.0.0",
+        identification: "module-cms",
+        name: "Module CMS",
+        version: "2.0.2",
         imports: [
             graphql_1.GraphQLModule,
             cqrs_module_1.CqrsModule,
