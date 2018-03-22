@@ -4,7 +4,7 @@ export interface BucketsData{
     buckets:BucketInfo[]
 }
 
-interface BucketInfo{
+export interface BucketInfo{
     id:number
     public_or_private:string
     name:string
