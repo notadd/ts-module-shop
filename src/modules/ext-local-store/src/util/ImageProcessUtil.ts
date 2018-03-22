@@ -1,7 +1,7 @@
-import { Component, Inject, HttpException } from '@nestjs/common';
 import { ImagePostProcessInfo, ImagePreProcessInfo, Resize, Tailor, Blur } from '../interface/file/ImageProcessInfo';
+import { Component, Inject, HttpException } from '@nestjs/common';
 import { ImageMetadata } from '../interface/file/ImageMetadata';
-import { Bucket } from '../model/Bucket';
+import { Bucket } from '../model/Bucket.entity';
 import { KindUtil } from './KindUtil';
 import { FileUtil } from './FileUtil';
 import { SharpInstance } from 'sharp';

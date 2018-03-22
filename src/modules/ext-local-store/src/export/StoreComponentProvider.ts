@@ -3,15 +3,15 @@ import { HttpException, Component, Inject } from '@nestjs/common';
 import { ImageMetadata } from '../interface/file/ImageMetadata';
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
 import { Repository, Connection } from 'typeorm';
+import { Bucket } from '../model/Bucket.entity';
+import { Image } from '../model/Image.entity';
 import { TokenUtil } from '../util/TokenUtil';
 import { FileUtil } from '../util/FileUtil';
 import { KindUtil } from '../util/KindUtil';
-import { Bucket } from '../model/Bucket';
-import { Image } from '../model/Image';
 import * as path from 'path';
 
 
-export class StoreComponent {
+class StoreComponent {
 
     constructor(
         @Inject(KindUtil) private readonly kindUtil: KindUtil,
@@ -23,7 +23,6 @@ export class StoreComponent {
     ) {}
 
     async delete(bucketName: string, name: string, type: string): Promise<void> {
-
         //验证参数
         if (!bucketName || !name || !type) {
             throw new HttpException('缺少参数', 400)
@@ -163,6 +162,6 @@ export const StoreComponentProvider = {
     useFactory: (kindUtil: KindUtil, fileUtil: FileUtil, tokenUtil: TokenUtil, imageProcessUtil: ImageProcessUtil, imageRepository: Repository<Image>, bucketRepository: Repository<Bucket>) => {
         return new StoreComponent(kindUtil, fileUtil, tokenUtil, imageProcessUtil, imageRepository, bucketRepository)
     },
-    inject: [KindUtil, FileUtil, TokenUtil, ImageProcessUtil, 'LocalModule.ImageRepository', 'LocalModule.BucketRepository']
+    inject: [KindUtil, FileUtil, TokenUtil, ImageProcessUtil, 'ImageRepository', 'BucketRepository']
 
 }

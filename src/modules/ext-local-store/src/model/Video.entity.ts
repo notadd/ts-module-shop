@@ -1,16 +1,16 @@
 import { Entity,Column,PrimaryGeneratedColumn,Index,ManyToOne,JoinColumn,OneToOne,CreateDateColumn,UpdateDateColumn} from 'typeorm';
 import { AbstractFile } from './AbstractFile'
-import { Bucket } from './Bucket'
+import { Bucket } from './Bucket.entity'
 
 @Entity({
-    name:'audio'
+    name:'video'
 })
-export class Audio extends AbstractFile{
-    
+export class Video extends AbstractFile{
+
     @Column({nullable:true})
     bucketId:number
 
-    @ManyToOne(type=>Bucket,bucket=>bucket.audios,{
+    @ManyToOne(type=>Bucket,bucket=>bucket.videos,{
         cascadeInsert:false,
         cascadeUpdate:false,
         cascadeRemove:false,

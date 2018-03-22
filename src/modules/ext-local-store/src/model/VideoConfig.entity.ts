@@ -1,10 +1,11 @@
 import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Bucket } from './Bucket'
-/* 音频配置实体类 */
+import { Bucket } from './Bucket.entity'
+
+/* 视频配置实体类 */
 @Entity({
-    name: 'audio_config'
+  name: 'video_config'
 })
-export class AudioConfig{
+export class VideoConfig{
 
   //主键，需要设置插入，1默认为公有空间配置，2默认为私有空间配置
   @PrimaryColumn({
@@ -13,7 +14,7 @@ export class AudioConfig{
   })
   id: number;
 
-  //保存格式，raw、mp3、aac
+  //保存格式，raw、vp9、h264、h265
   @Column({
     name: 'format',
     type: 'varchar',
@@ -21,7 +22,16 @@ export class AudioConfig{
   })
   format: string;
 
-  @OneToOne(type => Bucket,bucket=>bucket.audio_config)
+
+  //分辨率，raw、1080p、720p、480p
+  @Column({
+    name: 'resolution',
+    type: 'varchar',
+    nullable: true
+  })
+  resolution:string;
+
+  @OneToOne(type => Bucket,bucket=>bucket.video_config)
   @JoinColumn()
   bucket?: Bucket;
 }

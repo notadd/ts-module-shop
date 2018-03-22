@@ -7,12 +7,13 @@ import { ImageFormat } from '../interface/config/ImageFormat';
 import { AudioFormat } from '../interface/config/AudioFormat';
 import { VideoFormat } from '../interface/config/VideoFormat';
 import { ImageProcessUtil } from '../util/ImageProcessUtil';
-import { ImageConfig } from '../model/ImageConfig';
-import { AudioConfig } from '../model/AudioConfig';
-import { VideoConfig } from '../model/VideoConfig';
+import { ImageConfig } from '../model/ImageConfig.entity';
+import { AudioConfig } from '../model/AudioConfig.entity';
+import { VideoConfig } from '../model/VideoConfig.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Bucket } from '../model/Bucket.entity';
+import { Image } from '../model/Image.entity';
 import { FileUtil } from '../util/FileUtil';
-import { Bucket } from '../model/Bucket';
-import { Image } from '../model/Image';
 import { Repository } from 'typeorm';
 import * as  crypto from 'crypto';
 import * as  path from 'path';
@@ -24,11 +25,11 @@ export class ConfigService {
   constructor(
     @Inject(FileUtil) private readonly fileUtil: FileUtil,
     @Inject(ImageProcessUtil) private readonly imageProcessUtil: ImageProcessUtil,
-    @Inject('LocalModule.ImageRepository') private readonly imageRepository: Repository<Image>,
-    @Inject('LocalModule.BucketRepository') private readonly bucketRepository: Repository<Bucket>,
-    @Inject('LocalModule.ImageConfigRepository') private readonly imageConfigRepository: Repository<ImageConfig>,
-    @Inject('LocalModule.AudioConfigRepository') private readonly audioConfigRepository: Repository<AudioConfig>,
-    @Inject('LocalModule.VideoConfigRepository') private readonly videoConfigRepository: Repository<VideoConfig>
+    @InjectRepository(Image) private readonly imageRepository: Repository<Image>,
+    @InjectRepository(Bucket) private readonly bucketRepository: Repository<Bucket>,
+    @InjectRepository(ImageConfig) private readonly imageConfigRepository: Repository<ImageConfig>,
+    @InjectRepository(AudioConfig) private readonly audioConfigRepository: Repository<AudioConfig>,
+    @InjectRepository(VideoConfig) private readonly videoConfigRepository: Repository<VideoConfig>
   ) { }
 
   async saveBucketConfig(body: BucketConfig): Promise<void> {
