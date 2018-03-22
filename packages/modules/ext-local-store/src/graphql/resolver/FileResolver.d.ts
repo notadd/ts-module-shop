@@ -10,12 +10,12 @@ import { AllData } from '../../interface/file/AllData';
 import { OneBody } from '../../interface/file/OneBody';
 import { OneData } from '../../interface/file/OneData';
 import { CommonData } from '../../interface/Common';
+import { Bucket } from '../../model/Bucket.entity';
 import { TokenUtil } from '../../util/TokenUtil';
+import { Image } from '../../model/Image.entity';
+import { File } from '../../model/File.entity';
 import { KindUtil } from '../../util/KindUtil';
 import { FileUtil } from '../../util/FileUtil';
-import { Bucket } from '../../model/Bucket';
-import { Image } from '../../model/Image';
-import { File } from '../../model/File';
 import { IncomingMessage } from 'http';
 export declare class FileResolver {
     private readonly fileUtil;
