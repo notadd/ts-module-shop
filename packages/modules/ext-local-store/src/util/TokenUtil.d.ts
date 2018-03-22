@@ -1,4 +1,4 @@
-import { Bucket } from '../model/Bucket';
+import { Bucket } from '../model/Bucket.entity';
 export declare class TokenUtil {
     constructor();
     getToken(url: string, bucket: Bucket): string;
