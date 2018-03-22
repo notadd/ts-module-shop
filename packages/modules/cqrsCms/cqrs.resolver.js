@@ -111,6 +111,15 @@ let CqrsResolver = class CqrsResolver {
                 articleVM.limitNum = limitNum;
                 articleVM.pages = pages;
             }
+            let keywordSearch = map.get('keywordSearch');
+            if (keywordSearch != null || keywordSearch != undefined) {
+                let amap = new Map();
+                amap = this.objToStrMap(keywordSearch);
+                let keyWords = amap.get('keyWords');
+                articleVM.getArticles = { keywordSearch: keyWords };
+                articleVM.limitNum = amap.get('limitNum');
+                articleVM.pages = amap.get('pages');
+            }
             articleVM.getAllArticles = true;
             let resultArt = yield this.sitemapService.articleCurd(articleVM);
             resultPage = yield this.classifyService.pageServiceArt(resultArt.totalItems, articleVM.limitNum, articleVM.pages).then(a => { return a; });
