@@ -27,7 +27,11 @@ const UploadParamGuard_1 = require("../guard/UploadParamGuard");
 const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
 const typeorm_1 = require("typeorm");
 const FileService_1 = require("../service/FileService");
+const typeorm_2 = require("@nestjs/typeorm");
+const Bucket_entity_1 = require("../model/Bucket.entity");
 const TokenUtil_1 = require("../util/TokenUtil");
+const Image_entity_1 = require("../model/Image.entity");
+const File_entity_1 = require("../model/File.entity");
 const FileUtil_1 = require("../util/FileUtil");
 const KindUtil_1 = require("../util/KindUtil");
 const crypto = require("crypto");
@@ -183,9 +187,9 @@ FileController = __decorate([
     __param(2, common_1.Inject(TokenUtil_1.TokenUtil)),
     __param(3, common_1.Inject(FileService_1.FileService)),
     __param(4, common_1.Inject(ImageProcessUtil_1.ImageProcessUtil)),
-    __param(5, common_1.Inject('LocalModule.FileRepository')),
-    __param(6, common_1.Inject('LocalModule.ImageRepository')),
-    __param(7, common_1.Inject('LocalModule.BucketRepository')),
+    __param(5, typeorm_2.InjectRepository(File_entity_1.File)),
+    __param(6, typeorm_2.InjectRepository(Image_entity_1.Image)),
+    __param(7, typeorm_2.InjectRepository(Bucket_entity_1.Bucket)),
     __metadata("design:paramtypes", [FileUtil_1.FileUtil,
         KindUtil_1.KindUtil,
         TokenUtil_1.TokenUtil,
