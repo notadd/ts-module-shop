@@ -10,9 +10,9 @@ export declare class ArticleService {
         articles: ArticleEntity[];
         totalItems: number;
     }>;
-    serachArticles(name: string, limit?: number, pages?: number): Promise<{
+    searchArticles(name: string, limit?: number, pages?: number): Promise<{
         articles: ArticleEntity[];
-        totalItems: number;
+        totalItems: Number;
     }>;
     deleteArticles(array: number[]): Promise<number>;
     createArticle(article: ArticleEntity): Promise<void>;

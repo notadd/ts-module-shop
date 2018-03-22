@@ -34,6 +34,7 @@ export declare class ClassifyService {
         totalItems: number;
     }>;
     Fenji(art: ArticleEntity[], limit?: number, pages?: number): Promise<ArticleEntity[]>;
+    getClassifyIdForArt(): Promise<number[]>;
     getClassifyId(id: number): Promise<number[]>;
     getClassifyIdPage(id: number): Promise<number[]>;
     findLevel(id: number): Promise<number>;

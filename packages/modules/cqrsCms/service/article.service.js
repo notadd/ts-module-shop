@@ -62,12 +62,21 @@ let ArticleService = class ArticleService {
             return { articles: resultAll, totalItems: title };
         });
     }
-    serachArticles(name, limit, pages) {
+    searchArticles(name, limit, pages) {
         return __awaiter(this, void 0, void 0, function* () {
-            let str = `%${name}%`;
-            let resultAll = yield this.respository.createQueryBuilder().where('"name"like :name', { name: str, }).andWhere('"recycling"<> :recycling or recycling isnull', { recycling: false }).orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getMany();
-            let title = yield this.respository.createQueryBuilder().where('"name"like :name', { name: str, }).andWhere('"recycling"<> :recycling or recycling isnull', { recycling: false }).getCount();
-            return { articles: resultAll, totalItems: title };
+            let strArt = `%${name}%`;
+            let array = yield this.classifyService.getClassifyIdForArt();
+            let articles = yield this.respository.createQueryBuilder()
+                .where('"classifyId" in (:id)', { id: array })
+                .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ', { name: strArt })
+                .orderBy('"publishedTime"', 'DESC')
+                .skip(limit * (pages - 1))
+                .take(limit)
+                .getMany();
+            let num = yield this.respository.createQueryBuilder().where('"classifyId" in (:id)', { id: array })
+                .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ', { name: strArt })
+                .getCount();
+            return { articles: articles, totalItems: num };
         });
     }
     deleteArticles(array) {
