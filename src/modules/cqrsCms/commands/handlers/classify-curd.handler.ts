@@ -73,7 +73,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
             if(value==undefined) value=true;
             if(value)page.createClassify(command.classify);
         }
-        console.log({MessageCodeError:MessageCodeError,Continue:value});
         page.commit();
         resolver({MessageCodeError:MessageCodeError,Continue:value});
     }

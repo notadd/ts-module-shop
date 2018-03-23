@@ -160,9 +160,8 @@ export class ClassifyService{
             result.push(newPageClassify);
             return result;
         }else{
-            let list:ClassifyEntity[]=[];
-            list.push(idFindOne);
-            return list;
+            let newArt:ClassifyEntity[]=await this.repository.find();
+            return newArt;
         }
 
     }
@@ -182,9 +181,8 @@ export class ClassifyService{
             result.push(newPageClassify);
             return result;
         }else{
-            let list:PageClassifyEntity[]=[];
-            list.push(idFindOne);
-            return list;
+            let newPage:PageClassifyEntity[]=await this.pageRepository.find();
+            return newPage;
         }
 
     }
@@ -207,7 +205,7 @@ export class ClassifyService{
                     navigationArray.children =theEnd;
                 }
             }else{
-                navigationArray.children=null;
+                navigationArray.children=[];
             }
             let navigationFinal:PageClassifyEntity=navigationArray;
             children.push(navigationFinal);
@@ -235,7 +233,7 @@ export class ClassifyService{
                     navigationArray.children =theEnd;
                 }
             }else{
-                navigationArray.children=null;
+                navigationArray.children=[];
             }
             let navigationFinal:ClassifyEntity=navigationArray;
             children.push(navigationFinal);

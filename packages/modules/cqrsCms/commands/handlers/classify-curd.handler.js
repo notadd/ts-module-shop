@@ -74,7 +74,6 @@ let ClassifyCurdHandler = class ClassifyCurdHandler {
                 if (value)
                     page.createClassify(command.classify);
             }
-            console.log({ MessageCodeError: MessageCodeError, Continue: value });
             page.commit();
             resolver({ MessageCodeError: MessageCodeError, Continue: value });
         });

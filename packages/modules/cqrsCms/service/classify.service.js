@@ -165,9 +165,8 @@ let ClassifyService = class ClassifyService {
                 return result;
             }
             else {
-                let list = [];
-                list.push(idFindOne);
-                return list;
+                let newArt = yield this.repository.find();
+                return newArt;
             }
         });
     }
@@ -184,9 +183,8 @@ let ClassifyService = class ClassifyService {
                 return result;
             }
             else {
-                let list = [];
-                list.push(idFindOne);
-                return list;
+                let newPage = yield this.pageRepository.find();
+                return newPage;
             }
         });
     }
@@ -205,7 +203,7 @@ let ClassifyService = class ClassifyService {
                     }
                 }
                 else {
-                    navigationArray.children = null;
+                    navigationArray.children = [];
                 }
                 let navigationFinal = navigationArray;
                 children.push(navigationFinal);
@@ -228,7 +226,7 @@ let ClassifyService = class ClassifyService {
                     }
                 }
                 else {
-                    navigationArray.children = null;
+                    navigationArray.children = [];
                 }
                 let navigationFinal = navigationArray;
                 children.push(navigationFinal);

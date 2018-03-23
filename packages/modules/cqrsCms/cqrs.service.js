@@ -57,7 +57,6 @@ let CqrsService = class CqrsService {
     classifyCurd(getClassifyDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield this.commonbus.execute(new classify_param_command_1.ClassifyParamCommand(getClassifyDto));
-            console.log('service=' + JSON.stringify(result));
             return result;
         });
     }
