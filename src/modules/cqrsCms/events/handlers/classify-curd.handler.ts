@@ -2,13 +2,11 @@ import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
 import {ClassifyCurdEvents} from "../impl/classify-curd.events";
 import {ClassifyService} from "../../service/classify.service";
 
-const clc=require('cli-color');
 @EventsHandler(ClassifyCurdEvents)
 export class ClassifyCurdEvent implements IEventHandler<ClassifyCurdEvents> {
     constructor(readonly classifyservice: ClassifyService) {
     }
     async handle(event: ClassifyCurdEvents) {
-        console.log(clc.yellowBright('Async create classify...'));
         //新增分类
         if(event.classify.createClassify){
             if(event.classify.useFor=='art'){
