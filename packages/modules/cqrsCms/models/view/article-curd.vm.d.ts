@@ -31,6 +31,7 @@ export declare class ArticleCurdVm {
             classifyId: number;
             top: boolean;
         };
+        keywordSearch?: string;
     };
     pictureUpload?: {
         id?: number;

@@ -87,10 +87,18 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         if(command.article.getAllArticles && command.article.getArticles.getCurrentClassifyArticles){
             result=await this.classifyService.showCurrentArticles(command.article.getArticles.getCurrentClassifyArticles);
         }
+        //关键字搜索活动和资讯
+        if(command.article.getArticles && command.article.getArticles.keywordSearch){
+            result=await this.articleService.searchArticles(
+                command.article.getArticles.keywordSearch,
+                command.article.limitNum,
+                command.article.pages);
+        }
         //显示分类层级 暂未确定是否开放
       /*  if(command.article.getAllArticles && command.article.getArticles.getLevelByClassifyId){
             result=await this.articleService.getLevelByClassifyId(command.article.getArticles.getLevelByClassifyId);
         }*/
+
         page.commit();
         resolver(result);
     }

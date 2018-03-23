@@ -154,26 +154,40 @@ let ClassifyService = class ClassifyService {
     }
     findAllClassifyArt(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let list = yield this.repository.createQueryBuilder().where('"groupId"= :groupId', { groupId: id, }).orderBy('id', 'ASC').getMany();
             let idFindOne = yield this.repository.createQueryBuilder().where('"id"= :id', { id: id, }).getOne();
-            let result = [];
-            let resultArray = yield this.Artrecursion(id, list);
-            idFindOne.children = resultArray;
-            let newPageClassify = idFindOne;
-            result.push(newPageClassify);
-            return result;
+            if (idFindOne) {
+                let list = yield this.repository.createQueryBuilder().where('"groupId"= :groupId', { groupId: id, }).orderBy('id', 'ASC').getMany();
+                let result = [];
+                let resultArray = yield this.Artrecursion(id, list);
+                idFindOne.children = resultArray;
+                let newPageClassify = idFindOne;
+                result.push(newPageClassify);
+                return result;
+            }
+            else {
+                let list = [];
+                list.push(idFindOne);
+                return list;
+            }
         });
     }
     findAllClassifyPage(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let list = yield this.pageRepository.createQueryBuilder().where('"groupId"= :id', { id: id, }).orderBy('id', 'ASC').getMany();
             let idFindOne = yield this.pageRepository.createQueryBuilder().where('"id"= :id', { id: id, }).getOne();
-            let result = [];
-            let resultArray = yield this.Pagerecursion(id, list);
-            idFindOne.children = resultArray;
-            let newPageClassify = idFindOne;
-            result.push(newPageClassify);
-            return result;
+            if (idFindOne) {
+                let list = yield this.pageRepository.createQueryBuilder().where('"groupId"= :id', { id: id, }).orderBy('id', 'ASC').getMany();
+                let result = [];
+                let resultArray = yield this.Pagerecursion(id, list);
+                idFindOne.children = resultArray;
+                let newPageClassify = idFindOne;
+                result.push(newPageClassify);
+                return result;
+            }
+            else {
+                let list = [];
+                list.push(idFindOne);
+                return list;
+            }
         });
     }
     Pagerecursion(id, listFirst) {
@@ -495,6 +509,18 @@ let ClassifyService = class ClassifyService {
             return newArt;
         });
     }
+    getClassifyIdForArt() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let custom = yield this.repository.createQueryBuilder().where('"classifyAlias"=\'活动\' or "classifyAlias"=\'资讯\'').getMany();
+            let customArray = [];
+            for (let t in custom) {
+                customArray.push(custom[t].id);
+                customArray.push(...yield this.getClassifyId(custom[t].id).then(a => { return a; }));
+            }
+            customArray = Array.from(new Set(customArray));
+            return customArray;
+        });
+    }
     getClassifyId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             yield typeorm_2.getManager().query("update public.article_classify_table set \"parentId\" = \"groupId\"");
@@ -754,7 +780,10 @@ let ClassifyService = class ClassifyService {
                 if (art[t].id != null) {
                     let entity = new article_entity_1.Article();
                     let time = art[t].createAt;
-                    let createAt = new Date(time.getTime() + time.getTimezoneOffset() * 2 * 30 * 1000);
+                    if (art[t].createAt != null) {
+                        let createAt = new Date(time.getTime() + time.getTimezoneOffset() * 2 * 30 * 1000);
+                        entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
+                    }
                     let newTime = art[t].updateAt;
                     let update = new Date(newTime.getTime() + newTime.getTimezoneOffset() * 2 * 30 * 1000);
                     if (art[t].publishedTime != null) {
@@ -769,7 +798,6 @@ let ClassifyService = class ClassifyService {
                         let startTime = new Date(art[t].startTime.getTime() + art[t].startTime.getTimezoneOffset() * 60 * 1000);
                         entity.startTime = `${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
                     }
-                    entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                     entity.updateAt = `${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
                     entity.id = art[t].id;
                     entity.name = art[t].name;
