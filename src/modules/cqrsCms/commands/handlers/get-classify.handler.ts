@@ -2,12 +2,10 @@ import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {GetClassifyParamCommand} from "../impl/get-classify-param.command";
 import {ClassifyService} from "../../service/classify.service";
 
-const clc=require('cli-color');
 @CommandHandler(GetClassifyParamCommand)
 export class GetClassifyHandler implements ICommandHandler<GetClassifyParamCommand>{
     constructor(private readonly classifyService: ClassifyService){}
     async execute(command:GetClassifyParamCommand,resolver:(value) => void){
-        console.log(clc.greenBright('handlerCommand getClassify Command...'));
         let result;
         //页面分类无极限
         if(command.getClassify.useFor=='page'){

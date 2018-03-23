@@ -3,7 +3,6 @@ import {PageRepository} from "../../repository/pageRepository";
 import {ClassifyParamCommand} from "../impl/classify-param.command";
 import {ClassifyService} from "../../service/classify.service";
 
-const clc=require('cli-color');
 @CommandHandler(ClassifyParamCommand)
 export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand>{
     constructor(private readonly repositoty:PageRepository,
@@ -11,7 +10,6 @@ export class ClassifyCurdHandler implements ICommandHandler<ClassifyParamCommand
                 private readonly classifyService:ClassifyService){}
 
     async execute(command:ClassifyParamCommand,resolver:(value?) => void):Promise<any>{
-        console.log(clc.greenBright('handlerCommand classify_curd Command...'));
         let id:string='0';
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
         let value,MessageCodeError;
