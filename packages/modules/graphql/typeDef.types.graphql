@@ -242,7 +242,7 @@ input ClassifyUpdate{
     isPreTop:Boolean
 }
 
-type Page{
+type Pages{
     #页面id
     id:Int,
     #页面标题
@@ -266,7 +266,7 @@ type Page{
 }
 type PagePagination{
     pagination:ReturnPage,
-    pages:[Page]
+    pages:[Pages]
 }
 type ClassifyOne{
     classifyEntity:[Classify],
@@ -461,7 +461,7 @@ type Query{
     #get pages by paging.
     getPagesLimit(getAllPage: recycleLimit, serachPages: Keywords, getPagesByClassifyId: recycleClasssifyId) :PagePagination,
     #get a page by page
-    getPageById(findPageById: ArticleId):Page,
+    getPageById(findPageById: ArticleId):Pages,
     updateFile(updateFile:createXml):String,
     createFile(buildxml:createXml):String
 }
