@@ -150,14 +150,21 @@ export class ClassifyService{
      * @returns {Promise<ClassifyEntity[]>}
      */
     async findAllClassifyArt(id:number):Promise<ClassifyEntity[]>{
-        let list:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :groupId',{groupId:id,}).orderBy('id','ASC').getMany();
         let idFindOne:ClassifyEntity =await this.repository.createQueryBuilder().where('"id"= :id',{id:id,}).getOne();
-        let result:ClassifyEntity[]=[];
-        let resultArray:ClassifyEntity[]=await this.Artrecursion(id,list);
-        idFindOne.children=resultArray;
-        let newPageClassify:ClassifyEntity=idFindOne;
-        result.push(newPageClassify);
-        return result;
+        if(idFindOne){
+            let list:ClassifyEntity[]=await this.repository.createQueryBuilder().where('"groupId"= :groupId',{groupId:id,}).orderBy('id','ASC').getMany();
+            let result:ClassifyEntity[]=[];
+            let resultArray:ClassifyEntity[]=await this.Artrecursion(id,list);
+            idFindOne.children=resultArray;
+            let newPageClassify:ClassifyEntity=idFindOne;
+            result.push(newPageClassify);
+            return result;
+        }else{
+            let list:ClassifyEntity[]=[];
+            list.push(idFindOne);
+            return list;
+        }
+
     }
 
     /**
@@ -165,14 +172,21 @@ export class ClassifyService{
      * @returns {Promise<PageClassifyEntity[]>}
      */
     async findAllClassifyPage(id:number):Promise<PageClassifyEntity[]>{
-        let list:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:id,}).orderBy('id','ASC').getMany();
         let idFindOne:PageClassifyEntity =await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:id,}).getOne();
-        let result:PageClassifyEntity[]=[];
-        let resultArray:PageClassifyEntity[]=await this.Pagerecursion(id,list);
-        idFindOne.children=resultArray;
-        let newPageClassify:PageClassifyEntity=idFindOne;
-        result.push(newPageClassify);
-        return result;
+        if(idFindOne){
+            let list:PageClassifyEntity[]=await this.pageRepository.createQueryBuilder().where('"groupId"= :id',{id:id,}).orderBy('id','ASC').getMany();
+            let result:PageClassifyEntity[]=[];
+            let resultArray:PageClassifyEntity[]=await this.Pagerecursion(id,list);
+            idFindOne.children=resultArray;
+            let newPageClassify:PageClassifyEntity=idFindOne;
+            result.push(newPageClassify);
+            return result;
+        }else{
+            let list:PageClassifyEntity[]=[];
+            list.push(idFindOne);
+            return list;
+        }
+
     }
 
     /**
