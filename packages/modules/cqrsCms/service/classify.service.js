@@ -154,26 +154,40 @@ let ClassifyService = class ClassifyService {
     }
     findAllClassifyArt(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let list = yield this.repository.createQueryBuilder().where('"groupId"= :groupId', { groupId: id, }).orderBy('id', 'ASC').getMany();
             let idFindOne = yield this.repository.createQueryBuilder().where('"id"= :id', { id: id, }).getOne();
-            let result = [];
-            let resultArray = yield this.Artrecursion(id, list);
-            idFindOne.children = resultArray;
-            let newPageClassify = idFindOne;
-            result.push(newPageClassify);
-            return result;
+            if (idFindOne) {
+                let list = yield this.repository.createQueryBuilder().where('"groupId"= :groupId', { groupId: id, }).orderBy('id', 'ASC').getMany();
+                let result = [];
+                let resultArray = yield this.Artrecursion(id, list);
+                idFindOne.children = resultArray;
+                let newPageClassify = idFindOne;
+                result.push(newPageClassify);
+                return result;
+            }
+            else {
+                let list = [];
+                list.push(idFindOne);
+                return list;
+            }
         });
     }
     findAllClassifyPage(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let list = yield this.pageRepository.createQueryBuilder().where('"groupId"= :id', { id: id, }).orderBy('id', 'ASC').getMany();
             let idFindOne = yield this.pageRepository.createQueryBuilder().where('"id"= :id', { id: id, }).getOne();
-            let result = [];
-            let resultArray = yield this.Pagerecursion(id, list);
-            idFindOne.children = resultArray;
-            let newPageClassify = idFindOne;
-            result.push(newPageClassify);
-            return result;
+            if (idFindOne) {
+                let list = yield this.pageRepository.createQueryBuilder().where('"groupId"= :id', { id: id, }).orderBy('id', 'ASC').getMany();
+                let result = [];
+                let resultArray = yield this.Pagerecursion(id, list);
+                idFindOne.children = resultArray;
+                let newPageClassify = idFindOne;
+                result.push(newPageClassify);
+                return result;
+            }
+            else {
+                let list = [];
+                list.push(idFindOne);
+                return list;
+            }
         });
     }
     Pagerecursion(id, listFirst) {
