@@ -54,7 +54,6 @@ export class CqrsService{
      */
     async classifyCurd(getClassifyDto:ClassifyCurdVm){
         const result=await this.commonbus.execute(new ClassifyParamCommand(getClassifyDto));
-        console.log('service='+JSON.stringify(result));
         return result;
 
     }
