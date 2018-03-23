@@ -15,7 +15,6 @@ export class PageSagas{
         return events$.ofType(ArticleCurdEvents)
             .delay(1000)
             .map(event => {
-                console.log(clc.redBright('Inside [PageSagas] Saga articleXml'));
                 return new DeleteParamCommand(event.heroId, itemId);
             })
     };
@@ -24,7 +23,6 @@ export class PageSagas{
         return events$.ofType(PageCurdEvent)
             .delay(1000)
             .map(event =>{
-                console.log(clc.redBright('Inside [PageSagas] Saga pagexml'));
                 return new DeleteParamCommand(event.heroId,itemId);
             })
     };
