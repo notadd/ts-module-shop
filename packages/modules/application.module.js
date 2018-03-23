@@ -9,24 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const common_1 = require("@nestjs/common");
-const apollo_server_express_1 = require("apollo-server-express");
-const common_2 = require("@nestjs/common");
+const cms_injection_1 = require("./cms.injection");
 const graphql_1 = require("@nestjs/graphql");
-const cqrs_module_1 = require("./cqrsCms/cqrs.module");
-const registration_module_1 = require("./enter/registration.module");
-const LocalModule_1 = require("./ext-local-store/src/LocalModule");
+const apollo_server_express_1 = require("apollo-server-express");
+const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-let CmsModule = class CmsModule {
+let ApplicationModule = class ApplicationModule {
     constructor(graphqlFactory) {
         this.graphqlFactory = graphqlFactory;
     }
     configure(consumer) {
         const schema = this.createSchema();
         consumer.apply(apollo_server_express_1.graphiqlExpress({ endpointURL: '/graphql' }))
-            .forRoutes({ path: '/graphiql', method: common_2.RequestMethod.GET })
+            .forRoutes({ path: '/graphiql', method: common_1.RequestMethod.GET })
             .apply(apollo_server_express_1.graphqlExpress(req => ({ schema, rootValue: req })))
-            .forRoutes({ path: '/graphql', method: common_2.RequestMethod.ALL });
+            .forRoutes({ path: '/graphql', method: common_1.RequestMethod.ALL });
     }
     createSchema() {
         const typeDefs = this.graphqlFactory.mergeTypesByPaths('./**/*.graphql');
@@ -34,10 +31,14 @@ let CmsModule = class CmsModule {
         return schema;
     }
 };
-CmsModule = __decorate([
+ApplicationModule = __decorate([
     common_1.Module({
-        modules: [graphql_1.GraphQLModule, cqrs_module_1.CqrsModule, LocalModule_1.LocalModule, registration_module_1.RegistrationModule, typeorm_1.TypeOrmModule.forRoot()],
+        imports: [
+            cms_injection_1.CmsModule,
+            graphql_1.GraphQLModule,
+            typeorm_1.TypeOrmModule.forRoot(),
+        ],
     }),
     __metadata("design:paramtypes", [graphql_1.GraphQLFactory])
-], CmsModule);
-exports.CmsModule = CmsModule;
+], ApplicationModule);
+exports.ApplicationModule = ApplicationModule;
