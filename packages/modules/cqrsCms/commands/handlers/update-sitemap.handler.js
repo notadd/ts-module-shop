@@ -20,7 +20,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const pageRepository_1 = require("../../repository/pageRepository");
 const delete_param_command_1 = require("../impl/delete-param.command");
-const clc = require('cli-color');
 let UpdateSitemapHandler = class UpdateSitemapHandler {
     constructor(repositoty, publisher) {
         this.repositoty = repositoty;
@@ -28,7 +27,6 @@ let UpdateSitemapHandler = class UpdateSitemapHandler {
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand  UpdateXmlCommand...'));
             const sitemap = this.publisher.mergeObjectContext(yield this.repositoty.siteMap());
             sitemap.updatexml('0');
             sitemap.commit();

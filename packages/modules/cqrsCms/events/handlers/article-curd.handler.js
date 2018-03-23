@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const article_curd_events_1 = require("../impl/article-curd.events");
 const cqrs_1 = require("@nestjs/cqrs");
 const article_service_1 = require("../../service/article.service");
-const clc = require('cli-color');
 let ArticleCurdEvent = class ArticleCurdEvent {
     constructor(articleService) {
         this.articleService = articleService;
     }
     handle(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.yellowBright('Async create curd  article...'));
             if (event.article.createArticle) {
                 yield this.articleService.createArticle(event.article.createArticle.article);
             }

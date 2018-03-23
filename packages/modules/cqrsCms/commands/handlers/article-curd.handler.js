@@ -22,7 +22,6 @@ const pageRepository_1 = require("../../repository/pageRepository");
 const article_param_command_1 = require("../impl/article-param.command");
 const article_service_1 = require("../../service/article.service");
 const classify_service_1 = require("../../service/classify.service");
-const clc = require('cli-color');
 let ArticleCurdHandler = class ArticleCurdHandler {
     constructor(repositoty, publisher, articleService, classifyService) {
         this.repositoty = repositoty;
@@ -32,7 +31,6 @@ let ArticleCurdHandler = class ArticleCurdHandler {
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand article_curd Command...'));
             let id = '0';
             const page = this.publisher.mergeObjectContext(yield this.repositoty.find(id));
             let result;

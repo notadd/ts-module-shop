@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const sitemap_update_event_1 = require("../impl/sitemap-update.event");
 const sitemap_service_1 = require("../../../sitemap/sitemap.service");
-const clc = require('cli-color');
 let SitemapUpdateHandler = class SitemapUpdateHandler {
     constructor(sitemapService) {
         this.sitemapService = sitemapService;
     }
     handle(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.yellowBright('Async update SitemapFoundItemEvent...'));
             let url = 'www.baidu.com';
             yield this.sitemapService.UpdateXMLFile(0, url);
         });

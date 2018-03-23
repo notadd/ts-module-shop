@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sitemap_create_event_1 = require("../impl/sitemap-create.event");
 const sitemap_service_1 = require("../../../sitemap/sitemap.service");
 const cqrs_1 = require("@nestjs/cqrs");
-const clc = require('cli-color');
 let SitemapCreateHandler = class SitemapCreateHandler {
     constructor(sitemapService) {
         this.sitemapService = sitemapService;
     }
     handle(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.yellowBright('Async create SitemapFoundItemEvent...'));
             let url = 'www.baidu.com';
             let array_baidu_sitemap_options = {
                 lc_XML_FileName: event.createXml.lc_XML_FileName,
