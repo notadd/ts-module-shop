@@ -1,6 +1,6 @@
 import './vendor';
 import { NestFactory } from '@nestjs/core';
-import {CmsModule} from "./cms.injection";
+import { ApplicationModule } from "./application.module";
 
 /**
  * 跨域问题
@@ -18,8 +18,9 @@ const cross =(req,res,next) =>{
         next();
     }
 };
+
 async function bootstrap() {
-    const app = await NestFactory.create(CmsModule);
+    const app = await NestFactory.create(ApplicationModule);
     var bodyParser=require('body-parser');
     app.use(cross);
     app.use(bodyParser.json({ limit:'10000kb'}));
