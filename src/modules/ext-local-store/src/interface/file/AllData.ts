@@ -1,4 +1,4 @@
-export interface AllData{
+export interface AllData {
     code: number
     message: string
     baseUrl: string

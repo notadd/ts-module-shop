@@ -9,7 +9,7 @@ import { VideoConfig } from './model/VideoConfig.entity';
 import { ConfigService } from './service/ConfigService';
 import { FileService } from './service/FileService';
 import { Document } from './model/Document.entity';
-import { RestfulUtil } from './util/RestfulUtil';
+import { RestfulUtil} from "./util/RestfulUtil";
 import { PromiseUtil } from './util/PromiseUtil';
 import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';

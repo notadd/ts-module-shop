@@ -1,5 +1,5 @@
-export interface FileLocationBody{
-    bucketName:string
-    name:string
-    type:string
+export interface FileLocationBody {
+    bucketName: string
+    name: string
+    type: string
 }
