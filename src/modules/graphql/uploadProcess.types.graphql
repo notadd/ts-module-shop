@@ -5,18 +5,10 @@ type Mutation{
 
 #upload request form 
 type UploadProcessForm{
-    #md5 of file
-    md5:String
-    #bucket name
-    bucketName:String
-    #file name
-    rawName:String
-    #file secret key
-    contentSecret:String
-    #array of tag
-    tagsString:String
-    #image pretreatment info
-    imagePreProcessString:String  
+    #the base64 code of upload parameter
+    policy:String
+    #signature
+    authorization:String
 }
 
 #return data
@@ -27,10 +19,10 @@ type  UploadProcessData{
     message:String
     #upload request url
     url:String
-    #base url to visit image
-    baseUrl:String
     #upload request method
     method:String
+    #base url for visit image
+    baseUrl:String
     #upload request form
     form:UploadProcessForm
 }
