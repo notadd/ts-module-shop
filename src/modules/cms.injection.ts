@@ -1,7 +1,7 @@
 import { MiddlewaresConsumer, NestModule, RequestMethod } from "@nestjs/common";
 import { CqrsModule } from "./cqrsCms/cqrs.module";
 import { RegistrationModule } from "./enter/registration.module";
-import { LocalModule } from "./ext-local-store/src/LocalModule";
+import {UpyunModule} from "./ext-local-store/src/UpyunModule";
 
 import { Module } from "@notadd/injection";
 
@@ -21,7 +21,7 @@ import { Module } from "@notadd/injection";
     version: "2.0.2",
     imports: [
         CqrsModule,
-        LocalModule,
+        UpyunModule,
         RegistrationModule,
     ],
 })
