@@ -31,6 +31,14 @@ __decorate([
     __metadata("design:type", Number)
 ], Image.prototype, "height", void 0);
 __decorate([
+    typeorm_1.Column({
+        name: 'frames',
+        type: 'integer',
+        nullable: true
+    }),
+    __metadata("design:type", Number)
+], Image.prototype, "frames", void 0);
+__decorate([
     typeorm_1.Column({ nullable: true }),
     __metadata("design:type", Number)
 ], Image.prototype, "bucketId", void 0);
@@ -48,7 +56,6 @@ __decorate([
 Image = __decorate([
     typeorm_1.Entity({
         name: 'image'
-    }),
-    typeorm_1.Index('name_bucket_id', ['name', 'bucketId'], { unique: true })
+    })
 ], Image);
 exports.Image = Image;

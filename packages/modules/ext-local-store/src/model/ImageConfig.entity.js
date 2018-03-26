@@ -40,7 +40,7 @@ __decorate([
     typeorm_1.Column({
         name: 'watermark_save_key',
         type: 'varchar',
-        length: 200,
+        length: 80,
         nullable: true
     }),
     __metadata("design:type", String)

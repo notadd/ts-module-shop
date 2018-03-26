@@ -1,10 +1,10 @@
 export interface ResizeData {
-    scale?: number;
-    wscale?: number;
-    hscale?: number;
-    width?: number;
-    height?: number;
-    pixel?: number;
+    scale: number;
+    wscale: number;
+    hscale: number;
+    width: number;
+    height: number;
+    pixel: number;
 }
 export interface Resize {
     mode: string;
@@ -28,7 +28,7 @@ export interface ImagePreProcessInfo {
     watermark?: boolean;
     rotate?: number;
 }
-export interface ImagePostProcessInfo {
+export declare class ImagePostProcessInfo {
     resize?: Resize;
     tailor?: Tailor;
     watermark?: boolean;

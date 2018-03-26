@@ -5,11 +5,7 @@ export interface UploadProcessData {
     url: string;
     baseUrl: string;
     form: {
-        imagePreProcessString?: string;
-        contentSecret?: string;
-        tagsString?: string;
-        bucketName: string;
-        rawName: string;
-        md5: string;
+        policy: string;
+        authorization: string;
     };
 }

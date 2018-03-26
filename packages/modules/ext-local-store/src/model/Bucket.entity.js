@@ -41,11 +41,57 @@ __decorate([
     typeorm_1.Column({
         name: 'name',
         type: 'varchar',
+        length: 50,
+        nullable: false,
+        unique: true
+    }),
+    __metadata("design:type", String)
+], Bucket.prototype, "name", void 0);
+__decorate([
+    typeorm_1.Column({
+        name: 'operator',
+        type: 'varchar',
+        length: 50,
+        nullable: false
+    }),
+    __metadata("design:type", String)
+], Bucket.prototype, "operator", void 0);
+__decorate([
+    typeorm_1.Column({
+        name: 'password',
+        type: 'varchar',
+        length: 50,
+        nullable: false
+    }),
+    __metadata("design:type", String)
+], Bucket.prototype, "password", void 0);
+__decorate([
+    typeorm_1.Column({
+        name: 'directory',
+        type: 'varchar',
         length: 20,
         nullable: false
     }),
     __metadata("design:type", String)
-], Bucket.prototype, "name", void 0);
+], Bucket.prototype, "directory", void 0);
+__decorate([
+    typeorm_1.Column({
+        name: 'request_expire',
+        type: 'integer',
+        nullable: false
+    }),
+    __metadata("design:type", Number)
+], Bucket.prototype, "request_expire", void 0);
+__decorate([
+    typeorm_1.Column({
+        name: 'base_url',
+        type: 'varchar',
+        length: 50,
+        nullable: false,
+        unique: true
+    }),
+    __metadata("design:type", String)
+], Bucket.prototype, "base_url", void 0);
 __decorate([
     typeorm_1.Column({
         name: 'token_secret_key',

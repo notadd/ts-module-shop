@@ -20,21 +20,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
-const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
 const ImageConfig_entity_1 = require("../model/ImageConfig.entity");
 const AudioConfig_entity_1 = require("../model/AudioConfig.entity");
 const VideoConfig_entity_1 = require("../model/VideoConfig.entity");
-const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("@nestjs/typeorm");
+const RestfulUtil_1 = require("../util/RestfulUtil");
 const Bucket_entity_1 = require("../model/Bucket.entity");
 const Image_entity_1 = require("../model/Image.entity");
 const FileUtil_1 = require("../util/FileUtil");
-const typeorm_2 = require("typeorm");
-const path = require("path");
+const crypto = require("crypto");
 let ConfigService = class ConfigService {
-    constructor(fileUtil, imageProcessUtil, imageRepository, bucketRepository, imageConfigRepository, audioConfigRepository, videoConfigRepository) {
+    constructor(fileUtil, restfulUtil, imageRepository, bucketRepository, imageConfigRepository, audioConfigRepository, videoConfigRepository) {
         this.fileUtil = fileUtil;
-        this.imageProcessUtil = imageProcessUtil;
+        this.restfulUtil = restfulUtil;
         this.imageRepository = imageRepository;
         this.bucketRepository = bucketRepository;
         this.imageConfigRepository = imageConfigRepository;
@@ -44,81 +44,80 @@ let ConfigService = class ConfigService {
     saveBucketConfig(body) {
         return __awaiter(this, void 0, void 0, function* () {
             let exist;
-            let newBucket = {
+            let newBucket = this.bucketRepository.create({
                 name: body.name,
-            };
-            let directory_path = path.resolve(__dirname, '../', 'store', body.name);
+                operator: body.operator,
+                password: crypto.createHash('md5').update(body.password).digest('hex'),
+                directory: body.directory,
+                base_url: body.base_url,
+                request_expire: body.request_expire
+            });
             if (body.isPublic) {
                 exist = yield this.bucketRepository.findOneById(1);
             }
             else {
                 exist = yield this.bucketRepository.findOneById(2);
-                newBucket.token_expire = +body.token_expire;
+                newBucket.token_expire = body.token_expire;
                 newBucket.token_secret_key = body.token_secret_key;
             }
             if (exist) {
                 try {
                     yield this.bucketRepository.updateById(exist.id, newBucket);
-                    if (!this.fileUtil.exist(directory_path)) {
-                        yield this.fileUtil.mkdir(directory_path);
-                    }
                 }
                 catch (err) {
-                    throw new common_1.HttpException('空间配置更新失败' + err.toString(), 410);
+                    throw new common_1.HttpException('空间配置更新失败' + err.toString(), 403);
                 }
-                return;
+                return newBucket;
             }
-            let bucket = new Bucket_entity_1.Bucket();
             let audio_config = new AudioConfig_entity_1.AudioConfig();
             let video_config = new VideoConfig_entity_1.VideoConfig();
             let image_config = new ImageConfig_entity_1.ImageConfig();
             if (body.isPublic) {
-                bucket.id = 1;
-                bucket.public_or_private = 'public';
+                newBucket.id = 1;
+                newBucket.public_or_private = 'public';
             }
             else {
-                bucket.id = 2;
-                bucket.public_or_private = 'private';
-                bucket.token_expire = +body.token_expire;
-                bucket.token_secret_key = body.token_secret_key;
+                newBucket.id = 2;
+                newBucket.public_or_private = 'private';
             }
-            bucket.name = body.name;
-            audio_config.id = bucket.id;
-            video_config.id = bucket.id;
-            image_config.id = bucket.id;
-            bucket.audio_config = audio_config;
-            bucket.video_config = video_config;
-            bucket.image_config = image_config;
+            audio_config.id = newBucket.id;
+            video_config.id = newBucket.id;
+            image_config.id = newBucket.id;
+            newBucket.audio_config = audio_config;
+            newBucket.video_config = video_config;
+            newBucket.image_config = image_config;
             try {
-                yield this.bucketRepository.save(bucket);
-                if (!this.fileUtil.exist(directory_path)) {
-                    yield this.fileUtil.mkdir(directory_path);
-                }
+                yield this.bucketRepository.save(newBucket);
             }
             catch (err) {
-                throw new common_1.HttpException('空间保存失败' + err.toString(), 410);
+                throw new common_1.HttpException('空间保存失败' + err.toString(), 403);
             }
+            return newBucket;
         });
     }
-    saveImageFormat(body) {
+    saveImageFormatConfig(body) {
         return __awaiter(this, void 0, void 0, function* () {
             let { format } = body;
             format = format.toLowerCase();
+            if (format != 'raw' && format != 'webp_damage' && format != 'webp_undamage') {
+                throw new common_1.HttpException('图片保存格式不正确', 400);
+            }
             let buckets = yield this.bucketRepository.find({ relations: ["image_config"] });
             if (buckets.length !== 2) {
                 throw new common_1.HttpException('空间配置不存在', 401);
             }
             try {
-                yield buckets.forEach((bucket) => __awaiter(this, void 0, void 0, function* () {
-                    yield this.imageConfigRepository.updateById(bucket.image_config.id, { format });
-                }));
+                for (let i = 0; i < buckets.length; i++) {
+                    yield this.imageConfigRepository.updateById(buckets[i].image_config.id, { format });
+                }
             }
             catch (err) {
-                throw new common_1.HttpException('图片保存格式更新失败' + err.toString(), 410);
+                throw new common_1.HttpException('图片保存格式更新失败' + err.toString(), 403);
             }
+            return;
         });
     }
-    saveEnableImageWatermark(body) {
+    saveEnableImageWatermarkConfig(body) {
         return __awaiter(this, void 0, void 0, function* () {
             let buckets = yield this.bucketRepository.find({ relations: ["image_config"] });
             if (buckets.length !== 2) {
@@ -132,54 +131,50 @@ let ConfigService = class ConfigService {
                 watermark_enable = 0;
             }
             try {
-                yield buckets.forEach((bucket) => __awaiter(this, void 0, void 0, function* () {
-                    yield this.imageConfigRepository.updateById(bucket.image_config.id, { watermark_enable });
-                }));
+                for (let i = 0; i < buckets.length; i++) {
+                    yield this.imageConfigRepository.updateById(buckets[i].image_config.id, { watermark_enable });
+                }
             }
             catch (err) {
-                throw new common_1.HttpException('水印启用更新失败' + err.toString(), 410);
+                throw new common_1.HttpException('水印启用保存失败' + err.toString(), 403);
             }
         });
     }
-    saveImageWatermark(file, obj) {
+    saveImageWatermarkConfig(file, obj) {
         return __awaiter(this, void 0, void 0, function* () {
             let buckets = yield this.bucketRepository.find({ relations: ["image_config"] });
+            let type = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
             if (buckets.length !== 2) {
                 throw new common_1.HttpException('空间配置不存在', 401);
             }
+            let buffer = yield this.fileUtil.read(file.path);
+            let md5 = crypto.createHash('md5').update(buffer).digest('hex');
             for (let i = 0; i < buckets.length; i++) {
-                let metadata;
-                let format = buckets[i].image_config.format || 'raw';
-                if (format === 'raw') {
-                    metadata = yield this.imageProcessUtil.processAndStore(file.path, buckets[i], { strip: true, watermark: false });
-                }
-                else if (format === 'webp_damage') {
-                    metadata = yield this.imageProcessUtil.processAndStore(file.path, buckets[i], { format: 'webp', strip: true, watermark: false });
-                }
-                else if (format === 'webp_undamage') {
-                    metadata = yield this.imageProcessUtil.processAndStore(file.path, buckets[i], { format: 'webp', lossless: true, strip: true, watermark: false });
+                if (buckets[i].image_config.format === 'webp_damage' || buckets[i].image_config.format === 'webp_undamage') {
+                    type = 'webp';
                 }
                 let image = new Image_entity_1.Image();
                 image.bucket = buckets[i];
                 image.raw_name = file.name;
-                image.name = metadata.name;
-                image.type = metadata.format;
-                image.width = metadata.width;
-                image.height = metadata.height;
-                image.size = metadata.size;
-                let isExist = yield this.imageRepository.findOne({ name: metadata.name, bucketId: buckets[i].id });
-                if (!isExist) {
-                    try {
-                        yield this.imageRepository.save(image);
-                    }
-                    catch (err) {
-                        yield this.fileUtil.delete(path.resolve(__dirname, '../', 'store', buckets[i].name, image.name + '.' + image.type));
-                        throw new common_1.HttpException('水印图片保存失败' + err.toString(), 410);
-                    }
+                image.name = md5 + '_' + (+new Date());
+                image.type = type;
+                image.status = 'post';
+                let { width, height, frames } = yield this.restfulUtil.uploadFile(buckets[i], image, file, null);
+                let { file_size, file_md5 } = yield this.restfulUtil.getFileInfo(buckets[i], image);
+                image.width = width;
+                image.height = height;
+                image.frames = frames;
+                image.size = file_size;
+                image.md5 = file_md5;
+                try {
+                    yield this.imageRepository.save(image);
+                }
+                catch (err) {
+                    throw new common_1.HttpException('水印图片保存失败' + err.toString(), 403);
                 }
                 try {
                     yield this.imageConfigRepository.updateById(buckets[i].image_config.id, {
-                        watermark_save_key: '/store/' + buckets[i].name + '/' + image.name + '.' + image.type,
+                        watermark_save_key: '/' + buckets[i].directory + '/' + image.name + '.' + image.type,
                         watermark_gravity: obj.gravity,
                         watermark_opacity: obj.opacity,
                         watermark_ws: obj.ws,
@@ -188,65 +183,75 @@ let ConfigService = class ConfigService {
                     });
                 }
                 catch (err) {
-                    throw new common_1.HttpException('图片水印更新失败' + err.toString(), 410);
+                    throw new common_1.HttpException('水印配置更新失败' + err.toString(), 403);
                 }
             }
-            yield this.fileUtil.delete(file.path);
+            return;
         });
     }
-    saveAudioFormat(body) {
+    saveAudioFormatConfig(body) {
         return __awaiter(this, void 0, void 0, function* () {
             let { format } = body;
             format = format.toLowerCase();
+            if (format != 'raw' && format != 'mp3' && format != 'aac') {
+                throw new common_1.HttpException('音频保存格式不正确', 400);
+            }
             let buckets = yield this.bucketRepository.find({ relations: ["audio_config"] });
             if (buckets.length !== 2) {
                 throw new common_1.HttpException('空间配置不存在', 401);
             }
             try {
-                yield buckets.forEach((bucket) => __awaiter(this, void 0, void 0, function* () {
-                    yield this.audioConfigRepository.updateById(bucket.audio_config.id, { format });
-                }));
+                for (let i = 0; i < buckets.length; i++) {
+                    yield this.audioConfigRepository.updateById(buckets[i].audio_config.id, { format });
+                }
             }
             catch (err) {
-                throw new common_1.HttpException('音频保存格式更新失败' + err.toString(), 410);
+                throw new common_1.HttpException('音频保存格式更新失败' + err.toString(), 403);
             }
         });
     }
-    saveVideoFormat(body) {
+    saveVideoFormatConfig(body) {
         return __awaiter(this, void 0, void 0, function* () {
             let { format, resolution } = body;
             format = format.toLowerCase();
+            if (format != 'raw' && format != 'vp9' && format != 'h264' && format != 'h265') {
+                throw new common_1.HttpException('视频编码格式不正确', 400);
+            }
             resolution = resolution.toLowerCase();
+            if (resolution != 'raw' && resolution != 'p1080' && resolution != 'p720' && resolution != 'p480') {
+                throw new common_1.HttpException('视频分辨率格式不正确', 400);
+            }
             let buckets = yield this.bucketRepository.find({ relations: ["video_config"] });
             if (buckets.length !== 2) {
                 throw new common_1.HttpException('空间配置不存在', 401);
             }
             try {
-                yield buckets.forEach((bucket) => __awaiter(this, void 0, void 0, function* () {
-                    yield this.videoConfigRepository.updateById(bucket.video_config.id, { format, resolution });
-                }));
+                for (let i = 0; i < buckets.length; i++) {
+                    yield this.videoConfigRepository.updateById(buckets[i].video_config.id, { format, resolution });
+                }
             }
             catch (err) {
-                throw new common_1.HttpException('视频保存格式更新失败' + err.toString(), 410);
+                throw new common_1.HttpException('视频保存格式更新失败' + err.toString(), 403);
             }
+            return;
         });
     }
 };
 ConfigService = __decorate([
     common_1.Component(),
     __param(0, common_1.Inject(FileUtil_1.FileUtil)),
-    __param(1, common_1.Inject(ImageProcessUtil_1.ImageProcessUtil)),
-    __param(2, typeorm_1.InjectRepository(Image_entity_1.Image)),
-    __param(3, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
-    __param(4, typeorm_1.InjectRepository(ImageConfig_entity_1.ImageConfig)),
-    __param(5, typeorm_1.InjectRepository(AudioConfig_entity_1.AudioConfig)),
-    __param(6, typeorm_1.InjectRepository(VideoConfig_entity_1.VideoConfig)),
+    __param(1, common_1.Inject(RestfulUtil_1.RestfulUtil)),
+    __param(2, typeorm_2.InjectRepository(Image_entity_1.Image)),
+    __param(3, typeorm_2.InjectRepository(Bucket_entity_1.Bucket)),
+    __param(4, typeorm_2.InjectRepository(ImageConfig_entity_1.ImageConfig)),
+    __param(5, typeorm_2.InjectRepository(AudioConfig_entity_1.AudioConfig)),
+    __param(6, typeorm_2.InjectRepository(VideoConfig_entity_1.VideoConfig)),
     __metadata("design:paramtypes", [FileUtil_1.FileUtil,
-        ImageProcessUtil_1.ImageProcessUtil,
-        typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository])
+        RestfulUtil_1.RestfulUtil,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository])
 ], ConfigService);
 exports.ConfigService = ConfigService;
