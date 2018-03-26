@@ -18,7 +18,7 @@ import { Module } from "@notadd/injection";
     ],
     identification: "module-cms",
     name: "Module CMS",
-    version: "2.0.2",
+    version: "2.0.3",
     imports: [
         CqrsModule,
         UpyunModule,
