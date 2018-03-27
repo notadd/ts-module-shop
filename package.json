@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "gulp-rename": "^1.2.2",
+    "lerna": "^2.9.0",
     "nodemon": "^1.17.2",
     "ts-node": "^3.3.0"
   }
