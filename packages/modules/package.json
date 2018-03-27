@@ -16,6 +16,8 @@
   "dependencies": {
     "formidable": "^1.1.1",
     "gm": "^1.23.1",
-    "sharp": "^0.20.1"
+    "sharp": "^0.20.1",
+    "request": "^2.85.0",
+    "mime":"^2.2.0"
   }
 }

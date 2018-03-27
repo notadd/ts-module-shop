@@ -126,7 +126,7 @@ export class FileResolver {
       'date': '',
       'content-md5': md5,
       //异步回调通知路径，图片异步预处理回调也是这个接口
-      'notify-url': 'http://upyuns.frp2.chuantou.org/upyun/file/notify',
+      'notify-url': 'https://src.029inno.com/upyun/file/notify',
       //图片生存期限默认为180天
       'x-upyun-meta-ttl': 180,
       //扩展参数，包含了空间名

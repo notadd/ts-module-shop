@@ -119,7 +119,7 @@ let FileResolver = class FileResolver {
                 'expiration': null,
                 'date': '',
                 'content-md5': md5,
-                'notify-url': 'http://upyuns.frp2.chuantou.org/upyun/file/notify',
+                'notify-url': 'https://src.029inno.com/upyun/file/notify',
                 'x-upyun-meta-ttl': 180,
                 'ext-param': ''
             };
