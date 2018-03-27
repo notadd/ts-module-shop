@@ -61,6 +61,9 @@ export class RegistrationService{
            let str:string=JSON.stringify(result);
            let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
            let block:BlockEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+           if(block.length==0){
+               num='0';
+           }
            return{blocks:block,totals:Number(num)};
        }
        //获取场地租用信息
@@ -69,6 +72,9 @@ export class RegistrationService{
            let str:string=JSON.stringify(result);
            let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
            let site:SiteEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+           if(site.length==0){
+               num='0';
+           }
            return{sites:site,totals:Number(num)};
        }
        //获取参观预约信息
@@ -77,6 +83,9 @@ export class RegistrationService{
            let str:string=JSON.stringify(result);
            let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
            let visit:VisitEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+           if(visit.length==0){
+               num='0';
+           }
            return{visits:visit,totals:Number(num)};
        }
 
@@ -87,7 +96,8 @@ export class RegistrationService{
      * @param {number} page
      * @returns {Promise<ReturnPage>}
      */
-      async pagingMethod(totalItems?:number,limit?:number,page?:number){
+      async pagingMethod(totalItems?:number,limit?:number,page?:number): Promise<ReturnPage>{
+          console.log('totals='+totalItems+",limit="+limit+",page="+page);
         let result=this.pageService.getPager(totalItems,page,limit);
         let res=new ReturnPage();
         res.totalItems=result.totalItems;
@@ -99,6 +109,7 @@ export class RegistrationService{
         res.startIndex=result.startIndex;
         res.endIndex= result.endIndex;
         res.pages= result.pages;
+
         return res;
     }
 

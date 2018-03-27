@@ -34,7 +34,7 @@ export class EnterResolver {
         let map = new Map();
         map = objToStrMap(bToJSon);
         const result=await this.registration.getSite(map.get('limit'),map.get('pages'));
-        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages')).then(a=>{});
+        const paging= await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages'));
         return {sites:result.sites,pagination:paging}
     }
 
@@ -45,7 +45,7 @@ export class EnterResolver {
         let map = new Map();
         map = objToStrMap(bToJSon);
         const result=await this.registration.getAllBlocks(map.get('limit'),map.get('pages'));
-        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages')).then(a=>{});
+        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages')).then(a=>{return a});
         return {blocks:result.blocks,pagination:paging};
     }
     @Mutation('createBlocks')
