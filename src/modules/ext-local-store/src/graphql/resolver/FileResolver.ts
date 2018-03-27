@@ -176,7 +176,7 @@ export class FileResolver {
     }
     //所有文件调用统一的拼接Url方法
     let url = await this.fileService.makeUrl(bucket, file, body, kind)
-    return { code: 200, message: "获取指定文件访问url成功", url: '' }
+    return { code: 200, message: "获取指定文件访问url成功", url}
   }
 
   /* 获取指定空间下文件，从后台数据库中获取
