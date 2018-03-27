@@ -26,7 +26,7 @@ let ApplicationModule = class ApplicationModule {
             .forRoutes({ path: '/graphql', method: common_1.RequestMethod.ALL });
     }
     createSchema() {
-        const typeDefs = this.graphqlFactory.mergeTypesByPaths('./**/*.types.graphql');
+        const typeDefs = this.graphqlFactory.mergeTypesByPaths('**/*.types.graphql');
         const schema = this.graphqlFactory.createSchema({ typeDefs });
         return schema;
     }
