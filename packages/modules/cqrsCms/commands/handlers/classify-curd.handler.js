@@ -72,8 +72,8 @@ let ClassifyCurdHandler = class ClassifyCurdHandler {
                 if (value)
                     page.createClassify(command.classify);
             }
-            page.commit();
             resolver({ MessageCodeError: MessageCodeError, Continue: value });
+            page.commit();
         });
     }
 };

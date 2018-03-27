@@ -10,7 +10,7 @@ export class UpdateSitemapHandler implements  ICommandHandler<DeleteParamCommand
     async execute(command: DeleteParamCommand, resolver: (value?) => void) {
         const sitemap = this.publisher.mergeObjectContext(await this.repositoty.siteMap());
         sitemap.updatexml('0');
-        sitemap.commit();
         resolver();
+        sitemap.commit();
     }
 }

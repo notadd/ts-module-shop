@@ -10,7 +10,8 @@ export class CreateSitemapHandler implements ICommandHandler<CreateParamCommand>
     async execute(command:CreateParamCommand,resolver:(value?) => void){
         const sitemap=this.publisher.mergeObjectContext( await this.repositoty.siteMap());
         sitemap.createxml(command.createXml);
-        sitemap.commit();
         resolver();
+        sitemap.commit();
+
     }
 }

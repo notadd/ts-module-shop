@@ -19,7 +19,8 @@ export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
                 }else{
                     page.createPage(command.pageEntity);
                 }
-                page.commit();
                 resolver(result);
+                page.commit();
+
     }
 }
