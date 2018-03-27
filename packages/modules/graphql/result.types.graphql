@@ -1,0 +1,6 @@
+type Json{
+    id:Int
+}
+type Result{
+    id:Int
+}

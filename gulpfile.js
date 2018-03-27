@@ -3,6 +3,7 @@ const path = require('path');
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const gulpSequence = require('gulp-sequence');
+const rename = require("gulp-rename");
 const sourcemaps = require('gulp-sourcemaps');
 const clean = require('gulp-clean');
 
@@ -12,12 +13,18 @@ const packages = {
 const modules = Object.keys(packages);
 const source = 'src';
 const distId = process.argv.indexOf('--dist');
-const dist = distId < 0 ? 'node_modules/@nestjs' : process.argv[distId + 1];
+const dist = 'packages';
 
 gulp.task('default', function() {
     modules.forEach(module => {
         gulp.watch(
-            [`${source}/${module}/**/*.ts`, `${source}/${module}/*.ts`,`${source}/*.ts`],
+            [
+                `${source}/${module}/**/*.graphql`,
+                `${source}/${module}/*.graphql`,
+                `${source}/${module}/**/*.ts`,
+                `${source}/${module}/*.ts`,
+                `${source}/*.ts`,
+            ],
             [module]
         );
     });
@@ -35,6 +42,13 @@ gulp.task('clean:lib', function() {
 
 modules.forEach(module => {
     gulp.task(module, () => {
+        gulp.src([
+            `${source}/${module}/**/*.original.graphql`,
+            `${source}/${module}/*.original.graphql`,
+        ]).pipe(rename(function (path) {
+            path.basename = path.basename.replace(".original", ".types");
+        })).pipe(gulp.dest(`${dist}/${module}`));
+
         return packages[module]
             .src()
             .pipe(packages[module]())

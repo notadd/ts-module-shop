@@ -2,13 +2,6 @@ type Query{
     #get all kinds of file and it's url in specified bucket
     all(bucketName:String):AllData
 }
-type Json{
-    id:Int
-}
-
-type Result{
-    id:Int
-}
 #file info
 type File{
     id:Int

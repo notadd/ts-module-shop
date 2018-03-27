@@ -55,6 +55,7 @@
     "typescript": "^2.7.2"
   },
   "devDependencies": {
+    "gulp-rename": "^1.2.2",
     "nodemon": "^1.17.2",
     "ts-node": "^3.3.0"
   }
