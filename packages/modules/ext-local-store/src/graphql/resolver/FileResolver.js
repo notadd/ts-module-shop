@@ -153,7 +153,7 @@ let FileResolver = class FileResolver {
             else {
             }
             let url = yield this.fileService.makeUrl(bucket, file, body, kind);
-            return { code: 200, message: "获取指定文件访问url成功", url: '' };
+            return { code: 200, message: "获取指定文件访问url成功", url };
         });
     }
     files(req, body) {
