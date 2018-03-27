@@ -87,8 +87,8 @@ let ArticleCurdHandler = class ArticleCurdHandler {
             if (command.article.getArticles && command.article.getArticles.keywordSearch) {
                 result = yield this.articleService.searchArticles(command.article.getArticles.keywordSearch, command.article.limitNum, command.article.pages);
             }
-            page.commit();
             resolver(result);
+            page.commit();
         });
     }
 };

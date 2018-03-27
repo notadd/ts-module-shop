@@ -41,8 +41,8 @@ let CreatePageHandler = class CreatePageHandler {
             else {
                 page.createPage(command.pageEntity);
             }
-            page.commit();
             resolver(result);
+            page.commit();
         });
     }
 };
