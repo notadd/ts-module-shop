@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_module_1 = require("./cqrsCms/cqrs.module");
 const registration_module_1 = require("./enter/registration.module");
-const LocalModule_1 = require("./ext-local-store/src/LocalModule");
+const UpyunModule_1 = require("./ext-local-store/src/UpyunModule");
 const injection_1 = require("@notadd/injection");
 let CmsModule = class CmsModule {
 };
@@ -26,10 +26,10 @@ CmsModule = __decorate([
         ],
         identification: "module-cms",
         name: "Module CMS",
-        version: "2.0.2",
+        version: "2.0.3",
         imports: [
             cqrs_module_1.CqrsModule,
-            LocalModule_1.LocalModule,
+            UpyunModule_1.UpyunModule,
             registration_module_1.RegistrationModule,
         ],
     })

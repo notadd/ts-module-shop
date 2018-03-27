@@ -1,9 +1,14 @@
 type Mutation{
     #bucket configuration
     bucket(
-        isPublic:Boolean,
-        name:String,
-        token_expire:Int,
+        isPublic:Boolean 
+        name:String
+        operator:String
+        password:String
+        directory:String
+        base_url:String
+        request_expire:Int
+        token_expire:Int
         token_secret_key:String):ConfigData
 }
 

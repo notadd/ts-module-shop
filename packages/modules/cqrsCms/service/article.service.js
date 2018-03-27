@@ -308,6 +308,7 @@ let ArticleService = class ArticleService {
                 return { pictureUrl: url, bucketName: bucket, pictureName: name, type: type, MessageCodeError: "上传成功" };
             }
             catch (err) {
+                console.log(err);
                 return { MessageCodeError: "上传失败" };
             }
         });

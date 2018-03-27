@@ -1,16 +1,16 @@
-import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Bucket } from './Bucket.entity'
 
 /* 视频配置实体类 */
 @Entity({
   name: 'video_config'
 })
-export class VideoConfig{
+export class VideoConfig {
 
   //主键，需要设置插入，1默认为公有空间配置，2默认为私有空间配置
   @PrimaryColumn({
-    name: 'id',
-    type: 'integer'
+    name:'id',
+    type:'integer'
   })
   id: number;
 
@@ -29,9 +29,9 @@ export class VideoConfig{
     type: 'varchar',
     nullable: true
   })
-  resolution:string;
+  resolution: string;
 
-  @OneToOne(type => Bucket,bucket=>bucket.video_config)
+  @OneToOne(type => Bucket, bucket => bucket.video_config)
   @JoinColumn()
-  bucket?: Bucket;
+  bucket: Bucket;
 }

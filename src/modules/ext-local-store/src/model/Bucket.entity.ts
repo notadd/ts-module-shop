@@ -7,7 +7,7 @@ import { Image } from './Image.entity'
 import { Video } from './Video.entity'
 import { Audio } from './Audio.entity'
 import { File } from './File.entity'
-
+/* 后台配置实体类 */
 @Entity({
   name: 'bucket'
 })
@@ -30,15 +30,60 @@ export class Bucket {
   })
   public_or_private: string;
 
+  //空间名
+  @Column({
+    name: 'name',
+    type: 'varchar',
+    length: 50,
+    nullable: false,
+    unique: true
+  })
+  name: string;
+
+  //操作员名
+  @Column({
+    name: 'operator',
+    type: 'varchar',
+    length: 50,
+    nullable: false
+  })
+  operator: string;
+
+  //操作员密码的md5
+  @Column({
+    name: 'password',
+    type: 'varchar',
+    length: 50,
+    nullable: false
+  })
+  password: string;
 
   //此空间下所有文件都存储于这个目录里,与虚拟目录无关
   @Column({
-    name: 'name',
+    name: 'directory',
     type: 'varchar',
     length: 20,
     nullable: false
   })
-  name: string;
+  directory: string;
+
+  //请求过期时间，单位秒
+  @Column({
+    name: 'request_expire',
+    type: 'integer',
+    nullable: false
+  })
+  request_expire: number;
+
+  //基本url
+  @Column({
+    name: 'base_url',
+    type: 'varchar',
+    length: 50,
+    nullable: false,
+    unique: true
+  })
+  base_url: string;
 
   //token密钥
   @Column({
@@ -61,7 +106,7 @@ export class Bucket {
   这里lazy:false的意思不是每个Bucket查询出来的时候就会包含image_config
   它的意思只是在于获取的属性是否是Promise，而要查询出来的Bucket包含image_config，必须使用find({relation:xxxx})
   */
-  @OneToOne(type => ImageConfig,imageConfig=>imageConfig.bucket,{
+  @OneToOne(type => ImageConfig, imageConfig => imageConfig.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     cascadeRemove: true,
@@ -69,7 +114,7 @@ export class Bucket {
   })
   image_config: ImageConfig;
 
-  @OneToOne(type =>AudioConfig,audioConfig=>audioConfig.bucket,{
+  @OneToOne(type => AudioConfig, audioConfig => audioConfig.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     cascadeRemove: true,
@@ -77,7 +122,7 @@ export class Bucket {
   })
   audio_config: AudioConfig;
 
-  @OneToOne(type => VideoConfig,videoConfig=>videoConfig.bucket,{
+  @OneToOne(type => VideoConfig, videoConfig => videoConfig.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     cascadeRemove: true,
@@ -91,33 +136,33 @@ export class Bucket {
     cascadeUpdate: true,
     lazy: true
   })
-  files?: Promise<File[]>;
+  files: Promise<File[]>;
 
   @OneToMany(type => Image, image => image.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     lazy: true
   })
-  images?: Promise<Image[]>;
+  images: Promise<Image[]>;
 
-  @OneToMany(type => Audio, audio=> audio.bucket, {
+  @OneToMany(type => Audio, audio => audio.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     lazy: true
   })
-  audios?: Promise<Audio[]>;
+  audios: Promise<Audio[]>;
 
   @OneToMany(type => Video, video => video.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     lazy: true
   })
-  videos?:Promise<Video[]>;
+  videos: Promise<Video[]>;
 
   @OneToMany(type => Document, document => document.bucket, {
     cascadeInsert: true,
     cascadeUpdate: true,
     lazy: true
   })
-  documents?:Promise<Document[]>;
+  documents: Promise<Document[]>;
 }

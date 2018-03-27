@@ -9,5 +9,5 @@ export declare class ImageConfig {
     watermark_y: number;
     watermark_opacity: number;
     watermark_ws: number;
-    bucket?: Bucket;
+    bucket: Bucket;
 }

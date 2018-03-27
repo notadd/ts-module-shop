@@ -1,10 +1,10 @@
-export interface DownloadProcessData{
-    code:number
-    message:string
-    method:string
+export interface DownloadProcessData {
+    code: number
+    message: string
+    method: string
+    url: string
     headers: {
-        bucketName:string
-        fileName:string
+        authorization: string
+        date: string
     }
-    url:string
 }

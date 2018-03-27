@@ -20,8 +20,8 @@ type DownloadProcessData{
 
 #download header type
 type DownloadHeaders{
-    #bucket name 
-    bucketName:String
-    #file name
-    fileName:String
+    #signature
+    authorization:String
+    #date
+    date:String
 }

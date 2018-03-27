@@ -1,15 +1,15 @@
-import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Bucket } from './Bucket.entity'
 /* 音频配置实体类 */
 @Entity({
-    name: 'audio_config'
+  name: 'audio_config'
 })
-export class AudioConfig{
+export class AudioConfig {
 
   //主键，需要设置插入，1默认为公有空间配置，2默认为私有空间配置
   @PrimaryColumn({
-    name: 'id',
-    type: 'integer'
+    name:'id',
+    type:'integer'
   })
   id: number;
 
@@ -21,7 +21,7 @@ export class AudioConfig{
   })
   format: string;
 
-  @OneToOne(type => Bucket,bucket=>bucket.audio_config)
+  @OneToOne(type => Bucket, bucket => bucket.audio_config)
   @JoinColumn()
-  bucket?: Bucket;
+  bucket: Bucket;
 }

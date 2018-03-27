@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, Index, OneToOne, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Bucket } from './Bucket.entity'
 /* 图片配置实体类 */
 @Entity({
@@ -8,8 +8,8 @@ export class ImageConfig {
 
   //主键，需要设置插入，1默认为公有空间配置，2默认为私有空间配置
   @PrimaryColumn({
-    name: 'id',
-    type: 'integer'
+    name:'id',
+    type:'integer'
   })
   id: number;
   //保存格式，raw、webp_damage、webp_undamage
@@ -32,7 +32,7 @@ export class ImageConfig {
   @Column({
     name: 'watermark_save_key',
     type: 'varchar',
-    length: 200,
+    length: 80,
     nullable: true
   })
   watermark_save_key: string;
@@ -79,5 +79,5 @@ export class ImageConfig {
 
   @OneToOne(type => Bucket, bucket => bucket.image_config)
   @JoinColumn()
-  bucket?: Bucket;
+  bucket: Bucket;
 }

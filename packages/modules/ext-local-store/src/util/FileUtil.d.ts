@@ -1,6 +1,8 @@
 /// <reference types="node" />
+import { PromiseUtil } from './PromiseUtil';
 export declare class FileUtil {
-    constructor();
+    private readonly promiseUtil;
+    constructor(promiseUtil: PromiseUtil);
     write(path: string, buffer: Buffer): Promise<void>;
     read(path: string): Promise<Buffer>;
     delete(path: string): Promise<void>;

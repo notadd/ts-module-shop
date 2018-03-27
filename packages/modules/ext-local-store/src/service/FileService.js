@@ -21,86 +21,148 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
-const ImageProcessUtil_1 = require("../util/ImageProcessUtil");
+const ProcessStringUtil_1 = require("../util/ProcessStringUtil");
 const typeorm_1 = require("@nestjs/typeorm");
+const RestfulUtil_1 = require("../util/RestfulUtil");
 const Bucket_entity_1 = require("../model/Bucket.entity");
-const TokenUtil_1 = require("../util/TokenUtil");
 const Audio_entity_1 = require("../model/Audio.entity");
 const Video_entity_1 = require("../model/Video.entity");
 const Image_entity_1 = require("../model/Image.entity");
-const KindUtil_1 = require("../util/KindUtil");
 const File_entity_1 = require("../model/File.entity");
+const KindUtil_1 = require("../util/KindUtil");
+const AuthUtil_1 = require("../util/AuthUtil");
 const typeorm_2 = require("typeorm");
 let FileService = class FileService {
-    constructor(kindUtil, tokenUtil, imageProcessUtil, fileRepository, imageRepository, audioRepository, videoRepository, bucketRepository) {
+    constructor(authUtil, kindUtil, restfulUtil, processStringUtil, fileRepository, imageRepository, audioRepository, videoRepository, bucketRepository) {
+        this.authUtil = authUtil;
         this.kindUtil = kindUtil;
-        this.tokenUtil = tokenUtil;
-        this.imageProcessUtil = imageProcessUtil;
+        this.restfulUtil = restfulUtil;
+        this.processStringUtil = processStringUtil;
         this.fileRepository = fileRepository;
         this.imageRepository = imageRepository;
         this.audioRepository = audioRepository;
         this.videoRepository = videoRepository;
         this.bucketRepository = bucketRepository;
     }
-    saveUploadFile(bucket, file, obj) {
+    makePolicy(data, policy, bucket, body, file) {
         return __awaiter(this, void 0, void 0, function* () {
-            let { imagePreProcessString, contentSecret, tagsString, md5, bucketName, rawName } = obj;
-            let imageProcessInfo, tags;
-            try {
-                if (tagsString) {
-                    tags = JSON.parse(tagsString);
+            let { md5, contentSecret, contentName } = body;
+            if (contentSecret) {
+                policy['content-secret'] = contentSecret;
+            }
+            policy['bucket'] = bucket.name;
+            policy['ext-param'] += bucket.name;
+            data['url'] += '/' + bucket.name;
+            let type = file.type || '';
+            let kind = this.kindUtil.getKind(type);
+            policy['save-key'] += '/' + bucket.directory + '/' + md5 + '_' + (+new Date()) + '.' + type;
+            policy['expiration'] = Math.floor((+new Date()) / 1000) + bucket.request_expire;
+            policy['date'] = new Date(+new Date() + bucket.request_expire * 1000).toUTCString();
+            if (kind === 'image') {
+                let obj = {
+                    'name': 'thumb',
+                    'x-gmkerl-thumb': '',
+                    'save_as': '',
+                    'notify_url': policy['notify-url']
+                };
+                let format = bucket.image_config.format || 'raw';
+                if (format == 'raw') {
+                    obj['x-gmkerl-thumb'] = this.processStringUtil.makeImageProcessString(bucket, body.imagePreProcessInfo) + '/scale/100';
+                    obj['save_as'] = '/' + bucket.directory + '/' + file.name + '.' + file.type;
+                    policy['apps'] = [obj];
                 }
-                if (imagePreProcessString) {
-                    imageProcessInfo = JSON.parse(imagePreProcessString);
-                    if (bucket.image_config.format === 'webp_damage') {
-                        imageProcessInfo.format = 'webp';
-                        imageProcessInfo.lossless = false;
-                    }
-                    else if (bucket.image_config.format === 'webp_undamage') {
-                        imageProcessInfo.format = 'webp';
-                        imageProcessInfo.lossless = true;
-                    }
-                    else {
-                        imageProcessInfo.format = undefined;
-                        imageProcessInfo.lossless = undefined;
-                    }
+                else if (format == 'webp_damage') {
+                    obj['x-gmkerl-thumb'] = this.processStringUtil.makeImageProcessString(bucket, body.imagePreProcessInfo) + '/format/webp/strip/true';
+                    obj['save_as'] = '/' + bucket.directory + '/' + file.name + '.' + 'webp';
+                    policy['apps'] = [obj];
+                }
+                else if (format == 'webp_undamage') {
+                    obj['x-gmkerl-thumb'] = this.processStringUtil.makeImageProcessString(bucket, body.imagePreProcessInfo) + '/format/webp/lossless/true/strip/true';
+                    obj['save_as'] = '/' + bucket.directory + '/' + file.name + '.' + 'webp';
+                    policy['apps'] = [obj];
+                }
+                else {
+                    throw new Error('格式配置不正确，应该不能发生');
                 }
             }
-            catch (err) {
-                throw new common_1.HttpException('JSON解析错误:' + err.toString(), 405);
+            else {
             }
-            let metadata = yield this.imageProcessUtil.processAndStore(file.path, bucket, imageProcessInfo);
-            let type = rawName.substring(rawName.lastIndexOf('.') + 1);
+            data.form.policy = Buffer.from(JSON.stringify(policy)).toString('base64');
+            let method = data.method;
+            data.form.authorization = yield this.authUtil.getBodyAuth(bucket, method, policy);
+            return;
+        });
+    }
+    preSaveFile(bucket, body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let { md5, contentName, contentSecret, tags } = body;
+            let type = contentName.substr(contentName.lastIndexOf('.') + 1).toLowerCase();
             let kind = this.kindUtil.getKind(type);
             if (kind === 'image') {
-                let exist = yield this.imageRepository.findOne({ name: metadata.name, bucketId: bucket.id });
-                if (exist) {
-                    return '/visit/' + bucket.name + '/' + exist.name + '.' + exist.type;
-                }
                 let image = new Image_entity_1.Image();
+                image.raw_name = contentName;
+                image.name = md5 + '_' + (+new Date());
+                image.md5 = md5;
+                image.tags = tags;
+                image.type = type;
+                image.status = 'pre';
+                image.content_secret = contentSecret || null;
                 image.bucket = bucket;
-                image.raw_name = file.name;
-                image.name = metadata.name;
-                image.size = metadata.size;
-                image.type = metadata.format;
-                image.width = metadata.width;
-                image.height = metadata.height;
-                if (tags) {
-                    image.tags = tags;
-                }
-                if (contentSecret) {
-                    image.content_secret = contentSecret;
-                }
                 try {
                     yield this.imageRepository.save(image);
                 }
                 catch (err) {
-                    throw new common_1.HttpException('文件保存到数据库失败:' + err.toString(), 406);
+                    throw new common_1.HttpException('图片预保存失败', 403);
                 }
-                return '/visit/' + bucket.name + '/' + image.name + '.' + image.type;
+                return image;
             }
             else {
             }
+        });
+    }
+    postSaveTask(bucket, name, body, kind) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (kind === 'image') {
+                let image = yield this.imageRepository.findOne({ name, bucketId: bucket.id, status: 'pre' });
+                if (!image) {
+                    return;
+                }
+                image.width = body.imginfo['width'],
+                    image.height = body.imginfo['height'],
+                    image.type = body.imginfo['type'].toLowerCase(),
+                    image.frames = body.imginfo['frames'],
+                    image.status = 'post';
+                let { file_size, file_md5 } = yield this.restfulUtil.getFileInfo(bucket, image);
+                image.size = file_size;
+                image.md5 = file_md5;
+                try {
+                    yield this.imageRepository.updateById(image.id, image);
+                }
+                catch (err) {
+                    throw new common_1.HttpException('更新预保存图片失败', 403);
+                }
+            }
+            else {
+                throw new Error('kind不正确');
+            }
+            return;
+        });
+    }
+    makeUrl(bucket, file, body, kind) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = '/' + bucket.directory + '/' + file.name + '.' + file.type;
+            url += '!';
+            if (file.content_secret) {
+                url += file.content_secret;
+            }
+            if (kind === 'image') {
+                url += this.processStringUtil.makeImageProcessString(bucket, body.imagePostProcessInfo);
+            }
+            if (bucket.public_or_private == 'private') {
+                url += '?_upt=' + (yield this.authUtil.getToken(bucket, url));
+            }
+            url = bucket.base_url.concat(url);
+            return url;
         });
     }
     getAll(data, bucket) {
@@ -110,37 +172,41 @@ let FileService = class FileService {
             data.audios = yield bucket.audios;
             data.videos = yield bucket.videos;
             data.documents = yield bucket.documents;
-            let tokenUtil = this.tokenUtil;
             let addUrl = function (value) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    value.url = '/' + bucket.name + '/' + value.name + '.' + value.type;
+                    value.url = '/' + bucket.directory + '/' + value.name + '.' + value.type;
+                    if (value.content_secret) {
+                        value.url += '!' + value.content_secret;
+                    }
                     if (bucket.public_or_private === 'private') {
-                        value.url += '?token=' + (yield tokenUtil.getToken(data.baseUrl + value.url, bucket));
+                        value.url += '?_upt=' + (yield this.authUtil.getToken(bucket, value.url));
                     }
                 });
             };
-            yield data.files.forEach(addUrl);
-            yield data.images.forEach(addUrl);
-            yield data.audios.forEach(addUrl);
-            yield data.videos.forEach(addUrl);
-            yield data.documents.forEach(addUrl);
+            yield data.files.forEach(addUrl, this);
+            yield data.images.forEach(addUrl, this);
+            yield data.audios.forEach(addUrl, this);
+            yield data.videos.forEach(addUrl, this);
+            yield data.documents.forEach(addUrl, this);
             return;
         });
     }
 };
 FileService = __decorate([
     common_1.Component(),
-    __param(0, common_1.Inject(KindUtil_1.KindUtil)),
-    __param(1, common_1.Inject(TokenUtil_1.TokenUtil)),
-    __param(2, common_1.Inject(ImageProcessUtil_1.ImageProcessUtil)),
-    __param(3, typeorm_1.InjectRepository(File_entity_1.File)),
-    __param(4, typeorm_1.InjectRepository(Image_entity_1.Image)),
-    __param(5, typeorm_1.InjectRepository(Audio_entity_1.Audio)),
-    __param(6, typeorm_1.InjectRepository(Video_entity_1.Video)),
-    __param(7, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
-    __metadata("design:paramtypes", [KindUtil_1.KindUtil,
-        TokenUtil_1.TokenUtil,
-        ImageProcessUtil_1.ImageProcessUtil,
+    __param(0, common_1.Inject(AuthUtil_1.AuthUtil)),
+    __param(1, common_1.Inject(KindUtil_1.KindUtil)),
+    __param(2, common_1.Inject(RestfulUtil_1.RestfulUtil)),
+    __param(3, common_1.Inject(ProcessStringUtil_1.ProcessStringUtil)),
+    __param(4, typeorm_1.InjectRepository(File_entity_1.File)),
+    __param(5, typeorm_1.InjectRepository(Image_entity_1.Image)),
+    __param(6, typeorm_1.InjectRepository(Audio_entity_1.Audio)),
+    __param(7, typeorm_1.InjectRepository(Video_entity_1.Video)),
+    __param(8, typeorm_1.InjectRepository(Bucket_entity_1.Bucket)),
+    __metadata("design:paramtypes", [AuthUtil_1.AuthUtil,
+        KindUtil_1.KindUtil,
+        RestfulUtil_1.RestfulUtil,
+        ProcessStringUtil_1.ProcessStringUtil,
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,

@@ -10,32 +10,39 @@ const StoreComponentProvider_1 = require("./export/StoreComponentProvider");
 const ConfigResolver_1 = require("./graphql/resolver/ConfigResolver");
 const FileResolver_1 = require("./graphql/resolver/FileResolver");
 const FileController_1 = require("./controller/FileController");
-const ImageProcessUtil_1 = require("./util/ImageProcessUtil");
-const ConfigService_1 = require("./service/ConfigService");
-const FileService_1 = require("./service/FileService");
+const ProcessStringUtil_1 = require("./util/ProcessStringUtil");
 const ImageConfig_entity_1 = require("./model/ImageConfig.entity");
 const AudioConfig_entity_1 = require("./model/AudioConfig.entity");
 const VideoConfig_entity_1 = require("./model/VideoConfig.entity");
+const ConfigService_1 = require("./service/ConfigService");
+const FileService_1 = require("./service/FileService");
 const Document_entity_1 = require("./model/Document.entity");
+const RestfulUtil_1 = require("./util/RestfulUtil");
+const PromiseUtil_1 = require("./util/PromiseUtil");
+const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const Bucket_entity_1 = require("./model/Bucket.entity");
-const common_1 = require("@nestjs/common");
-const TokenUtil_1 = require("./util/TokenUtil");
+const Image_entity_1 = require("./model/Image.entity");
 const Audio_entity_1 = require("./model/Audio.entity");
 const Video_entity_1 = require("./model/Video.entity");
-const Image_entity_1 = require("./model/Image.entity");
 const File_entity_1 = require("./model/File.entity");
-const FileUtil_1 = require("./util/FileUtil");
 const KindUtil_1 = require("./util/KindUtil");
-let LocalModule = class LocalModule {
+const FileUtil_1 = require("./util/FileUtil");
+const AuthUtil_1 = require("./util/AuthUtil");
+let UpyunModule = class UpyunModule {
 };
-LocalModule = __decorate([
+UpyunModule = __decorate([
     common_1.Global(),
     common_1.Module({
-        modules: [typeorm_1.TypeOrmModule.forFeature([Bucket_entity_1.Bucket, ImageConfig_entity_1.ImageConfig, AudioConfig_entity_1.AudioConfig, VideoConfig_entity_1.VideoConfig, File_entity_1.File, Document_entity_1.Document, Audio_entity_1.Audio, Video_entity_1.Video, Image_entity_1.Image])],
+        modules: [typeorm_1.TypeOrmModule.forFeature([Bucket_entity_1.Bucket, AudioConfig_entity_1.AudioConfig, VideoConfig_entity_1.VideoConfig, ImageConfig_entity_1.ImageConfig, Document_entity_1.Document, Audio_entity_1.Audio, Video_entity_1.Video, File_entity_1.File, Image_entity_1.Image])],
         controllers: [FileController_1.FileController],
-        components: [ConfigResolver_1.ConfigResolver, ConfigService_1.ConfigService, FileResolver_1.FileResolver, FileService_1.FileService, KindUtil_1.KindUtil, FileUtil_1.FileUtil, TokenUtil_1.TokenUtil, ImageProcessUtil_1.ImageProcessUtil, StoreComponentProvider_1.StoreComponentProvider],
+        components: [
+            PromiseUtil_1.PromiseUtil, FileUtil_1.FileUtil, AuthUtil_1.AuthUtil, KindUtil_1.KindUtil, RestfulUtil_1.RestfulUtil, ProcessStringUtil_1.ProcessStringUtil,
+            ConfigService_1.ConfigService, FileService_1.FileService,
+            ConfigResolver_1.ConfigResolver, FileResolver_1.FileResolver,
+            StoreComponentProvider_1.StoreComponentProvider
+        ],
         exports: [StoreComponentProvider_1.StoreComponentProvider]
     })
-], LocalModule);
-exports.LocalModule = LocalModule;
+], UpyunModule);
+exports.UpyunModule = UpyunModule;

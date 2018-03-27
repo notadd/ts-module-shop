@@ -1,74 +1,91 @@
-import { Entity,Column,PrimaryGeneratedColumn,Index,ManyToOne,JoinColumn,OneToOne,CreateDateColumn,UpdateDateColumn} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Bucket } from './Bucket.entity'
 
 
-export class AbstractFile{
-    
+export class AbstractFile {
+
     @PrimaryGeneratedColumn({
-        name:'id',
-        type:'integer'
+        name: 'id',
+        type: 'integer'
     })
     id: number;
-  
-    @Column({ 
-        name:'raw_name',
-        type:'varchar',
+
+    @Column({
+        name: 'raw_name',
+        type: 'varchar',
         length: 50,
-        nullable:false
+        nullable: false
     })
     raw_name: string;
 
-    @Column({ 
-        name:'tags',
-        type:'simple-array',
-        nullable:true,
-    })
-    tags: string[];
-  
-    //本地存储中，文件名为它的sha256值有64位
-    //为了与云存储统一，也称做name,这里统一空间下name不可以重复
-    @Column({ 
-        name:'name',
-        type:'varchar',
+    @Column({
+        name: 'name',
+        type: 'varchar',
         length: 100,
-        nullable:false 
+        nullable: false,
+        unique: true
     })
     name: string;
-  
-    @Column({ 
-        name:'type',
-        type:'varchar',
+
+    @Column({
+        name: 'tags',
+        type: 'simple-array',
+        nullable: true,
+    })
+    tags: string[];
+
+    @Column({
+        name: 'md5',
+        type: 'varchar',
+        length: 50,
+        nullable: false
+    })
+    md5: string;
+
+    @Column({
+        name: 'type',
+        type: 'varchar',
         length: 20,
-        nullable:true
+        //File可以没有扩展名
+        nullable: true
     })
     type: string;
-  
+
     @Column({
-        name:'size',
-        type:'integer',
-        nullable:true
+        name: 'size',
+        type: 'integer',
+        nullable: true
     })
     size: number;
-  
+
     //访问密钥
     @Column({
-        name:'content_secret',
-        type:'varchar',
-        length:'50',
-        nullable:true
+        name: 'content_secret',
+        type: 'varchar',
+        length: '50',
+        nullable: true
     })
     content_secret: string;
 
-    @CreateDateColumn({
-        name:'create_date',
-        type:'date'
+    @Column({
+        name: 'status',
+        type: 'varchar',
+        nullable: false
     })
-    create_date:Date;
+    status: string;
+
+
+    @CreateDateColumn({
+        name: 'create_date',
+        type: 'date'
+    })
+    create_date: Date;
 
     @UpdateDateColumn({
-        name:'update_date',
-        type:'date'
+        name: 'update_date',
+        type: 'date'
     })
-    update_date:Date;
+    update_date: Date;
+
 
 }

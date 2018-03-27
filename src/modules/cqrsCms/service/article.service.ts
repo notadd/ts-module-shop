@@ -333,6 +333,7 @@ export class ArticleService{
             let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
+            console.log(err);
             return {MessageCodeError:"上传失败"}
         }
     }
