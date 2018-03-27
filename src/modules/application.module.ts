@@ -13,7 +13,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 })
 export class ApplicationModule implements NestModule {
     constructor(private readonly graphqlFactory: GraphQLFactory) {
-    }
+    }K
 
     //中间件设置
     configure(consumer: MiddlewaresConsumer) {

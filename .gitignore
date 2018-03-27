@@ -10,3 +10,7 @@ ormconfig.yml
 yarn.lock
 yarn-error.log
 package-lock.json
+src/modules/public/
+packages/modules/public/
+packages/modules/ext-local-store/src/store/
+src/modules/ext-local-store/src/store/
