@@ -2,12 +2,10 @@ import{ArticleCurdEvents} from "../impl/article-curd.events";
 import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
 import {ArticleService} from "../../service/article.service";
 
-const clc=require('cli-color');
 @EventsHandler(ArticleCurdEvents)
 export class ArticleCurdEvent implements IEventHandler<ArticleCurdEvents>{
     constructor(private readonly articleService:ArticleService){}
     async handle(event:ArticleCurdEvents){
-        console.log(clc.yellowBright('Async create curd  article...'));
         if(event.article.createArticle){
             //新增文章
             await this.articleService.createArticle(

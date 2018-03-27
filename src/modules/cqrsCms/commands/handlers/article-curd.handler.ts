@@ -4,7 +4,6 @@ import {ArticleParamCommand} from "../impl/article-param.command";
 import {ArticleService} from "../../service/article.service";
 import {ClassifyService} from "../../service/classify.service";
 
-const clc=require('cli-color');
 @CommandHandler(ArticleParamCommand)
 export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
     constructor(private readonly repositoty:PageRepository,
@@ -13,7 +12,6 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
                 private readonly classifyService:ClassifyService){}
 
     async execute(command:ArticleParamCommand,resolver:(value) => void):Promise<any>{
-        console.log(clc.greenBright('handlerCommand article_curd Command...'));
         let id:string='0';
         const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));
         let result;

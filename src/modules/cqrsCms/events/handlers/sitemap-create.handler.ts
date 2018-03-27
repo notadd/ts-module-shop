@@ -2,12 +2,10 @@ import {SitemapCreateEvent} from "../impl/sitemap-create.event";
 import {SitemapService} from "../../../sitemap/sitemap.service";
 import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
 
-const clc=require('cli-color');
 @EventsHandler(SitemapCreateEvent)
 export class SitemapCreateHandler implements IEventHandler<SitemapCreateEvent>{
     constructor(readonly sitemapService:SitemapService){}
     async handle(event:SitemapCreateEvent){
-        console.log(clc.yellowBright('Async create SitemapFoundItemEvent...'));
         let url:string='www.baidu.com';
         let array_baidu_sitemap_options ={
             lc_XML_FileName:event.createXml.lc_XML_FileName,

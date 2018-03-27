@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const get_classify_param_command_1 = require("../impl/get-classify-param.command");
 const classify_service_1 = require("../../service/classify.service");
-const clc = require('cli-color');
 let GetClassifyHandler = class GetClassifyHandler {
     constructor(classifyService) {
         this.classifyService = classifyService;
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand getClassify Command...'));
             let result;
             if (command.getClassify.useFor == 'page') {
                 result = yield this.classifyService.findAllClassifyPage(1);

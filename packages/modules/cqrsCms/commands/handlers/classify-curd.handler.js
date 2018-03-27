@@ -21,7 +21,6 @@ const cqrs_1 = require("@nestjs/cqrs");
 const pageRepository_1 = require("../../repository/pageRepository");
 const classify_param_command_1 = require("../impl/classify-param.command");
 const classify_service_1 = require("../../service/classify.service");
-const clc = require('cli-color');
 let ClassifyCurdHandler = class ClassifyCurdHandler {
     constructor(repositoty, publisher, classifyService) {
         this.repositoty = repositoty;
@@ -30,7 +29,6 @@ let ClassifyCurdHandler = class ClassifyCurdHandler {
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand classify_curd Command...'));
             let id = '0';
             const page = this.publisher.mergeObjectContext(yield this.repositoty.find(id));
             let value, MessageCodeError;

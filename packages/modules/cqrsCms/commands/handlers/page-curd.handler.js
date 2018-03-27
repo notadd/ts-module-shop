@@ -21,7 +21,6 @@ const cqrs_1 = require("@nestjs/cqrs");
 const pageRepository_1 = require("../../repository/pageRepository");
 const page_param_command_1 = require("../impl/page-param.command");
 const page_service_1 = require("../../service/page.service");
-const clc = require('cli-color');
 let CreatePageHandler = class CreatePageHandler {
     constructor(repositoty, publisher, pageService) {
         this.repositoty = repositoty;
@@ -30,7 +29,6 @@ let CreatePageHandler = class CreatePageHandler {
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand  PageFindByIdCommand...'));
             let id = '0';
             let result;
             const page = this.publisher.mergeObjectContext(yield this.repositoty.find(id));

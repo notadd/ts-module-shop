@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const page_service_1 = require("../../service/page.service");
 const get_page_param_command_1 = require("../impl/get-page-param.command");
-const clc = require('cli-color');
 let GetPageHandler = class GetPageHandler {
     constructor(pageService) {
         this.pageService = pageService;
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand getPage Command...'));
             let result;
             if (command.getPage.keywords) {
                 result = this.pageService.serachKeywords(command.getPage.keywords, command.getPage.limit, command.getPage.pages);

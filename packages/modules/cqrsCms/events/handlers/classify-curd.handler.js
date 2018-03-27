@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const classify_curd_events_1 = require("../impl/classify-curd.events");
 const classify_service_1 = require("../../service/classify.service");
-const clc = require('cli-color');
 let ClassifyCurdEvent = class ClassifyCurdEvent {
     constructor(classifyservice) {
         this.classifyservice = classifyservice;
     }
     handle(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.yellowBright('Async create classify...'));
             if (event.classify.createClassify) {
                 if (event.classify.useFor == 'art') {
                     yield this.classifyservice.createClassifyArt(event.classify.createClassify.art);

@@ -2,13 +2,11 @@ import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {PageService} from "../../service/page.service";
 import {GetPageParamCommand} from "../impl/get-page-param.command";
 
-const clc=require('cli-color');
 @CommandHandler(GetPageParamCommand)
 export class GetPageHandler implements ICommandHandler<GetPageParamCommand>{
     constructor(private readonly pageService: PageService){}
 
     async execute(command:GetPageParamCommand,resolver:(value) => void){
-        console.log(clc.greenBright('handlerCommand getPage Command...'));
         let result;
         //关键字搜索
         if(command.getPage.keywords){

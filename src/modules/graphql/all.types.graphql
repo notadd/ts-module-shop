@@ -87,9 +87,9 @@ type AllData{
     message:String
     #base url for visit file , need to append the url of info
     baseUrl:String
-    #array of file info 
+    #array of file info
     files:[File]
-    #array of image info 
+    #array of image info
     images:[Image]
     #array of audio info
     audios:[Audio]

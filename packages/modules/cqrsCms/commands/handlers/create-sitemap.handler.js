@@ -20,7 +20,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const create_param_command_1 = require("../impl/create-param.command");
 const pageRepository_1 = require("../../repository/pageRepository");
-const clc = require('cli-color');
 let CreateSitemapHandler = class CreateSitemapHandler {
     constructor(repositoty, publisher) {
         this.repositoty = repositoty;
@@ -28,7 +27,6 @@ let CreateSitemapHandler = class CreateSitemapHandler {
     }
     execute(command, resolver) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.greenBright('handlerCommand  CreateXmlCommand...'));
             const sitemap = this.publisher.mergeObjectContext(yield this.repositoty.siteMap());
             sitemap.createxml(command.createXml);
             sitemap.commit();

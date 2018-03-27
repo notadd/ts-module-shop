@@ -3,7 +3,6 @@ import {PageRepository} from "../../repository/pageRepository";
 import {PageParamCommand} from "../impl/page-param.command";
 import {PageService} from "../../service/page.service";
 
-const clc=require('cli-color');
 @CommandHandler(PageParamCommand)
 export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
     constructor(private readonly repositoty:PageRepository,
@@ -11,7 +10,6 @@ export class CreatePageHandler implements ICommandHandler<PageParamCommand>{
                 private readonly pageService:PageService){}
 
                 async execute(command:PageParamCommand,resolver:(value?) => void):Promise<any>{
-                console.log(clc.greenBright('handlerCommand  PageFindByIdCommand...'));
                 let id:string='0';
                 let result;
                 const page=this.publisher.mergeObjectContext( await this.repositoty.find(id));

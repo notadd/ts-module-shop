@@ -20,14 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cqrs_1 = require("@nestjs/cqrs");
 const page_service_1 = require("../../service/page.service");
 const page_curd_event_1 = require("../impl/page-curd.event");
-const clc = require('cli-color');
 let PageCurdHandle = class PageCurdHandle {
     constructor(pageService) {
         this.pageService = pageService;
     }
     handle(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(clc.yellowBright('Async create curd page...'));
             let array = event.pageEntity.array;
             if (event.pageEntity.page != null && event.pageEntity.page.id == null) {
                 this.pageService.createPages(event.pageEntity.page, event.pageEntity.content);
