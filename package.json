@@ -5,7 +5,8 @@
   "author": "lvying",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "gulp build",
+    "publish": "node ./node_modules/lerna/bin/lerna.js publish -m \"chore(release): publish %s\"",
     "start": "node index.ts",
     "start:watch": "nodemon"
   },
