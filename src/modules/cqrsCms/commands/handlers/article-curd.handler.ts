@@ -96,8 +96,8 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
       /*  if(command.article.getAllArticles && command.article.getArticles.getLevelByClassifyId){
             result=await this.articleService.getLevelByClassifyId(command.article.getArticles.getLevelByClassifyId);
         }*/
-
-        page.commit();
         resolver(result);
+        page.commit();
+
     }
 }
