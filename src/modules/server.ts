@@ -1,7 +1,7 @@
 import './vendor';
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from "./application.module";
-
+import * as bodyParser from 'body-parser';
 /**
  * 跨域问题
  * @param req
@@ -21,9 +21,8 @@ const cross =(req,res,next) =>{
 
 async function bootstrap() {
     const app = await NestFactory.create(ApplicationModule);
-    var bodyParser=require('body-parser');
     app.use(cross);
-    app.use(bodyParser.json({ limit:'10000kb'}));
+    app.use(bodyParser.json({ limit:'100000kb'}));
     await app.listen(3000);
 }
 

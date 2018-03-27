@@ -82,7 +82,7 @@ export class SitemapService{
         //只更新最近1000篇文章
         if(array_baidu_sitemap_options['lc_post_limit1000']){ lc_limit = 1000; } else { lc_limit = 10000;}
         let fs=require('fs');
-        let file=`${(__dirname).substring(0,(__dirname).lastIndexOf('modules'))}modules/public/`;
+        let file=`${(__dirname).substring(0,(__dirname).lastIndexOf('/'))}/public/`;
         let ws=fs.createWriteStream(`${file}${array_baidu_sitemap_options['lc_XML_FileName']}.xml`);
         let builder=require('xmlbuilder');
         let root = builder.create('urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"');

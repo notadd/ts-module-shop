@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./vendor");
 const core_1 = require("@nestjs/core");
 const application_module_1 = require("./application.module");
+const bodyParser = require("body-parser");
 const cross = (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -25,9 +26,8 @@ const cross = (req, res, next) => {
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(application_module_1.ApplicationModule);
-        var bodyParser = require('body-parser');
         app.use(cross);
-        app.use(bodyParser.json({ limit: '10000kb' }));
+        app.use(bodyParser.json({ limit: '100000kb' }));
         yield app.listen(3000);
     });
 }
