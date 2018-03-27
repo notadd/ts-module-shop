@@ -5,7 +5,8 @@
   "author": "lvying",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "gulp build",
+    "publish": "node ./node_modules/lerna/bin/lerna.js publish -m \"chore(release): publish %s\"",
     "start": "node index.ts",
     "start:watch": "nodemon"
   },
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "gulp-rename": "^1.2.2",
+    "lerna": "^2.9.0",
     "nodemon": "^1.17.2",
     "ts-node": "^3.3.0"
   }

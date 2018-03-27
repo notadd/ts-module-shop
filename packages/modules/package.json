@@ -1,6 +1,6 @@
 {
-  "name":"@notadd/cms",
-  "version": "2.0.16",
+  "name": "@notadd/cms",
+  "version": "2.0.17",
   "description": "Notadd CMS Package.",
   "repository": {
     "type": "git",
@@ -16,9 +16,9 @@
   "dependencies": {
     "formidable": "^1.1.1",
     "gm": "^1.23.1",
-    "sharp": "^0.20.1",
+    "mime": "^2.2.0",
     "request": "^2.85.0",
-    "mime":"^2.2.0",
+    "sharp": "^0.20.1",
     "underscore": "^1.8.3"
   }
 }
