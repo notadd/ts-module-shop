@@ -122,8 +122,7 @@ let ClassifyService = class ClassifyService {
                 if (parentClassify == null)
                     throw new error_interface_1.MessageCodeError('create:classify:parentIdMissing');
             }
-            let time = new Date();
-            entity.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+            entity.updateAt = new Date();
             let finalClassify = entity;
             yield this.repository.updateById(entity.id, finalClassify);
             return this.findAllClassifyArt(id);
@@ -144,8 +143,7 @@ let ClassifyService = class ClassifyService {
                 if (parentClassify == null)
                     throw new error_interface_1.MessageCodeError('create:classify:parentIdMissing');
             }
-            let time = new Date();
-            entity.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+            entity.updateAt = new Date();
             yield this.pageRepository.updateById(entity.id, entity);
             return this.findAllClassifyPage(id);
         });
@@ -331,8 +329,7 @@ let ClassifyService = class ClassifyService {
                         let newArticle = article[h];
                         newArticle.classifyId = id;
                         newArticle.classify = '默认分类';
-                        let time = new Date();
-                        newArticle.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                        newArticle.updateAt = new Date();
                         this.artRepository.updateById(newArticle.id, newArticle);
                     }
                 }
@@ -345,8 +342,7 @@ let ClassifyService = class ClassifyService {
                         let newArticle = article[h];
                         newArticle.classify = '默认分类';
                         newArticle.classifyId = id;
-                        let time = new Date();
-                        newArticle.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                        newArticle.updateAt = new Date();
                         this.repositoryPage.updateById(newArticle.id, newArticle);
                     }
                 }
@@ -623,8 +619,7 @@ let ClassifyService = class ClassifyService {
             array.push(id);
             let newArray = Array.from(new Set(array));
             this.resetTheSetTop(newArray);
-            let time = new Date();
-            classify.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+            classify.updateAt = new Date();
             let newClassify = classify;
             this.repository.updateById(newClassify.id, newClassify);
             return this.findAllClassifyArt(1);
@@ -633,12 +628,11 @@ let ClassifyService = class ClassifyService {
     resetTheSetTop(arr) {
         return __awaiter(this, void 0, void 0, function* () {
             let articles = yield this.artRepository.createQueryBuilder().where('"classifyId" in (:id)', { id: arr }).getMany();
-            let time = new Date();
             for (let t in articles) {
                 let arr = new article_entity_1.ArticleEntity;
                 arr = articles[t];
                 arr.topPlace = 'cancel';
-                arr.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                arr.updateAt = new Date();
                 yield this.artRepository.updateById(arr.id, arr);
             }
         });
@@ -657,8 +651,7 @@ let ClassifyService = class ClassifyService {
                 groupId = 1;
             }
             classify.groupId = groupId;
-            let time = new Date();
-            classify.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+            classify.updateAt = new Date();
             let newClassify = classify;
             this.pageRepository.updateById(newClassify.id, newClassify);
             return this.findAllClassifyPage(1);
@@ -735,8 +728,7 @@ let ClassifyService = class ClassifyService {
                 newArt = result[t];
                 newArt.topPlace = 'global';
                 newArt.display = finalArray.toString();
-                let time = new Date();
-                newArt.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                newArt.updateAt = new Date();
                 this.artRepository.updateById(newArt.id, newArt);
                 num++;
             }
