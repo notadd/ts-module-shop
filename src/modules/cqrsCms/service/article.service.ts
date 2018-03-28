@@ -111,22 +111,6 @@ export class ArticleService{
         let levelGive:string=article.topPlace.toString();
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
-        let time =new Date();
-        if(article.publishedTime){
-            time=article.publishedTime;
-            article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000)
-        }
-        if(article.publishedTime==null){
-            article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
-        if(article.startTime){
-            time=article.startTime;
-            article.startTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
-        if(article.endTime){
-            time=article.endTime;
-            article.endTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
         article.recycling=false;
         await this.respository.createQueryBuilder().insert().into(ArticleEntity).values(article).output('id').execute().then(a=>{return a});
     }
@@ -146,20 +130,7 @@ export class ArticleService{
         let levelGive:string=article.topPlace;
         if(level=='level1' && levelGive=='level2' || levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
         if(level=='level2' && levelGive=='level3') throw new MessageCodeError('create:level:lessThanLevel');
-        let time =new Date();
-        article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        if(article.startTime){
-            time=article.startTime;
-            article.startTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
-        if(article.endTime){
-            time=article.endTime;
-            article.endTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
-        }
-        if(article.publishedTime){
-            time=article.publishedTime;
-            article.publishedTime=new Date(time.getTime()-time.getTimezoneOffset()*60*1000)
-        }
+        article.updateAt=new Date();
         let newArt:ArticleEntity =article;
         await this.respository.updateById(newArt.id,newArt);
     }
@@ -204,8 +175,7 @@ export class ArticleService{
             let article:ArticleEntity=await this.respository.findOneById(array[t]);
             if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
             article.recycling=false;
-            let time =new Date();
-            article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            article.updateAt=new Date();
             let newArticle:ArticleEntity=article;
             this.respository.updateById(newArticle.id,newArticle);
             num++;

@@ -360,6 +360,7 @@ export class CqrsResolver{
                 let endTime: string = art.endTime.toString();
                 art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
             }
+            console.log('startTime='+art.startTime+",endTime="+art.endTime);
             let newArticle:ArticleEntity=art;
             let ws=new Map();
             ws.set('obj',obj);
