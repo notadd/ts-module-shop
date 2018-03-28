@@ -94,7 +94,7 @@ let ArticleService = class ArticleService {
                     throw new error_interface_1.MessageCodeError('delete:recycling:idMissing');
                 article.recycling = true;
                 let time = new Date();
-                article.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                article.updateAt = new Date();
                 let newArticle = article;
                 this.respository.updateById(newArticle.id, newArticle);
                 count++;
@@ -278,7 +278,6 @@ let ArticleService = class ArticleService {
                 return { pictureUrl: url, bucketName: bucket, pictureName: name, type: type, MessageCodeError: "上传成功" };
             }
             catch (err) {
-                console.log(err);
                 return { MessageCodeError: "上传失败" };
             }
         });
