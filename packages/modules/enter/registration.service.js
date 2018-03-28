@@ -25,14 +25,12 @@ const typeorm_1 = require("typeorm");
 const block_entity_1 = require("../entity/block.entity");
 const site_entity_1 = require("../entity/site.entity");
 const visit_entity_1 = require("../entity/visit.entity");
-const common_paging_1 = require("../export/common.paging");
 const typeorm_2 = require("@nestjs/typeorm");
 let RegistrationService = class RegistrationService {
-    constructor(blockRespository, siteRespository, visitRespository, pageService) {
+    constructor(blockRespository, siteRespository, visitRespository) {
         this.blockRespository = blockRespository;
         this.siteRespository = siteRespository;
         this.visitRespository = visitRespository;
-        this.pageService = pageService;
     }
     createBlock(block) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -116,22 +114,6 @@ let RegistrationService = class RegistrationService {
             return { visits: visit, totals: Number(num) };
         });
     }
-    pagingMethod(totalItems, limit, page) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let result = this.pageService.getPager(totalItems, page, limit);
-            let res = new common_paging_1.ReturnPage();
-            res.totalItems = result.totalItems;
-            res.currentPage = result.currentPage;
-            res.pageSize = result.pageSize;
-            res.totalPages = result.totalPages;
-            res.startPage = result.startPage;
-            res.endPage = result.endPage;
-            res.startIndex = result.startIndex;
-            res.endIndex = result.endIndex;
-            res.pages = result.pages;
-            return res;
-        });
-    }
 };
 RegistrationService = __decorate([
     common_1.Component(),
@@ -140,7 +122,6 @@ RegistrationService = __decorate([
     __param(2, typeorm_2.InjectRepository(visit_entity_1.VisitEntity)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
         typeorm_1.Repository,
-        typeorm_1.Repository,
-        common_paging_1.PagerService])
+        typeorm_1.Repository])
 ], RegistrationService);
 exports.RegistrationService = RegistrationService;
