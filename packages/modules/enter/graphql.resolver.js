@@ -19,6 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("@nestjs/graphql");
 const registration_service_1 = require("./registration.service");
+const common_paging_1 = require("../export/common.paging");
 function objToStrMap(obj) {
     let strMap = new Map();
     for (let k of Object.keys(obj)) {
@@ -27,8 +28,9 @@ function objToStrMap(obj) {
     return strMap;
 }
 let EnterResolver = class EnterResolver {
-    constructor(registration) {
+    constructor(registration, pagerService) {
         this.registration = registration;
+        this.pagerService = pagerService;
     }
     getAllVisits(obj, arg) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,7 +39,7 @@ let EnterResolver = class EnterResolver {
             let map = new Map();
             map = objToStrMap(bToJSon);
             const result = yield this.registration.getVisit(map.get('limit'), map.get('pages'));
-            let paging = yield this.registration.pagingMethod(result.totals, map.get('limit'), map.get('pages')).then(a => { });
+            const paging = this.pagerService.getPager(result.totals, map.get('pages'), map.get('limit'));
             return { pagination: paging, visits: result.visits };
         });
     }
@@ -47,8 +49,8 @@ let EnterResolver = class EnterResolver {
             let bToJSon = JSON.parse(str);
             let map = new Map();
             map = objToStrMap(bToJSon);
-            const result = yield this.registration.getSite(map.get('limit'), map.get('pages'));
-            let paging = yield this.registration.pagingMethod(result.totals, map.get('limit'), map.get('pages')).then(a => { });
+            const result = yield this.registration.getSite(map.get('limit'), map.get('pages')).then(a => { return a; });
+            const paging = this.pagerService.getPager(result.totals, map.get('pages'), map.get('limit'));
             return { sites: result.sites, pagination: paging };
         });
     }
@@ -59,7 +61,7 @@ let EnterResolver = class EnterResolver {
             let map = new Map();
             map = objToStrMap(bToJSon);
             const result = yield this.registration.getAllBlocks(map.get('limit'), map.get('pages'));
-            let paging = yield this.registration.pagingMethod(result.totals, map.get('limit'), map.get('pages')).then(a => { });
+            const paging = this.pagerService.getPager(result.totals, map.get('pages'), map.get('limit'));
             return { blocks: result.blocks, pagination: paging };
         });
     }
@@ -147,6 +149,7 @@ __decorate([
 ], EnterResolver.prototype, "createVisits", null);
 EnterResolver = __decorate([
     graphql_1.Resolver(),
-    __metadata("design:paramtypes", [registration_service_1.RegistrationService])
+    __metadata("design:paramtypes", [registration_service_1.RegistrationService,
+        common_paging_1.PagerService])
 ], EnterResolver);
 exports.EnterResolver = EnterResolver;
