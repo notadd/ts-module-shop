@@ -117,8 +117,7 @@ let PageService = class PageService {
             let entity = yield this.classifyService.findOneByIdPage(page.classifyId);
             if (page.classifyId != null && page.classifyId != 0 && entity == null)
                 throw new error_interface_1.MessageCodeError('page:classify:classifyIdMissing');
-            let time = new Date();
-            page.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+            page.updateAt = new Date();
             for (let t in content) {
                 if (content[t].id == 0) {
                     let newContent = new page_content_entity_1.PageContentEntity();
@@ -130,7 +129,7 @@ let PageService = class PageService {
                     let newContent = new page_content_entity_1.PageContentEntity();
                     newContent = content[t];
                     newContent.parentId = page.id;
-                    newContent.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                    newContent.updateAt = new Date();
                     yield this.contentRepository.updateById(newContent.id, newContent);
                 }
             }

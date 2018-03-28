@@ -117,22 +117,6 @@ let ArticleService = class ArticleService {
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
             if (level == 'level2' && levelGive == 'level3')
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
-            let time = new Date();
-            if (article.publishedTime) {
-                time = article.publishedTime;
-                article.publishedTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
-            if (article.publishedTime == null) {
-                article.publishedTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
-            if (article.startTime) {
-                time = article.startTime;
-                article.startTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
-            if (article.endTime) {
-                time = article.endTime;
-                article.endTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
             article.recycling = false;
             yield this.respository.createQueryBuilder().insert().into(article_entity_1.ArticleEntity).values(article).output('id').execute().then(a => { return a; });
         });
@@ -152,20 +136,6 @@ let ArticleService = class ArticleService {
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
             if (level == 'level2' && levelGive == 'level3')
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
-            let time = new Date();
-            article.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            if (article.startTime) {
-                time = article.startTime;
-                article.startTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
-            if (article.endTime) {
-                time = article.endTime;
-                article.endTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
-            if (article.publishedTime) {
-                time = article.publishedTime;
-                article.publishedTime = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
-            }
             let newArt = article;
             yield this.respository.updateById(newArt.id, newArt);
         });
@@ -200,8 +170,7 @@ let ArticleService = class ArticleService {
                 if (article == null)
                     throw new error_interface_1.MessageCodeError('delete:recycling:idMissing');
                 article.recycling = false;
-                let time = new Date();
-                article.updateAt = new Date(time.getTime() - time.getTimezoneOffset() * 60 * 1000);
+                article.updateAt = new Date();
                 let newArticle = article;
                 this.respository.updateById(newArticle.id, newArticle);
                 num++;
@@ -308,7 +277,6 @@ let ArticleService = class ArticleService {
                 return { pictureUrl: url, bucketName: bucket, pictureName: name, type: type, MessageCodeError: "上传成功" };
             }
             catch (err) {
-                console.log(err);
                 return { MessageCodeError: "上传失败" };
             }
         });

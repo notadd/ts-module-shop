@@ -783,13 +783,13 @@ let ClassifyService = class ClassifyService {
                         entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                     }
                     let newTime = art[t].updateAt;
-                    let update = new Date(newTime.getTime() );
+                    let update = new Date(newTime.getTime());
                     if (art[t].publishedTime != null) {
                         let publish = new Date(art[t].publishedTime.getTime());
                         entity.publishedTime = `${publish.toLocaleDateString()} ${publish.toLocaleTimeString()}`;
                     }
                     if (art[t].endTime != null) {
-                        let endTime = new Date(art[t].endTime.getTime() );
+                        let endTime = new Date(art[t].endTime.getTime());
                         entity.endTime = `${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
                     }
                     if (art[t].startTime != null) {
@@ -829,7 +829,7 @@ let ClassifyService = class ClassifyService {
             for (let t in art) {
                 let entity = new page_entity_1.Page();
                 let time = art[t].createAt;
-                let createAt = new Date(time.getTime() );
+                let createAt = new Date(time.getTime());
                 let newTime = art[t].updateAt;
                 let update = new Date(newTime.getTime());
                 entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
