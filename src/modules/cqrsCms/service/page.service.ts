@@ -50,7 +50,7 @@ export class PageService{
     }
 
     /**
-     * 新增页面,暂时不能确定别名是否可以重复
+     * 新增页面,别名不能重复
      * @param {PageEntity} page
      * @returns {Promise<PageEntity[]>}
      */
@@ -105,8 +105,7 @@ export class PageService{
         if(aliasEntity.length>0) throw new MessageCodeError('create:classify:aliasRepeat');
         let entity:PageClassifyEntity=await this.classifyService.findOneByIdPage(page.classifyId);
         if(page.classifyId!=null && page.classifyId!=0 && entity==null) throw new MessageCodeError('page:classify:classifyIdMissing');
-        let time =new Date();
-        page.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        page.updateAt=new Date();
         for(let t in content){
             if(content[t].id==0){
                 let newContent:PageContentEntity=new PageContentEntity();
@@ -117,7 +116,7 @@ export class PageService{
                 let newContent:PageContentEntity=new PageContentEntity();
                 newContent=content[t];
                 newContent.parentId=page.id;
-                newContent.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+                newContent.updateAt=new Date();
                 await this.contentRepository.updateById(newContent.id,newContent);
             }
         }

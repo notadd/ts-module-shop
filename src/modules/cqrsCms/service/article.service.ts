@@ -87,7 +87,7 @@ export class ArticleService{
             if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
             article.recycling=true;
             let time =new Date();
-            article.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            article.updateAt=new Date();
             let newArticle:ArticleEntity=article;
             this.respository.updateById(newArticle.id,newArticle);
             count++;
@@ -147,7 +147,7 @@ export class ArticleService{
     }
 
     /**
-     * 回收站内删除数据，记入历史表
+     * 回收站内删除数据
      * @param {[number]} array
      * @returns {Promise<number>}
      */
@@ -303,7 +303,6 @@ export class ArticleService{
             let url=await this.storeService.getUrl(req.get('obj'),bucket,name,type,imagePreProcessInfo).then(a=>{return a});
             return {pictureUrl:url,bucketName:bucket,pictureName:name,type:type,MessageCodeError:"上传成功"};
         }catch(err) {
-            console.log(err);
             return {MessageCodeError:"上传失败"}
         }
     }
