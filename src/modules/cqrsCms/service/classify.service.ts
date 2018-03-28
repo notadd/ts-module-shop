@@ -16,8 +16,7 @@ export class ClassifyService{
                 @InjectRepository(ClassifyEntity) private readonly repository:Repository<ClassifyEntity>,
                 @InjectRepository(ArticleEntity) private readonly artRepository:Repository<ArticleEntity>,
                 @InjectRepository(PageClassifyEntity) private readonly pageRepository:Repository<PageClassifyEntity>,
-                @InjectRepository(PageEntity) private readonly repositoryPage:Repository<PageEntity>,
-                private readonly pageService:PagerService){}
+                @InjectRepository(PageEntity) private readonly repositoryPage:Repository<PageEntity>){}
 
     /**
      * 新增文章分类
@@ -113,8 +112,7 @@ export class ClassifyService{
                 //通过父级别名确定父级是否存在
                 if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
             }
-            let time =new Date();
-            entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            entity.updateAt=new Date();
             let finalClassify:ClassifyEntity =entity;
             await this.repository.updateById(entity.id,finalClassify);
             return this.findAllClassifyArt(id);
@@ -138,8 +136,7 @@ export class ClassifyService{
              //通过父级别名确定父级是否存在
              if(parentClassify==null) throw new MessageCodeError('create:classify:parentIdMissing');
          }
-         let time =new Date();
-         entity.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+         entity.updateAt=new Date();
          await this.pageRepository.updateById(entity.id,entity);
          return this.findAllClassifyPage(id);
      }
@@ -350,8 +347,7 @@ export class ClassifyService{
                     let newArticle:ArticleEntity=article[h];
                     newArticle.classifyId=id;
                     newArticle.classify='默认分类';
-                    let time =new Date();
-                    newArticle.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+                    newArticle.updateAt=new Date();
                     this.artRepository.updateById(newArticle.id,newArticle);
                 }
             }
@@ -363,8 +359,7 @@ export class ClassifyService{
                     let newArticle:PageEntity=article[h];
                     newArticle.classify='默认分类';
                     newArticle.classifyId=id;
-                    let time =new Date();
-                    newArticle.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+                    newArticle.updateAt=new Date();
                     this.repositoryPage.updateById(newArticle.id,newArticle);
                 }
             }
@@ -679,8 +674,7 @@ export class ClassifyService{
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
         this.resetTheSetTop(newArray);
-        let time =new Date();
-        classify.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        classify.updateAt=new Date();
         let newClassify:ClassifyEntity=classify;
         this.repository.updateById(newClassify.id,newClassify);
         return this.findAllClassifyArt(1);
@@ -694,12 +688,11 @@ export class ClassifyService{
      */
     public async resetTheSetTop(arr:number[]){
         let articles:ArticleEntity[]=await this.artRepository.createQueryBuilder().where('"classifyId" in (:id)',{id:arr}).getMany();
-        let time =new Date();
         for(let t in articles){
             let arr=new ArticleEntity;
             arr=articles[t];
             arr.topPlace='cancel';
-            arr.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            arr.updateAt=new Date();
             await this.artRepository.updateById(arr.id,arr);
         }
     }
@@ -720,8 +713,7 @@ export class ClassifyService{
             groupId=1;
         }
         classify.groupId=groupId;
-        let time =new Date();
-        classify.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+        classify.updateAt=new Date();
         let newClassify:PageClassifyEntity=classify;
         this.pageRepository.updateById(newClassify.id,newClassify);
         return this.findAllClassifyPage(1);
@@ -806,8 +798,7 @@ export class ClassifyService{
             newArt=result[t];
             newArt.topPlace='global';
             newArt.display=finalArray.toString();
-            let time =new Date();
-            newArt.updateAt=new Date(time.getTime()-time.getTimezoneOffset()*60*1000);
+            newArt.updateAt=new Date();
             this.artRepository.updateById(newArt.id,newArt);
             num++
         }
@@ -927,21 +918,6 @@ export class ClassifyService{
         }
         return result;
     }
-    async pageServiceArt(totalItems?:number,limit?:number,page?:number){
-        let result=this.pageService.getPager(totalItems,page,limit);
-        let res=new ReturnPage();
-            res.totalItems=result.totalItems;
-            res.currentPage=result.currentPage;
-            res.pageSize=result.pageSize;
-            res.totalPages=result.totalPages;
-            res.startPage=result.startPage;
-            res.endPage= result.endPage;
-            res.startIndex=result.startIndex;
-            res.endIndex= result.endIndex;
-            res.pages= result.pages;
-         return res;
-    }
-
     /**
      *
      * @param {string} useFor
