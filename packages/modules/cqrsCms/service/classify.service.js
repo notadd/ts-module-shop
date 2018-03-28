@@ -28,16 +28,14 @@ const typeorm_2 = require("typeorm");
 const article_entity_1 = require("../../entity/article.entity");
 const pageClassify_entity_1 = require("../../entity/pageClassify.entity");
 const page_entity_1 = require("../../entity/page.entity");
-const common_paging_1 = require("../../export/common.paging");
 const util_1 = require("util");
 const typeorm_3 = require("@nestjs/typeorm");
 let ClassifyService = class ClassifyService {
-    constructor(repository, artRepository, pageRepository, repositoryPage, pageService) {
+    constructor(repository, artRepository, pageRepository, repositoryPage) {
         this.repository = repository;
         this.artRepository = artRepository;
         this.pageRepository = pageRepository;
         this.repositoryPage = repositoryPage;
-        this.pageService = pageService;
     }
     createClassifyArt(entity, limit) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -846,22 +844,6 @@ let ClassifyService = class ClassifyService {
             return result;
         });
     }
-    pageServiceArt(totalItems, limit, page) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let result = this.pageService.getPager(totalItems, page, limit);
-            let res = new common_paging_1.ReturnPage();
-            res.totalItems = result.totalItems;
-            res.currentPage = result.currentPage;
-            res.pageSize = result.pageSize;
-            res.totalPages = result.totalPages;
-            res.startPage = result.startPage;
-            res.endPage = result.endPage;
-            res.startIndex = result.startIndex;
-            res.endIndex = result.endIndex;
-            res.pages = result.pages;
-            return res;
-        });
-    }
     classifyCheck(useFor, id, groupId, alias, deleteNum) {
         return __awaiter(this, void 0, void 0, function* () {
             let result;
@@ -984,7 +966,6 @@ ClassifyService = __decorate([
     __metadata("design:paramtypes", [typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
-        typeorm_1.Repository,
-        common_paging_1.PagerService])
+        typeorm_1.Repository])
 ], ClassifyService);
 exports.ClassifyService = ClassifyService;
