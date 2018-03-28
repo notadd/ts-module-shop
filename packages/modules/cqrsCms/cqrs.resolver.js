@@ -27,11 +27,13 @@ const create_page_vm_1 = require("./models/view/create-page.vm");
 const get_page_vm_1 = require("./models/view/get-page.vm");
 const classify_curd_vm_1 = require("./models/view/classify-curd.vm");
 const article_curd_vm_1 = require("./models/view/article-curd.vm");
+const common_paging_1 = require("../export/common.paging");
 const clc = require('cli-color');
 let CqrsResolver = class CqrsResolver {
-    constructor(classifyService, sitemapService) {
+    constructor(classifyService, sitemapService, pagerService) {
         this.classifyService = classifyService;
         this.sitemapService = sitemapService;
+        this.pagerService = pagerService;
     }
     createFile(obj, arg) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -122,9 +124,9 @@ let CqrsResolver = class CqrsResolver {
             }
             articleVM.getAllArticles = true;
             let resultArt = yield this.sitemapService.articleCurd(articleVM);
-            resultPage = yield this.classifyService.pageServiceArt(resultArt.totalItems, articleVM.limitNum, articleVM.pages).then(a => { return a; });
+            const paging = this.pagerService.getPager(resultArt.totalItems, articleVM.pages, articleVM.limitNum);
             result = yield this.classifyService.TimestampArt(resultArt.articles);
-            return { pagination: resultPage, articles: result };
+            return { pagination: paging, articles: result };
         });
     }
     getArticlesNoLimit(obj, arg) {
@@ -245,8 +247,8 @@ let CqrsResolver = class CqrsResolver {
             }
             let resultPage = yield this.sitemapService.getPages(pageParam).then(a => { return a; });
             PageReturn = yield this.classifyService.TimestampPage(resultPage.pages);
-            pagination = yield this.classifyService.pageServiceArt(resultPage.totalItems, pageParam.limit, pageParam.pages);
-            return { pagination: pagination, pages: PageReturn };
+            const paging = this.pagerService.getPager(resultPage.totalItems, pageParam.pages, pageParam.limit);
+            return { pagination: paging, pages: PageReturn };
         });
     }
     getPageById(obj, arg) {
@@ -583,6 +585,7 @@ __decorate([
 CqrsResolver = __decorate([
     graphql_1.Resolver(),
     __metadata("design:paramtypes", [classify_service_1.ClassifyService,
-        cqrs_service_1.CqrsService])
+        cqrs_service_1.CqrsService,
+        common_paging_1.PagerService])
 ], CqrsResolver);
 exports.CqrsResolver = CqrsResolver;
