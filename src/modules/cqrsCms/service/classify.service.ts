@@ -854,22 +854,22 @@ export class ClassifyService{
                 let entity=new Article();
                 let time:Date= art[t].createAt;
                 if(art[t].createAt !=null){
-                    let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+                    let createAt:Date=new Date(time.getTime());
                     entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                 }
 
                 let newTime:Date=art[t].updateAt;
-                let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000);
+                let update:Date=new Date(newTime.getTime());
                 if(art[t].publishedTime!=null){
-                    let publish:Date=new Date(art[t].publishedTime.getTime()+art[t].publishedTime.getTimezoneOffset()*60*1000);
+                    let publish:Date=new Date(art[t].publishedTime.getTime());
                     entity.publishedTime=`${publish.toLocaleDateString()} ${publish.toLocaleTimeString()}`;
                 }
                 if(art[t].endTime!=null){
-                    let endTime:Date=new Date(art[t].endTime.getTime()+art[t].endTime.getTimezoneOffset()*60*1000);
+                    let endTime:Date=new Date(art[t].endTime.getTime());
                     entity.endTime=`${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
                 }
                 if(art[t].startTime!=null){
-                    let startTime:Date=new Date(art[t].startTime.getTime()+art[t].startTime.getTimezoneOffset()*60*1000);
+                    let startTime:Date=new Date(art[t].startTime.getTime());
                     entity.startTime=`${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
                 }
 
@@ -911,9 +911,9 @@ export class ClassifyService{
         for(let t in art){
             let entity=new Page();
             let time:Date= art[t].createAt;
-            let createAt:Date=new Date(time.getTime()+time.getTimezoneOffset()*2*30*1000);
+            let createAt:Date=new Date(time.getTime());
             let newTime:Date=art[t].updateAt;
-            let update:Date=new Date(newTime.getTime()+newTime.getTimezoneOffset()*2*30*1000)
+            let update:Date=new Date(newTime.getTime())
             entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
             entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
             entity.id=art[t].id;
