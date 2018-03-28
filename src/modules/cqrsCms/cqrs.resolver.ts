@@ -11,13 +11,15 @@ import {GetPageVm} from "./models/view/get-page.vm";
 import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
 import {ArticleCurdVm} from "./models/view/article-curd.vm";
 import {ContentMap} from "./common/param.dto";
+import {PagerService} from "../export/common.paging";
 
 const clc=require('cli-color');
 @Resolver()
 export class CqrsResolver{
     constructor(
                 private readonly classifyService:ClassifyService,
-                private readonly sitemapService:CqrsService
+                private readonly sitemapService:CqrsService,
+                private readonly pagerService:PagerService
     ){}
 
     /**
@@ -126,9 +128,9 @@ export class CqrsResolver{
         }
         articleVM.getAllArticles=true;
         let resultArt=await this.sitemapService.articleCurd(articleVM);
-        resultPage=await this.classifyService.pageServiceArt(resultArt.totalItems,articleVM.limitNum,articleVM.pages).then(a=>{return a});
+        const paging= this.pagerService.getPager(resultArt.totalItems,articleVM.pages,articleVM.limitNum);
         result=await this.classifyService.TimestampArt(resultArt.articles);
-        return {pagination:resultPage,articles:result};
+        return {pagination:paging,articles:result};
 
     }
 
@@ -278,8 +280,8 @@ export class CqrsResolver{
         }
         let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
         PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
-        pagination=await this.classifyService.pageServiceArt(resultPage.totalItems,pageParam.limit,pageParam.pages);
-        return{pagination:pagination,pages:PageReturn};
+        const paging= this.pagerService.getPager(resultPage.totalItems,pageParam.pages,pageParam.limit);
+        return{pagination:paging,pages:PageReturn};
     }
 
     /**
@@ -360,7 +362,6 @@ export class CqrsResolver{
                 let endTime: string = art.endTime.toString();
                 art.endTime=new Date(Date.parse(endTime.replace(/- /g,"/")));
             }
-            console.log('startTime='+art.startTime+",endTime="+art.endTime);
             let newArticle:ArticleEntity=art;
             let ws=new Map();
             ws.set('obj',obj);

@@ -315,7 +315,6 @@ let CqrsResolver = class CqrsResolver {
                     let endTime = art.endTime.toString();
                     art.endTime = new Date(Date.parse(endTime.replace(/- /g, "/")));
                 }
-                console.log('startTime=' + art.startTime + ",endTime=" + art.endTime);
                 let newArticle = art;
                 let ws = new Map();
                 ws.set('obj', obj);
