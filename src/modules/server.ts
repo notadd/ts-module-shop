@@ -1,7 +1,8 @@
 import './vendor';
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from "./application.module";
-import * as bodyParser from 'body-parser';
+import * as bodyParser from 'body-parser'
+
 /**
  * 跨域问题
  * @param req
@@ -23,7 +24,7 @@ async function bootstrap() {
     const app = await NestFactory.create(ApplicationModule);
     app.use(cross);
     app.use(bodyParser.json({ limit:'100000kb'}));
-    await app.listen(3000);
+    await app.listen(3001);
 }
 
-bootstrap().then(()=>console.log('Application is listening on port 3000'));
+bootstrap().then(()=>console.log('Application is listening on port 3001'));

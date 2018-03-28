@@ -49,7 +49,7 @@ export class PagerService {
         };
     }
 }
-export class  ReturnPage{
+export class ReturnPage{
     totalItems: number;
     currentPage: number;
     pageSize: number;
