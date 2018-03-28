@@ -3,14 +3,12 @@ import { ClassifyEntity } from "../../entity/classify.entity";
 import { Article, ArticleEntity } from "../../entity/article.entity";
 import { PageClassifyEntity } from "../../entity/pageClassify.entity";
 import { Page, PageEntity } from "../../entity/page.entity";
-import { PagerService, ReturnPage } from "../../export/common.paging";
 export declare class ClassifyService {
     private readonly repository;
     private readonly artRepository;
     private readonly pageRepository;
     private readonly repositoryPage;
-    private readonly pageService;
-    constructor(repository: Repository<ClassifyEntity>, artRepository: Repository<ArticleEntity>, pageRepository: Repository<PageClassifyEntity>, repositoryPage: Repository<PageEntity>, pageService: PagerService);
+    constructor(repository: Repository<ClassifyEntity>, artRepository: Repository<ArticleEntity>, pageRepository: Repository<PageClassifyEntity>, repositoryPage: Repository<PageEntity>);
     createClassifyArt(entity: ClassifyEntity, limit?: number): Promise<ClassifyEntity[]>;
     createClassifyPage(entity: PageClassifyEntity, limit?: number): Promise<PageClassifyEntity[]>;
     updateClassifyArt(entity: ClassifyEntity, id?: number): Promise<ClassifyEntity[]>;
@@ -52,7 +50,6 @@ export declare class ClassifyService {
     }>;
     TimestampArt(art: ArticleEntity[]): Promise<Article[]>;
     TimestampPage(art: PageEntity[]): Promise<Page[]>;
-    pageServiceArt(totalItems?: number, limit?: number, page?: number): Promise<ReturnPage>;
     classifyCheck(useFor: string, id?: number, groupId?: number, alias?: string, deleteNum?: number): Promise<{
         MessageCodeError: any;
         Continue: boolean;

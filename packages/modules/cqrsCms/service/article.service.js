@@ -136,6 +136,7 @@ let ArticleService = class ArticleService {
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
             if (level == 'level2' && levelGive == 'level3')
                 throw new error_interface_1.MessageCodeError('create:level:lessThanLevel');
+            article.updateAt = new Date();
             let newArt = article;
             yield this.respository.updateById(newArt.id, newArt);
         });
@@ -277,6 +278,7 @@ let ArticleService = class ArticleService {
                 return { pictureUrl: url, bucketName: bucket, pictureName: name, type: type, MessageCodeError: "上传成功" };
             }
             catch (err) {
+                console.log(err);
                 return { MessageCodeError: "上传失败" };
             }
         });
