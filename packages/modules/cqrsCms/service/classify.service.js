@@ -779,21 +779,21 @@ let ClassifyService = class ClassifyService {
                     let entity = new article_entity_1.Article();
                     let time = art[t].createAt;
                     if (art[t].createAt != null) {
-                        let createAt = new Date(time.getTime() + time.getTimezoneOffset() * 2 * 30 * 1000);
+                        let createAt = new Date(time.getTime());
                         entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                     }
                     let newTime = art[t].updateAt;
-                    let update = new Date(newTime.getTime() + newTime.getTimezoneOffset() * 2 * 30 * 1000);
+                    let update = new Date(newTime.getTime() );
                     if (art[t].publishedTime != null) {
-                        let publish = new Date(art[t].publishedTime.getTime() + art[t].publishedTime.getTimezoneOffset() * 60 * 1000);
+                        let publish = new Date(art[t].publishedTime.getTime());
                         entity.publishedTime = `${publish.toLocaleDateString()} ${publish.toLocaleTimeString()}`;
                     }
                     if (art[t].endTime != null) {
-                        let endTime = new Date(art[t].endTime.getTime() + art[t].endTime.getTimezoneOffset() * 60 * 1000);
+                        let endTime = new Date(art[t].endTime.getTime() );
                         entity.endTime = `${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
                     }
                     if (art[t].startTime != null) {
-                        let startTime = new Date(art[t].startTime.getTime() + art[t].startTime.getTimezoneOffset() * 60 * 1000);
+                        let startTime = new Date(art[t].startTime.getTime());
                         entity.startTime = `${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
                     }
                     entity.updateAt = `${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
@@ -829,9 +829,9 @@ let ClassifyService = class ClassifyService {
             for (let t in art) {
                 let entity = new page_entity_1.Page();
                 let time = art[t].createAt;
-                let createAt = new Date(time.getTime() + time.getTimezoneOffset() * 2 * 30 * 1000);
+                let createAt = new Date(time.getTime() );
                 let newTime = art[t].updateAt;
-                let update = new Date(newTime.getTime() + newTime.getTimezoneOffset() * 2 * 30 * 1000);
+                let update = new Date(newTime.getTime());
                 entity.createAt = `${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
                 entity.updateAt = `${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
                 entity.id = art[t].id;
