@@ -3,6 +3,7 @@ import {RegistrationService} from "./registration.service";
 import {BlockEntity} from "../entity/block.entity";
 import {SiteEntity} from "../entity/site.entity";
 import {VisitEntity} from "../entity/visit.entity";
+import {PagerService} from "../export/common.paging";
 
 function objToStrMap(obj):Map<string,string> {
     let strMap=new Map();
@@ -14,7 +15,8 @@ function objToStrMap(obj):Map<string,string> {
 
 @Resolver()
 export class EnterResolver {
-    constructor(private readonly registration:RegistrationService){}
+    constructor(private readonly registration:RegistrationService,
+                private readonly pagerService:PagerService){}
 
     @Query('getAllVisits')
     async getAllVisits(obj,arg){
@@ -23,19 +25,19 @@ export class EnterResolver {
         let map = new Map();
         map = objToStrMap(bToJSon);
         const result=await this.registration.getVisit(map.get('limit'),map.get('pages'));
-        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages')).then(a=>{});
+        const paging= this.pagerService.getPager(result.totals,map.get('pages'),map.get('limit'));
         return {pagination:paging,visits:result.visits};
     }
 
     @Query('getAllSites')
-    async getAllSites(obj,arg){
+     async getAllSites(obj,arg){
         const str: string = JSON.stringify(arg);
         let bToJSon = JSON.parse(str);
         let map = new Map();
         map = objToStrMap(bToJSon);
-        const result=await this.registration.getSite(map.get('limit'),map.get('pages'));
-        const paging= await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages'));
-        return {sites:result.sites,pagination:paging}
+        const result= await this.registration.getSite(map.get('limit'),map.get('pages')).then(a=>{return a});
+        const paging= this.pagerService.getPager(result.totals,map.get('pages'),map.get('limit'));
+        return  {sites:result.sites,pagination:paging}
     }
 
     @Query('getAllBlocks')
@@ -45,7 +47,7 @@ export class EnterResolver {
         let map = new Map();
         map = objToStrMap(bToJSon);
         const result=await this.registration.getAllBlocks(map.get('limit'),map.get('pages'));
-        let paging=await this.registration.pagingMethod(result.totals,map.get('limit'),map.get('pages')).then(a=>{return a});
+        const paging= this.pagerService.getPager(result.totals,map.get('pages'),map.get('limit'));
         return {blocks:result.blocks,pagination:paging};
     }
     @Mutation('createBlocks')
