@@ -32,7 +32,7 @@ let RestfulUtil = class RestfulUtil {
         this.authUtil = authUtil;
         this.promiseUtil = promiseUtil;
         this.processStringUtil = processStringUtil;
-        this.apihost = 'http://v0.api.upyun.com';
+        this.apihost = 'https://v0.api.upyun.com';
     }
     uploadFile(bucket, file, uploadFile, imagePreProcessInfo) {
         return __awaiter(this, void 0, void 0, function* () {
