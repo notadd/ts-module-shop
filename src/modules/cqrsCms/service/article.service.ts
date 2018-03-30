@@ -1,18 +1,16 @@
-import {Component, HttpException, Inject} from "@nestjs/common";
-import {Repository} from "typeorm";
-import {ArticleEntity} from "../../entity/article.entity";
-import {MessageCodeError} from "../errorMessage/error.interface";
-import {InjectRepository} from "@nestjs/typeorm";
-import {ClassifyService} from "./classify.service";
-import {ClassifyEntity} from "../../entity/classify.entity";
-import {ImagePreProcessInfo} from "../common/error.interface";
-import {BlockEntity} from "../../entity/block.entity";
-
-const clc=require('cli-color');
+import { Component, HttpException, Inject } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { ArticleEntity } from "../../entity/article.entity";
+import { MessageCodeError } from "../errorMessage/error.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ClassifyService } from "./classify.service";
+import { ClassifyEntity } from "../../entity/classify.entity";
+import { ImagePreProcessInfo } from "../common/error.interface";
 
 @Component()
 export class ArticleService{
     constructor(@InjectRepository(ArticleEntity) private readonly respository:Repository<ArticleEntity>,
+                @InjectRepository(ClassifyEntity) private readonly claRespository:Repository<ClassifyEntity>,
                 private readonly classifyService:ClassifyService,
                 @Inject('StoreComponentToken') private storeService){}
 
@@ -23,27 +21,36 @@ export class ArticleService{
     async  getArticleAll(limit?:number,hidden?:boolean,pages?:number){
         let title:number=0;
         let resultAll:ArticleEntity[]=[];
+        let newresult:ArticleEntity[]=[];
+        let str:string;
+        let num:string;
         if(hidden==true){
             let newArray:ArticleEntity[]=[];
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
+            const result = await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:true}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getManyAndCount();
+            str=JSON.stringify(result);
+            newresult=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
             for(let t in newresult){
                 if(newresult[t].hidden){
                     newArray.push(newresult[t]);
                 }
             }
-            title= await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true',{recycling:false}).getCount();
-            resultAll.push(...newArray);
+            num=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+            newresult=newArray;
         }
         if(hidden==false){
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:false}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
-            title=await this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=false',{recycling:false}).getCount();
-            resultAll.push(...newresult);
+            const result = await this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false',{recycling:true}).orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getManyAndCount();
+            str=JSON.stringify(result);
+            num=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+            newresult=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
         }
         if(hidden==undefined){
-            let newresult:ArticleEntity[] = await this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getMany();
-            title=await this.respository.createQueryBuilder().where('recycling=false or recycling is null').getCount();
-            resultAll.push(...newresult);
+            const result= await this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"','DESC').skip(limit*(pages-1)).take(limit).getManyAndCount();
+            str=JSON.stringify(result);
+            num=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+            newresult=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
         }
+        title=Number(num);
+        resultAll.push(...newresult);
         return {articles:resultAll,totalItems:title};
     }
 
@@ -57,17 +64,17 @@ export class ArticleService{
         let strArt:string=`%${name}%`;
         let array:number[]=await this.classifyService.getClassifyIdForArt();
         if(array.length!=0){
-            let articles:ArticleEntity[]=await this.respository.createQueryBuilder()
+            const result=await this.respository.createQueryBuilder()
                 .where('"classifyId" in (:id)',{id:array})
                 .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ',{name:strArt})
                 .orderBy('"publishedTime"','DESC')
                 .skip(limit*(pages-1))
                 .take(limit)
-                .getMany();
-            let num:Number=await this.respository.createQueryBuilder() .where('"classifyId" in (:id)',{id:array})
-                .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ',{name:strArt})
-                .getCount();
-            return {articles:articles,totalItems:num};
+                .getManyAndCount();
+            let str:string=JSON.stringify(result);
+            let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+            let newresult:ArticleEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+            return {articles:newresult,totalItems:Number(num)};
         }else{
             let articles:ArticleEntity[]=[];
             return {articles:articles,totalItems:0}
@@ -140,9 +147,14 @@ export class ArticleService{
      * @returns {Promise<ArticleEntity[]>}
      */
     async recycleFind(limit?:number,pages?:number){
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).orderBy('"publishedTime"','ASC').skip(limit*(pages-1)).take(limit).getMany();
-        let title:number=await this.respository.createQueryBuilder().where('"recycling"= :recycling',{recycling:true}).getCount();
-        return {articles:result,totalItems:title};
+        const result=await this.respository.createQueryBuilder()
+            .where('"recycling"= :recycling',{recycling:true})
+            .orderBy('"publishedTime"','ASC')
+            .skip(limit*(pages-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let newresult:ArticleEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {articles:newresult,totalItems:Number(num)};
     }
 
     /**
@@ -188,9 +200,14 @@ export class ArticleService{
      * @returns {Promise<ArticleEntity[]>}
      */
     async findTopPlace(limit?:number,pages?:number){
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).orderBy('"updateAt"','DESC').skip(limit*(pages-1)).take(limit).getMany();
-        let title:number=await this.respository.createQueryBuilder().where('"topPlace"= :topPlace',{topPlace:'global'}).getCount();
-        return {articles:result,totalItems:title};
+        const result=await this.respository.createQueryBuilder()
+            .where('"topPlace"= :topPlace',{topPlace:'global'})
+            .orderBy('"updateAt"','DESC')
+            .skip(limit*(pages-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let newresult:ArticleEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {articles:newresult,totalItems:Number(num)};
     }
 
     /**
@@ -205,24 +222,17 @@ export class ArticleService{
         let array:number[]=await this.classifyService.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let result:ArticleEntity[]=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).orderBy('id','ASC').skip(limit*(pages-1)).take(limit).getMany();
-        let title:number=await this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray}).getCount();
-        return {articles:result,totalItems:title}
+        const result=await this.respository.createQueryBuilder()
+            .where('"classifyId" in (:classifyId)  and recycling=true',{classifyId:newArray})
+            .orderBy('id','ASC')
+            .skip(limit*(pages-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let newresult:ArticleEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {articles:newresult,totalItems:Number(num)}
     }
 
-    /**
-     * 根据id获取文章
-     * @param {number} id
-     * @returns {Promise<ArticleEntity>}
-     */
-    async getArticleById(id:number):Promise<ArticleEntity[]>{
-        let Array:ArticleEntity[]=[];
-        let article:ArticleEntity=await this.respository.findOneById(id);
-        if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
-        let newArticle:ArticleEntity=article;
-        Array.push(newArticle);
-        return Array;
-    }
+
 
     /**
      * 根据分类id获取层级
@@ -316,6 +326,18 @@ export class ArticleService{
             strMap.set(k, obj[k]);
         }
         return strMap;
+    }
+    /**
+     * 根据id获取文章
+     * @param {number} id
+     * @returns {Promise<ArticleEntity>}
+     */
+    async getArticleById(id:number){
+        let Array:ArticleEntity[]=[];
+        let article:ArticleEntity=await this.respository.findOneById(id);
+        if(article==null) throw new MessageCodeError('delete:recycling:idMissing');
+        Array.push(article);
+        return {articles:Array};
     }
 
 }

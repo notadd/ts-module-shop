@@ -1,14 +1,13 @@
-import {Component} from "@nestjs/common";
-import {Repository} from "typeorm";
-import {ClassifyEntity} from "../../entity/classify.entity";
-import {MessageCodeError} from "../errorMessage/error.interface";
-import {getManager} from "typeorm";
-import {Article, ArticleEntity} from "../../entity/article.entity";
-import {PageClassifyEntity} from "../../entity/pageClassify.entity";
-import {Page, PageEntity} from "../../entity/page.entity";
-import {PagerService,ReturnPage} from "../../export/common.paging";
-import {isNumber} from "util";
-import {InjectRepository} from "@nestjs/typeorm";
+import { Component } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { ClassifyEntity } from "../../entity/classify.entity";
+import { MessageCodeError } from "../errorMessage/error.interface";
+import { getManager } from "typeorm";
+import { ArticleEntity } from "../../entity/article.entity";
+import { PageClassifyEntity } from "../../entity/pageClassify.entity";
+import { PageEntity } from "../../entity/page.entity";
+import { isNumber } from "util";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Component()
 export class ClassifyService{
@@ -839,83 +838,15 @@ export class ClassifyService{
      * @constructor
      */
     async TimestampArt(art:ArticleEntity[]){
-        let result:Article[]=[];
+        let result:ArticleEntity[]=[];
         for(let t in art){
-            if(art[t].id!=null){
-                let entity=new Article();
-                let time:Date= art[t].createAt;
-                if(art[t].createAt !=null){
-                    let createAt:Date=new Date(time.getTime());
-                    entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
-                }
-
-                let newTime:Date=art[t].updateAt;
-                let update:Date=new Date(newTime.getTime());
-                if(art[t].publishedTime!=null){
-                    let publish:Date=new Date(art[t].publishedTime.getTime());
-                    entity.publishedTime=`${publish.toLocaleDateString()} ${publish.toLocaleTimeString()}`;
-                }
-                if(art[t].endTime!=null){
-                    let endTime:Date=new Date(art[t].endTime.getTime());
-                    entity.endTime=`${endTime.toLocaleDateString()} ${endTime.toLocaleTimeString()}`;
-                }
-                if(art[t].startTime!=null){
-                    let startTime:Date=new Date(art[t].startTime.getTime());
-                    entity.startTime=`${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()}`;
-                }
-
-                entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
-                entity.id=art[t].id;
-                entity.name=art[t].name;
-                entity.classifyId=art[t].classifyId;
-                let timeOne=await this.repository.createQueryBuilder().where('"id"= :id',{id:art[t].classifyId}).getOne().then(a=>{return a.title});
-                entity.classify=timeOne;
-                entity.abstract=art[t].abstract;
-                entity.content=art[t].content;
-                entity.url=art[t].url;
-                entity.source=art[t].source;
-                entity.sourceUrl=art[t].sourceUrl;
-                entity.topPlace=art[t].topPlace;
-                entity.abstract=art[t].abstract;
-                entity.hidden=art[t].hidden;
-                entity.pictureUrl=art[t].pictureUrl;
-                entity.id=art[t].id;
-                entity.recycling=art[t].recycling;
-                entity.check=false;
-                entity.activityAddress=art[t].activityAddress;
-                entity.peopleNum=art[t].peopleNum;
-                entity.organizer=art[t].organizer;
-                result.push(entity);
-            }
+            art[t].classify=await this.repository.createQueryBuilder()
+                .where('"id"= :id',{id:art[t].classifyId})
+                .getOne()
+                .then(a=>{return a.title});
+            result.push(art[t]);
             }
 
-        return result;
-    }
-    /**
-     * 页面时间格式转化
-     * @param {ArticleEntity[]} art
-     * @returns {Promise<Article[]>}
-     * @constructor
-     */
-    async TimestampPage(art:PageEntity[]){
-        let result:Page[]=[];
-        for(let t in art){
-            let entity=new Page();
-            let time:Date= art[t].createAt;
-            let createAt:Date=new Date(time.getTime());
-            let newTime:Date=art[t].updateAt;
-            let update:Date=new Date(newTime.getTime())
-            entity.createAt=`${createAt.toLocaleDateString()} ${createAt.toLocaleTimeString()}`;
-            entity.updateAt=`${update.toLocaleDateString()} ${update.toLocaleTimeString()}`;
-            entity.id=art[t].id;
-            entity.classifyId=art[t].classifyId;
-            let timeOne=await this.pageRepository.createQueryBuilder().where('"id"= :id',{id:art[t].classifyId}).getOne().then(a=>{return a.title});
-            entity.classify=timeOne;
-            entity.title=art[t].title;
-            entity.alias=art[t].alias;
-            entity.check=false;
-            result.push(entity);
-        }
         return result;
     }
     /**
