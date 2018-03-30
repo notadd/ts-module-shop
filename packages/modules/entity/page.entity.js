@@ -43,6 +43,10 @@ __decorate([
     __metadata("design:type", Date)
 ], PageEntity.prototype, "updateAt", void 0);
 __decorate([
+    typeorm_1.Column({ default: false }),
+    __metadata("design:type", Boolean)
+], PageEntity.prototype, "check", void 0);
+__decorate([
     typeorm_1.OneToMany(type => page_content_entity_1.PageContentEntity, PageContentEntity => PageContentEntity.page),
     __metadata("design:type", Array)
 ], PageEntity.prototype, "contents", void 0);
@@ -54,6 +58,3 @@ PageEntity = __decorate([
     typeorm_1.Entity('page_entity_table')
 ], PageEntity);
 exports.PageEntity = PageEntity;
-class Page {
-}
-exports.Page = Page;

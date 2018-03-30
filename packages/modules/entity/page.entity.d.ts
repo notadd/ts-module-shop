@@ -8,16 +8,7 @@ export declare class PageEntity {
     classify: string;
     createAt: Date;
     updateAt: Date;
+    check: boolean;
     contents: PageContentEntity[];
     classifications: PageClassifyEntity[];
-}
-export declare class Page {
-    id: number;
-    title: string;
-    alias: string;
-    classifyId: number;
-    classify: string;
-    createAt: string;
-    updateAt: string;
-    check: boolean;
 }

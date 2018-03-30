@@ -18,20 +18,14 @@ export class PageEntity{
     @CreateDateColumn() createAt:Date;
     //修改时间
     @UpdateDateColumn() updateAt:Date;
+    //无用
+    @Column({default:false})
+    check:boolean;
     //页面内容
     @OneToMany(type => PageContentEntity,PageContentEntity=>PageContentEntity.page)
     contents:PageContentEntity[];
 
     @OneToMany(type => PageClassifyEntity,PageClassifyEntity=>PageClassifyEntity.pages)
     classifications:PageClassifyEntity[];
-}
-export class Page{
-   id:number;
-   title:string;
-   alias:string;
-   classifyId:number;
-   classify:string;
-   createAt:string;
-   updateAt:string;
-   check:boolean;
+
 }
