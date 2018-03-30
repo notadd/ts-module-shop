@@ -28,7 +28,6 @@ const get_page_vm_1 = require("./models/view/get-page.vm");
 const classify_curd_vm_1 = require("./models/view/classify-curd.vm");
 const article_curd_vm_1 = require("./models/view/article-curd.vm");
 const common_paging_1 = require("../export/common.paging");
-const clc = require('cli-color');
 let CqrsResolver = class CqrsResolver {
     constructor(classifyService, sitemapService, pagerService) {
         this.classifyService = classifyService;
@@ -63,7 +62,6 @@ let CqrsResolver = class CqrsResolver {
             let bToJSon = JSON.parse(str);
             let map = new Map();
             map = this.objToStrMap(bToJSon);
-            let resultPage;
             let result;
             let getArticle = map.get('getArticleAll');
             let articleVM = new article_curd_vm_1.ArticleCurdVm();
@@ -163,7 +161,7 @@ let CqrsResolver = class CqrsResolver {
             }
             articleVM.getAllArticles = true;
             let entity = yield this.sitemapService.articleCurd(articleVM);
-            result = yield this.classifyService.TimestampArt(entity);
+            result = yield this.classifyService.TimestampArt(entity.articles);
             return result;
         });
     }
@@ -218,8 +216,6 @@ let CqrsResolver = class CqrsResolver {
             let bToJSon = JSON.parse(str);
             let map = new Map();
             map = this.objToStrMap(bToJSon);
-            let PageReturn;
-            let pagination;
             let getAllPage = map.get('getAllPage');
             let pageParam = new get_page_vm_1.GetPageVm();
             if (getAllPage != null || getAllPage != undefined) {
@@ -246,9 +242,8 @@ let CqrsResolver = class CqrsResolver {
                 pageParam.pages = amap.get('pages');
             }
             let resultPage = yield this.sitemapService.getPages(pageParam).then(a => { return a; });
-            PageReturn = yield this.classifyService.TimestampPage(resultPage.pages);
             const paging = this.pagerService.getPager(resultPage.totalItems, pageParam.pages, pageParam.limit);
-            return { pagination: paging, pages: PageReturn };
+            return { pagination: paging, pages: resultPage.pages };
         });
     }
     getPageById(obj, arg) {

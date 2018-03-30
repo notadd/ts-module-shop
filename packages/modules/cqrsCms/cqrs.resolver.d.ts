@@ -1,6 +1,5 @@
-import { Article } from "../entity/article.entity";
+import { ArticleEntity } from "../entity/article.entity";
 import { ClassifyService } from "./service/classify.service";
-import { Page } from "../entity/page.entity";
 import { CreateXmlVm } from "./models/view/create-xml-vm";
 import { CqrsService } from "./cqrs.service";
 import { PagerService } from "../export/common.paging";
@@ -23,9 +22,9 @@ export declare class CqrsResolver {
             endIndex: number;
             pages: any;
         };
-        articles: Article[];
+        articles: ArticleEntity[];
     }>;
-    getArticlesNoLimit(obj: any, arg: any): Promise<Article[]>;
+    getArticlesNoLimit(obj: any, arg: any): Promise<ArticleEntity[]>;
     getClassifys(obj: any, arg: any): any;
     getClassifyById(obj: any, arg: any): Promise<any>;
     getPagesLimit(obj: any, arg: any): Promise<{
@@ -40,7 +39,7 @@ export declare class CqrsResolver {
             endIndex: number;
             pages: any;
         };
-        pages: Page[];
+        pages: any;
     }>;
     getPageById(obj: any, arg: any): Promise<any>;
     ArticleCU(obj: any, arg: any): Promise<string>;
