@@ -1,12 +1,9 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {
+    Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {ClassifyEntity} from "./classify.entity";
-enum EnvConfig{
-    global,
-    current,
-    level1,
-    level2,
-    level3
-}
+
 @Entity('article_entity_table')
 export class ArticleEntity{
     //文章Id
@@ -59,35 +56,10 @@ export class ArticleEntity{
     @Column({nullable:true,length:30}) type:string;
     //图片地址
     @Column({nullable:true,length:500}) pictureUrl:string;
+    //无用
+    @Column({default:false})   check:boolean;
 
-    @OneToMany(type => ClassifyEntity,ClassifyEntity=>ClassifyEntity.articles)
-    classifications:ClassifyEntity[];
-
-}
-export class Article{
-    id:number;
-    name:string;
-    classify:string;
-    classifyId:number;
-    url:string;
-    source:string;
-    sourceUrl:string;
-    topPlace:string;
-    hidden:boolean;
-    recycling:boolean;
-    publishedTime:string;
-    endTime:string;
-    startTime:string;
-    activityAddress:string;
-    organizer:string;
-    peopleNum:number;
-    abstract:string;
-    content:string;
-    display:string;
-    createAt:string;
-    updateAt:string;
-    pictureUrl:string;
-    classifications:ClassifyEntity[];
-    check:boolean;
+    @ManyToOne(type => ClassifyEntity,ClassifyEntity=>ClassifyEntity.articles,{cascadeUpdate:true})
+    classifications:ClassifyEntity;
 
 }

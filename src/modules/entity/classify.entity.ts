@@ -42,6 +42,6 @@ export class ClassifyEntity{
     //修改时间
     @UpdateDateColumn() updateAt:Date;
 
-    @ManyToOne(type => ArticleEntity,ArticleEntity=>ArticleEntity.classifications)
-    articles:ArticleEntity;
+    @OneToMany(type => ArticleEntity,ArticleEntity=>ArticleEntity.classifications)
+    articles:ArticleEntity[];
 }
