@@ -37,17 +37,26 @@ let PageService = class PageService {
     }
     getAllPage(limit, page) {
         return __awaiter(this, void 0, void 0, function* () {
-            let pages = yield this.repository.createQueryBuilder().orderBy('"updateAt"', 'DESC').skip(limit * (page - 1)).take(limit).getMany();
-            let title = yield this.repository.createQueryBuilder().getCount();
-            return { pages: pages, totalItems: title };
+            const result = yield this.repository.createQueryBuilder()
+                .orderBy('"updateAt"', 'DESC')
+                .skip(limit * (page - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let pages = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { pages: pages, totalItems: Number(num) };
         });
     }
     serachKeywords(keywords, limit, page) {
         return __awaiter(this, void 0, void 0, function* () {
             let words = `%${keywords}%`;
-            let pages = yield this.repository.createQueryBuilder().where('"title"like :title', { title: words }).orderBy('"updateAt"', 'DESC').skip(limit * (page - 1)).take(limit).getMany();
-            let title = yield this.repository.createQueryBuilder().where('"title"like :title', { title: words }).getCount();
-            return { pages: pages, totalItems: title };
+            const result = yield this.repository.createQueryBuilder()
+                .where('"title"like :title', { title: words })
+                .orderBy('"updateAt"', 'DESC')
+                .skip(limit * (page - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let pages = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { pages: pages, totalItems: Number(num) };
         });
     }
     deletePages(array, limit, page) {
@@ -56,7 +65,9 @@ let PageService = class PageService {
                 let page = yield this.repository.findOneById(array[t]);
                 if (page == null)
                     throw new error_interface_1.MessageCodeError('delete:page:deleteById');
-                yield this.contentRepository.createQueryBuilder().delete().from(page_content_entity_1.PageContentEntity).where('"parentId"= :parentId', { parentId: page.id }).execute();
+                yield this.contentRepository.createQueryBuilder()
+                    .delete().from(page_content_entity_1.PageContentEntity)
+                    .where('"parentId"= :parentId', { parentId: page.id }).execute();
                 this.repository.deleteById(page.id);
             }
         });
@@ -89,7 +100,8 @@ let PageService = class PageService {
             let result;
             let update = true;
             if (alias) {
-                let aliasEntity = yield this.repository.createQueryBuilder().where('"alias"= :alias', { alias: alias }).getMany();
+                let aliasEntity = yield this.repository.createQueryBuilder()
+                    .where('"alias"= :alias', { alias: alias }).getMany();
                 if (aliasEntity.length > 0)
                     result = "别名不能重复";
                 update = false;
@@ -152,9 +164,6 @@ let PageService = class PageService {
     }
     findPageById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let entity = yield this.repository.findOneById(id);
-            if (entity == null)
-                throw new error_interface_1.MessageCodeError('delete:page:deleteById');
             let result = yield this.repository.findOneById(id, { relations: ['contents'] });
             return result;
         });
@@ -167,15 +176,22 @@ let PageService = class PageService {
             let array = yield this.getClassifyId(id).then(a => { return a; });
             array.push(id);
             let newArray = Array.from(new Set(array));
-            let entity = yield this.repository.createQueryBuilder().where('"classifyId" in (:id)', { id: newArray }).orderBy('"updateAt"', 'DESC').skip(limit * (page - 1)).take(limit).getMany();
-            let title = yield this.repository.createQueryBuilder().where('"classifyId" in (:id)', { id: newArray }).getCount();
-            return { pages: entity, totalItems: title };
+            const result = yield this.repository.createQueryBuilder()
+                .where('"classifyId" in (:id)', { id: newArray })
+                .orderBy('"updateAt"', 'DESC').skip(limit * (page - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let pages = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { pages: pages, totalItems: Number(num) };
         });
     }
     getClassifyId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             yield typeorm_1.getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
-            const result = yield this.pageRepository.createQueryBuilder('page_classify_table').where('page_classify_table.id= :id', { id: id }).innerJoinAndSelect('page_classify_table.children', 'children').orderBy('page_classify_table.id').getMany();
+            const result = yield this.pageRepository.createQueryBuilder('page_classify_table')
+                .where('page_classify_table.id= :id', { id: id })
+                .innerJoinAndSelect('page_classify_table.children', 'children')
+                .orderBy('page_classify_table.id').getMany();
             let firstArray = result;
             let array = [];
             for (let t in firstArray) {

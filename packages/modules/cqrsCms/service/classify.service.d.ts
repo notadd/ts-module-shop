@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
 import { ClassifyEntity } from "../../entity/classify.entity";
-import { Article, ArticleEntity } from "../../entity/article.entity";
+import { ArticleEntity } from "../../entity/article.entity";
 import { PageClassifyEntity } from "../../entity/pageClassify.entity";
-import { Page, PageEntity } from "../../entity/page.entity";
+import { PageEntity } from "../../entity/page.entity";
 export declare class ClassifyService {
     private readonly repository;
     private readonly artRepository;
@@ -48,8 +48,7 @@ export declare class ClassifyService {
         classifyEntity: any;
         MessageCodeError: any;
     }>;
-    TimestampArt(art: ArticleEntity[]): Promise<Article[]>;
-    TimestampPage(art: PageEntity[]): Promise<Page[]>;
+    TimestampArt(art: ArticleEntity[]): Promise<ArticleEntity[]>;
     classifyCheck(useFor: string, id?: number, groupId?: number, alias?: string, deleteNum?: number): Promise<{
         MessageCodeError: any;
         Continue: boolean;
