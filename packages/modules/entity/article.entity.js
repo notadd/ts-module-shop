@@ -11,14 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const classify_entity_1 = require("./classify.entity");
-var EnvConfig;
-(function (EnvConfig) {
-    EnvConfig[EnvConfig["global"] = 0] = "global";
-    EnvConfig[EnvConfig["current"] = 1] = "current";
-    EnvConfig[EnvConfig["level1"] = 2] = "level1";
-    EnvConfig[EnvConfig["level2"] = 3] = "level2";
-    EnvConfig[EnvConfig["level3"] = 4] = "level3";
-})(EnvConfig || (EnvConfig = {}));
 let ArticleEntity = class ArticleEntity {
 };
 __decorate([
@@ -122,13 +114,14 @@ __decorate([
     __metadata("design:type", String)
 ], ArticleEntity.prototype, "pictureUrl", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => classify_entity_1.ClassifyEntity, ClassifyEntity => ClassifyEntity.articles),
-    __metadata("design:type", Array)
+    typeorm_1.Column({ default: false }),
+    __metadata("design:type", Boolean)
+], ArticleEntity.prototype, "check", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => classify_entity_1.ClassifyEntity, ClassifyEntity => ClassifyEntity.articles, { cascadeUpdate: true }),
+    __metadata("design:type", classify_entity_1.ClassifyEntity)
 ], ArticleEntity.prototype, "classifications", void 0);
 ArticleEntity = __decorate([
     typeorm_1.Entity('article_entity_table')
 ], ArticleEntity);
 exports.ArticleEntity = ArticleEntity;
-class Article {
-}
-exports.Article = Article;

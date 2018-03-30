@@ -25,31 +25,6 @@ export declare class ArticleEntity {
     pictureName: string;
     type: string;
     pictureUrl: string;
-    classifications: ClassifyEntity[];
-}
-export declare class Article {
-    id: number;
-    name: string;
-    classify: string;
-    classifyId: number;
-    url: string;
-    source: string;
-    sourceUrl: string;
-    topPlace: string;
-    hidden: boolean;
-    recycling: boolean;
-    publishedTime: string;
-    endTime: string;
-    startTime: string;
-    activityAddress: string;
-    organizer: string;
-    peopleNum: number;
-    abstract: string;
-    content: string;
-    display: string;
-    createAt: string;
-    updateAt: string;
-    pictureUrl: string;
-    classifications: ClassifyEntity[];
     check: boolean;
+    classifications: ClassifyEntity;
 }
