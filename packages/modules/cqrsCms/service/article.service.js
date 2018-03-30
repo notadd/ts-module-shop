@@ -26,11 +26,12 @@ const article_entity_1 = require("../../entity/article.entity");
 const error_interface_1 = require("../errorMessage/error.interface");
 const typeorm_2 = require("@nestjs/typeorm");
 const classify_service_1 = require("./classify.service");
+const classify_entity_1 = require("../../entity/classify.entity");
 const error_interface_2 = require("../common/error.interface");
-const clc = require('cli-color');
 let ArticleService = class ArticleService {
-    constructor(respository, classifyService, storeService) {
+    constructor(respository, claRespository, classifyService, storeService) {
         this.respository = respository;
+        this.claRespository = claRespository;
         this.classifyService = classifyService;
         this.storeService = storeService;
     }
@@ -38,27 +39,36 @@ let ArticleService = class ArticleService {
         return __awaiter(this, void 0, void 0, function* () {
             let title = 0;
             let resultAll = [];
+            let newresult = [];
+            let str;
+            let num;
             if (hidden == true) {
                 let newArray = [];
-                let newresult = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true', { recycling: false }).orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getMany();
+                const result = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true', { recycling: true }).orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getManyAndCount();
+                str = JSON.stringify(result);
+                newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
                 for (let t in newresult) {
                     if (newresult[t].hidden) {
                         newArray.push(newresult[t]);
                     }
                 }
-                title = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=true', { recycling: false }).getCount();
-                resultAll.push(...newArray);
+                num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+                newresult = newArray;
             }
             if (hidden == false) {
-                let newresult = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false', { recycling: false }).orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getMany();
-                title = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling and hidden=false', { recycling: false }).getCount();
-                resultAll.push(...newresult);
+                const result = yield this.respository.createQueryBuilder().where('"recycling"<> :recycling  and hidden=false', { recycling: true }).orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getManyAndCount();
+                str = JSON.stringify(result);
+                num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+                newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
             }
             if (hidden == undefined) {
-                let newresult = yield this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getMany();
-                title = yield this.respository.createQueryBuilder().where('recycling=false or recycling is null').getCount();
-                resultAll.push(...newresult);
+                const result = yield this.respository.createQueryBuilder().where('recycling=false or recycling is null').orderBy('"publishedTime"', 'DESC').skip(limit * (pages - 1)).take(limit).getManyAndCount();
+                str = JSON.stringify(result);
+                num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+                newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
             }
+            title = Number(num);
+            resultAll.push(...newresult);
             return { articles: resultAll, totalItems: title };
         });
     }
@@ -67,17 +77,17 @@ let ArticleService = class ArticleService {
             let strArt = `%${name}%`;
             let array = yield this.classifyService.getClassifyIdForArt();
             if (array.length != 0) {
-                let articles = yield this.respository.createQueryBuilder()
+                const result = yield this.respository.createQueryBuilder()
                     .where('"classifyId" in (:id)', { id: array })
                     .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ', { name: strArt })
                     .orderBy('"publishedTime"', 'DESC')
                     .skip(limit * (pages - 1))
                     .take(limit)
-                    .getMany();
-                let num = yield this.respository.createQueryBuilder().where('"classifyId" in (:id)', { id: array })
-                    .andWhere('"name"like :name and "recycling" =\'false\' or recycling isnull ', { name: strArt })
-                    .getCount();
-                return { articles: articles, totalItems: num };
+                    .getManyAndCount();
+                let str = JSON.stringify(result);
+                let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+                let newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+                return { articles: newresult, totalItems: Number(num) };
             }
             else {
                 let articles = [];
@@ -142,9 +152,14 @@ let ArticleService = class ArticleService {
     }
     recycleFind(limit, pages) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = yield this.respository.createQueryBuilder().where('"recycling"= :recycling', { recycling: true }).orderBy('"publishedTime"', 'ASC').skip(limit * (pages - 1)).take(limit).getMany();
-            let title = yield this.respository.createQueryBuilder().where('"recycling"= :recycling', { recycling: true }).getCount();
-            return { articles: result, totalItems: title };
+            const result = yield this.respository.createQueryBuilder()
+                .where('"recycling"= :recycling', { recycling: true })
+                .orderBy('"publishedTime"', 'ASC')
+                .skip(limit * (pages - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { articles: newresult, totalItems: Number(num) };
         });
     }
     recycleDelete(array) {
@@ -180,9 +195,14 @@ let ArticleService = class ArticleService {
     }
     findTopPlace(limit, pages) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = yield this.respository.createQueryBuilder().where('"topPlace"= :topPlace', { topPlace: 'global' }).orderBy('"updateAt"', 'DESC').skip(limit * (pages - 1)).take(limit).getMany();
-            let title = yield this.respository.createQueryBuilder().where('"topPlace"= :topPlace', { topPlace: 'global' }).getCount();
-            return { articles: result, totalItems: title };
+            const result = yield this.respository.createQueryBuilder()
+                .where('"topPlace"= :topPlace', { topPlace: 'global' })
+                .orderBy('"updateAt"', 'DESC')
+                .skip(limit * (pages - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { articles: newresult, totalItems: Number(num) };
         });
     }
     reductionClassity(id, limit, pages) {
@@ -193,20 +213,14 @@ let ArticleService = class ArticleService {
             let array = yield this.classifyService.getClassifyId(id).then(a => { return a; });
             array.push(id);
             let newArray = Array.from(new Set(array));
-            let result = yield this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true', { classifyId: newArray }).orderBy('id', 'ASC').skip(limit * (pages - 1)).take(limit).getMany();
-            let title = yield this.respository.createQueryBuilder().where('"classifyId" in (:classifyId)  and recycling=true', { classifyId: newArray }).getCount();
-            return { articles: result, totalItems: title };
-        });
-    }
-    getArticleById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let Array = [];
-            let article = yield this.respository.findOneById(id);
-            if (article == null)
-                throw new error_interface_1.MessageCodeError('delete:recycling:idMissing');
-            let newArticle = article;
-            Array.push(newArticle);
-            return Array;
+            const result = yield this.respository.createQueryBuilder()
+                .where('"classifyId" in (:classifyId)  and recycling=true', { classifyId: newArray })
+                .orderBy('id', 'ASC')
+                .skip(limit * (pages - 1)).take(limit).getManyAndCount();
+            let str = JSON.stringify(result);
+            let num = str.substring(str.lastIndexOf(',') + 1, str.lastIndexOf(']'));
+            let newresult = Array.from(JSON.parse(str.substring(str.indexOf('[') + 1, str.lastIndexOf(','))));
+            return { articles: newresult, totalItems: Number(num) };
         });
     }
     getLevelByClassifyId(id) {
@@ -288,12 +302,24 @@ let ArticleService = class ArticleService {
         }
         return strMap;
     }
+    getArticleById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let Array = [];
+            let article = yield this.respository.findOneById(id);
+            if (article == null)
+                throw new error_interface_1.MessageCodeError('delete:recycling:idMissing');
+            Array.push(article);
+            return { articles: Array };
+        });
+    }
 };
 ArticleService = __decorate([
     common_1.Component(),
     __param(0, typeorm_2.InjectRepository(article_entity_1.ArticleEntity)),
-    __param(2, common_1.Inject('StoreComponentToken')),
+    __param(1, typeorm_2.InjectRepository(classify_entity_1.ClassifyEntity)),
+    __param(3, common_1.Inject('StoreComponentToken')),
     __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
         classify_service_1.ClassifyService, Object])
 ], ArticleService);
 exports.ArticleService = ArticleService;

@@ -1,18 +1,20 @@
 import { Repository } from "typeorm";
 import { ArticleEntity } from "../../entity/article.entity";
 import { ClassifyService } from "./classify.service";
+import { ClassifyEntity } from "../../entity/classify.entity";
 export declare class ArticleService {
     private readonly respository;
+    private readonly claRespository;
     private readonly classifyService;
     private storeService;
-    constructor(respository: Repository<ArticleEntity>, classifyService: ClassifyService, storeService: any);
+    constructor(respository: Repository<ArticleEntity>, claRespository: Repository<ClassifyEntity>, classifyService: ClassifyService, storeService: any);
     getArticleAll(limit?: number, hidden?: boolean, pages?: number): Promise<{
         articles: ArticleEntity[];
         totalItems: number;
     }>;
     searchArticles(name: string, limit?: number, pages?: number): Promise<{
         articles: ArticleEntity[];
-        totalItems: Number;
+        totalItems: number;
     }>;
     deleteArticles(array: number[]): Promise<number>;
     createArticle(article: ArticleEntity): Promise<void>;
@@ -31,7 +33,6 @@ export declare class ArticleService {
         articles: ArticleEntity[];
         totalItems: number;
     }>;
-    getArticleById(id: number): Promise<ArticleEntity[]>;
     getLevelByClassifyId(id: number): Promise<string>;
     CurdArticleCheck(classifyId?: number, id?: number): Promise<{
         MessageCodeError: string;
@@ -51,4 +52,7 @@ export declare class ArticleService {
         type?: undefined;
     }>;
     objToStrMap(obj: any): Map<string, string>;
+    getArticleById(id: number): Promise<{
+        articles: ArticleEntity[];
+    }>;
 }
