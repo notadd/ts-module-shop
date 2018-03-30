@@ -1,11 +1,11 @@
-import {Component, Inject} from "@nestjs/common";
-import {getManager, Repository} from "typeorm";
-import {PageEntity} from "../../entity/page.entity";
-import {MessageCodeError} from "../errorMessage/error.interface";
-import {PageClassifyEntity} from "../../entity/pageClassify.entity";
-import {ClassifyService} from "./classify.service";
-import {PageContentEntity} from "../../entity/page.content.entity";
-import {InjectRepository} from "@nestjs/typeorm";
+import { Component } from "@nestjs/common";
+import { getManager, Repository } from "typeorm";
+import { PageEntity } from "../../entity/page.entity";
+import { MessageCodeError } from "../errorMessage/error.interface";
+import { PageClassifyEntity } from "../../entity/pageClassify.entity";
+import { ClassifyService } from "./classify.service";
+import { PageContentEntity } from "../../entity/page.content.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Component()
 export class PageService{
@@ -19,9 +19,13 @@ export class PageService{
      * @returns {Promise<PageEntity[]>}
      */
     async getAllPage(limit?:number,page?:number){
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
-        let title:number=await this.repository.createQueryBuilder().getCount();
-        return {pages:pages,totalItems:title};
+        const result=await this.repository.createQueryBuilder()
+            .orderBy('"updateAt"','DESC')
+            .skip(limit*(page-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let pages:PageEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {pages:pages,totalItems:Number(num)};
     }
 
     /**
@@ -31,9 +35,14 @@ export class PageService{
      */
     async serachKeywords(keywords:string,limit?:number,page?:number){
         let words=`%${keywords}%`;
-        let pages:PageEntity[]=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
-        let title:number=await this.repository.createQueryBuilder().where('"title"like :title',{title:words}).getCount();
-        return {pages:pages,totalItems:title};
+        const result=await this.repository.createQueryBuilder()
+            .where('"title"like :title',{title:words})
+            .orderBy('"updateAt"','DESC')
+            .skip(limit*(page-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let pages:PageEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {pages:pages,totalItems:Number(num)};
     }
     /**
      * 批量或者单个删除页面
@@ -44,7 +53,9 @@ export class PageService{
         for(let t in array){
             let page:PageEntity = await this.repository.findOneById(array[t]);
             if(page==null) throw new MessageCodeError('delete:page:deleteById');
-            await this.contentRepository.createQueryBuilder().delete().from(PageContentEntity).where('"parentId"= :parentId',{parentId:page.id}).execute();
+            await this.contentRepository.createQueryBuilder()
+                .delete().from(PageContentEntity)
+                .where('"parentId"= :parentId',{parentId:page.id}).execute();
             this.repository.deleteById(page.id);
         }
     }
@@ -81,7 +92,8 @@ export class PageService{
         let result:string;
         let update:boolean=true;
         if(alias){
-            let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder().where('"alias"= :alias',{alias:alias}).getMany();
+            let aliasEntity:PageEntity[]=await this.repository.createQueryBuilder()
+                .where('"alias"= :alias',{alias:alias}).getMany();
             if(aliasEntity.length>0) result="别名不能重复";update=false;
         }
         if(classifyId){
@@ -138,8 +150,6 @@ export class PageService{
      * @returns {Promise<PageEntity>}
      */
     async findPageById(id:number):Promise<PageEntity>{
-        let entity:PageEntity=await this.repository.findOneById(id);
-        if(entity==null) throw new MessageCodeError('delete:page:deleteById');
         let result:PageEntity=await this.repository.findOneById(id,{relations:['contents']});
         return result;
     }
@@ -156,9 +166,13 @@ export class PageService{
         let array:number[]=await this.getClassifyId(id).then(a=>{return a});
         array.push(id);
         let newArray:number[]=Array.from(new Set(array));
-        let entity:PageEntity[]=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getMany();
-        let title:number=await this.repository.createQueryBuilder().where('"classifyId" in (:id)',{id:newArray}).getCount();
-        return {pages:entity,totalItems:title};
+        const result=await this.repository.createQueryBuilder()
+            .where('"classifyId" in (:id)',{id:newArray})
+            .orderBy('"updateAt"','DESC').skip(limit*(page-1)).take(limit).getManyAndCount();
+        let str:string=JSON.stringify(result);
+        let num:string=str.substring(str.lastIndexOf(',')+1,str.lastIndexOf(']'));
+        let pages:PageEntity[]=Array.from(JSON.parse(str.substring(str.indexOf('[')+1,str.lastIndexOf(','))));
+        return {pages:pages,totalItems:Number(num)};
     }
 
     /**
@@ -168,7 +182,10 @@ export class PageService{
      */
     async  getClassifyId(id:number):Promise<number[]>{
         await getManager().query("update public.page_classify_table set \"parentId\" = \"groupId\"");
-        const result =await this.pageRepository.createQueryBuilder('page_classify_table').where('page_classify_table.id= :id',{id:id}).innerJoinAndSelect('page_classify_table.children','children').orderBy('page_classify_table.id').getMany();
+        const result =await this.pageRepository.createQueryBuilder('page_classify_table')
+            .where('page_classify_table.id= :id',{id:id})
+            .innerJoinAndSelect('page_classify_table.children','children')
+            .orderBy('page_classify_table.id').getMany();
         let firstArray:PageClassifyEntity[]=result;
         let array:number[]=[];
         for(let t in firstArray){
