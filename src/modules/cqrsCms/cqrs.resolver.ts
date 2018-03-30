@@ -1,26 +1,24 @@
-import {Mutation, Query, Resolver} from "@nestjs/graphql";
-import {Article, ArticleEntity} from "../entity/article.entity";
-import {ClassifyService} from "./service/classify.service";
-import {Page, PageEntity} from "../entity/page.entity";
-import {PageContentEntity} from "../entity/page.content.entity";
-import {MessageCodeError} from "./errorMessage/error.interface";
-import {CreateXmlVm} from "./models/view/create-xml-vm";
-import {CqrsService} from "./cqrs.service";
-import {CreatePageVm} from "./models/view/create-page.vm";
-import {GetPageVm} from "./models/view/get-page.vm";
-import {ClassifyCurdVm} from "./models/view/classify-curd.vm";
-import {ArticleCurdVm} from "./models/view/article-curd.vm";
-import {ContentMap} from "./common/param.dto";
-import {PagerService} from "../export/common.paging";
+import { Mutation, Query, Resolver } from "@nestjs/graphql";
+import { ArticleEntity } from "../entity/article.entity";
+import { ClassifyService } from "./service/classify.service";
+import { PageEntity } from "../entity/page.entity";
+import { PageContentEntity } from "../entity/page.content.entity";
+import { MessageCodeError } from "./errorMessage/error.interface";
+import { CreateXmlVm } from "./models/view/create-xml-vm";
+import { CqrsService } from "./cqrs.service";
+import { CreatePageVm } from "./models/view/create-page.vm";
+import { GetPageVm } from "./models/view/get-page.vm";
+import { ClassifyCurdVm } from "./models/view/classify-curd.vm";
+import { ArticleCurdVm } from "./models/view/article-curd.vm";
+import { ContentMap } from "./common/param.dto";
+import { PagerService } from "../export/common.paging";
 
-const clc=require('cli-color');
 @Resolver()
 export class CqrsResolver{
     constructor(
                 private readonly classifyService:ClassifyService,
                 private readonly sitemapService:CqrsService,
-                private readonly pagerService:PagerService
-    ){}
+                private readonly pagerService:PagerService){}
 
     /**
      * 创建地图xml文件
@@ -68,8 +66,7 @@ export class CqrsResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let resultPage;
-        let result:Article[];
+        let result:ArticleEntity[];
         let getArticle=map.get('getArticleAll');
         let articleVM:ArticleCurdVm=new ArticleCurdVm();
         if(getArticle!=null || getArticle!=undefined){
@@ -148,7 +145,7 @@ export class CqrsResolver{
         map = this.objToStrMap(bToJSon);
         let articleVM:ArticleCurdVm=new ArticleCurdVm();
         let showNext=map.get('showNext');
-        let result:Article[];
+        let result:ArticleEntity[];
         if(showNext!=null || showNext !=undefined){
             let amap=new Map();
             amap=this.objToStrMap(showNext);
@@ -182,8 +179,8 @@ export class CqrsResolver{
             return result;*!/
         }*/
         articleVM.getAllArticles=true;
-        let entity:ArticleEntity[]=await this.sitemapService.articleCurd(articleVM);
-        result=await this.classifyService.TimestampArt(entity);
+        let entity=await this.sitemapService.articleCurd(articleVM);
+        result=await this.classifyService.TimestampArt(entity.articles);
         return result;
 
     }
@@ -251,8 +248,6 @@ export class CqrsResolver{
         let bToJSon=JSON.parse(str);
         let map =new Map();
         map=this.objToStrMap(bToJSon);
-        let PageReturn:Page[];
-        let pagination;
         let getAllPage=map.get('getAllPage');
         let pageParam:GetPageVm=new GetPageVm();
         if(getAllPage!=null || getAllPage !=undefined){
@@ -279,9 +274,8 @@ export class CqrsResolver{
             pageParam.pages=amap.get('pages');
         }
         let resultPage=await this.sitemapService.getPages(pageParam).then(a=>{return a});
-        PageReturn=await this.classifyService.TimestampPage(resultPage.pages);
         const paging= this.pagerService.getPager(resultPage.totalItems,pageParam.pages,pageParam.limit);
-        return{pagination:paging,pages:PageReturn};
+        return{pagination:paging,pages:resultPage.pages};
     }
 
     /**
