@@ -16,5 +16,5 @@ export declare class ClassifyEntity {
     parent: ClassifyEntity;
     createAt: Date;
     updateAt: Date;
-    articles: ArticleEntity;
+    articles: ArticleEntity[];
 }

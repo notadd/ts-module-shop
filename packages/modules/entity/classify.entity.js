@@ -78,8 +78,8 @@ __decorate([
     __metadata("design:type", Date)
 ], ClassifyEntity.prototype, "updateAt", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => article_entity_1.ArticleEntity, ArticleEntity => ArticleEntity.classifications),
-    __metadata("design:type", article_entity_1.ArticleEntity)
+    typeorm_1.OneToMany(type => article_entity_1.ArticleEntity, ArticleEntity => ArticleEntity.classifications),
+    __metadata("design:type", Array)
 ], ClassifyEntity.prototype, "articles", void 0);
 ClassifyEntity = ClassifyEntity_1 = __decorate([
     typeorm_1.Entity('article_classify_table')
