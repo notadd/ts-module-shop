@@ -85,7 +85,7 @@ let ArticleCurdHandler = class ArticleCurdHandler {
                 result = yield this.classifyService.showCurrentArticles(command.article.getArticles.getCurrentClassifyArticles);
             }
             if (command.article.getArticles && command.article.getArticles.keywordSearch) {
-                result = yield this.articleService.searchArticles(command.article.getArticles.keywordSearch, command.article.limitNum, command.article.pages);
+                result = yield this.articleService.searchArticles(command.article.getArticles.keywordSearch.keywords, command.article.limitNum, command.article.pages);
             }
             resolver(result);
             page.commit();
