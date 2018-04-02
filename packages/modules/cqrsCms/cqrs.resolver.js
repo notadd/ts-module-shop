@@ -116,7 +116,7 @@ let CqrsResolver = class CqrsResolver {
                 let amap = new Map();
                 amap = this.objToStrMap(keywordSearch);
                 let keyWords = amap.get('keyWords');
-                articleVM.getArticles = { keywordSearch: keyWords };
+                articleVM.getArticles = { keywordSearch: { keywords: keyWords } };
                 articleVM.limitNum = amap.get('limitNum');
                 articleVM.pages = amap.get('pages');
             }
