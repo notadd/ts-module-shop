@@ -88,7 +88,7 @@ export class ArticleCurdHandler implements ICommandHandler<ArticleParamCommand>{
         //关键字搜索活动和资讯
         if(command.article.getArticles && command.article.getArticles.keywordSearch){
             result=await this.articleService.searchArticles(
-                command.article.getArticles.keywordSearch,
+                command.article.getArticles.keywordSearch.keywords,
                 command.article.limitNum,
                 command.article.pages);
         }
