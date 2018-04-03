@@ -1,0 +1,19 @@
+{
+  "name": "shop2.0",
+  "version": "1.0.0",
+  "description": "商城模块",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:ibenchu/shop2.0.git"
+  },
+  "keywords": [
+    "商城",
+    "notadd"
+  ],
+  "author": "czy",
+  "license": "ISC"
+}
