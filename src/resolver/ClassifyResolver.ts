@@ -27,16 +27,16 @@ export class ClassifyResolver {
     }
 
     @Query('classify')
-    async classify(req:Request,body:{id:number,level:1|2|3}):Promise<Data&{classify:Classify}>{
-        let {id,level} = body
-        if(!id||!level){
-            throw new HttpException('缺少参数',400)
+    async classify(req: Request, body: { id: number, level: 1 | 2 | 3 }): Promise<Data & { classify: Classify }> {
+        let { id, level } = body
+        if (!id || !level) {
+            throw new HttpException('缺少参数', 400)
         }
         if (level !== 1 && level !== 2 && level !== 3) {
             throw new HttpException('参数错误', 400)
         }
-        let classify:Classify = await this.classifyService.getClassify(id,level)
-        return {code:200,message:'获取指定分类成功',classify}
+        let classify: Classify = await this.classifyService.getClassify(id, level)
+        return { code: 200, message: '获取指定分类成功', classify }
     }
 
     @Mutation('createClassify')
@@ -56,15 +56,28 @@ export class ClassifyResolver {
     }
 
     @Mutation('updateClassify')
-    async updateClassify(req: Request, body: { id:number,name: string, description: string, level: 1 | 2 | 3}): Promise<Data> {
-        let { id , name, description, level} = body
-        if (!id||!name || !description || !level) {
+    async updateClassify(req: Request, body: { id: number, name: string, description: string, level: 1 | 2 | 3 }): Promise<Data> {
+        let { id, name, description, level } = body
+        if (!id || !name || !description || !level) {
             throw new HttpException('缺少参数', 400)
         }
         if (level !== 1 && level !== 2 && level !== 3) {
             throw new HttpException('参数错误', 400)
         }
-        await this.classifyService.updateClassify(id,name, description, level)
+        await this.classifyService.updateClassify(id, name, description, level)
         return { code: 200, message: '更新分类成功' }
+    }
+
+    @Mutation('deleteClassify')
+    async deleteClassify(req: Request, body: { id: number, level: 1 | 2 | 3 }): Promise<Data> {
+        let { id, level } = body
+        if (!id || !level) {
+            throw new HttpException('缺少参数', 400)
+        }
+        if (level !== 1 && level !== 2 && level !== 3) {
+            throw new HttpException('参数错误', 400)
+        }
+        await this.classifyService.deleteClassify(id, level)
+        return { code: 200, message: '删除分类成功' }
     }
 }
