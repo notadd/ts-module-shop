@@ -1,9 +1,11 @@
+import { ExceptionInterceptor } from '../interceptor/ExceptionInterceptor';
 import { Inject, HttpException, UseInterceptors } from '@nestjs/common';
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Data } from '../interface/Data';
 import { Request } from 'express';
 
 @Resolver('Classify')
+@UseInterceptors(ExceptionInterceptor)
 export class ClassifyResolver {
 
     constructor(
