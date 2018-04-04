@@ -16,6 +16,7 @@ export class ClassifyResolver {
         @Inject(ClassifyService) private readonly classifyService: ClassifyService
     ) { }
 
+    /* 获取多个指定级别分类，如果未指定上级分类，则获取这个级别所有分类 */
     @Query('classifies')
     async classifies(req: Request, body: { parentId: number, level: 1 | 2 | 3 }): Promise<Data & { classifes: Classify[] }> {
         let { parentId, level } = body

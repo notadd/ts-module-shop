@@ -5,6 +5,8 @@ type Query{
 
 type Mutation{
     createClassify(name:String!,description:String!,level:Int!,parentId:Int):ShopCommonData
+    updateClassify(id:Int!,name:String!,description:String!,level:Int!):ShopCommonData
+    deleteClassify(id:Int!,level:Int!):ShopCommonData
 }
 
 type ClassiesData{

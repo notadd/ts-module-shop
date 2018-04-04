@@ -131,4 +131,38 @@ export class ClassifyService {
             }
         }
     }
+
+    async deleteClassify(id: number, level: number): Promise<void> {
+        if (level === 1) {
+            let classify: FirstClassify = await this.firstClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '一级分类不存在', 404)
+            }
+            try {
+                await this.firstClassifyRepository.remove(classify)
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else if (level === 2) {
+            let classify: SecondClassify = await this.secondClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '二级分类不存在', 404)
+            }
+            try {
+                await this.secondClassifyRepository.remove(classify)
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else {
+            let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '三级分类不存在', 404)
+            }
+            try {
+                await this.thirdClassifyRepository.remove(classify)
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        }
+    }
 }
