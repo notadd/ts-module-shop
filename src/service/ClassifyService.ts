@@ -15,7 +15,6 @@ export class ClassifyService {
         @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>
     ) { }
 
-
     async getClassifes(parentId: number, level: number): Promise<Classify[]> {
         if (level === 1) {
             return await this.firstClassifyRepository.find()

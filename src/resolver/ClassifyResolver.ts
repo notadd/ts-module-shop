@@ -26,6 +26,19 @@ export class ClassifyResolver {
         return { code: 200, message: '获取指定分类成功', classifes }
     }
 
+    @Query('classify')
+    async classify(req:Request,body:{id:number,level:1|2|3}):Promise<Data&{classify:Classify}>{
+        let {id,level} = body
+        if(!id||!level){
+            throw new HttpException('缺少参数',400)
+        }
+        if (level !== 1 && level !== 2 && level !== 3) {
+            throw new HttpException('参数错误', 400)
+        }
+        let classify:Classify = await this.classifyService.getClassify(id,level)
+        return {code:200,message:'获取指定分类成功',classify}
+    }
+
     @Mutation('createClassify')
     async createClassify(req: Request, body: { name: string, description: string, level: 1 | 2 | 3, parentId: number }): Promise<Data> {
         let { name, description, level, parentId } = body
