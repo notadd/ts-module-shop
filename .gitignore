@@ -1,5 +1,10 @@
 .idea/
 node_modules/
+packages/modules/public/
+packages/modules/ext-local-store/src/store/
+src/modules/ext-local-store/src/store/
+src/modules/public/
+
 *.sqlite
 graphql.config.json
 graphql.schema.json
@@ -10,7 +15,3 @@ ormconfig.yml
 yarn.lock
 yarn-error.log
 package-lock.json
-src/modules/public/
-packages/modules/public/
-packages/modules/ext-local-store/src/store/
-src/modules/ext-local-store/src/store/
