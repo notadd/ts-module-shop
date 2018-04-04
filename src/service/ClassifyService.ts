@@ -40,12 +40,12 @@ export class ClassifyService {
         }
     }
 
-    async getClassify(id:number,level:number):Promise<Classify>{
-        if(level===1){
+    async getClassify(id: number, level: number): Promise<Classify> {
+        if (level === 1) {
             return await this.firstClassifyRepository.findOneById(id)
-        }else if(level===2){
+        } else if (level === 2) {
             return await this.secondClassifyRepository.findOneById(2)
-        }else{
+        } else {
             return await this.thirdClassifyRepository.findOneById(id)
         }
     }
@@ -86,6 +86,46 @@ export class ClassifyService {
             }
             try {
                 await this.thirdClassifyRepository.save({ name, description, parent })
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        }
+    }
+
+    async updateClassify(id: number, name: string, description: string, level: number): Promise<void> {
+        if (level === 1) {
+            let classify: FirstClassify = await this.firstClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '一级分类不存在', 404)
+            }
+            classify.name = name
+            classify.description = description
+            try {
+                await this.firstClassifyRepository.save(classify)
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else if (level === 2) {
+            let classify: SecondClassify = await this.secondClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '二级分类不存在', 404)
+            }
+            classify.name = name
+            classify.description = description
+            try {
+                await this.secondClassifyRepository.save(classify)
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else {
+            let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(id)
+            if (!classify) {
+                throw new HttpException('指定id=' + id + '三级分类不存在', 404)
+            }
+            classify.name = name
+            classify.description = description
+            try {
+                await this.thirdClassifyRepository.save(classify)
             } catch (err) {
                 throw new HttpException('发生了数据库错误' + err.toString(), 403)
             }
