@@ -2,6 +2,7 @@ import { SecondClassify } from '../model/SecondClassify.entity';
 import { FirstClassify } from '../model/FirstClassify.entity';
 import { ThirdClassify } from '../model/ThirdClassify.entity';
 import { Component, HttpException } from '@nestjs/common';
+import { Classify } from '../interface/classify/Classify';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -13,6 +14,31 @@ export class ClassifyService {
         @InjectRepository(SecondClassify) private readonly secondClassifyRepository: Repository<SecondClassify>,
         @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>
     ) { }
+
+
+    async getClassifes(parentId: number, level: number): Promise<Classify[]> {
+        if (level === 1) {
+            return await this.firstClassifyRepository.find()
+        } else if (level === 2) {
+            let parent: FirstClassify
+            if (parentId) {
+                parent = await this.firstClassifyRepository.findOneById(parentId)
+                if (!parent) {
+                    throw new HttpException('指定id=' + parentId + '上级分类不存在', 404)
+                }
+            }
+            return await this.secondClassifyRepository.find({ parent })
+        } else {
+            let parent: SecondClassify
+            if (parentId) {
+                parent = await this.secondClassifyRepository.findOneById(parentId)
+                if (!parent) {
+                    throw new HttpException('指定id=' + parentId + '上级分类不存在', 404)
+                }
+            }
+            return await this.thirdClassifyRepository.find({ parent })
+        }
+    }
 
     async createClassify(name: string, description: string, level: number, parentId: number): Promise<void> {
         if (level === 1) {
