@@ -54,4 +54,17 @@ export class ClassifyResolver {
         await this.classifyService.createClassify(name, description, level, parentId)
         return { code: 200, message: '创建分类成功' }
     }
+
+    @Mutation('updateClassify')
+    async updateClassify(req: Request, body: { id:number,name: string, description: string, level: 1 | 2 | 3}): Promise<Data> {
+        let { id , name, description, level} = body
+        if (!id||!name || !description || !level) {
+            throw new HttpException('缺少参数', 400)
+        }
+        if (level !== 1 && level !== 2 && level !== 3) {
+            throw new HttpException('参数错误', 400)
+        }
+        await this.classifyService.updateClassify(id,name, description, level)
+        return { code: 200, message: '更新分类成功' }
+    }
 }
