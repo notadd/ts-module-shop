@@ -13,7 +13,7 @@ import { ShopModule } from '../src/ShopModule';
     port: 5433,
     username: 'postgres',
     password: '123456',
-    database: "shop",
+    database: "postgres",
     entities: ['../**/*.entity.ts'],
     logger: 'simple-console',
     logging: null,
