@@ -15,6 +15,36 @@ export class ClassifyService {
     ) { }
 
     async createClassify(name: string, description: string, level: number): Promise<void> {
-
+        if (level === 1) {
+            let exist: FirstClassify = await this.firstClassifyRepository.findOne({ name })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '一级分类已存在', 404)
+            }
+            try {
+                await this.firstClassifyRepository.save({ name, description })
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else if (level === 2) {
+            let exist: SecondClassify = await this.secondClassifyRepository.findOne({ name })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '二级分类已存在', 404)
+            }
+            try {
+                await this.secondClassifyRepository.save({ name, description })
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        } else {
+            let exist: ThirdClassify = await this.thirdClassifyRepository.findOne({ name })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '三级分类已存在', 404)
+            }
+            try {
+                await this.thirdClassifyRepository.save({ name, description })
+            } catch (err) {
+                throw new HttpException('发生了数据库错误' + err.toString(), 403)
+            }
+        }
     }
 }
