@@ -28,7 +28,7 @@ function bootstrap() {
         const app = yield core_1.NestFactory.create(application_module_1.ApplicationModule);
         app.use(cross);
         app.use(bodyParser.json({ limit: '100000kb' }));
-        yield app.listen(3000);
+        yield app.listen(3001);
     });
 }
-bootstrap().then(() => console.log('Application is listening on port 3000'));
+bootstrap().then(() => console.log('Application is listening on port 3001'));
