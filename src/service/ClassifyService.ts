@@ -5,6 +5,7 @@ import { Component, HttpException } from '@nestjs/common';
 import { Classify } from '../interface/classify/Classify';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EventListenerTypes } from 'typeorm/metadata/types/EventListenerTypes';
 
 @Component()
 export class ClassifyService {
@@ -36,6 +37,16 @@ export class ClassifyService {
                 }
             }
             return await this.thirdClassifyRepository.find({ parent })
+        }
+    }
+
+    async getClassify(id:number,level:number):Promise<Classify>{
+        if(level===1){
+            return await this.firstClassifyRepository.findOneById(id)
+        }else if(level===2){
+            return await this.secondClassifyRepository.findOneById(2)
+        }else{
+            return await this.thirdClassifyRepository.findOneById(id)
         }
     }
 
