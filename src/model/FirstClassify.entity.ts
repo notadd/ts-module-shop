@@ -1,4 +1,6 @@
 import { Entity,PrimaryGeneratedColumn,Column,CreateDateColumn,UpdateDateColumn,OneToMany } from 'typeorm';
+import { SecondClassify } from './SecondClassify.entity';
+
 
 @Entity('first_classify')
 export class FirstClassify{
@@ -21,6 +23,19 @@ export class FirstClassify{
     })
     description:string
 
+    @Column({
+        name:'level',
+        type:'integer',
+        default:1
+    })
+    level:number
 
+    @OneToMany(type=>SecondClassify,secondClassify=>secondClassify.parent,{
+        cascadeInsert:false,
+        cascadeUpdate:false,
+        lazy:false,
+        eager:false
+    })
+    children:SecondClassify[]
 
 }

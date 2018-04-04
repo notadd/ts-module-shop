@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany,ManyToOne } from 'typeorm';
+import { FirstClassify } from './FirstClassify.entity';
+import { ThirdClassify } from './ThirdClassify.entity';
 
 @Entity('second_classify')
 export class SecondClassify {
@@ -21,5 +23,33 @@ export class SecondClassify {
         length: 100
     })
     description: string
+
+    @Column({
+        name:'level',
+        type:'integer',
+        default:2
+    })
+    level:number
+
+    @ManyToOne(type=>FirstClassify,firstClassify=>firstClassify.children,{
+        cascadeInsert:false,
+        cascadeUpdate:false,
+        cascadeRemove:false,
+        onDelete:"RESTRICT",
+        nullable:false,
+        lazy:false,
+        eager:false
+    })
+    parent:FirstClassify
+
+    @OneToMany(type=>ThirdClassify,thirdClassify=>thirdClassify.parent,{
+        cascadeInsert:false,
+        cascadeUpdate:false,
+        lazy:false,
+        eager:false
+    })
+    children:ThirdClassify[]
+
+
 
 }
