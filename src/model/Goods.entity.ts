@@ -20,6 +20,15 @@ export class Goods {
     })
     name: string
 
+    /* 商品基本价格，最终价格由基本价格与属性价格相加决定 */
+    @Column({
+        name: 'base_price',
+        type: 'decimal',
+        precision: 10,
+        scale: 2
+    })
+    basePrice: number
+
     @Column({
         name: 'description',
         type: 'text'

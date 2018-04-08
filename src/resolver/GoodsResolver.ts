@@ -14,12 +14,12 @@ export class GoodsResolver {
     ) { }
 
     @Mutation('createGoods')
-    async createGoods(req: Request, body: { name: string, description: string, classifyId: number }): Promise<Data> {
-        let { name, description, classifyId } = body;
-        if (!name || !description || !classifyId) {
+    async createGoods(req: Request, body: { name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number }): Promise<Data> {
+        let { name, basePrice, description, classifyId, goodsTypeId } = body;
+        if (!name || !basePrice || !description || !classifyId || !goodsTypeId) {
             throw new HttpException('缺少参数', 400)
         }
-        await this.goodsService.createGoods(name, description, classifyId)
+        await this.goodsService.createGoods(name, basePrice, description, classifyId, goodsTypeId)
         return { code: 200, message: '创建商品成功' }
     }
 }
