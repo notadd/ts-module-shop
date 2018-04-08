@@ -25,11 +25,21 @@ export class GoodsResolver {
 
     @Mutation('updateGoods')
     async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number }): Promise<Data> {
-        let { id } = body
+        let { id, basePrice, description, classifyId, goodsTypeId } = body
         if (!id) {
             throw new HttpException('缺少参数', 400)
         }
         await this.goodsService.updateGoods(id, name, basePrice, description, classifyId, goodsTypeId)
         return { code: 200, message: '更新商品成功' }
+    }
+
+    @Mutation('deleteGoods')
+    async deleteGoods(req: Request, body: { id: number }): Promise<Data> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 400)
+        }
+        await this.goodsService.deleteGoods(id)
+        return { code: 200, message: '删除商品成功' }
     }
 }
