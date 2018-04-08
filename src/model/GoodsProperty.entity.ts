@@ -3,7 +3,7 @@ import { GoodsType } from './GoodsType.entity';
 
 
 @Entity('goods_property')
-@Index('name_type_id', ['name', 'typeId'])
+@Index('name_type_id', ['name', 'goodsTypeId'])
 export class GoodsProperty {
 
     @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
@@ -16,28 +16,41 @@ export class GoodsProperty {
     })
     name: string
 
+    /* 属性类型，即属性是属于商品还是单品，属性与单品的关系
+       unique：唯一属性，即属于商品的属性，对于所有单品来说是一样的
+       radio：单选属性，只可以选择一个属性值，属性值对应的价格会被加到总价中
+       check：复选属性，可以选择多个属性值，多个值对应的价格都会被加到总价中    
+    */
     @Column({
-        name: 'is_sku',
-        type: 'smallint'
+        name: 'type',
+        type: 'varchar',
+        length: 20
     })
-    isSku: boolean
+    type: string
 
+    /* 属性录入方式，即属性输入的方式
+       text：普通文本
+       list：列表中选择
+       textarea：多行文本框
+    */
     @Column({
-        name: 'is_enum',
-        type: 'smallint'
+        name: 'input_type',
+        type: 'varchar',
+        length: 20
     })
-    isEnum: boolean
+    inputType: string
 
+    /* 当属性录入方式为list时，所有列表值 */
     @Column({
-        name: 'enum',
+        name: 'list',
         type: 'simple-array'
     })
-    enum: string[]
+    list: string[]
 
     @Column({
-        name: 'typeId'
+        name: 'goodsTypeId'
     })
-    typeId: number
+    goodsTypeId: number
 
     @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
         cascadeInsert: false,
@@ -48,5 +61,5 @@ export class GoodsProperty {
         lazy: false,
         eager: false
     })
-    type: GoodsType
+    goodsType: GoodsType
 }
