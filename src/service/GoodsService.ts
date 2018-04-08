@@ -34,5 +34,40 @@ export class GoodsService {
         }
     }
 
+    async updateGoods(id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number): Promise<void> {
+        let goods: Goods = await this.goodsRepository.findOneById(id, { relations: ['classify', 'type'] })
+        if (!goods) {
+            throw new HttpException('指定id=' + id + '商品不存在', 404)
+        }
+        if (name && (name !== goods.name)) {
+            let exist: Goods = await this.goodsRepository.findOne({ name })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '商品已存在', 404)
+            }
+            goods.name = name
+        }
+        basePrice && (goods.basePrice = basePrice)
+        description && (goods.description = description)
+        if (classifyId && (classifyId !== goods.classify.id)) {
+            let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(classifyId)
+            if (!classify) {
+                throw new HttpException('指定id=' + classifyId + '分类不存在', 404)
+            }
+            goods.classify = classify
+        }
+        if (goodsTypeId && (goodsTypeId !== goods.type.id)) {
+            let type: GoodsType = await this.goodsTypeRepository.findOneById(goodsTypeId)
+            if (!type) {
+                throw new HttpException('指定id' + goodsTypeId + '商品类型不存在', 404)
+            }
+            goods.type = type
+        }
+        try {
+            await this.goodsRepository.save(goods)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
+
 
 }
