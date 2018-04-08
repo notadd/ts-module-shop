@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { FirstClassify } from './FirstClassify.entity';
 import { ThirdClassify } from './ThirdClassify.entity';
 
+
+/* 二级分类实体，其level默认为2 */
 @Entity('second_classify')
 export class SecondClassify {
 

@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { GoodsProperty } from './GoodsProperty.entity';
 import { Goods } from './Goods.entity';
 
+
+/* 商品类型，代表了商品属性的集合，一个商品必然属于某一类型，商品的属性由其类型决定 */
 @Entity('goods_type')
 export class GoodsType {
 

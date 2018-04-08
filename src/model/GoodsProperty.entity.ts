@@ -1,7 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, Index } from 'typeorm';
 import { GoodsType } from './GoodsType.entity';
 
-
+/* 商品属性实体，属于商品类型，其下包含了多个属性值
+   主要按照类型区分为unique、radio、check三种类型，其中unique为属于商品的属性，与价格无关
+   radio、check为属于单品的属性，与指定增量价格有关，商品最终价格由基本价格与所选属性价格的总和决定
+*/
 @Entity('goods_property')
 @Index('name_type_id', ['name', 'goodsTypeId'])
 export class GoodsProperty {

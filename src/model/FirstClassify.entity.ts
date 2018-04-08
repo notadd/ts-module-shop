@@ -1,7 +1,7 @@
 import { Entity,PrimaryGeneratedColumn,Column,CreateDateColumn,UpdateDateColumn,OneToMany } from 'typeorm';
 import { SecondClassify } from './SecondClassify.entity';
 
-
+/* 一级分类实体，其level默认为1 */
 @Entity('first_classify')
 export class FirstClassify{
 

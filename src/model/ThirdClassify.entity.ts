@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { SecondClassify } from './SecondClassify.entity';
 import { Goods } from './Goods.entity';
 
-
+/* 三级分类实体，level默认为3，且其下可包含商品 */
 @Entity('third_classify')
 export class ThirdClassify {
 

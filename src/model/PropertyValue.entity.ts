@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { GoodsProperty } from './GoodsProperty.entity';
 import { Goods } from './Goods.entity';
 
+
+/* 属性值，代表了某个商品的某一属性的值，其中unique属性没有价格，radio、check属性都有相应的增量价格 */
 @Entity('property_value')
 export class PropertyValue {
 
