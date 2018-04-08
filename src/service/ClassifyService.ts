@@ -134,9 +134,12 @@ export class ClassifyService {
 
     async deleteClassify(id: number, level: number): Promise<void> {
         if (level === 1) {
-            let classify: FirstClassify = await this.firstClassifyRepository.findOneById(id)
+            let classify: FirstClassify = await this.firstClassifyRepository.findOneById(id,{relations:['children']})
             if (!classify) {
                 throw new HttpException('指定id=' + id + '一级分类不存在', 404)
+            }
+            if(classify.children&&classify.children.length>0){
+                throw new HttpException('指定id=' + id + '一级分类下存在二级分类，不能删除', 404)
             }
             try {
                 await this.firstClassifyRepository.remove(classify)
@@ -144,9 +147,12 @@ export class ClassifyService {
                 throw new HttpException('发生了数据库错误' + err.toString(), 403)
             }
         } else if (level === 2) {
-            let classify: SecondClassify = await this.secondClassifyRepository.findOneById(id)
+            let classify: SecondClassify = await this.secondClassifyRepository.findOneById(id,{relations:['children']})
             if (!classify) {
                 throw new HttpException('指定id=' + id + '二级分类不存在', 404)
+            }
+            if(classify.children&&classify.children.length>0){
+                throw new HttpException('指定id=' + id + '二级分类下存在三级分类，不能删除', 404)
             }
             try {
                 await this.secondClassifyRepository.remove(classify)
@@ -154,9 +160,12 @@ export class ClassifyService {
                 throw new HttpException('发生了数据库错误' + err.toString(), 403)
             }
         } else {
-            let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(id)
+            let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(id,{relations:['goodses']})
             if (!classify) {
                 throw new HttpException('指定id=' + id + '三级分类不存在', 404)
+            }
+            if(classify.goodses&&classify.goodses.length>0){
+                throw new HttpException('指定id=' + id + '三级分类下存在商品，不能删除', 404)
             }
             try {
                 await this.thirdClassifyRepository.remove(classify)
