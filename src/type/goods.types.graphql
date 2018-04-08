@@ -1,5 +1,22 @@
+type Query{
+    goodses(classifyId:Int!):GoodsesData
+}
+
 type Mutation{
     createGoods(name:String!,basePrice:Float!,description:String!,classifyId:Int!,goodsTypeId:Int!):ShopCommonData
     updateGoods(id:Int!,name:String,basePrice:Float,description:String,classifyId:Int,goodsTypeId:Int):ShopCommonData
     deleteGoods(id:Int!):ShopCommonData
+}
+
+type GoodsesData{
+    code:Int
+    message:String
+    goodses:[Good]
+}
+
+type Good{
+    id:Int
+    name:String
+    basePrice:Float
+    description:String
 }
