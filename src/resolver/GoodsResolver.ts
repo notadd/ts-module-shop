@@ -2,6 +2,7 @@ import { ExceptionInterceptor } from '../interceptor/ExceptionInterceptor';
 import { Inject, HttpException, UseInterceptors } from '@nestjs/common';
 import { Resolver, Mutation, Query } from '@nestjs/graphql';
 import { GoodsService } from '../service/GoodsService';
+import { Goods } from '../interface/goods/Goods';
 import { Data } from '../interface/Data';
 
 
@@ -12,6 +13,17 @@ export class GoodsResolver {
     constructor(
         @Inject(GoodsService) private readonly goodsService: GoodsService
     ) { }
+
+    /* 获取指定分类下所有商品 */
+    @Query('goodses')
+    async goodses(req: Request, body: { classifyId: number, pageNumber: number, pageSize: number }): Promise<Data & { goodses: Goods[] }> {
+        let { classifyId } = body
+        if (!classifyId) {
+            throw new HttpException('缺少参数', 400)
+        }
+        let goodses: [Goods] = await this.goodsService.getGoodses(classifyId, pageNumber, pageSize)
+        return { code: 200, message: '获取指定分类商品成功', goodses }
+    }
 
     @Mutation('createGoods')
     async createGoods(req: Request, body: { name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number }): Promise<Data> {

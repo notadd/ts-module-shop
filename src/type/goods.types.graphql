@@ -1,5 +1,5 @@
 type Query{
-    goodses(classifyId:Int!):GoodsesData
+    goodses(classifyId:Int!,pageNumber:Int,pageSize:Int):GoodsesData
 }
 
 type Mutation{
