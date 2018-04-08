@@ -1,3 +1,4 @@
 type Mutation{
     createGoods(name:String!,basePrice:Float!,description:String!,classifyId:Int!,goodsTypeId:Int!):ShopCommonData
+    updateGoods(id:Int!,name:String,basePrice:Float,description:String,classifyId:Int,goodsTypeId:Int):ShopCommonData
 }

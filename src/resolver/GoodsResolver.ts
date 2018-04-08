@@ -22,4 +22,14 @@ export class GoodsResolver {
         await this.goodsService.createGoods(name, basePrice, description, classifyId, goodsTypeId)
         return { code: 200, message: '创建商品成功' }
     }
+
+    @Mutation('updateGoods')
+    async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number }): Promise<Data> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 400)
+        }
+        await this.goodsService.updateGoods(id, name, basePrice, description, classifyId, goodsTypeId)
+        return { code: 200, message: '更新商品成功' }
+    }
 }
