@@ -56,6 +56,7 @@ export class GoodsProperty {
     })
     goodsTypeId: number
 
+    /* 商品类型删除时，其下属性级联删除，注意此时要保证商品类型下没有商品 */
     @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
         cascadeInsert: false,
         cascadeUpdate: false,

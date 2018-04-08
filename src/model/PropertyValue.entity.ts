@@ -25,22 +25,24 @@ export class PropertyValue {
     })
     price: number
 
+    /* 商品属性删除时，其下所有属性值级联删除 */
     @ManyToOne(type => GoodsProperty, goodsProperty => goodsProperty.values, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         nullable: false,
         lazy: false,
         eager: false
     })
     property: GoodsProperty
 
+    /* 商品删除时，所有属性值级联删除 */
     @ManyToOne(type => Goods, goods => goods.values, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         nullable: false,
         lazy: false,
         eager: false

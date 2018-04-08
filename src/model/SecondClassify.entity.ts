@@ -33,6 +33,7 @@ export class SecondClassify {
     })
     level:number
 
+    /* 一级分类删除时，如果其下存在二级分类，需要报错，也就是不级联删除 */
     @ManyToOne(type=>FirstClassify,firstClassify=>firstClassify.children,{
         cascadeInsert:false,
         cascadeUpdate:false,

@@ -26,6 +26,7 @@ export class Goods {
     })
     description: string
 
+    /* 分类删除时，其下存在商品，需要报错，不级联删除 */
     @ManyToOne(type => ThirdClassify, thirdClassify => thirdClassify.goodses, {
         cascadeInsert: false,
         cascadeUpdate: false,
@@ -37,6 +38,7 @@ export class Goods {
     })
     classify: ThirdClassify
 
+    /* 商品类型删除时，其下存在商品需要报错，不级联删除 */
     @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
         cascadeInsert: false,
         cascadeUpdate: false,
