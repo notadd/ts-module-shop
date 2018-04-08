@@ -4,7 +4,7 @@ import { GoodsType } from '../model/GoodsType.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Goods } from '../model/Goods.entity';
 import { Repository } from 'typeorm';
-
+import { Goods as IGoods } from '../interface/goods/Goods';
 @Component()
 export class GoodsService {
 
@@ -13,6 +13,15 @@ export class GoodsService {
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
         @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>
     ) { }
+
+    async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<IGoods[]> {
+        let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(classifyId)
+        if (!classify) {
+            throw new HttpException('指定id=' + classifyId + '分类不存在', 404)
+        }
+        let goodses: IGoods[] = await this.goodsRepository.createQueryBuilder('goods').select(['id', 'name', 'basePrice', 'description']).where({ classifyId }).getMany()
+        return goodses
+    }
 
     async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number): Promise<void> {
         let exist: Goods = await this.goodsRepository.findOne({ name })

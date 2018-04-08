@@ -35,6 +35,11 @@ export class Goods {
     })
     description: string
 
+    @Column({
+        name:'classifyId'
+    })
+    classifyId:number
+
     /* 分类删除时，其下存在商品，需要报错，不级联删除 */
     @ManyToOne(type => ThirdClassify, thirdClassify => thirdClassify.goodses, {
         cascadeInsert: false,
