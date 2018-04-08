@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "基于nestjs的cms插件",
     "author": "lvying",
-    "license": "Apache 2.0",
+    "license": "Apache-2.0",
     "scripts": {
         "build": "gulp build",
         "publish": "node ./node_modules/lerna/bin/lerna.js publish -m \"chore(release): publish %s\"",
