@@ -8,11 +8,10 @@ const sourcemaps = require('gulp-sourcemaps');
 const clean = require('gulp-clean');
 
 const packages = {
-    modules: ts.createProject('src/modules/tsconfig.json')
+    cms: ts.createProject('src/tsconfig.json')
 };
 const modules = Object.keys(packages);
 const source = 'src';
-const distId = process.argv.indexOf('--dist');
 const dist = 'packages';
 
 gulp.task('default', function() {
@@ -58,20 +57,18 @@ modules.forEach(module => {
 
 modules.forEach(module => {
     gulp.task(module + ':dev', () => {
-    return packages[module]
-        .src()
-        .pipe(sourcemaps.init())
-        .pipe(packages[module]())
-        .pipe(
-            sourcemaps.mapSources(sourcePath => './' + sourcePath.split('/').pop())
-        )
-        .pipe(sourcemaps.write('.'))
+        return packages[module]
+            .src()
+            .pipe(sourcemaps.init())
+            .pipe(packages[module]())
+            .pipe(sourcemaps.mapSources(sourcePath => './' + sourcePath.split('/').pop()))
+            .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest(`${dist}/${module}`));
-        });
+    });
 });
 
 gulp.task('build', function(cb) {
-    gulpSequence('modules', modules.filter(module => module !== 'modules'), cb);
+    gulpSequence('cms', modules.filter(module => module !== 'cms'), cb);
 });
 
 gulp.task('build:dev', function(cb) {
