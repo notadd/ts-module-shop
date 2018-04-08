@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 import { ThirdClassify } from './ThirdClassify.entity';
+import { GoodsType } from './GoodsType.entity';
+
 
 @Entity('goods')
 export class Goods {
@@ -32,6 +34,16 @@ export class Goods {
     })
     classify: ThirdClassify
 
+    @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        cascadeRemove: false,
+        onDelete: "RESTRICT",
+        nullable: false,
+        lazy: false,
+        eager: false
+    })
+    type: GoodsType
 
 
 }

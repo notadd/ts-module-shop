@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 import { GoodsProperty } from './GoodsProperty.entity';
+import { Goods } from './Goods.entity';
 
 @Entity('goods_type')
 export class GoodsType {
@@ -22,5 +23,13 @@ export class GoodsType {
         eager: false
     })
     properties: GoodsProperty[]
+
+    @OneToMany(type => Goods, goods => goods.classify, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    goodses: Goods[]
 
 }
