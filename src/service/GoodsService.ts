@@ -69,5 +69,18 @@ export class GoodsService {
         }
     }
 
+    /* 删除商品时，其下所有属性值也会被删除 */
+    async deleteGoods(id: number): Promise<void> {
+        let goods: Goods = await this.goodsRepository.findOneById(id)
+        if (!goods) {
+            throw new HttpException('指定id=' + id + '商品不存在', 404)
+        }
+        try {
+            await this.goodsRepository.remove(goods)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
+
 
 }
