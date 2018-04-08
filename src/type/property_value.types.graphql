@@ -1,0 +1,7 @@
+
+type PropertyValue{
+    id:Int
+    value:String
+    price:Float
+    property:GoodsProperty
+}

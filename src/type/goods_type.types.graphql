@@ -1,0 +1,9 @@
+
+
+
+
+type GoodsType{
+    id:Int
+    name:String
+    properties:[GoodsProperty]
+}

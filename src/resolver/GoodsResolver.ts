@@ -17,12 +17,22 @@ export class GoodsResolver {
     /* 获取指定分类下所有商品 */
     @Query('goodses')
     async goodses(req: Request, body: { classifyId: number, pageNumber: number, pageSize: number }): Promise<Data & { goodses: Goods[] }> {
-        let { classifyId } = body
+        let { classifyId, pageNumber, pageSize } = body
         if (!classifyId) {
             throw new HttpException('缺少参数', 400)
         }
-        let goodses: [Goods] = await this.goodsService.getGoodses(classifyId, pageNumber, pageSize)
+        let goodses: Goods[] = await this.goodsService.getGoodses(classifyId, pageNumber, pageSize)
         return { code: 200, message: '获取指定分类商品成功', goodses }
+    }
+
+    @Query('goods')
+    async goods(req: Request, body: { id: number }): Promise<Data & { goods: Goods & any }> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 400)
+        }
+        let goods: Goods = await this.goodsService.getGoods(id)
+        return { code: 200, message: '获取指定商品详情成功', goods }
     }
 
     @Mutation('createGoods')

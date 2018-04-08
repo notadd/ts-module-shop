@@ -1,5 +1,6 @@
 type Query{
     goodses(classifyId:Int!,pageNumber:Int,pageSize:Int):GoodsesData
+    goods(id:Int!):GoodsData
 }
 
 type Mutation{
@@ -8,15 +9,28 @@ type Mutation{
     deleteGoods(id:Int!):ShopCommonData
 }
 
+type GoodsData{
+    code:Int
+    message:String
+    goods:Goods
+}
+
 type GoodsesData{
     code:Int
     message:String
-    goodses:[Good]
+    goodses:[Goods]
 }
 
-type Good{
+type Goods{
     id:Int
     name:String
     basePrice:Float
     description:String
+    type:GoodsType
+    classify:Classify
+    values:[PropertyValue]
 }
+
+
+
+

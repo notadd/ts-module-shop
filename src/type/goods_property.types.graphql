@@ -1,0 +1,21 @@
+
+
+type GoodsProperty{
+    id:Int
+    name:String
+    type:GoodsPropertyType
+    inputType:GoodsPropertyInputType
+    list:[String]
+}
+
+enum GoodsPropertyType{
+    unique
+    radio
+    check
+}
+
+enum GoodsPropertyInputType{
+    text
+    list
+    textarea
+}
