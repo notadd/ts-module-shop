@@ -1,17 +1,19 @@
 import { Component, HttpException, Inject } from '@nestjs/common';
 import { ThirdClassify } from '../model/ThirdClassify.entity';
+import { PropertyValue } from '../model/PropertyValue.entity';
+import { Goods as IGoods } from '../interface/goods/Goods';
 import { GoodsType } from '../model/GoodsType.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Goods } from '../model/Goods.entity';
 import { Repository } from 'typeorm';
-import { Goods as IGoods } from '../interface/goods/Goods';
 @Component()
 export class GoodsService {
 
     constructor(
         @InjectRepository(Goods) private readonly goodsRepository: Repository<Goods>,
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
-        @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>
+        @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>,
+        @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>
     ) { }
 
     async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<IGoods[]> {
@@ -21,6 +23,18 @@ export class GoodsService {
         }
         let goodses: IGoods[] = await this.goodsRepository.createQueryBuilder('goods').select(['id', 'name', 'basePrice', 'description']).where({ classifyId }).getMany()
         return goodses
+    }
+
+    async getGoods(id: number): Promise<IGoods & any> {
+        let goods: Goods = await this.goodsRepository.findOneById(id)
+        if (!goods) {
+            throw new HttpException('指定id=' + id + '商品不存在', 404)
+        }
+        let type: GoodsType = await this.goodsTypeRepository.findOneById(goods.type.id, { relations: ['properties'] })
+        let values: PropertyValue[] = await this.propertyValueRepository.createQueryBuilder('value').select(['id', 'price', 'value', 'property']).where({ goods }).getMany()
+        goods.type = type
+        goods.values = values
+        return goods
     }
 
     async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number): Promise<void> {

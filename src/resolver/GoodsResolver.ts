@@ -31,7 +31,7 @@ export class GoodsResolver {
         if (!id) {
             throw new HttpException('缺少参数', 400)
         }
-        let goods: Goods = await this.goodsService.getGoods(id)
+        let goods: Goods & any = await this.goodsService.getGoods(id)
         return { code: 200, message: '获取指定商品详情成功', goods }
     }
 
