@@ -14,10 +14,10 @@ import { ShopModule } from '../src/ShopModule';
     username: 'postgres',
     password: '123456',
     database: "postgres",
-    entities: ['../**/*.entity.ts'],
+    entities: ['./**/*.entity.ts'],
     logger: 'simple-console',
     logging: null,
-    synchronize: false,
+    synchronize: true,
     dropSchema: false
   }), ShopModule],
   controllers: []

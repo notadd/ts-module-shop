@@ -4,6 +4,7 @@ import { Resolver, Mutation, Query } from '@nestjs/graphql';
 import { GoodsService } from '../service/GoodsService';
 import { Goods } from '../interface/goods/Goods';
 import { Data } from '../interface/Data';
+import { Request } from 'express';
 
 
 @Resolver('Goods')
