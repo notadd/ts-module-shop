@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, Index } from 'typeorm';
+import { PropertyValue } from './PropertyValue.entity';
 import { GoodsType } from './GoodsType.entity';
 
 /* 商品属性实体，属于商品类型，其下包含了多个属性值
@@ -65,4 +66,12 @@ export class GoodsProperty {
         eager: false
     })
     goodsType: GoodsType
+
+    @OneToMany(type => PropertyValue, propertyValue =>propertyValue.property, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    values:PropertyValue[]
 }

@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
+import { PropertyValue } from './PropertyValue.entity';
 import { ThirdClassify } from './ThirdClassify.entity';
 import { GoodsType } from './GoodsType.entity';
 
@@ -47,5 +48,11 @@ export class Goods {
     })
     type: GoodsType
 
-
+    @OneToMany(type => PropertyValue, propertyValue =>propertyValue.goods, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    values:PropertyValue[]
 }
