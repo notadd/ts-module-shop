@@ -1,6 +1,7 @@
 type Mutation{
     createGoodsType(name:String!):ShopCommonData
     updateGoodsType(id:Int!,name:String):ShopCommonData
+    deleteGoodsType(id:Int!):ShopCommonData
 }
 
 

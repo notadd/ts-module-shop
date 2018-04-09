@@ -39,7 +39,7 @@ export class GoodsTypeResolver {
         if(!id){
             throw new HttpException('缺少参数',404)
         }
-        await this.goodsTypeService.udeleteGoodsType(id,name)
+        await this.goodsTypeService.deleteGoodsType(id,name)
         return {code:200,message:'删除商品类型成功'}
     }
 
