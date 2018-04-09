@@ -11,4 +11,24 @@ export class GoodsPropertyService {
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
         @InjectRepository(GoodsProperty) private readonly goodsPropertyRepository: Repository<GoodsProperty>
     ) { }
+
+    async createGoodsProperty(goodsTypeId: number, name: string, type: string, inputType: string, list: string[]): Promise<void> {
+        let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(goodsTypeId)
+        if (!goodsType) {
+            throw new HttpException('指定id=' + goodsTypeId + '商品类型不存在', 404)
+        }
+        let exist: GoodsProperty = await this.goodsPropertyRepository.findOne({ name, goodsType })
+        if (exist) {
+            throw new HttpException('指定id' + goodsTypeId + '商品类型下已存在name=' + name + '商品属性', 404)
+        }
+        let goodsProperty: GoodsProperty = this.goodsPropertyRepository.create({ name, type, inputType, goodsType })
+        if (inputType === 'list') {
+            goodsProperty.list = list
+        }
+        try {
+            await this.goodsPropertyRepository.save(goodsProperty)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
 }

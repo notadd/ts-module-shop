@@ -14,9 +14,9 @@ export class GoodsPropertyResolver {
     ) { }
 
     @Mutation('createGoodsProperty')
-    async createGoodsProperty(req: Request, body: { name: string, type: 'unique' | 'radio' | 'check', inputType: 'text' | 'list' | 'textarea', list: string[] }): Promise<Data> {
-        let { name, type, inputType, list } = body
-        if (!name || !type || !inputType) {
+    async createGoodsProperty(req: Request, body: { goodsTypeId: number, name: string, type: 'unique' | 'radio' | 'check', inputType: 'text' | 'list' | 'textarea', list: string[] }): Promise<Data> {
+        let { goodsTypeId, name, type, inputType, list } = body
+        if (!goodsTypeId || !name || !type || !inputType) {
             throw new HttpException('缺少参数', 404)
         }
         if (type !== 'unique' && type !== 'radio' && type !== 'check') {
@@ -28,7 +28,7 @@ export class GoodsPropertyResolver {
         if (inputType === 'list' && !list) {
             throw new HttpException('输入类型为list时，list列表值必须存在', 404)
         }
-        await this.goodsPropertyService.createGoodsProperty(name, type, inputType, list)
+        await this.goodsPropertyService.createGoodsProperty(goodsTypeId,name, type, inputType, list)
         return { code: 200, message: '创建商品属性成功' }
     }
 
