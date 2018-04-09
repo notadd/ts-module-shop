@@ -38,11 +38,22 @@ export class GoodsPropertyResolver {
         if (!id) {
             throw new HttpException('缺少参数', 404)
         }
-        if(inputType==='list'&&!list){
-            throw new HttpException('输入类型为list时，list列表值必须存在', 404)            
+        if (inputType === 'list' && !list) {
+            throw new HttpException('输入类型为list时，list列表值必须存在', 404)
         }
         await this.goodsPropertyService.updateGoodsProperty(id, name, type, inputType, list)
         return { code: 200, message: '更新商品属性成功' }
+    }
+
+    /* 删除指定商品属性，这个属性关联的属性值也会被删除 */
+    @Mutation('deleteGoodsProperty')
+    async deleteGoodsProperty(req: Request, body: { id: number }): Promise<Data> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 404)
+        }
+        await this.goodsPropertyService.deleteGoodsProperty(id)
+        return { code: 200, message: '删除商品属性成功' }
     }
 
 }

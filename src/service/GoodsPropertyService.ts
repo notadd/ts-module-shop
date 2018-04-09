@@ -57,4 +57,16 @@ export class GoodsPropertyService {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
+
+    async deleteGoodsProperty(id: number): Promise<void> {
+        let goodsProperty: GoodsProperty = await this.goodsPropertyRepository.findOneById(id, { relations: ['goodsType'] })
+        if (!goodsProperty) {
+            throw new HttpException('指定id=' + id + '商品属性不存在', 404)
+        }
+        try {
+            await this.goodsPropertyRepository.remove(goodsProperty)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
 }
