@@ -61,7 +61,7 @@ export class GoodsProperty {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         nullable: false,
         lazy: false,
         eager: false
