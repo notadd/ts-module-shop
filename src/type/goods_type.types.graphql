@@ -1,6 +1,6 @@
 type Query{
     goodsTypes:GoodsTypesData
-    goodsTyoe(id:Int!):GoodsTypeData
+    goodsType(id:Int!):GoodsTypeData
 }
 
 
