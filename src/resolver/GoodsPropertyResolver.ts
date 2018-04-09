@@ -28,8 +28,18 @@ export class GoodsPropertyResolver {
         if (inputType === 'list' && !list) {
             throw new HttpException('输入类型为list时，list列表值必须存在', 404)
         }
-        await this.goodsPropertyService.createGoodsProperty(goodsTypeId,name, type, inputType, list)
+        await this.goodsPropertyService.createGoodsProperty(goodsTypeId, name, type, inputType, list)
         return { code: 200, message: '创建商品属性成功' }
+    }
+
+    @Mutation('updateGoodsProperty')
+    async updateGoodsProperty(req: Request, body: { id: number, name: string, type: 'unique' | 'radio' | 'check', inputType: 'text' | 'list' | 'textarea', list: string[] }): Promise<Data> {
+        let { id, name, type, inputType, list } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 404)
+        }
+        await this.goodsPropertyService.updateGoodsProperty(id, name, type, inputType, list)
+        return { code: 200, message: '更新商品属性成功' }
     }
 
 }
