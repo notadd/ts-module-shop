@@ -10,6 +10,18 @@ export class GoodsTypeService {
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
     ) { }
 
+    async getGoodsType(id: number): Promise<any> {
+        let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(id, { relations: ['properties'] })
+        if (!goodsType) {
+            throw new HttpException('指定id=' + id + '商品类型不存在', 404)
+        }
+        return goodsType
+    }
+
+    async getGoodsTypes(): Promise<GoodsType[]> {
+        return await this.goodsTypeRepository.find()
+    }
+
     async createGoodsType(name: string): Promise<void> {
         let exist: GoodsType = await this.goodsTypeRepository.findOne({ name })
         if (exist) {
@@ -41,14 +53,14 @@ export class GoodsTypeService {
         }
     }
 
-    async deleteGoodsType(id:number):Promise<void>{
-        let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(id,{relations:['properties','goodses']})
+    async deleteGoodsType(id: number): Promise<void> {
+        let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(id, { relations: ['properties', 'goodses'] })
         if (!goodsType) {
             throw new HttpException('指定id=' + id + '商品类型不存在', 404)
         }
         /* 商品类型下还有商品则不能删除，必须先解除两者关系 */
-        if(goodsType.goodses&&goodsType.goodses.length>0){
-            throw new HttpException('指定商品类型下存在商品，请先将商品移动到其他商品类型下再删除',404)
+        if (goodsType.goodses && goodsType.goodses.length > 0) {
+            throw new HttpException('指定商品类型下存在商品，请先将商品移动到其他商品类型下再删除', 404)
         }
         try {
             await this.goodsTypeRepository.remove(goodsType)

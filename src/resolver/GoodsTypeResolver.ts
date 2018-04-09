@@ -19,6 +19,12 @@ export class GoodsTypeResolver {
         return { code: 200, message: '获取所有商品类型成功', goodsTypes }
     }
 
+    @Query('goodsType')
+    async goodsType(req: Request, body: { id: number }): Promise<Data & { goodsType: any }> {
+        let goodsType: any = await this.goodsTypeService.getGoodsType(id)
+        return { code: 200, message: '获取指定商品类型信息成功', goodsType }
+    }
+
     @Mutation('createGoodsType')
     async createGoodsType(req: Request, body: { name: string }): Promise<Data> {
         let { name } = body
