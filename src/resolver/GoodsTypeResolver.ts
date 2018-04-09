@@ -23,6 +23,16 @@ export class GoodsTypeResolver {
         return { code: 200, message: '创建商品类型成功' }
     }
 
+    @Mutation('updateGoodsType')
+    async updateGoodsType(req:Request,body:{id:number,name:string}):Promise<Data>{
+        let {id,name} = body
+        if(!id){
+            throw new HttpException('缺少参数',404)
+        }
+        await this.goodsTypeService.updateGoodsType(id,name)
+        return {code:200,message:'更新商品类型成功'}
+    }
+
 
 
 }
