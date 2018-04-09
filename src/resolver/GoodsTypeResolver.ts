@@ -33,6 +33,16 @@ export class GoodsTypeResolver {
         return {code:200,message:'更新商品类型成功'}
     }
 
+    @Mutation('deleteGoodsType')
+    async deleteGoodsType(req:Request,body:{id:number}):Promise<Data>{
+        let {id} = body
+        if(!id){
+            throw new HttpException('缺少参数',404)
+        }
+        await this.goodsTypeService.udeleteGoodsType(id,name)
+        return {code:200,message:'删除商品类型成功'}
+    }
+
 
 
 }
