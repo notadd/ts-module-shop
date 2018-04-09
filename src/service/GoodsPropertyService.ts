@@ -31,4 +31,30 @@ export class GoodsPropertyService {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
+
+    async updateGoodsProperty(id: number, name: string, type: string, inputType: string, list: string[]): Promise<void> {
+        let goodsProperty: GoodsProperty = await this.goodsPropertyRepository.findOneById(id, { relations: ['goodsType'] })
+        if (!goodsProperty) {
+            throw new HttpException('指定id=' + id + '商品属性不存在', 404)
+        }
+        if (name && name !== goodsProperty.name) {
+            let exist: GoodsProperty = await this.goodsPropertyRepository.findOne({ name, goodsType: goodsProperty.goodsType })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '商品属性已存在于所属商品类型下', 404)
+            }
+            goodsProperty.name = name
+        }
+        type && (goodsProperty.type = type)
+        inputType && (goodsProperty.inputType = inputType)
+        if (goodsProperty.inputType === 'list') {
+            goodsProperty.list = list
+        } else {
+            goodsProperty.list = null
+        }
+        try {
+            await this.goodsPropertyRepository.save(goodsProperty)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
 }

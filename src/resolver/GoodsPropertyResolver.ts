@@ -38,6 +38,9 @@ export class GoodsPropertyResolver {
         if (!id) {
             throw new HttpException('缺少参数', 404)
         }
+        if(inputType==='list'&&!list){
+            throw new HttpException('输入类型为list时，list列表值必须存在', 404)            
+        }
         await this.goodsPropertyService.updateGoodsProperty(id, name, type, inputType, list)
         return { code: 200, message: '更新商品属性成功' }
     }
