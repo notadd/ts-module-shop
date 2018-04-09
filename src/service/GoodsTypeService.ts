@@ -10,7 +10,7 @@ export class GoodsTypeService {
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
     ) { }
 
-    async getGoodsType(id: number): Promise<any> {
+    async getGoodsType(id: number): Promise<GoodsType> {
         let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(id, { relations: ['properties'] })
         if (!goodsType) {
             throw new HttpException('指定id=' + id + '商品类型不存在', 404)

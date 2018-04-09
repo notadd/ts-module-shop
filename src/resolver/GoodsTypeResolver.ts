@@ -1,5 +1,6 @@
 import { ExceptionInterceptor } from '../interceptor/ExceptionInterceptor';
 import { Inject, HttpException, UseInterceptors } from '@nestjs/common';
+import { GoodsTypesData } from '../interface/goodstype/GoodsTypesData';
 import { GoodsTypeService } from '../service/GoodsTypeService';
 import { Resolver, Query, Mutation } from '@nestjs/graphql'
 import { Data } from '../interface/Data';
@@ -14,13 +15,17 @@ export class GoodsTypeResolver {
     ) { }
 
     @Query('goodsTypes')
-    async goodsTypes(req: Request): Promise<Data & { goodsTypes: { id: number, name: string }[] }> {
+    async goodsTypes(req: Request): Promise<GoodsTypesData> {
         let goodsTypes: { id: number, name: string }[] = await this.goodsTypeService.getGoodsTypes()
         return { code: 200, message: '获取所有商品类型成功', goodsTypes }
     }
 
     @Query('goodsType')
     async goodsType(req: Request, body: { id: number }): Promise<Data & { goodsType: any }> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 404)
+        }
         let goodsType: any = await this.goodsTypeService.getGoodsType(id)
         return { code: 200, message: '获取指定商品类型信息成功', goodsType }
     }
