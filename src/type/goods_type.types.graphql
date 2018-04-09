@@ -1,9 +1,20 @@
+type Query{
+    goodsTypes:GoodsTypesData
+}
+
+
 type Mutation{
     createGoodsType(name:String!):ShopCommonData
     updateGoodsType(id:Int!,name:String):ShopCommonData
     deleteGoodsType(id:Int!):ShopCommonData
 }
 
+
+type GoodsTypesData{
+    code:Int
+    message:String
+    goodsTypes:[GoodsType]
+}
 
 
 type GoodsType{
