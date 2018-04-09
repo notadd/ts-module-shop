@@ -1,8 +1,10 @@
 import { ExceptionInterceptor } from '../interceptor/ExceptionInterceptor';
 import { Inject, HttpException, UseInterceptors } from '@nestjs/common';
+import { GoodsesData } from '../interface/goods/GoodsesData';
 import { Resolver, Mutation, Query } from '@nestjs/graphql';
+import { GoodsData } from '../interface/goods/GoodsData';
 import { GoodsService } from '../service/GoodsService';
-import { Goods } from '../interface/goods/Goods';
+import { Goods } from '../model/Goods.entity';
 import { Data } from '../interface/Data';
 import { Request } from 'express';
 
@@ -17,7 +19,7 @@ export class GoodsResolver {
 
     /* 获取指定分类下所有商品 */
     @Query('goodses')
-    async goodses(req: Request, body: { classifyId: number, pageNumber: number, pageSize: number }): Promise<Data & { goodses: Goods[] }> {
+    async goodses(req: Request, body: { classifyId: number, pageNumber: number, pageSize: number }): Promise<GoodsesData> {
         let { classifyId, pageNumber, pageSize } = body
         if (!classifyId) {
             throw new HttpException('缺少参数', 400)
@@ -27,7 +29,7 @@ export class GoodsResolver {
     }
 
     @Query('goods')
-    async goods(req: Request, body: { id: number }): Promise<Data & { goods: Goods & any }> {
+    async goods(req: Request, body: { id: number }): Promise<GoodsData> {
         let { id } = body
         if (!id) {
             throw new HttpException('缺少参数', 400)

@@ -2,7 +2,7 @@ import { Component, HttpException, Inject } from '@nestjs/common';
 import { ThirdClassify } from '../model/ThirdClassify.entity';
 import { PropertyValue } from '../model/PropertyValue.entity';
 import { Repository, Connection, QueryRunner } from 'typeorm';
-import { Goods as IGoods } from '../interface/goods/Goods';
+import { GoodsData } from '../interface/goods/GoodsData';
 import { GoodsType } from '../model/GoodsType.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Goods } from '../model/Goods.entity';
@@ -17,16 +17,16 @@ export class GoodsService {
         @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>
     ) { }
 
-    async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<IGoods[]> {
+    async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<Goods[]> {
         let classify: ThirdClassify = await this.thirdClassifyRepository.findOneById(classifyId)
         if (!classify) {
             throw new HttpException('指定id=' + classifyId + '分类不存在', 404)
         }
-        let goodses: IGoods[] = await this.goodsRepository.createQueryBuilder('goods').select(['id', 'name', 'basePrice', 'description']).where({ classifyId }).getMany()
+        let goodses: Goods[] = await this.goodsRepository.createQueryBuilder('goods').select(['id', 'name', 'basePrice', 'description']).where({ classifyId }).getMany()
         return goodses
     }
 
-    async getGoods(id: number): Promise<IGoods & any> {
+    async getGoods(id: number): Promise<Goods> {
         let goods: Goods = await this.goodsRepository.findOneById(id)
         if (!goods) {
             throw new HttpException('指定id=' + id + '商品不存在', 404)
