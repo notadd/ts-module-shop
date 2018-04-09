@@ -1,3 +1,5 @@
+import { GoodsPropertyResolver } from './resolver/GoodsPropertyResolver';
+import { GoodsPropertyService } from './service/GoodsPropertyService';
 import { GoodsTypeResolver } from './resolver/GoodsTypeResolver';
 import { ClassifyResolver } from './resolver/ClassifyResolver';
 import { SecondClassify } from './model/SecondClassify.entity';
@@ -19,7 +21,8 @@ import { Module } from '@nestjs/common';
     components: [
         GoodsService, GoodsResolver,
         ClassifyService, ClassifyResolver,
-        GoodsTypeService,GoodsTypeResolver
+        GoodsTypeService, GoodsTypeResolver,
+        GoodsPropertyService, GoodsPropertyResolver
     ],
     controllers: [],
     exports: []
