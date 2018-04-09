@@ -1,5 +1,6 @@
 type Query{
     goodsTypes:GoodsTypesData
+    goodsTyoe(id:Int!):GoodsTypeData
 }
 
 
@@ -9,6 +10,12 @@ type Mutation{
     deleteGoodsType(id:Int!):ShopCommonData
 }
 
+
+type GoodsTypeData{
+    code:Int
+    message:String
+    goodsType:GoodsType
+}
 
 type GoodsTypesData{
     code:Int
