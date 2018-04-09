@@ -1,4 +1,6 @@
-
+type Mutation{
+    createGoodsProperty(name:String!,type:GoodsPropertyType!,inputType:GoodsPropertyInputType!,list:[String]):ShopCommonData
+}
 
 type GoodsProperty{
     id:Int
