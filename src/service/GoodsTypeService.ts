@@ -23,4 +23,23 @@ export class GoodsTypeService {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
+
+    async updateGoodsType(id: number, name: string): Promise<void> {
+        let goodsType: GoodsType = await this.goodsTypeRepository.findOneById(id)
+        if (!goodsType) {
+            throw new HttpException('指定id=' + id + '商品类型不存在', 404)
+        }
+        if (name && (name !== goodsType.name)) {
+            let exist: GoodsType = await this.goodsTypeRepository.findOne({ name })
+            if (exist) {
+                throw new HttpException('指定name=' + name + '商品类型已存在', 404)
+            }
+            goodsType.name = name
+        }
+        try {
+            await this.goodsTypeRepository.save(goodsType)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
 }
