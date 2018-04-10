@@ -15,4 +15,14 @@ export class BrandResolver {
         @Inject(BrandService) private readonly brandService: BrandService
     ) { }
 
+    @Mutation('createBrand')
+    async createBrand(req: Request, body: { name: string }): Promise<Data> {
+        let {name} = body
+        if(!name){
+            throw new HttpException('缺少参数',404)
+        }
+        await this.brandService.createBrand(name)
+        return {code:200,message:'创建品牌成功'}
+    }
+
 }
