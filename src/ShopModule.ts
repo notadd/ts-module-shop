@@ -15,11 +15,12 @@ import { GoodsResolver } from './resolver/GoodsResolver';
 import { GoodsService } from './service/GoodsService';
 import { GoodsType } from './model/GoodsType.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Brand } from './model/Brand.entity';
 import { Goods } from './model/Goods.entity';
 import { Module } from '@nestjs/common';
 
 @Module({
-    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify, Goods, GoodsType, GoodsProperty, PropertyValue])],
+    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify, Goods, GoodsType, GoodsProperty, PropertyValue,Brand])],
     components: [
         GoodsService, GoodsResolver,
         ClassifyService, ClassifyResolver,

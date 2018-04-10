@@ -6,11 +6,13 @@ import { GoodsData } from '../interface/goods/GoodsData';
 import { GoodsType } from '../model/GoodsType.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Goods } from '../model/Goods.entity';
+import { Brand } from '../model/Brand.entity';
 @Component()
 export class GoodsService {
 
     constructor(
         @Inject(Connection) private readonly connection: Connection,
+        @InjectRepository(Brand) private readonly brandRepository: Repository<Brand>,
         @InjectRepository(Goods) private readonly goodsRepository: Repository<Goods>,
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
         @InjectRepository(ThirdClassify) private readonly thirdClassifyRepository: Repository<ThirdClassify>,
@@ -32,13 +34,13 @@ export class GoodsService {
             throw new HttpException('指定id=' + id + '商品不存在', 404)
         }
         let type: GoodsType = await this.goodsTypeRepository.findOneById(goods.type.id, { relations: ['properties'] })
-        let values: PropertyValue[] = await this.propertyValueRepository.createQueryBuilder('value').select(['value.id', 'value.price', 'value.value']).where({ goods }).leftJoinAndSelect('value.property','property').getMany()
+        let values: PropertyValue[] = await this.propertyValueRepository.createQueryBuilder('value').select(['value.id', 'value.price', 'value.value']).where({ goods }).leftJoinAndSelect('value.property', 'property').getMany()
         goods.type = type
         goods.values = values
         return goods
     }
 
-    async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number): Promise<void> {
+    async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         let exist: Goods = await this.goodsRepository.findOne({ name })
         if (exist) {
             throw new HttpException('指定name=' + name + '商品已存在', 404)
@@ -51,8 +53,15 @@ export class GoodsService {
         if (!type) {
             throw new HttpException('指定id' + goodsTypeId + '商品类型不存在', 404)
         }
+        let brand: Brand
+        if (brandId) {
+            brand = await this.brandRepository.findOneById(brandId)
+            if (!brand) {
+                throw new HttpException('指定id' + brandId + '品牌不存在', 404)
+            }
+        }
         try {
-            await this.goodsRepository.save({ name, basePrice, description, classify, type })
+            await this.goodsRepository.save({ name, basePrice, description, classify, type, brand })
         } catch (err) {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
