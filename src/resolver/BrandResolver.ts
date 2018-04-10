@@ -35,4 +35,14 @@ export class BrandResolver {
         return { code: 200, message: '更新品牌成功' }
     }
 
+    @Mutation('deleteBrand')
+    async deleteBrand(req:Request,body:{id:number}):Promise<Data>{
+        let {id} = body
+        if(!id){
+            throw new HttpException('缺少参数', 404)
+        }
+        await this.brandService.deleteBrand(id)
+        return {code:200,message:'删除品牌成功'}
+    }
+
 }
