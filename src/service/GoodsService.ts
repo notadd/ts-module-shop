@@ -22,7 +22,7 @@ export class GoodsService {
         if (!classify) {
             throw new HttpException('指定id=' + classifyId + '分类不存在', 404)
         }
-        let goodses: Goods[] = await this.goodsRepository.createQueryBuilder('goods').select(['id', 'name', 'basePrice', 'description']).where({ classifyId }).getMany()
+        let goodses: Goods[] = await this.goodsRepository.createQueryBuilder('goods').select(['goods.id', 'goods.name', 'goods.basePrice', 'goods.description']).where({ classifyId }).getMany()
         return goodses
     }
 
@@ -32,7 +32,7 @@ export class GoodsService {
             throw new HttpException('指定id=' + id + '商品不存在', 404)
         }
         let type: GoodsType = await this.goodsTypeRepository.findOneById(goods.type.id, { relations: ['properties'] })
-        let values: PropertyValue[] = await this.propertyValueRepository.createQueryBuilder('value').select(['id', 'price', 'value', 'property']).where({ goods }).getMany()
+        let values: PropertyValue[] = await this.propertyValueRepository.createQueryBuilder('value').select(['value.id', 'value.price', 'value.value']).where({ goods }).leftJoinAndSelect('value.property','property').getMany()
         goods.type = type
         goods.values = values
         return goods
