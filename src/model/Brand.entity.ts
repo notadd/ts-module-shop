@@ -11,12 +11,12 @@ export class Brand {
     @Column({
         name: 'name',
         type: 'varchar',
-        length: 50,
+        length: 20,
         unique: true
     })
     name: string
 
-    @OneToMany(type => Goods, goods => goods.classify, {
+    @OneToMany(type => Goods, goods => goods.brand, {
         cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,

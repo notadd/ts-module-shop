@@ -11,4 +11,16 @@ export class BrandService {
         @InjectRepository(Brand) private readonly brandRepository: Repository<Brand>
     ) { }
 
+    async createBrand(name:string):Promise<void>{
+        let exist:Brand = await this.brandRepository.findOne({name})
+        if(exist){
+            throw new HttpException('指定name='+name+'品牌已存在',404)
+        }
+        try {
+            await this.brandRepository.save({name})
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
+
 }
