@@ -5,7 +5,6 @@ import { Component, HttpException } from '@nestjs/common';
 import { Classify } from '../interface/classify/Classify';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EventListenerTypes } from 'typeorm/metadata/types/EventListenerTypes';
 
 @Component()
 export class ClassifyService {

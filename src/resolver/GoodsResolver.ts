@@ -54,7 +54,7 @@ export class GoodsResolver {
         if (!id) {
             throw new HttpException('缺少参数', 400)
         }
-        await this.goodsService.updateGoods(id, name, basePrice, description, classifyId, goodsTypeId)
+        await this.goodsService.updateGoods(id, name, basePrice, description, classifyId, goodsTypeId,brandId)
         return { code: 200, message: '更新商品成功' }
     }
 

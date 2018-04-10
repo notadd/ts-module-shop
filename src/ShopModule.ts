@@ -12,7 +12,9 @@ import { GoodsProperty } from './model/GoodsProperty.entity';
 import { PropertyValue } from './model/PropertyValue.entity';
 import { ClassifyService } from './service/ClassifyService';
 import { GoodsResolver } from './resolver/GoodsResolver';
+import { BrandResolver } from './resolver/BrandResolver';
 import { GoodsService } from './service/GoodsService';
+import { BrandService } from './service/BrandService';
 import { GoodsType } from './model/GoodsType.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Brand } from './model/Brand.entity';
@@ -20,9 +22,10 @@ import { Goods } from './model/Goods.entity';
 import { Module } from '@nestjs/common';
 
 @Module({
-    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify, Goods, GoodsType, GoodsProperty, PropertyValue,Brand])],
+    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify, Goods, GoodsType, GoodsProperty, PropertyValue, Brand])],
     components: [
         GoodsService, GoodsResolver,
+        BrandService, BrandResolver,
         ClassifyService, ClassifyResolver,
         GoodsTypeService, GoodsTypeResolver,
         GoodsPropertyService, GoodsPropertyResolver,
