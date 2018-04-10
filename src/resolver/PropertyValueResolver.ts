@@ -21,4 +21,14 @@ export class PropertyValueResolver {
         await this.propertyValueService.createPropertyValue(goodsId, goodsPropertyId, value, price)
         return { code: 200, message: '创建属性值成功' }
     }
+
+    @Mutation('updatePropertyValue')
+    async updatePropertyValue(req: Request, body: { id: number, value: string, price: number }): Promise<Data> {
+        let { id, value, price } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 404)
+        }
+        await this.propertyValueService.updatePropertyValue(id, value, price)
+        return { code: 200, message: '更新属性值成功' }
+    }
 }
