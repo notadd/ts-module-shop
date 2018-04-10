@@ -72,4 +72,16 @@ export class PropertyValueService {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
+
+    async deletePropertyValue(id: number): Promise<void> {
+        let propertyValue: PropertyValue = await this.propertyValueRepository.findOneById(id)
+        if (!propertyValue) {
+            throw new HttpException('指定id=' + id + '属性值不存在', 404)
+        }
+        try {
+            await this.propertyValueRepository.remove(propertyValue)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
 }
