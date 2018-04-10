@@ -1,6 +1,7 @@
 type Mutation{
     createPropertyValue(goodsId:Int!,goodsPropertyId:Int!,value:String!,price:Float):ShopCommonData
     updatePropertyValue(id:Int!,value:String,price:Float):ShopCommonData
+    daletePropertyValue(id:Int!):ShopCommonData
 }
 
 

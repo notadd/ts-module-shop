@@ -31,4 +31,14 @@ export class PropertyValueResolver {
         await this.propertyValueService.updatePropertyValue(id, value, price)
         return { code: 200, message: '更新属性值成功' }
     }
+
+    @Mutation('deletePropertyValue')
+    async deletePropertyValue(req: Request, body: { id: number }): Promise<Data> {
+        let { id } = body
+        if (!id) {
+            throw new HttpException('缺少参数', 404)
+        }
+        await this.propertyValueService.deletePropertyValue(id)
+        return { code: 200, message: '删除属性值成功' }
+    }
 }
