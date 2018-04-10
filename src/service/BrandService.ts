@@ -11,6 +11,10 @@ export class BrandService {
         @InjectRepository(Brand) private readonly brandRepository: Repository<Brand>
     ) { }
 
+    async getBrands(): Promise<Brand[]> {
+        return await this.brandRepository.find()
+    }
+
     async createBrand(name: string): Promise<void> {
         let exist: Brand = await this.brandRepository.findOne({ name })
         if (exist) {
