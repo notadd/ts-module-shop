@@ -1,4 +1,4 @@
 type Mutation{
     createBrand(name:String!):ShopCommonData
-    
+    updateBrand(id:Int!,name:String!):ShopCommonData
 }
