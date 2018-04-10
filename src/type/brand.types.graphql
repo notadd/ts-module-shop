@@ -3,3 +3,18 @@ type Mutation{
     updateBrand(id:Int!,name:String!):ShopCommonData
     deleteBrand(id:Int!):ShopCommonData
 }
+
+type Query{
+    brands:BrandsData
+}
+
+type BrandsData{
+    code:Int
+    message:String
+    brands:[Brand]
+}
+
+type Brand{
+    id:Int
+    name:String
+}
