@@ -49,8 +49,8 @@ export class GoodsResolver {
     }
 
     @Mutation('updateGoods')
-    async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number }): Promise<Data> {
-        let { id, basePrice, description, classifyId, goodsTypeId } = body
+    async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number,brandId:number }): Promise<Data> {
+        let { id, basePrice, description, classifyId, goodsTypeId ,brandId} = body
         if (!id) {
             throw new HttpException('缺少参数', 400)
         }

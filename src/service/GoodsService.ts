@@ -67,8 +67,8 @@ export class GoodsService {
         }
     }
 
-    async updateGoods(id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number): Promise<void> {
-        let goods: Goods = await this.goodsRepository.findOneById(id, { relations: ['classify', 'type', 'values'] })
+    async updateGoods(id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
+        let goods: Goods = await this.goodsRepository.findOneById(id, { relations: ['classify', 'type', 'values', 'brand'] })
         if (!goods) {
             throw new HttpException('指定id=' + id + '商品不存在', 404)
         }
@@ -97,6 +97,13 @@ export class GoodsService {
             }
             goods.type = type
             changeGoodsType = true
+        }
+        if (brandId && (brandId !== goods.brand.id)) {
+            let brand: Brand = await this.brandRepository.findOneById(brandId)
+            if (!brand) {
+                throw new HttpException('指定id' + brandId + '品牌不存在', 404)
+            }
+            goods.brand = brand
         }
         let queryRunner: QueryRunner = this.connection.createQueryRunner('master')
         try {
