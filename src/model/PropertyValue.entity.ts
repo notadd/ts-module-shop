@@ -21,7 +21,8 @@ export class PropertyValue {
         name: 'price',
         type: 'decimal',
         precision: 10,
-        scale: 2
+        scale: 2,
+        nullable:true
     })
     price: number
 

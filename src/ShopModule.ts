@@ -1,4 +1,6 @@
 import { GoodsPropertyResolver } from './resolver/GoodsPropertyResolver';
+import { PropertyValueResolver } from './resolver/PropertyValueResolver';
+import { PropertyValueService } from './service/PropertyValueService';
 import { GoodsPropertyService } from './service/GoodsPropertyService';
 import { GoodsTypeResolver } from './resolver/GoodsTypeResolver';
 import { ClassifyResolver } from './resolver/ClassifyResolver';
@@ -22,7 +24,8 @@ import { Module } from '@nestjs/common';
         GoodsService, GoodsResolver,
         ClassifyService, ClassifyResolver,
         GoodsTypeService, GoodsTypeResolver,
-        GoodsPropertyService, GoodsPropertyResolver
+        GoodsPropertyService, GoodsPropertyResolver,
+        PropertyValueService, PropertyValueResolver
     ],
     controllers: [],
     exports: []
