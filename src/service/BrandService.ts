@@ -42,4 +42,19 @@ export class BrandService {
         }
     }
 
+    async deleteBrand(id: number): Promise<void> {
+        let brand: Brand = await this.brandRepository.findOneById(id, { relations: ['goodses'] })
+        if (!brand) {
+            throw new HttpException('指定id=' + id + '品牌不存在', 404)
+        }
+        if (brand.goodses && brand.goodses.length > 0) {
+            throw new HttpException('指定品牌下存在商品不允许删除', 404)
+        }
+        try {
+            await this.brandRepository.remove(brand)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
+
 }
