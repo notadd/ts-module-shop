@@ -57,3 +57,19 @@ export class PropertyValueService {
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
+
+
+    async updatePropertyValue(id: number, value: string, price: number): Promise<void> {
+        let propertyValue: PropertyValue = await this.propertyValueRepository.findOneById(id, { relations: ['property'] })
+        if (!propertyValue) {
+            throw new HttpException('指定id=' + id + '属性值不存在', 404)
+        }
+        value && (propertyValue.value = value)
+        price !== null && price !== undefined && propertyValue.property.type !== 'unique' && (propertyValue.price = price)
+        try {
+            await this.propertyValueRepository.save(propertyValue)
+        } catch (err) {
+            throw new HttpException('发生了数据库错误' + err.toString(), 403)
+        }
+    }
+}
