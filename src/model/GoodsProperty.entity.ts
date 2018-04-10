@@ -30,7 +30,7 @@ export class GoodsProperty {
         type: 'varchar',
         length: 20
     })
-    type: 'unique'|'radio'|'check'
+    type: string
 
     /* 属性录入方式，即属性输入的方式
        text：普通文本
@@ -42,7 +42,7 @@ export class GoodsProperty {
         type: 'varchar',
         length: 20
     })
-    inputType: 'text'|'list'|'textarea'
+    inputType: string
 
     /* 当属性录入方式为list时，所有列表值 */
     @Column({

@@ -1,13 +1,14 @@
 import { Component, Inject, HttpException } from '@nestjs/common';
 import { GoodsProperty } from '../model/GoodsProperty.entity';
+import { Repository, QueryRunner, Connection } from 'typeorm';
 import { GoodsType } from '../model/GoodsType.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Component()
 export class GoodsPropertyService {
 
     constructor(
+        @Inject(Connection) private readonly connection: Connection,
         @InjectRepository(GoodsType) private readonly goodsTypeRepository: Repository<GoodsType>,
         @InjectRepository(GoodsProperty) private readonly goodsPropertyRepository: Repository<GoodsProperty>
     ) { }
@@ -33,27 +34,50 @@ export class GoodsPropertyService {
     }
 
     async updateGoodsProperty(id: number, name: string, type: string, inputType: string, list: string[]): Promise<void> {
-        let goodsProperty: GoodsProperty = await this.goodsPropertyRepository.findOneById(id, { relations: ['goodsType'] })
+        let goodsProperty: GoodsProperty = await this.goodsPropertyRepository.findOneById(id, { relations: ['goodsType', 'values'] })
         if (!goodsProperty) {
             throw new HttpException('指定id=' + id + '商品属性不存在', 404)
         }
+        let ischange: boolean = false
         if (name && name !== goodsProperty.name) {
             let exist: GoodsProperty = await this.goodsPropertyRepository.findOne({ name, goodsType: goodsProperty.goodsType })
             if (exist) {
                 throw new HttpException('指定name=' + name + '商品属性已存在于所属商品类型下', 404)
             }
             goodsProperty.name = name
+            ischange = true
         }
-        type && (goodsProperty.type = type)
-        inputType && (goodsProperty.inputType = inputType)
+        if (type && goodsProperty.type !== type) {
+            goodsProperty.type = type
+            ischange = true
+        }
+        if (inputType && goodsProperty.inputType !== inputType) {
+            goodsProperty.inputType = inputType
+            ischange = true
+        }
         if (goodsProperty.inputType === 'list') {
+            goodsProperty.list.forEach(item => {
+                let find = list.find(i => {
+                    return i === item
+                })
+                if (!find) {
+                    ischange = true
+                }
+            })
             goodsProperty.list = list
         } else {
             goodsProperty.list = null
         }
+        let queryRunner: QueryRunner = this.connection.createQueryRunner('master')
         try {
-            await this.goodsPropertyRepository.save(goodsProperty)
+            await queryRunner.startTransaction()
+            if (ischange) {
+                await queryRunner.manager.remove(goodsProperty.values)
+            }
+            await queryRunner.manager.save(goodsProperty)
+            await queryRunner.commitTransaction()
         } catch (err) {
+            await queryRunner.rollbackTransaction()
             throw new HttpException('发生了数据库错误' + err.toString(), 403)
         }
     }
