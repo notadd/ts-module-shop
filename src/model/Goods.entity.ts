@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { PropertyValue } from './PropertyValue.entity';
 import { ThirdClassify } from './ThirdClassify.entity';
 import { GoodsType } from './GoodsType.entity';
-
+import { Brand } from './Brand.entity';
 /* 商品实体，为一个商品的基本属性，名称、描述、基本价格等，一个商品必然属于一个分类、一个商品类型
    商品包含了多个属性值，有些为唯一属性，即直接属于商品，有些是单选、复选属性，属于指定价格的单品
 */
@@ -36,9 +36,9 @@ export class Goods {
     description: string
 
     @Column({
-        name:'classifyId'
+        name: 'classifyId'
     })
-    classifyId:number
+    classifyId: number
 
     /* 分类删除时，其下存在商品，需要报错，不级联删除 */
     @ManyToOne(type => ThirdClassify, thirdClassify => thirdClassify.goodses, {
@@ -52,6 +52,18 @@ export class Goods {
     })
     classify: ThirdClassify
 
+    /* 商品品牌 */
+    @ManyToOne(type => Brand, brand => brand.goodses, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        cascadeRemove: false,
+        onDelete: "RESTRICT",
+        nullable: true,
+        lazy: false,
+        eager: false
+    })
+    brand: Brand
+
     /* 商品类型删除时，其下存在商品需要报错，不级联删除 */
     @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
         cascadeInsert: false,
@@ -64,11 +76,11 @@ export class Goods {
     })
     type: GoodsType
 
-    @OneToMany(type => PropertyValue, propertyValue =>propertyValue.goods, {
+    @OneToMany(type => PropertyValue, propertyValue => propertyValue.goods, {
         cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,
         eager: false
     })
-    values:PropertyValue[]
+    values: PropertyValue[]
 }
