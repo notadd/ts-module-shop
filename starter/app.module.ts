@@ -1,22 +1,21 @@
-import { Module, MiddlewaresConsumer, NestModule, Inject, RequestMethod } from '@nestjs/common';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShopModule } from '../src/ShopModule';
+import { Module, MiddlewaresConsumer, NestModule, Inject, RequestMethod } from "@nestjs/common";
+import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
+import { GraphQLModule, GraphQLFactory } from "@nestjs/graphql";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ShopModule } from "../src/shop.module";
 
 
 @Module({
   modules: [GraphQLModule, TypeOrmModule.forRoot({
-    name: 'shop',
-    type: 'postgres',
-    host: 'localhost',
+    name: "shop",
+    type: "postgres",
+    host: "localhost",
     port: 5433,
-    username: 'postgres',
-    password: '123456',
+    username: "postgres",
+    password: "123456",
     database: "postgres",
-    entities: ['./**/*.entity.ts'],
-    logger: 'simple-console',
-    logging: null,
+    entities: ["./**/*.entity.ts"],
+    logger: "simple-console",
     synchronize: true,
     dropSchema: false
   }), ShopModule],
@@ -31,13 +30,13 @@ export class ApplicationModule implements NestModule {
   ) { }
 
   configure(consumer: MiddlewaresConsumer) {
-    const typeDefs = this.graphQLFactory.mergeTypesByPaths('./src/**/*.types.graphql');
+    const typeDefs = this.graphQLFactory.mergeTypesByPaths("./src/**/*.types.graphql");
     const schema = this.graphQLFactory.createSchema({ typeDefs });
     consumer
-      .apply(graphiqlExpress({ endpointURL: '/graphql' }))
-      .forRoutes({ path: '/graphiql', method: RequestMethod.GET })
+      .apply(graphiqlExpress({ endpointURL: "/graphql" }))
+      .forRoutes({ path: "/graphiql", method: RequestMethod.GET })
       .apply(graphqlExpress(req => ({ schema, rootValue: req })))
-      .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
+      .forRoutes({ path: "/graphql", method: RequestMethod.ALL });
   }
 
 }

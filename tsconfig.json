@@ -10,11 +10,14 @@
     "target": "es6",
     "sourceMap": true,
     "allowJs": false,
-    "outDir": "./dist",
+    "outDir": "./package",
+    "strict": true,
+    "strictPropertyInitialization": false,
     "emitBOM": true
   },
   "include": [
-    "./**/*.ts"
+    "src/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
