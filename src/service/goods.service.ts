@@ -30,13 +30,26 @@ export class GoodsService {
         }
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.description"])
+            .select(["goods.id", "goods.name", "goods.basePrice", "goods.description", "goods.recycle"])
             .where({ classifyId, recycle: false });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
         }
         const goodses: Array<Goods> = await queryBuilder.getMany();
         return goodses;
+    }
+
+    /* 获取回收站中商品，可以分页获取 */
+    async getRecycleGoodses(pageNumber: number, pageSize: number): Promise<Array<Goods>> {
+        let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
+            .createQueryBuilder("goods")
+            .select(["goods.id", "goods.name", "goods.basePrice", "goods.description", "goods.recycle"])
+            .where({ recycle: true });
+        if (pageNumber && pageSize) {
+            queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
+        }
+        const recycleGoodses: Array<Goods> = await queryBuilder.getMany();
+        return recycleGoodses;
     }
 
     /* 获取指定的详细信息，会同时获取商品所属类型以及类型下的属性、商品下所有属性值以及属性值关联的属性 */
@@ -87,7 +100,7 @@ export class GoodsService {
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
-        if(goods.recycle){
+        if (goods.recycle) {
             throw new HttpException("指定id=" + id + "商品已经存在于回收站中，不能更新", 404);
         }
         if (name && (name !== goods.name)) {
