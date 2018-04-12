@@ -94,4 +94,16 @@ export class GoodsResolver {
         await this.goodsService.softDeleteGoodses(ids);
         return { code: 200, message: "多个商品放入回收站成功" };
     }
+
+    /* 从回收站中还原商品 */
+    @Mutation("restoreGoods")
+    async restoreGoods(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.goodsService.restoreGoods(id);
+        return { code: 200, message: "商品还原成功" };
+    }
+
 }

@@ -9,6 +9,7 @@ type Mutation{
     deleteGoods(id:Int!):ShopCommonData
     softDeleteGoods(id:Int!):ShopCommonData
     softDeleteGoodses(ids:[Int]!):ShopCommonData
+    restoreGoods(id:Int!):ShopCommonData
 }
 
 type GoodsData{
