@@ -83,4 +83,15 @@ export class GoodsResolver {
         await this.goodsService.softDeleteGoods(id);
         return { code: 200, message: "商品放入回收站成功" };
     }
+
+    /* 软删除多个商品 */
+    @Mutation("softDeleteGoodses")
+    async softDeleteGoodses(req: Request, body: { ids: Array<number> }): Promise<Data> {
+        const { ids } = body;
+        if (!ids || ids.length === 0) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.goodsService.softDeleteGoodses(ids);
+        return { code: 200, message: "多个商品放入回收站成功" };
+    }
 }

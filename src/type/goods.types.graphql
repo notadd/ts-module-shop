@@ -8,6 +8,7 @@ type Mutation{
     updateGoods(id:Int!,name:String,basePrice:Float,description:String,classifyId:Int,goodsTypeId:Int,brandId:Int!):ShopCommonData
     deleteGoods(id:Int!):ShopCommonData
     softDeleteGoods(id:Int!):ShopCommonData
+    softDeleteGoodses(ids:[Int]!):ShopCommonData
 }
 
 type GoodsData{
