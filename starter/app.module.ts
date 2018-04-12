@@ -16,8 +16,9 @@ import { ShopModule } from "../src/shop.module";
     database: "postgres",
     entities: ["./**/*.entity.ts"],
     logger: "simple-console",
+    logging:"all",
     synchronize: true,
-    dropSchema: false
+    dropSchema: true
   }), ShopModule],
   controllers: []
 })

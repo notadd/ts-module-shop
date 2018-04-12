@@ -18,7 +18,7 @@ export class GoodsType {
     })
     name: string;
 
-    @OneToMany(type => GoodsProperty, goodsProperty => goodsProperty.type, {
+    @OneToMany(type => GoodsProperty, goodsProperty => goodsProperty.goodsType, {
         cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,
@@ -26,7 +26,7 @@ export class GoodsType {
     })
     properties: Array<GoodsProperty>;
 
-    @OneToMany(type => Goods, goods => goods.classify, {
+    @OneToMany(type => Goods, goods => goods.type, {
         cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,

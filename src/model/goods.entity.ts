@@ -72,7 +72,7 @@ export class Goods {
     brand: Brand;
 
     /* 商品类型删除时，其下存在商品需要报错，不级联删除 */
-    @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
+    @ManyToOne(type => GoodsType, goodsType => goodsType.goodses, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
