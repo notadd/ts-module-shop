@@ -1,3 +1,4 @@
+import { RecycleGoodsesData } from "../interface/goods/recycle.goodses.data";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { GoodsesData } from "../interface/goods/goodses.data";
@@ -17,7 +18,7 @@ export class GoodsResolver {
         @Inject(GoodsService) private readonly goodsService: GoodsService
     ) { }
 
-    /* 获取指定分类下所有商品，分类只能是三级分类，不需要分类级别，可以分页获取,不传递分页参数，则获取类型下所有商品 */
+    /* 获取指定分类下所有商品，分类只能是三级分类，不需要分类级别，可以分页获取,不传递分页参数，则获取类型下所有商品,回收站中商品不能获取 */
     @Query("goodses")
     async goodses(req: Request, body: { classifyId: number, pageNumber: number, pageSize: number }): Promise<GoodsesData> {
         const { classifyId, pageNumber, pageSize } = body;
@@ -26,6 +27,14 @@ export class GoodsResolver {
         }
         const goodses: Array<Goods> = await this.goodsService.getGoodses(classifyId, pageNumber, pageSize);
         return { code: 200, message: "获取指定分类商品成功", goodses };
+    }
+
+    /* 获取回收站中所有商品，可以分页获取,不传递分页参数，则获取回收站下所有商品 */
+    @Query("recycleGoodses")
+    async recycleGoodses(req: Request, body: { pageNumber: number, pageSize: number }): Promise<RecycleGoodsesData> {
+        const { pageNumber, pageSize } = body;
+        const recycleGoodses: Array<Goods> = await this.goodsService.getRecycleGoodses(pageNumber, pageSize);
+        return { code: 200, message: "获取指定分类商品成功", recycleGoodses };
     }
 
     /* 获取指定id商品信息，可以获取商品类型以及其下属性，商品的属性值以及关联的属性，用来给商品详情页使用 */

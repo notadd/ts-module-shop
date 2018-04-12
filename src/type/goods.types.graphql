@@ -1,5 +1,6 @@
 type Query{
     goodses(classifyId:Int!,pageNumber:Int,pageSize:Int):GoodsesData
+    recycleGoodses(pageNumber:Int,pageSize:Int):RecycleGoodsesData
     goods(id:Int!):GoodsData
 }
 
@@ -17,6 +18,12 @@ type GoodsData{
     code:Int
     message:String
     goods:Goods
+}
+
+type RecycleGoodsesData{
+    code:Int
+    message:String
+    recycleGoodses:[Goods]
 }
 
 type GoodsesData{
