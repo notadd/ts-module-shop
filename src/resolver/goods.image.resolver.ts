@@ -22,7 +22,7 @@ export class GoodsImageResolver {
         if (!goodsId) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
-        const images: Array<{id: number; bucketName: string; name: string, type: string; url: string}> = await this.goodsImageService.getGoodsImages(goodsId);
+        const images: Array<{id: number; bucketName: string; name: string, type: string; url: string}> = await this.goodsImageService.getGoodsImages(req, goodsId);
         return {code: 200, message: "获取指定商品的所有图片成功", images};
     }
 
