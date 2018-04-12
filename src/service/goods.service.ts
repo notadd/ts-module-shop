@@ -186,7 +186,22 @@ export class GoodsService {
         }
     }
 
-
+    /* 从回收站中还原商品，即将recycle属性置为false */
+    async restoreGoods(id: number): Promise<void> {
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        if (!goods) {
+            throw new HttpException("指定id=" + id + "商品不存在", 404);
+        }
+        if (!goods.recycle) {
+            throw new HttpException("指定id=" + id + "商品不在回收站中，不需要还原", 404);
+        }
+        try {
+            goods.recycle = false;
+            await this.goodsRepository.save(goods);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 
 
 }
