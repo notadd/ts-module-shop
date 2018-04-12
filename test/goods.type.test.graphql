@@ -1,0 +1,60 @@
+query all{
+  goodsTypes{
+    code
+    message
+    goodsTypes{
+      id
+      name
+      properties{
+        id
+        name
+        type
+        inputType
+  			list
+      }
+    }
+  }
+}
+
+query one{
+  goodsType(id:1){
+    code
+    message
+    goodsType{
+      id
+      name
+      properties{
+        id
+        name
+        type
+        inputType
+        list
+      }
+    }
+  }
+}
+
+mutation create{
+  bijiben:createGoodsType(name:"笔记本电脑"){
+    code
+    message
+  }
+  shouji:createGoodsType(name:"手机"){
+    code
+    message
+  }
+}
+
+mutation update{
+  updateGoodsType(id:1,name:"笔记本"){
+    code
+    message
+  }
+}
+
+mutation delete{
+  deleteGoodsType(id:1){
+    code
+    message
+  }
+}
