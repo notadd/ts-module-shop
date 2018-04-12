@@ -31,7 +31,7 @@ export class GoodsImage {
     type: string;
 
     /* 商品删除时，所有图片级联删除，在这之前需要先删除存储的图片 */
-    @ManyToOne(type => Goods, goods => goods.values, {
+    @ManyToOne(type => Goods, goods => goods.images, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
