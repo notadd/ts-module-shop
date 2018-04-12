@@ -164,5 +164,29 @@ export class GoodsService {
         }
     }
 
+    /* 软删除多个商品 */
+    async softDeleteGoodses(ids: Array<number>): Promise<void> {
+        const goodses: Array<Goods> | undefined = await this.goodsRepository.findByIds(ids);
+        for (let i = 0; i < ids.length; i++) {
+            const index: number = goodses.findIndex(goods => {
+                return goods.id === ids[i];
+            });
+            if (index < 0) {
+                throw new HttpException("指定id=" + ids[i] + "商品不存在", 404);
+            }
+            if (goodses[index].recycle) {
+                throw new HttpException("指定id=" + ids[i] + "商品已经存在于回收站中，不需要软删除", 404);
+            }
+            goodses[index].recycle = true;
+        }
+        try {
+            await this.goodsRepository.save(goodses);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+
+
 
 }
