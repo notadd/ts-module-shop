@@ -22,7 +22,7 @@ export class GoodsService {
         @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>
     ) { }
 
-    /* 获取指定分类下所有商品，如果传递分页参数则分页获取 */
+    /* 获取指定分类下所有商品，如果传递分页参数则分页获取,只能获取不在回收站中商品 */
     async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<Array<Goods>> {
         const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);
         if (!classify) {
@@ -31,7 +31,7 @@ export class GoodsService {
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
             .select(["goods.id", "goods.name", "goods.basePrice", "goods.description"])
-            .where({ classifyId });
+            .where({ classifyId, recycle: false });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
         }
@@ -87,6 +87,9 @@ export class GoodsService {
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
+        if(goods.recycle){
+            throw new HttpException("指定id=" + id + "商品已经存在于回收站中，不能更新", 404);
+        }
         if (name && (name !== goods.name)) {
             const exist: Goods | undefined = await this.goodsRepository.findOne({ name });
             if (exist) {
@@ -139,6 +142,9 @@ export class GoodsService {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
+        }
+        if (!goods.recycle) {
+            throw new HttpException("指定id=" + id + "商品不在回收站中，不能删除，需要先放入回收站中才可删除", 404);
         }
         try {
             await this.goodsRepository.remove(goods);
