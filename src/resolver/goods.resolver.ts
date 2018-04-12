@@ -106,4 +106,15 @@ export class GoodsResolver {
         return { code: 200, message: "商品还原成功" };
     }
 
+    /* 从回收站中还原多个商品 */
+    @Mutation("restoreGoodses")
+    async restoreGoodses(req: Request, body: { ids: Array<number> }): Promise<Data> {
+        const { ids } = body;
+        if (!ids || ids.length === 0) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.goodsService.restoreGoodses(ids);
+        return { code: 200, message: "多个商品还原成功" };
+    }
+
 }
