@@ -1,4 +1,4 @@
-﻿import { PropertyValue } from "../model/property.value.entity";
+import { PropertyValue } from "../model/property.value.entity";
 import { GoodsProperty } from "../model/goods.property.entity";
 import { Goods } from "../model/goods.entity";
 import { Repository } from "typeorm";

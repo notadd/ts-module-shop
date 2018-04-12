@@ -1,4 +1,4 @@
-﻿import { SecondClassify } from "../model/second.classify.entity";
+import { SecondClassify } from "../model/second.classify.entity";
 import { FirstClassify } from "../model/first.classify.entity";
 import { ThirdClassify } from "../model/third.classify.entity";
 import { Classify } from "../interface/classify/classify";

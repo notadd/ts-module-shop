@@ -1,4 +1,4 @@
-﻿import { PropertyValue } from "./property.value.entity";
+import { PropertyValue } from "./property.value.entity";
 import { ThirdClassify } from "./third.classify.entity";
 import { GoodsType } from "./goods.type.entity";
 import { Brand } from "./brand.entity";

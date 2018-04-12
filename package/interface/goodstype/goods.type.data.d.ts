@@ -1,4 +1,4 @@
-﻿export interface GoodsTypeData {
+export interface GoodsTypeData {
     code: number;
     message: string;
     goodsType: {

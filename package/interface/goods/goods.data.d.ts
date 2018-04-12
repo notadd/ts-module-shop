@@ -1,4 +1,4 @@
-﻿import { GoodsProperty } from "../goodsproperty/goods.property";
+import { GoodsProperty } from "../goodsproperty/goods.property";
 export interface GoodsData {
     code: number;
     message: string;

@@ -1,4 +1,4 @@
-﻿export interface GoodsesData {
+export interface GoodsesData {
     code: number;
     message: string;
     goodses: Array<{

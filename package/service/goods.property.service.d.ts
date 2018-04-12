@@ -1,4 +1,4 @@
-﻿import { GoodsProperty } from "../model/goods.property.entity";
+import { GoodsProperty } from "../model/goods.property.entity";
 import { Repository, Connection } from "typeorm";
 import { GoodsType } from "../model/goods.type.entity";
 export declare class GoodsPropertyService {

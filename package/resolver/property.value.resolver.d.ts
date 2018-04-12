@@ -1,4 +1,4 @@
-﻿/// <reference types="express" />
+/// <reference types="express" />
 import { PropertyValueService } from "../service/property.value.service";
 import { Data } from "../interface/data";
 import { Request } from "express";

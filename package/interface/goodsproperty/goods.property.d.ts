@@ -1,4 +1,4 @@
-﻿export interface GoodsProperty {
+export interface GoodsProperty {
     id: number;
     name: string;
     type: string;

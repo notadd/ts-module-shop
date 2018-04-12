@@ -1,4 +1,4 @@
-﻿import { Brand } from "../model/brand.entity";
+import { Brand } from "../model/brand.entity";
 import { Repository } from "typeorm";
 export declare class BrandService {
     private readonly brandRepository;

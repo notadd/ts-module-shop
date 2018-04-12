@@ -1,4 +1,4 @@
-﻿/// <reference types="express" />
+/// <reference types="express" />
 import { GoodsTypesData } from "../interface/goodstype/goods.types.data";
 import { GoodsTypeData } from "../interface/goodstype/goods.type.data";
 import { GoodsTypeService } from "../service/goods.type.service";

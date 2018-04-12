@@ -1,4 +1,4 @@
-﻿import { PropertyValue } from "./property.value.entity";
+import { PropertyValue } from "./property.value.entity";
 import { GoodsType } from "./goods.type.entity";
 export declare class GoodsProperty {
     id: number;

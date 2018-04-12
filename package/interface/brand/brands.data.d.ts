@@ -1,4 +1,4 @@
-﻿export interface BrandsData {
+export interface BrandsData {
     code: number;
     message: string;
     brands: Array<{

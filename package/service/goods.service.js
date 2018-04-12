@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,10 +20,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
 const third_classify_entity_1 = require("../model/third.classify.entity");
 const property_value_entity_1 = require("../model/property.value.entity");
-const typeorm_1 = require("typeorm");
 const goods_type_entity_1 = require("../model/goods.type.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const goods_entity_1 = require("../model/goods.entity");
@@ -43,13 +43,20 @@ let GoodsService = class GoodsService {
             if (!classify) {
                 throw new common_1.HttpException("指定id=" + classifyId + "分类不存在", 404);
             }
-            const goodses = yield this.goodsRepository.createQueryBuilder("goods").select(["goods.id", "goods.name", "goods.basePrice", "goods.description"]).where({ classifyId }).getMany();
+            let queryBuilder = this.goodsRepository
+                .createQueryBuilder("goods")
+                .select(["goods.id", "goods.name", "goods.basePrice", "goods.description"])
+                .where({ classifyId });
+            if (pageNumber && pageSize) {
+                queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
+            }
+            const goodses = yield queryBuilder.getMany();
             return goodses;
         });
     }
     getGoods(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const goods = yield this.goodsRepository.findOneById(id);
+            const goods = yield this.goodsRepository.findOneById(id, { relations: ["type"] });
             if (!goods) {
                 throw new common_1.HttpException("指定id=" + id + "商品不存在", 404);
             }
@@ -173,4 +180,3 @@ GoodsService = __decorate([
         typeorm_1.Repository])
 ], GoodsService);
 exports.GoodsService = GoodsService;
-//# sourceMappingURL=goods.service.js.map

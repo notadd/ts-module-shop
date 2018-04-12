@@ -1,4 +1,4 @@
-﻿/// <reference types="express" />
+/// <reference types="express" />
 import { ClassifyService } from "../service/classify.service";
 import { Classify } from "../interface/classify/classify";
 import { Data } from "../interface/data";

@@ -1,4 +1,4 @@
-﻿import { GoodsType } from "../model/goods.type.entity";
+import { GoodsType } from "../model/goods.type.entity";
 import { Repository } from "typeorm";
 export declare class GoodsTypeService {
     private readonly goodsTypeRepository;

@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -68,4 +68,3 @@ ThirdClassify = __decorate([
     typeorm_1.Entity("third_classify")
 ], ThirdClassify);
 exports.ThirdClassify = ThirdClassify;
-//# sourceMappingURL=third.classify.entity.js.map

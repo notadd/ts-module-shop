@@ -1,4 +1,4 @@
-﻿import { SecondClassify } from "./second.classify.entity";
+import { SecondClassify } from "./second.classify.entity";
 import { Goods } from "./goods.entity";
 export declare class ThirdClassify {
     id: number;

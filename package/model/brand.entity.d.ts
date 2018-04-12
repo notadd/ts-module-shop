@@ -1,4 +1,4 @@
-﻿import { Goods } from "./goods.entity";
+import { Goods } from "./goods.entity";
 export declare class Brand {
     id: number;
     name: string;

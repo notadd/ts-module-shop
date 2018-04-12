@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -112,4 +112,3 @@ GoodsTypeResolver = __decorate([
     __metadata("design:paramtypes", [goods_type_service_1.GoodsTypeService])
 ], GoodsTypeResolver);
 exports.GoodsTypeResolver = GoodsTypeResolver;
-//# sourceMappingURL=goods.type.resolver.js.map

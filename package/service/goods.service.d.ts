@@ -1,6 +1,6 @@
-﻿import { ThirdClassify } from "../model/third.classify.entity";
-import { PropertyValue } from "../model/property.value.entity";
 import { Repository, Connection } from "typeorm";
+import { ThirdClassify } from "../model/third.classify.entity";
+import { PropertyValue } from "../model/property.value.entity";
 import { GoodsType } from "../model/goods.type.entity";
 import { Goods } from "../model/goods.entity";
 import { Brand } from "../model/brand.entity";

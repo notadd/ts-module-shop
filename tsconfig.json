@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "allowJs": false,
+    "baseUrl": "./",
     "declaration": true,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
-    "sourceMap": true,
-    "allowJs": false,
-    "outDir": "./package",
-    "strict": true,
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noLib": false,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "strict": false,
     "strictPropertyInitialization": false,
-    "emitBOM": true
+    "target": "ES2015",
+    "outDir": "package"
   },
   "include": [
     "src/*.ts",
