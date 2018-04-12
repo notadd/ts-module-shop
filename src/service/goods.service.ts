@@ -9,7 +9,7 @@ import { Goods } from "../model/goods.entity";
 import { Brand } from "../model/brand.entity";
 
 
-
+/* 商品服务组件 */
 @Component()
 export class GoodsService {
 
@@ -22,6 +22,7 @@ export class GoodsService {
         @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>
     ) { }
 
+    /* 获取指定分类下所有商品，如果传递分页参数则分页获取 */
     async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<Array<Goods>> {
         const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);
         if (!classify) {
@@ -38,11 +39,13 @@ export class GoodsService {
         return goodses;
     }
 
+    /* 获取指定的详细信息，会同时获取商品所属类型以及类型下的属性、商品下所有属性值以及属性值关联的属性 */
     async getGoods(id: number): Promise<Goods> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, {relations: ["type"]});
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
+        /* 获取商品类型的属性、获取属性值关联的属性 */
         const type: GoodsType | undefined = await this.goodsTypeRepository.findOneById(goods.type.id, { relations: ["properties"] });
         const values: Array<PropertyValue> = await this.propertyValueRepository.createQueryBuilder("value").select(["value.id", "value.price", "value.value"]).where({ goods }).leftJoinAndSelect("value.property", "property").getMany();
         goods.type = type as any;
@@ -50,6 +53,7 @@ export class GoodsService {
         return goods;
     }
 
+    /* 创建商品，只有品牌可以为空，其他属性都不能为空 */
     async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const exist: Goods | undefined = await this.goodsRepository.findOne({ name });
         if (exist) {
@@ -77,6 +81,7 @@ export class GoodsService {
         }
     }
 
+    /* 更新指定商品，如果商品分类被更新，则商品下原来所有的商品属性值都会被删除 */
     async updateGoods(id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["classify", "type", "values", "brand"] });
         if (!goods) {
@@ -129,7 +134,7 @@ export class GoodsService {
         }
     }
 
-    /* 删除商品时，其下所有属性值也会被删除 */
+    /* 删除商品时，其下所有属性值也会被删除,这是由数据库的外键关联删除的 */
     async deleteGoods(id: number): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
         if (!goods) {
