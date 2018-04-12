@@ -4,7 +4,6 @@
     "description": "商城模块",
     "main": "index.js",
     "scripts": {
-        "tsc": "tsc",
         "start": "node ./starter/index.js",
         "start:watch": "nodemon",
         "test": "jest --config=jest.json --runInBand --forceExit",
@@ -21,7 +20,7 @@
         "商城",
         "notadd"
     ],
-    "author": "czy",
+    "author": "czy12345",
     "license": "Apache-2.0",
     "dependencies": {
         "@nestjs/common": "^4.5.9",

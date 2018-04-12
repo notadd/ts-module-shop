@@ -13,7 +13,7 @@
     "strict": false,
     "strictPropertyInitialization": false,
     "target": "ES2015",
-    "outDir": "package"
+    "outDir": "package6"
   },
   "include": [
     "src/*.ts",

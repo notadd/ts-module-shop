@@ -5,6 +5,8 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
+
+/* 属性值的Resolver */
 @Resolver("PropertyValue")
 export class PropertyValueResolver {
 
@@ -12,6 +14,10 @@ export class PropertyValueResolver {
         @Inject(PropertyValueService) private readonly propertyValueService: PropertyValueService
     ) { }
 
+    /* 添加指定商品、指定属性的一个属性值，规则为
+    指定属性从属于指定商品的商品类型，不能是随意属性
+    唯一属性不需要传递价格，单选、复选属性需要价格，也就是价格与属性类型有关
+    当录入类型是list时，value必须被list包含，不能是随意值，也就是属性值与属性的输入类型有关*/
     @Mutation("createPropertyValue")
     async createPropertyValue(req: Request, body: { goodsId: number, goodsPropertyId: number, value: string, price: number }): Promise<Data> {
         const { goodsId, goodsPropertyId, value, price } = body;
@@ -22,6 +28,7 @@ export class PropertyValueResolver {
         return { code: 200, message: "创建属性值成功" };
     }
 
+    /* 更新指定id属性值，只能更新属性值与价格 */
     @Mutation("updatePropertyValue")
     async updatePropertyValue(req: Request, body: { id: number, value: string, price: number }): Promise<Data> {
         const { id, value, price } = body;
@@ -32,6 +39,7 @@ export class PropertyValueResolver {
         return { code: 200, message: "更新属性值成功" };
     }
 
+    /* 删除指定id属性值，不管是唯一属性、单选、复选属性都可以删除 */
     @Mutation("deletePropertyValue")
     async deletePropertyValue(req: Request, body: { id: number }): Promise<Data> {
         const { id } = body;
