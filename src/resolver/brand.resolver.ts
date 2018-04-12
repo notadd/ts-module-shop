@@ -7,7 +7,7 @@ import { Data } from "../interface/data";
 import { Request } from "express";
 
 
-
+/* 品牌的Resolver */
 @Resolver("Brand")
 @UseInterceptors(ExceptionInterceptor)
 export class BrandResolver {
@@ -16,12 +16,14 @@ export class BrandResolver {
         @Inject(BrandService) private readonly brandService: BrandService
     ) { }
 
+    /* 获取当前所有品牌，用来供商品选择 */
     @Query("brands")
     async brands(req: Request): Promise<BrandsData> {
         const brands: Array<{ id: number, name: string }> = await this.brandService.getBrands();
         return { code: 200, message: "获取所有品牌成功", brands };
     }
 
+    /* 创建指定名称品牌 */
     @Mutation("createBrand")
     async createBrand(req: Request, body: { name: string }): Promise<Data> {
         const { name } = body;
@@ -32,6 +34,7 @@ export class BrandResolver {
         return { code: 200, message: "创建品牌成功" };
     }
 
+    /* 更新指定id品牌，品牌下商品不受影响 */
     @Mutation("updateBrand")
     async updateBrand(req: Request, body: { id: number, name: string }): Promise<Data> {
         const { id, name } = body;
@@ -42,6 +45,7 @@ export class BrandResolver {
         return { code: 200, message: "更新品牌成功" };
     }
 
+    /* 删除指定id品牌，品牌下存在商品不允许删除 */
     @Mutation("deleteBrand")
     async deleteBrand(req: Request, body: { id: number }): Promise<Data> {
         const { id } = body;

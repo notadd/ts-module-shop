@@ -11,6 +11,7 @@ export class BrandService {
         @InjectRepository(Brand) private readonly brandRepository: Repository<Brand>
     ) { }
 
+
     async getBrands(): Promise<Array<Brand>> {
         return this.brandRepository.find();
     }
