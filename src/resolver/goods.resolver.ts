@@ -72,4 +72,15 @@ export class GoodsResolver {
         await this.goodsService.deleteGoods(id);
         return { code: 200, message: "删除商品成功" };
     }
+
+    /* 软删除商品，软删除后不会在商品列表中显示，商品不可以直接删除，只能先软删除，再delete */
+    @Mutation("softDeleteGoods")
+    async softDeleteGoods(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.goodsService.softDeleteGoods(id);
+        return { code: 200, message: "商品放入回收站成功" };
+    }
 }

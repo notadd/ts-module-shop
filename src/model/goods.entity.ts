@@ -36,6 +36,13 @@ export class Goods {
     description: string;
 
     @Column({
+        name: "recycle",
+        type: "smallint",
+        default: 0
+    })
+    recycle: boolean;
+
+    @Column({
         name: "classifyId"
     })
     classifyId: number;
