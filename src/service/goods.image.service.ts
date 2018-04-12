@@ -14,4 +14,5 @@ export class GoodsImageService {
         @InjectRepository(GoodsImage) private readonly goodsImageRepository: Repository<GoodsImage>
     ) { }
 
+
 }

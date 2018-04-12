@@ -1,0 +1,21 @@
+type Query{
+    goodsImages(goodsId:Int!):GoodsImagesData
+}
+
+type Mutation{
+
+}
+
+type GoodsImagesData{
+    code
+    message
+    images:[GoodsImage]
+}
+
+type GoodsImage{
+    id:Int
+    bucketName:String
+    name:String
+    type:String
+    url:String
+}
