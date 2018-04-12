@@ -41,7 +41,7 @@ export class GoodsService {
 
     /* 获取指定的详细信息，会同时获取商品所属类型以及类型下的属性、商品下所有属性值以及属性值关联的属性 */
     async getGoods(id: number): Promise<Goods> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, {relations: ["type"]});
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["type"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
@@ -142,6 +142,23 @@ export class GoodsService {
         }
         try {
             await this.goodsRepository.remove(goods);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+    /* 软删除商品，即放入回收站中，其实是将商品的recycle属性置为true，说明商品在回收站中 */
+    async softDeleteGoods(id: number): Promise<void> {
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        if (!goods) {
+            throw new HttpException("指定id=" + id + "商品不存在", 404);
+        }
+        if (goods.recycle) {
+            throw new HttpException("指定id=" + id + "商品已经存在于回收站中，不需要软删除", 404);
+        }
+        try {
+            goods.recycle = true;
+            await this.goodsRepository.save(goods);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
