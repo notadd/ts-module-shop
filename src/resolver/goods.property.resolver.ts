@@ -5,6 +5,8 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
+
+/* 商品属性Resolver，没有什么Query，查询商品类型时会顺带查询其下商品属性 */
 @Resolver("GoodsProperty")
 @UseInterceptors(ExceptionInterceptor)
 export class GoodsPropertyResolver {
@@ -13,9 +15,11 @@ export class GoodsPropertyResolver {
         @Inject(GoodsPropertyService) private readonly goodsPropertyService: GoodsPropertyService
     ) { }
 
+    /* 创建指定商品类型下，指定名称、类型、输入类型、列表值的商品属性 */
     @Mutation("createGoodsProperty")
     async createGoodsProperty(req: Request, body: { goodsTypeId: number, name: string, type: "unique" | "radio" | "check", inputType: "text" | "list" | "textarea", list: Array<string> }): Promise<Data> {
         const { goodsTypeId, name, type, inputType, list } = body;
+        /* list只有在输入类为list时才会存在 */
         if (!goodsTypeId || !name || !type || !inputType) {
             throw new HttpException("缺少参数", 404);
         }
@@ -32,12 +36,14 @@ export class GoodsPropertyResolver {
         return { code: 200, message: "创建商品属性成功" };
     }
 
+    /* 更新指定id商品属性，可以更新名称、类型、输入类型、列表值，不能更新所属商品类型 */
     @Mutation("updateGoodsProperty")
     async updateGoodsProperty(req: Request, body: { id: number, name: string, type: "unique" | "radio" | "check", inputType: "text" | "list" | "textarea", list: Array<string> }): Promise<Data> {
         const { id, name, type, inputType, list } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
+        /* 默认认为更新输入类型为list时，必须同时更新列表值 */
         if (inputType === "list" && !list) {
             throw new HttpException("输入类型为list时，list列表值必须存在", 404);
         }
