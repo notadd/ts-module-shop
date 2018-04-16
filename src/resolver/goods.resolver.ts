@@ -63,7 +63,7 @@ export class GoodsResolver {
     当更新商品类型时，商品下关联的属性值会被删除*/
     @Mutation("updateGoods")
     async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
-        const { id, basePrice, description, classifyId, goodsTypeId, brandId } = body;
+        const { id, name, basePrice, description, classifyId, goodsTypeId, brandId } = body;
         if (!id) {
             throw new HttpException("缺少参数", 400);
         }
