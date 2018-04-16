@@ -1,6 +1,6 @@
 type Mutation{
     createBrand(name:String!,logo:BrandLogo!):ShopCommonData
-    updateBrand(id:Int!,name:String!):ShopCommonData
+    updateBrand(id:Int!,name:String,logo:BrandLogo):ShopCommonData
     deleteBrand(id:Int!):ShopCommonData
 }
 

@@ -36,12 +36,12 @@ export class BrandResolver {
 
     /* 更新指定id品牌，品牌下商品不受影响 */
     @Mutation("updateBrand")
-    async updateBrand(req: Request, body: { id: number, name: string }): Promise<Data> {
-        const { id, name } = body;
-        if (!id || !name) {
+    async updateBrand(req: Request, body: { id: number, name: string, logo: { bucketName: string, rawName: string, base64: string } }): Promise<Data> {
+        const { id, name, logo } = body;
+        if (!id) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.brandService.updateBrand(id, name);
+        await this.brandService.updateBrand(id, name, logo);
         return { code: 200, message: "更新品牌成功" };
     }
 

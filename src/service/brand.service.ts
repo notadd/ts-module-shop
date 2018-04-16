@@ -37,8 +37,8 @@ export class BrandService {
     }
 
     /* 更新指定id品牌，品牌不存在或者新名称已存在，抛出异常 */
-    async updateBrand(id: number, name: string): Promise<void> {
-        const brand: Brand | undefined = await this.brandRepository.findOneById(id);
+    async updateBrand(id: number, name: string, logo: { bucketName: string, rawName: string, base64: string }): Promise<void> {
+        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["logo"] });
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }
@@ -50,6 +50,12 @@ export class BrandService {
             brand.name = name;
         }
         try {
+            if (logo) {
+                const { name, type } = await this.storeComponent.upload(logo.bucketName, logo.rawName, logo.base64, undefined);
+                await this.storeComponent.delete(brand.logo.bucketName, brand.logo.name, brand.logo.type);
+                await this.brandLogoRepository.remove(brand.logo);
+                await this.brandLogoRepository.save({bucketName: logo.bucketName, name, type, brand});
+            }
             await this.brandRepository.save(brand);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
