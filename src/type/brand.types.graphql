@@ -5,7 +5,7 @@ type Mutation{
 }
 
 input InputBrandLogo{
-    bucketName：String!
+    bucketName:String!
     rawName:String!
     base64:String!
 }

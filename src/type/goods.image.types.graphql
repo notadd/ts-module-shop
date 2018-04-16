@@ -8,8 +8,8 @@ type Mutation{
 }
 
 type GoodsImagesData{
-    code
-    message
+    code:Int
+    message:String
     images:[GoodsImage]
 }
 
