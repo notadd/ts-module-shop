@@ -41,7 +41,7 @@ type Goods{
     type:GoodsType
     classify:Classify
     values:[PropertyValue]
-    recycle:Int
+    recycle:String
 }
 
 

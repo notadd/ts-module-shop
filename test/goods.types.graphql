@@ -1,0 +1,126 @@
+query all{
+  goodses(classifyId:1,pageNumber:null,pageSize:null){
+    code
+    message
+    goodses{
+      id
+      name
+      basePrice
+      description
+      recycle
+    }
+  }
+}
+
+query recycle{
+  recycleGoodses{
+  	code
+    message
+    recycleGoodses{
+      id
+      name
+      basePrice
+      description
+      recycle
+    }
+  }
+}
+
+query one{
+  goods(id:1){
+    code
+    message
+    goods{
+      id
+      name
+      basePrice
+      description
+      recycle
+      typeId
+      type{
+        id
+        name
+      }
+      values{
+        id
+        value
+        property {
+          id
+        }
+      }
+    }
+  }
+}
+
+mutation create{
+  mix2:createGoods(name:"mix2",basePrice:2999,description:"小米旗舰产品",classifyId:1,goodsTypeId:2,brandId:1){
+    code
+    message
+  }
+  p10:createGoods(name:"P10",basePrice:3200,description:"华为旗舰产品",classifyId:1,goodsTypeId:2,brandId:2){
+    code
+    message
+  }
+  iphoneX:createGoods(name:"iphoneX",basePrice:9499,description:"苹果旗舰茶品",classifyId:1,goodsTypeId:2,brandId:3){
+    code
+    message
+  }
+}
+
+mutation update{
+  mix2:updateGoods(id:1,name:"mix2",basePrice:4999,description:"小米旗舰产品",classifyId:1,goodsTypeId:2,brandId:1){
+    code
+    message
+  }
+  p10:updateGoods(id:2,name:"P10",basePrice:5200,description:"华为旗舰产品",classifyId:1,goodsTypeId:2,brandId:2){
+    code
+    message
+  }
+  iphoneX:updateGoods(id:3,name:"iphoneX",basePrice:15200,description:"苹果旗舰茶品",classifyId:1,goodsTypeId:2,brandId:3){
+    code
+    message
+  }
+}
+
+mutation softDeleteOne{
+  softDeleteGoods(id:2){
+    code
+    message
+  }
+}
+
+mutation softDeleteMany{
+  softDeleteGoodses(ids:[1,2,3]){
+    code
+    message
+  }
+}
+
+mutation restoreOne{
+  restoreGoods(id:2){
+    code
+    message
+  }
+}
+
+mutation restoreMany{
+  restoreGoodses(ids:[1,2,3]){
+    code
+    message
+  }
+}
+
+mutation delete{
+  mix2:deleteGoods(id:1){
+    code
+    message
+  }
+  p10:deleteGoods(id:2){
+    code
+    message
+  }
+  iphoneX:deleteGoods(id:3){
+		code
+    message
+	}
+}
