@@ -40,8 +40,8 @@ export class Goods {
 
     @Column({
         name: "recycle",
-        type: "smallint",
-        default: 0
+        type: "boolean",
+        default: false
     })
     recycle: boolean;
 
