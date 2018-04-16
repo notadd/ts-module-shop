@@ -1,3 +1,4 @@
+import { PropertyValuesData } from "../interface/propertyvalue/property.values.data";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { PropertyValueService } from "../service/property.value.service";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
