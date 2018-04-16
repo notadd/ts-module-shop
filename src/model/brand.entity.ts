@@ -20,7 +20,8 @@ export class Brand {
     @OneToOne(type => BrandLogo, brandLogo => brandLogo.brand, {
         cascadeInsert: false,
         cascadeUpdate: false,
-        cascadeRemove: false
+        cascadeRemove: false,
+        nullable: true
     })
     logo: BrandLogo;
 
