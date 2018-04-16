@@ -4,7 +4,15 @@ type Mutation{
     deletePropertyValue(id:Int!):ShopCommonData
 }
 
+type Query{
+    propertyValues(goodsId:Int!):PropertyValuesData
+}
 
+type PropertyValuesData{
+    code:Int
+    message:String
+    values:[PropertyValue]
+}
 
 type PropertyValue{
     id:Int

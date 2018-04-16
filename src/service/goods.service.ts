@@ -54,15 +54,11 @@ export class GoodsService {
 
     /* 获取指定的详细信息，会同时获取商品所属类型以及类型下的属性、商品下所有属性值以及属性值关联的属性 */
     async getGoods(id: number): Promise<Goods> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["type"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["type", "values"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
-        /* 获取商品类型的属性、获取属性值关联的属性 */
-        const type: GoodsType | undefined = await this.goodsTypeRepository.findOneById(goods.type.id, { relations: ["properties"] });
-        const values: Array<PropertyValue> = await this.propertyValueRepository.createQueryBuilder("value").select(["value.id", "value.price", "value.value"]).where({ goods }).leftJoinAndSelect("value.property", "property").getMany();
-        goods.type = type as any;
-        goods.values = values;
+        // const values: Array<PropertyValue> = await this.propertyValueRepository.createQueryBuilder("value").select(["value.id", "value.price", "value.value"]).where({ goods }).leftJoinAndSelect("value.property", "property").getMany();
         return goods;
     }
 

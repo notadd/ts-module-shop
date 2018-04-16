@@ -37,6 +37,7 @@ type Goods{
     name:String
     basePrice:Float
     description:String
+    typeId:Int
     type:GoodsType
     classify:Classify
     values:[PropertyValue]
