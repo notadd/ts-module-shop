@@ -32,8 +32,18 @@ export class GoodsImageResolver {
         if (!goodsId || !bucketName || !rawName || !base64) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.goodsImages.createGoodsImage(goodsId, bucketName, rawName, base64);
+        await this.goodsImageService.createGoodsImage(goodsId, bucketName, rawName, base64);
         return { code: 200, message: "创建商品图片成功" };
+    }
+
+    @Mutation("deleteGoodsImage")
+    async deleteGoodsImage(req: Request, body: { goodsId: number, id: number }): Promise<Data> {
+        const { goodsId, id } = body;
+        if (!goodsId || !id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.goodsImageService.deleteGoodsImage(goodsId, id);
+        return { code: 200, message: "删除商品图片成功" };
     }
 
 }
