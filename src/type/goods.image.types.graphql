@@ -3,7 +3,7 @@ type Query{
 }
 
 type Mutation{
-
+    createGoodsImage(goodsId:Int!,bucketName:String!,rawName:String!,base64:String!):ShopCommonData
 }
 
 type GoodsImagesData{
