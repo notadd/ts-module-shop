@@ -19,7 +19,7 @@ export class BrandService {
     /* 获取当前所有品牌 */
     async getBrands(req: Request): Promise<Array<Brand>> {
         const brands: Array<any> = await this.brandRepository.createQueryBuilder("brand")
-                                            .select(["brand.id", "brand.bucketName", "brand.name", "brand.type"])
+                                            .select(["brand.id", "brand.name"])
                                             .leftJoinAndSelect("brand.logo", "logo")
                                             .getMany();
         for (let i = 0; i < brands.length; i++) {
