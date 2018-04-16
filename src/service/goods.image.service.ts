@@ -29,7 +29,7 @@ export class GoodsImageService {
     }
 
     async createGoodsImage(goodsId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["images"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -38,6 +38,23 @@ export class GoodsImageService {
             await this.goodsImageRepository.save({ bucketName, name, type, goods });
         } catch (err) {
             await this.storeComponent.delete(bucketName, name, type);
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+    async deleteGoodsImage(goodsId: number, id: number): Promise<void> {
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["images"] });
+        if (!goods) {
+            throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
+        }
+        const image: GoodsImage | undefined = goods.images.find(img => img.id === id);
+        if (!image) {
+            throw new HttpException("指定id=" + id + "图片不存在于指定id=" + goodsId + "商品之下", 404);
+        }
+        try {
+            await this.storeComponent.delete(image.bucketName, image.name, image.type);
+            await this.goodsImageRepository.remove(image);
+        } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
