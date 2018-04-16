@@ -1,0 +1,113 @@
+query all{
+  first:classifies(parentId:null,level:1){
+    code
+    message
+    classifies{
+      id
+      name
+      description
+      level
+    }
+  }
+  second:classifies(parentId:null,level:2){
+    code
+    message
+    classifies{
+      id
+      name
+      description
+      level
+    }
+  }
+  third:classifies(parentId:null,level:3){
+    code
+    message
+    classifies{
+      id
+      name
+      description
+      level
+    }
+  }
+}
+
+query one{
+  first:classify(id:1,level:1){
+    code
+    message
+    classify{
+      id
+      name
+      description
+      level
+    }
+  }
+  second:classify(id:1,level:2){
+    code
+    message
+    classify{
+      id
+      name
+      description
+      level
+    }
+  }
+  third:classify(id:1,level:3){
+    code
+    message
+    classify{
+      id
+      name
+      description
+      level
+    }
+  }
+}
+
+
+mutation create{
+  first:createClassify(name:"数码产品",description:"数码产品描述",level:1){
+    code
+    message
+  }
+  second:createClassify(name:"个人便携",description:"个人便携数码产品描述",level:2,parentId:1){
+    code
+    message
+  }
+  third:createClassify(name:"手机",description:"手机描述",level:3,parentId:1){
+    code
+    message
+  }
+}
+
+mutation update{
+  first:updateClassify(id:1,name:"数码产品分类",description:"数码产品分类描述",level:1){
+    code
+    message
+  }
+  second:updateClassify(id:1,name:"个人便携分类",description:"个人便携数码产品分类描述",level:2){
+    code
+    message
+  }
+  third:updateClassify(id:1,name:"手机分类",description:"手机分类描述",level:3){
+    code
+    message
+  }
+}
+
+mutation delete{
+  first:deleteClassify(id:1,level:1){
+    code
+    message
+  }
+  second:deleteClassify(id:1,level:2){
+    code
+    message
+  }
+  third:deleteClassify(id:1,level:3){
+    code
+    message
+  }
+}
+
+
