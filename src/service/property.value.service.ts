@@ -16,6 +16,16 @@ export class PropertyValueService {
         @InjectRepository(GoodsProperty) private readonly goodsPropertyRepository: Repository<GoodsProperty>
     ) { }
 
+
+    async getPropertyValues(goodsId: number): Promise<Array<PropertyValue>> {
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
+        if (!goods) {
+            throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
+        }
+        const values: Array<PropertyValue> = await this.propertyValueRepository.createQueryBuilder("value").select(["value.id", "value.price", "value.value"]).where({ goods }).leftJoinAndSelect("value.property", "property").getMany();
+        return values;
+    }
+
     /* 创建指定商品、指定属性的属性值 */
     async createPropertyValue(goodsId: number, goodsPropertyId: number, value: string, price: number): Promise<void> {
         const goodsProperty: GoodsProperty | undefined = await this.goodsPropertyRepository.findOneById(goodsPropertyId, { relations: ["goodsType"] });

@@ -16,6 +16,7 @@ export class PropertyValueResolver {
         @Inject(PropertyValueService) private readonly propertyValueService: PropertyValueService
     ) { }
 
+    /* 获取指定商品的所有属性值，并关联获取属性值的属性 */
     @Query("propertyValues")
     async propertyValues(req: Request, body: { goodsId: number }): Promise<PropertyValuesData> {
         const { goodsId } = body;

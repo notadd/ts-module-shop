@@ -58,7 +58,6 @@ export class GoodsService {
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
-        // const values: Array<PropertyValue> = await this.propertyValueRepository.createQueryBuilder("value").select(["value.id", "value.price", "value.value"]).where({ goods }).leftJoinAndSelect("value.property", "property").getMany();
         return goods;
     }
 
