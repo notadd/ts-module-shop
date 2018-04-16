@@ -23,7 +23,7 @@ type BrandsData{
 type Brand{
     id:Int
     name:String
-    logo:[BrandLogo]
+    logo:BrandLogo
 }
 
 type BrandLogo{
