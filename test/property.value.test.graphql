@@ -1,0 +1,47 @@
+query goodsValues{
+  propertyValues(goodsId:1){
+    code
+    message
+    values{
+      id
+      value
+      price
+      property{
+        id
+        name
+        type
+        inputType
+        list
+      }
+    }
+  }
+}
+
+mutation create{
+  xinghao:createPropertyValue(goodsId:1,goodsPropertyId:1,value:"xiaomi MIX DIDIDI"){
+    code
+    message
+  }
+  neicun64:createPropertyValue(goodsId:1,goodsPropertyId:2,value:"64G",price:250){
+    code
+    message
+  }
+  neicun256:createPropertyValue(goodsId:1,goodsPropertyId:2,value:"256G",price:1000){
+    code
+    message
+  }
+}
+
+mutation update{
+  xinghao:updatePropertyValue(id:1,value:"xiaomi MIX DADADADADAD"){
+    code
+    message
+  }
+}
+
+mutation delete{
+  neicun256:deletePropertyValue(id:3){
+    code
+    message
+  }
+}
