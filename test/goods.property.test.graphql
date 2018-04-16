@@ -1,0 +1,32 @@
+mutation create{
+  xinghao:createGoodsProperty(goodsTypeId:1,name:"型号",type:unique,inputType:text){
+    code
+    message
+  }
+  neicun:createGoodsProperty(goodsTypeId:1,name:"内存",type:radio,inputType:list,list:["64G","256G"]){
+    code
+    message
+  }
+}
+
+mutation update{
+  xinghao:updateGoodsProperty(id:1,name:"手机型号"){
+    code
+    message
+  }
+  neicun:updateGoodsProperty(id:2,name:"内存大小",inputType:text,list:["32G","64G","128G","256G"]){
+    code
+    message
+  }
+}
+
+mutation delete{
+  xinghao:deleteGoodsProperty(id:1){
+    code
+    message
+  }
+  neicun:deleteGoodsProperty(id:2){
+    code
+    message
+  }
+}

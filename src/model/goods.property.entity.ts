@@ -47,7 +47,8 @@ export class GoodsProperty {
     /* 当属性录入方式为list时，所有列表值 */
     @Column({
         name: "list",
-        type: "simple-array"
+        type: "simple-array",
+        nullable: true
     })
     list: Array<string>;
 
