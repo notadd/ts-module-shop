@@ -19,7 +19,7 @@ export class BrandResolver {
     /* 获取当前所有品牌，用来供商品选择 */
     @Query("brands")
     async brands(req: Request): Promise<BrandsData> {
-        const brands: Array<{ id: number, name: string }> = await this.brandService.getBrands();
+        const brands: Array<any> = await this.brandService.getBrands(req);
         return { code: 200, message: "获取所有品牌成功", brands };
     }
 

@@ -1,10 +1,10 @@
 type Mutation{
-    createBrand(name:String!,logo:BrandLogo!):ShopCommonData
-    updateBrand(id:Int!,name:String,logo:BrandLogo):ShopCommonData
+    createBrand(name:String!,logo:InputBrandLogo!):ShopCommonData
+    updateBrand(id:Int!,name:String,logo:InputBrandLogo):ShopCommonData
     deleteBrand(id:Int!):ShopCommonData
 }
 
-input BrandLogo{
+input InputBrandLogo{
     bucketName：String!
     rawName:String!
     base64:String!
@@ -23,4 +23,13 @@ type BrandsData{
 type Brand{
     id:Int
     name:String
+    logo:[BrandLogo]
+}
+
+type BrandLogo{
+    id:Int
+    bucketName:String
+    name:String
+    type:String
+    url:String
 }

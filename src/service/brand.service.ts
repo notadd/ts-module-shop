@@ -4,6 +4,7 @@ import { BrandLogo } from "../model/brand.logo.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Brand } from "../model/brand.entity";
 import { Repository } from "typeorm";
+import { Request } from "express";
 
 /* 品牌的服务组件 */
 @Component()
@@ -16,8 +17,15 @@ export class BrandService {
     ) { }
 
     /* 获取当前所有品牌 */
-    async getBrands(): Promise<Array<Brand>> {
-        return this.brandRepository.find();
+    async getBrands(req: Request): Promise<Array<Brand>> {
+        const brands: Array<any> = await this.brandRepository.createQueryBuilder("brand")
+                                            .select(["brand.id", "brand.bucketName", "brand.name", "brand.type"])
+                                            .leftJoinAndSelect("brand.logo", "logo")
+                                            .getMany();
+        for (let i = 0; i < brands.length; i++) {
+            brands[i].logo.url = await this.storeComponent.getUrl(req, brands[i].logo.bucketName, brands[i].logo.name, brands[i].logo.type, undefined);
+        }
+        return brands;
     }
 
     /* 创建指定名称品牌，名称已存在抛出异常 */

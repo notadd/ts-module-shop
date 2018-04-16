@@ -4,5 +4,12 @@ export interface BrandsData {
     brands: Array<{
         id: number
         name: string
+        logo: {
+            id: number
+            bucketName: string
+            name: string
+            type: string
+            url: string
+        }
     }>;
 }
