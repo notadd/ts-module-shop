@@ -28,7 +28,17 @@ export class GoodsImageService {
         return images;
     }
 
-
-
-
+    async createGoodsImage(goodsId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
+        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["images"] });
+        if (!goods) {
+            throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
+        }
+        const { name, type } = await this.storeComponent.upload(bucketName, rawName, base64, undefined);
+        try {
+            await this.goodsImageRepository.save({ bucketName, name, type, goods });
+        } catch (err) {
+            await this.storeComponent.delete(bucketName, name, type);
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
