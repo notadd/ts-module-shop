@@ -64,7 +64,7 @@ export class BrandService {
 
     /* 删除指定id品牌，品牌不存在或者品牌下存在商品，抛出异常 */
     async deleteBrand(id: number): Promise<void> {
-        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["goodses"] });
+        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["goodses", "logo"] });
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }
@@ -72,6 +72,7 @@ export class BrandService {
             throw new HttpException("指定品牌下存在商品不允许删除", 404);
         }
         try {
+            await this.storeComponent.delete(brand.logo.bucketName, brand.logo.name, brand.logo.type);
             await this.brandRepository.remove(brand);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
