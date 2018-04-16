@@ -25,12 +25,12 @@ export class BrandResolver {
 
     /* 创建指定名称品牌 */
     @Mutation("createBrand")
-    async createBrand(req: Request, body: { name: string }): Promise<Data> {
-        const { name } = body;
-        if (!name) {
+    async createBrand(req: Request, body: { name: string, logo: { bucketName: string, rawName: string, base64: string } }): Promise<Data> {
+        const { name, logo } = body;
+        if (!name || !logo || !logo.bucketName || !logo.rawName || !logo.base64) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.brandService.createBrand(name);
+        await this.brandService.createBrand(name, logo);
         return { code: 200, message: "创建品牌成功" };
     }
 

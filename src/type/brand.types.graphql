@@ -1,7 +1,13 @@
 type Mutation{
-    createBrand(name:String!):ShopCommonData
+    createBrand(name:String!,logo:BrandLogo!):ShopCommonData
     updateBrand(id:Int!,name:String!):ShopCommonData
     deleteBrand(id:Int!):ShopCommonData
+}
+
+input BrandLogo{
+    bucketName：String!
+    rawName:String!
+    base64:String!
 }
 
 type Query{

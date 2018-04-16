@@ -17,8 +17,8 @@ export class BrandService {
     }
 
     /* 创建指定名称品牌，名称已存在抛出异常 */
-    async createBrand(name: string): Promise<void> {
-        const exist: Brand|undefined = await this.brandRepository.findOne({ name });
+    async createBrand(name: string, logo: { bucketName: string, rawName: string, base64: string }): Promise<void> {
+        const exist: Brand | undefined = await this.brandRepository.findOne({ name });
         if (exist) {
             throw new HttpException("指定name=" + name + "品牌已存在", 404);
         }
@@ -31,12 +31,12 @@ export class BrandService {
 
     /* 更新指定id品牌，品牌不存在或者新名称已存在，抛出异常 */
     async updateBrand(id: number, name: string): Promise<void> {
-        const brand: Brand|undefined = await this.brandRepository.findOneById(id);
+        const brand: Brand | undefined = await this.brandRepository.findOneById(id);
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }
         if (name && (name !== brand.name)) {
-            const exist: Brand|undefined = await this.brandRepository.findOne({ name });
+            const exist: Brand | undefined = await this.brandRepository.findOne({ name });
             if (exist) {
                 throw new HttpException("指定name=" + name + "品牌已存在", 404);
             }
@@ -51,7 +51,7 @@ export class BrandService {
 
     /* 删除指定id品牌，品牌不存在或者品牌下存在商品，抛出异常 */
     async deleteBrand(id: number): Promise<void> {
-        const brand: Brand|undefined = await this.brandRepository.findOneById(id, { relations: ["goodses"] });
+        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["goodses"] });
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }

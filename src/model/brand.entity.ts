@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
+import { BrandLogo } from "./brand.logo.entity";
 import { Goods } from "./goods.entity";
 
 
@@ -15,6 +16,13 @@ export class Brand {
         unique: true
     })
     name: string;
+
+    @OneToOne(type => BrandLogo, brandLogo => brandLogo.brand, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        cascadeRemove: false
+    })
+    logo: BrandLogo;
 
     @OneToMany(type => Goods, goods => goods.brand, {
         cascadeInsert: false,

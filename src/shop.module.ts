@@ -19,19 +19,22 @@ import { GoodsImage } from "./model/goods.image.entity";
 import { GoodsService } from "./service/goods.service";
 import { BrandService } from "./service/brand.service";
 import { GoodsType } from "./model/goods.type.entity";
+import { BrandLogo } from "./model/brand.logo.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Module } from "@nestjs/common";
 
 @Module({
-    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify, Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue, Brand])],
+    modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify,
+        Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
+        Brand, BrandLogo])],
     components: [
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
         ClassifyService, ClassifyResolver,
         GoodsTypeService, GoodsTypeResolver,
-        GoodsImageService,GoodsImageResolver,
+        GoodsImageService, GoodsImageResolver,
         GoodsPropertyService, GoodsPropertyResolver,
         PropertyValueService, PropertyValueResolver
     ],

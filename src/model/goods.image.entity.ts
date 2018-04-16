@@ -36,7 +36,7 @@ export class GoodsImage {
         cascadeUpdate: false,
         cascadeRemove: false,
         onDelete: "CASCADE",
-        nullable: false,
+        nullable: true,
         lazy: false,
         eager: false
     })
