@@ -28,8 +28,10 @@ export class ClassifyService {
                 if (!parent) {
                     throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
                 }
+                return this.secondClassifyRepository.find({ parent });
+            } else {
+                return this.secondClassifyRepository.find();
             }
-            return this.secondClassifyRepository.find({ parent });
         } else {
             let parent: SecondClassify | undefined;
             if (parentId) {
@@ -37,8 +39,10 @@ export class ClassifyService {
                 if (!parent) {
                     throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
                 }
+                return this.thirdClassifyRepository.find({ parent });
+            } else {
+                return this.thirdClassifyRepository.find();
             }
-            return this.thirdClassifyRepository.find({ parent });
         }
     }
 
@@ -48,7 +52,7 @@ export class ClassifyService {
         if (level === 1) {
             result = await this.firstClassifyRepository.findOneById(id);
         } else if (level === 2) {
-            result = await this.secondClassifyRepository.findOneById(2);
+            result = await this.secondClassifyRepository.findOneById(id);
         } else {
             result = await this.thirdClassifyRepository.findOneById(id);
         }

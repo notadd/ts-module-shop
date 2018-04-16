@@ -18,13 +18,13 @@ export class ClassifyResolver {
 
     /* 获取多个指定级别分类，如果未指定上级分类，则获取这个级别所有分类，如果指定上级分类，则获取这个上级分类下的所有分类，获取一级分类不需要上级分类 */
     @Query("classifies")
-    async classifies(req: Request, body: { parentId: number, level: 1 | 2 | 3 }): Promise<Data & { classifes: Array<Classify> }> {
+    async classifies(req: Request, body: { parentId: number, level: 1 | 2 | 3 }): Promise<Data & { classifies: Array<Classify> }> {
         const { parentId, level } = body;
         if (level !== 1 && level !== 2 && level !== 3) {
             throw new HttpException("参数错误", 400);
         }
-        const classifes: Array<Classify> = await this.classifyService.getClassifes(parentId, level);
-        return { code: 200, message: "获取指定分类成功", classifes };
+        const classifies: Array<Classify> = await this.classifyService.getClassifes(parentId, level);
+        return { code: 200, message: "获取指定分类成功", classifies };
     }
 
     /* 获取指定id、级别分类的信息，由于分类在内部存储为三个实体类，所以必须指定级别 */

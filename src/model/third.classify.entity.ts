@@ -31,6 +31,9 @@ export class ThirdClassify {
     })
     level: number;
 
+    @Column({ name: "parentId" })
+    parentId: number;
+
     /* 二级分类删除时，其下存在三级分类，需要报错，不级联删除 */
     @ManyToOne(type => SecondClassify, secondClassify => secondClassify.children, {
         cascadeInsert: false,

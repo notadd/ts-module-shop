@@ -12,7 +12,7 @@ type Mutation{
 type ClassiesData{
     code:Int
     message:String
-    classies:[Classify]
+    classifies:[Classify]
 }
 
 type ClassifyData{
