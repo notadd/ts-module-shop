@@ -30,7 +30,7 @@ export class GoodsService {
         }
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.description", "goods.recycle"])
+            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
             .where({ classifyId, recycle: false });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
@@ -43,7 +43,7 @@ export class GoodsService {
     async getRecycleGoodses(pageNumber: number, pageSize: number): Promise<Array<Goods>> {
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.description", "goods.recycle"])
+            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
             .where({ recycle: true });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
@@ -62,7 +62,7 @@ export class GoodsService {
     }
 
     /* 创建商品，只有品牌可以为空，其他属性都不能为空 */
-    async createGoods(name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
+    async createGoods(name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const exist: Goods | undefined = await this.goodsRepository.findOne({ name });
         if (exist) {
             throw new HttpException("指定name=" + name + "商品已存在", 404);
@@ -83,14 +83,14 @@ export class GoodsService {
             }
         }
         try {
-            await this.goodsRepository.save({ name, basePrice, description, classify, type, brand });
+            await this.goodsRepository.save({ name, basePrice, discountPrice, description, classify, type, brand });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
 
     /* 更新指定商品，如果商品分类被更新，则商品下原来所有的商品属性值都会被删除 */
-    async updateGoods(id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
+    async updateGoods(id: number, name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["classify", "type", "values", "brand"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
@@ -106,6 +106,7 @@ export class GoodsService {
             goods.name = name;
         }
         basePrice && (goods.basePrice = basePrice);
+        discountPrice && (goods.discountPrice = discountPrice);
         description && (goods.description = description);
         if (classifyId && (classifyId !== goods.classify.id)) {
             const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);

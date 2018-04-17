@@ -5,6 +5,7 @@ export interface RecycleGoodsesData {
         id: number
         name: string
         basePrice: number
+        discountPrice: number
         description: string
     }>;
 }

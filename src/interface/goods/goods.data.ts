@@ -8,6 +8,7 @@ export interface GoodsData {
         name: string
         basePrice: number
         description: string
+        discountPrice: number
         type: {
             id: number
             name: string

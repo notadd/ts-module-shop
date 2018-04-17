@@ -32,6 +32,16 @@ export class Goods {
     })
     basePrice: number;
 
+    /* 商品折扣价格 */
+    @Column({
+        name: "discount_price",
+        type: "decimal",
+        precision: 10,
+        scale: 2,
+        nullable: true
+    })
+    discountPrice: number;
+
     @Column({
         name: "description",
         type: "text"

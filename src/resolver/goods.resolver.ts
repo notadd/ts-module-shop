@@ -50,24 +50,24 @@ export class GoodsResolver {
 
     /* 创建指定名称、基本价格、描述、分类、商品类型、品牌的商品，其中只有品牌可以为空*/
     @Mutation("createGoods")
-    async createGoods(req: Request, body: { name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
-        const { name, basePrice, description, classifyId, goodsTypeId, brandId } = body;
+    async createGoods(req: Request, body: { name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
+        const { name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId } = body;
         if (!name || !basePrice || !description || !classifyId || !goodsTypeId) {
             throw new HttpException("缺少参数", 400);
         }
-        await this.goodsService.createGoods(name, basePrice, description, classifyId, goodsTypeId, brandId);
+        await this.goodsService.createGoods(name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId);
         return { code: 200, message: "创建商品成功" };
     }
 
     /* 更新指定id商品的名称、基本价格、描述、商品分类、商品类型、品牌，只有id是必须的，其他参数不传代表不更新，只有传递的参数才会被更新，因为这些参数基本不能为空
     当更新商品类型时，商品下关联的属性值会被删除*/
     @Mutation("updateGoods")
-    async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
-        const { id, name, basePrice, description, classifyId, goodsTypeId, brandId } = body;
+    async updateGoods(req: Request, body: { id: number, name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
+        const { id, name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId } = body;
         if (!id) {
             throw new HttpException("缺少参数", 400);
         }
-        await this.goodsService.updateGoods(id, name, basePrice, description, classifyId, goodsTypeId, brandId);
+        await this.goodsService.updateGoods(id, name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId);
         return { code: 200, message: "更新商品成功" };
     }
 

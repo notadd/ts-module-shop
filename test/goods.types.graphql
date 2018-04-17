@@ -6,6 +6,7 @@ query all{
       id
       name
       basePrice
+      discountPrice
       description
       recycle
     }
@@ -20,6 +21,7 @@ query recycle{
       id
       name
       basePrice
+      discountPrice
       description
       recycle
     }
@@ -34,6 +36,7 @@ query one{
       id
       name
       basePrice
+      discountPrice
       description
       recycle
       typeId
@@ -53,7 +56,7 @@ query one{
 }
 
 mutation create{
-  mix2:createGoods(name:"mix2",basePrice:2999,description:"小米旗舰产品",classifyId:1,goodsTypeId:2,brandId:1){
+  mix2:createGoods(name:"mix2",basePrice:2999,discountPrice:2500,description:"小米旗舰产品",classifyId:1,goodsTypeId:2,brandId:1){
     code
     message
   }
@@ -72,7 +75,7 @@ mutation update{
     code
     message
   }
-  p10:updateGoods(id:2,name:"P10",basePrice:5200,description:"华为旗舰产品",classifyId:1,goodsTypeId:2,brandId:2){
+  p10:updateGoods(id:2,name:"P10",basePrice:5200,discountPrice:2000,description:"华为旗舰产品",classifyId:1,goodsTypeId:2,brandId:2){
     code
     message
   }
