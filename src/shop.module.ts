@@ -1,5 +1,6 @@
 import { GoodsPropertyResolver } from "./resolver/goods.property.resolver";
 import { PropertyValueResolver } from "./resolver/property.value.resolver";
+import { ShopComponentProvider } from "./export/shop.component.provider";
 import { PropertyValueService } from "./service/property.value.service";
 import { GoodsPropertyService } from "./service/goods.property.service";
 import { GoodsImageResolver } from "./resolver/goods.image.resolver";
@@ -36,9 +37,10 @@ import { Module } from "@nestjs/common";
         GoodsTypeService, GoodsTypeResolver,
         GoodsImageService, GoodsImageResolver,
         GoodsPropertyService, GoodsPropertyResolver,
-        PropertyValueService, PropertyValueResolver
+        PropertyValueService, PropertyValueResolver,
+        ShopComponentProvider
     ],
     controllers: [],
-    exports: []
+    exports: [ShopComponentProvider]
 })
 export class ShopModule { }
