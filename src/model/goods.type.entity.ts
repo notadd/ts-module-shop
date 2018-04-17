@@ -12,7 +12,6 @@ export class GoodsType {
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 20,
         unique: true
     })

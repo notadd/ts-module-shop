@@ -6,12 +6,11 @@ import { Goods } from "./goods.entity";
 @Entity("brand")
 export class Brand {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 20,
         unique: true
     })

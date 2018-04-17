@@ -8,12 +8,11 @@ import { ThirdClassify } from "./third.classify.entity";
 export class SecondClassify {
 
 
-    @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 20,
         unique: true
     })
@@ -21,19 +20,17 @@ export class SecondClassify {
 
     @Column({
         name: "description",
-        type: "varchar",
         length: 100
     })
     description: string;
 
     @Column({
         name: "level",
-        type: "integer",
         default: 2
     })
     level: number;
 
-    @Column({ name: "parentId" })
+    @Column()
     parentId: number;
 
     /* 一级分类删除时，如果其下存在二级分类，需要报错，也就是不级联删除 */

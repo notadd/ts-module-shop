@@ -11,7 +11,6 @@ export class ThirdClassify {
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 20,
         unique: true
     })
@@ -19,19 +18,17 @@ export class ThirdClassify {
 
     @Column({
         name: "description",
-        type: "varchar",
         length: 100
     })
     description: string;
 
     @Column({
         name: "level",
-        type: "integer",
         default: 3
     })
     level: number;
 
-    @Column({ name: "parentId" })
+    @Column()
     parentId: number;
 
     /* 二级分类删除时，其下存在三级分类，需要报错，不级联删除 */

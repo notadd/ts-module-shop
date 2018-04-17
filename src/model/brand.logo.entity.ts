@@ -7,26 +7,23 @@ import { Brand } from "./brand.entity";
 @Index("brand_id", ["brandId"])
 export class BrandLogo {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
         name: "bucketName",
-        type: "varchar",
         length: 20
     })
     bucketName: string;
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 100
     })
     name: string;
 
     @Column({
         name: "type",
-        type: "varchar",
         length: 20
     })
     type: string;

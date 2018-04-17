@@ -17,7 +17,6 @@ export class Goods {
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 50,
         unique: true
     })
@@ -50,7 +49,6 @@ export class Goods {
 
     @Column({
         name: "recycle",
-        type: "boolean",
         default: false
     })
     recycle: boolean;

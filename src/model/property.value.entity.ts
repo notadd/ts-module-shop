@@ -12,7 +12,6 @@ export class PropertyValue {
 
     @Column({
         name: "value",
-        type: "varchar",
         length: 20
     })
     value: string;

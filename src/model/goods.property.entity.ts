@@ -15,7 +15,6 @@ export class GoodsProperty {
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 20
     })
     name: string;
@@ -27,7 +26,6 @@ export class GoodsProperty {
     */
     @Column({
         name: "type",
-        type: "varchar",
         length: 20
     })
     type: string;
@@ -39,7 +37,6 @@ export class GoodsProperty {
     */
     @Column({
         name: "input_type",
-        type: "varchar",
         length: 20
     })
     inputType: string;

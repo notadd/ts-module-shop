@@ -11,21 +11,18 @@ export class GoodsImage {
 
     @Column({
         name: "bucketName",
-        type: "varchar",
         length: 20
     })
     bucketName: string;
 
     @Column({
         name: "name",
-        type: "varchar",
         length: 100
     })
     name: string;
 
     @Column({
         name: "type",
-        type: "varchar",
         length: 20
     })
     type: string;
