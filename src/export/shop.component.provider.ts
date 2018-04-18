@@ -1,5 +1,5 @@
+import { Repository, Connection, SelectQueryBuilder } from "typeorm";
 import { HttpException } from "@nestjs/common";
-import { Repository, Connection } from "typeorm";
 import { Goods } from "../model/goods.entity";
 
 
@@ -17,6 +17,22 @@ export class ShopComponent {
             .leftJoinAndSelect("goods.images", "image")
             .getOne();
         return goods;
+    }
+
+    async getGoodsesByIds(ids: Array<number>, pageNumber: number, pageSize: number): Promise<Array<Goods>> {
+        let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository.createQueryBuilder("goods")
+            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice"])
+            .whereInIds(ids)
+            .leftJoinAndSelect("goods.classify", "classify")
+            .leftJoinAndSelect("goods.images", "image");
+        if (pageNumber && pageSize) {
+            if (!Number.isInteger(pageNumber) || !Number.isInteger(pageSize)) {
+                throw new HttpException("分页参数错误，应为整数", 404);
+            }
+            queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
+        }
+        const goodses: Array<Goods> | undefined = await queryBuilder.getMany();
+        return goodses;
     }
 
     async getTotal(ids: Array<number>): Promise<number> {
