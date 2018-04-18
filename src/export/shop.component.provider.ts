@@ -10,12 +10,18 @@ export class ShopComponent {
     ) { }
 
     async getGoodsById(id: number): Promise<Goods> {
-        return this.goodsRepository.createQueryBuilder("goods")
+        const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
             .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice"])
             .where({ id, recycle: false })
             .leftJoinAndSelect("goods.classify", "classify")
             .leftJoinAndSelect("goods.images", "image")
             .getOne();
+        return goods;
+    }
+
+    async getTotal(ids: Array<number>): Promise<number> {
+        const total: number = await this.goodsRepository.createQueryBuilder("goods").whereInIds(ids).getCount();
+        return total;
     }
 
     async findNoExist(ids: Array<number>): Promise<{ exist: boolean, id: number }> {
