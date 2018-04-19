@@ -70,4 +70,18 @@ export class SkuService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
+
+    async deleteSku(id: number): Promise<void> {
+        const sku: Sku | undefined = await this.skuRepository.findOneById(id, { relations: ["values"] });
+        if (!sku) {
+            throw new HttpException("指定id=" + id + "Sku不存在", 404);
+        }
+        try {
+            sku.values = undefined;
+            await this.skuRepository.save(sku);
+            await this.skuRepository.remove(sku);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
