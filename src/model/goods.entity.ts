@@ -22,6 +22,13 @@ export class Goods {
     })
     name: string;
 
+    @Column({
+        name: "name",
+        length: 50,
+        unique: true
+    })
+    no: string;
+
     /* 商品基本价格，最终价格由基本价格与属性价格相加决定 */
     @Column({
         name: "base_price",
