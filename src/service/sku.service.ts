@@ -15,6 +15,19 @@ export class SkuService {
         @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>
     ) { }
 
+    async getSkus(goodsId: number): Promise<Array<Sku>> {
+        const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
+            .where({ id: goodsId })
+            .leftJoinAndSelect("goods.skus", "sku")
+            .leftJoinAndSelect("sku.values", "value")
+            .leftJoinAndSelect("value.property", "property")
+            .getOne();
+        if (!goods) {
+            throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
+        }
+        return goods.skus;
+    }
+
     async createSku(goodsId: number, inventory: number, propertyValueIds: Array<number>): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
         if (!goods) {
