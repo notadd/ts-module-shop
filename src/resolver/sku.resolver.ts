@@ -24,4 +24,13 @@ export class SkuResolver {
         await this.skuService.createSku(goodsId, inventory, propertyValueIds);
         return {code: 200, message: "创建Sku成功"};
     }
+
+    @Mutation("updateSku")
+    async updateSku(req: Request, body: { id: number, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {
+        const { id, inventory, propertyValueIds} = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.skuService.updateSku(id, inventory, propertyValueIds);
+        return {code: 200, message: "更新Sku成功"};
 }
