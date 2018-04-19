@@ -30,7 +30,7 @@ export class GoodsService {
         }
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
+            .select(["goods.id", "goods.name", "goods.no", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
             .where({ classifyId, recycle: false });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);
@@ -43,7 +43,7 @@ export class GoodsService {
     async getRecycleGoodses(pageNumber: number, pageSize: number): Promise<Array<Goods>> {
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository
             .createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
+            .select(["goods.id", "goods.name", "goods.no", "goods.basePrice", "goods.discountPrice", "goods.description", "goods.recycle"])
             .where({ recycle: true });
         if (pageNumber && pageSize) {
             queryBuilder = queryBuilder.offset((pageNumber - 1) * pageSize).limit(pageSize);

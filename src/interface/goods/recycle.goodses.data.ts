@@ -4,6 +4,7 @@ export interface RecycleGoodsesData {
     recycleGoodses: Array<{
         id: number
         name: string
+        no: string
         basePrice: number
         discountPrice: number
         description: string

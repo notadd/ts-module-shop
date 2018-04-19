@@ -35,6 +35,7 @@ type GoodsesData{
 type Goods{
     id:Int
     name:String
+    no:String
     basePrice:Float
     discountPrice:Float
     description:String

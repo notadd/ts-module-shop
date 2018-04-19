@@ -6,6 +6,7 @@ export interface GoodsData {
     goods: {
         id: number
         name: string
+        no: string
         basePrice: number
         description: string
         discountPrice: number

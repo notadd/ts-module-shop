@@ -11,7 +11,7 @@ export class ShopComponent {
 
     async getGoodsById(id: number): Promise<Goods> {
         const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice"])
+            .select(["goods.id", "goods.name", "goods.no", "goods.basePrice", "goods.discountPrice"])
             .where({ id, recycle: false })
             .leftJoinAndSelect("goods.classify", "classify")
             .leftJoinAndSelect("goods.images", "image")
@@ -21,7 +21,7 @@ export class ShopComponent {
 
     async getGoodsesByIds(ids: Array<number>, pageNumber: number, pageSize: number): Promise<Array<Goods>> {
         let queryBuilder: SelectQueryBuilder<Goods> = this.goodsRepository.createQueryBuilder("goods")
-            .select(["goods.id", "goods.name", "goods.basePrice", "goods.discountPrice"])
+            .select(["goods.id", "goods.name", "goods.no", "goods.basePrice", "goods.discountPrice"])
             .whereInIds(ids)
             .leftJoinAndSelect("goods.classify", "classify")
             .leftJoinAndSelect("goods.images", "image");
