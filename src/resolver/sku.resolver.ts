@@ -1,10 +1,10 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { Resolver, Query, Mutation } from "@nestjs/graphql";
+import { SkusData } from "../interface/sku/skus.data";
 import { SkuService } from "../service/sku.service";
 import { Data } from "../interface/data";
 import { Request } from "express";
-
 
 /* Sku的Resolver */
 @Resolver("Sku")
@@ -14,6 +14,16 @@ export class SkuResolver {
     constructor(
         @Inject(SkuService) private readonly skuService: SkuService
     ) { }
+
+    @Query("skus")
+    async skus(req: Request, body: { goodsId: number }): Promise<SkusData> {
+        const { goodsId } = body;
+        if (!goodsId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const skus = await this.skuService.getSkus(goodsId);
+        return { code: 200, message: "获取指定商品Sku成功", skus };
+    }
 
     @Mutation("createSku")
     async createSku(req: Request, body: { goodsId: number, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {

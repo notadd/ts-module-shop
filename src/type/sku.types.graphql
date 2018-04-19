@@ -17,5 +17,5 @@ type SkusData{
 type Sku{
     id:Int
     inventory:Int
-    propertyValues:[PropertyValue]
+    values:[PropertyValue]
 }
