@@ -6,7 +6,7 @@ import { Goods } from "./goods.entity";
 @Entity("third_classify")
 export class ThirdClassify {
 
-    @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
