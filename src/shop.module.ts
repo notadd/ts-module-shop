@@ -21,6 +21,8 @@ import { GoodsService } from "./service/goods.service";
 import { BrandService } from "./service/brand.service";
 import { GoodsType } from "./model/goods.type.entity";
 import { BrandLogo } from "./model/brand.logo.entity";
+import { SkuResolver } from "./resolver/sku.resolver";
+import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
@@ -32,6 +34,7 @@ import { Module } from "@nestjs/common";
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku])],
     components: [
+        SkuService, SkuResolver,
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
         ClassifyService, ClassifyResolver,
