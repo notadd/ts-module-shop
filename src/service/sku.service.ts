@@ -32,12 +32,42 @@ export class SkuService {
             if (find.property.type !== "radio") {
                 throw new HttpException("指定id=" + propertyValueIds[i] + "属性值的属性不是单选类型，只有单选类型属性值可以作为sku添加", 404);
             }
-            try {
-                await this.skuRepository.save({ inventory, goods, values });
-            } catch (err) {
-                throw new HttpException("发生了数据库错误" + err.toString(), 403);
-            }
         }
+        try {
+            await this.skuRepository.save({ inventory, goods, values });
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 
+    async updateSku(id: number, inventory: number, propertyValueIds: Array<number>): Promise<void> {
+        const sku: Sku | undefined = await this.skuRepository.findOneById(id, { relations: ["goods", "values"] });
+        if (!sku) {
+            throw new HttpException("指定id=" + id + "Sku不存在", 404);
+        }
+        if (inventory) {
+            sku.inventory = inventory;
+        }
+        if (propertyValueIds && propertyValueIds.length !== 0) {
+            const values: Array<PropertyValue> | undefined = await this.propertyValueRepository.findByIds(propertyValueIds, { relations: ["property", "goods"] });
+            for (let i = 0; i < propertyValueIds.length; i++) {
+                const find: PropertyValue | undefined = values.find(value => value.id === propertyValueIds[i]);
+                if (!find) {
+                    throw new HttpException("指定id=" + propertyValueIds[i] + "属性值不存在", 404);
+                }
+                if (find.goods.id !== sku.goods.id) {
+                    throw new HttpException("指定id=" + propertyValueIds[i] + "属性值不存在于指定id=" + goods.id + "商品之下", 404);
+                }
+                if (find.property.type !== "radio") {
+                    throw new HttpException("指定id=" + propertyValueIds[i] + "属性值的属性不是单选类型，只有单选类型属性值可以作为sku添加", 404);
+                }
+            }
+            sku.values = values;
+        }
+        try {
+            await this.skuRepository.save(sku);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
     }
 }
