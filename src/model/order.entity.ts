@@ -7,11 +7,6 @@ export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
-        length: 20
-    })
-    status: string;
-
     @CreateDateColumn()
     createDate: Date;
 
@@ -21,17 +16,13 @@ export class Order {
     @Column()
     userId: number;
 
+    @Column({
+        length: 30
+    })
+    delivertNo: string;
+
     @Column()
     delivertTime: Date;
-
-    @OneToOne(type => Delivery, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
-        lazy: false,
-        eager: false
-    })
-    delivery: Delivery;
 
     @Column({
         length: 20
@@ -48,14 +39,9 @@ export class Order {
     })
     invoiceTitle: string;
 
-
     @Column({
         length: 20
     })
     customerMessage: string;
 
-    @Column({
-        length: 20
-    })
-    consignee: string;
 }
