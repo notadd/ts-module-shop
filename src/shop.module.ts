@@ -24,12 +24,13 @@ import { BrandLogo } from "./model/brand.logo.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
+import { Sku } from "./model/sku.entity";
 import { Module } from "@nestjs/common";
 
 @Module({
     modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
-        Brand, BrandLogo])],
+        Brand, BrandLogo, Sku])],
     components: [
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
