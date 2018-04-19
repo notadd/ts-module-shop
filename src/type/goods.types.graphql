@@ -5,8 +5,8 @@ type Query{
 }
 
 type Mutation{
-    createGoods(name:String!,basePrice:Float!,discountPrice:Float,description:String!,classifyId:Int!,goodsTypeId:Int!,brandId:Int!):ShopCommonData
-    updateGoods(id:Int!,name:String,basePrice:Float,discountPrice:Float,description:String,classifyId:Int,goodsTypeId:Int,brandId:Int!):ShopCommonData
+    createGoods(name:String!,no:String!,basePrice:Float!,discountPrice:Float,description:String!,classifyId:Int!,goodsTypeId:Int!,brandId:Int!):ShopCommonData
+    updateGoods(id:Int!,name:String,no:String,basePrice:Float,discountPrice:Float,description:String,classifyId:Int,goodsTypeId:Int,brandId:Int!):ShopCommonData
     deleteGoods(id:Int!):ShopCommonData
     softDeleteGoods(id:Int!):ShopCommonData
     softDeleteGoodses(ids:[Int]!):ShopCommonData
