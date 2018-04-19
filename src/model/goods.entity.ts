@@ -24,8 +24,7 @@ export class Goods {
 
     @Column({
         name: "name",
-        length: 50,
-        unique: true
+        length: 50
     })
     no: string;
 

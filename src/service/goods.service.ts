@@ -90,7 +90,7 @@ export class GoodsService {
     }
 
     /* 更新指定商品，如果商品分类被更新，则商品下原来所有的商品属性值都会被删除 */
-    async updateGoods(id: number, name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
+    async updateGoods(id: number, name: string, no: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["classify", "type", "values", "brand"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
@@ -105,6 +105,7 @@ export class GoodsService {
             }
             goods.name = name;
         }
+        no && (goods.no = no);
         basePrice && (goods.basePrice = basePrice);
         discountPrice && (goods.discountPrice = discountPrice);
         description && (goods.description = description);
