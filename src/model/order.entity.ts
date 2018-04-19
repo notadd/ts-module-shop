@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
-
+import { GoodsReceivingInformation } from "./goods.receiving.information.entity";
 
 @Entity("order")
 export class Order {
@@ -44,4 +44,12 @@ export class Order {
     })
     customerMessage: string;
 
+    @OneToOne(type => GoodsReceivingInformation, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        cascadeRemove: false,
+        lazy: false,
+        eager: false
+    })
+    receivingInformation: GoodsReceivingInformation;
 }
