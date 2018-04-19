@@ -4,7 +4,7 @@ import { ThirdClassify } from "./third.classify.entity";
 import { GoodsImage } from "./goods.image.entity";
 import { GoodsType } from "./goods.type.entity";
 import { Brand } from "./brand.entity";
-
+import { Sku } from "./sku.entity";
 
 /* 商品实体，为一个商品的基本属性，名称、描述、基本价格等，一个商品必然属于一个分类、一个商品类型
    商品包含了多个属性值，有些为唯一属性，即直接属于商品，有些是单选、复选属性，属于指定价格的单品
@@ -120,4 +120,12 @@ export class Goods {
         eager: false
     })
     images: Array<GoodsImage>;
+
+    @OneToMany(type => Sku, sku => sku.goods, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    skus: Array<Sku>;
 }
