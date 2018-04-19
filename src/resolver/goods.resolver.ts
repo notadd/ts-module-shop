@@ -50,12 +50,12 @@ export class GoodsResolver {
 
     /* 创建指定名称、基本价格、描述、分类、商品类型、品牌的商品，其中只有品牌可以为空*/
     @Mutation("createGoods")
-    async createGoods(req: Request, body: { name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
-        const { name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId } = body;
-        if (!name || !basePrice || !description || !classifyId || !goodsTypeId) {
+    async createGoods(req: Request, body: { name: string, no: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number }): Promise<Data> {
+        const { name, no, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId } = body;
+        if (!name || !no || !basePrice || !description || !classifyId || !goodsTypeId) {
             throw new HttpException("缺少参数", 400);
         }
-        await this.goodsService.createGoods(name, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId);
+        await this.goodsService.createGoods(name, no, basePrice, discountPrice, description, classifyId, goodsTypeId, brandId);
         return { code: 200, message: "创建商品成功" };
     }
 

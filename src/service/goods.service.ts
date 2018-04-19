@@ -62,7 +62,7 @@ export class GoodsService {
     }
 
     /* 创建商品，只有品牌可以为空，其他属性都不能为空 */
-    async createGoods(name: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
+    async createGoods(name: string, no: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
         const exist: Goods | undefined = await this.goodsRepository.findOne({ name });
         if (exist) {
             throw new HttpException("指定name=" + name + "商品已存在", 404);
@@ -83,7 +83,7 @@ export class GoodsService {
             }
         }
         try {
-            await this.goodsRepository.save({ name, basePrice, discountPrice, description, classify, type, brand });
+            await this.goodsRepository.save({ name, no, basePrice, discountPrice, description, classify, type, brand });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
