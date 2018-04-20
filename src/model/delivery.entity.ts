@@ -41,5 +41,5 @@ export class Delivery {
         precision: 10,
         scale: 2
     })
-    ValuationFee: number;
+    valuationFee: number;
 }

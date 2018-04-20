@@ -1,0 +1,24 @@
+type Mutation{
+    createDelivery(name:String!,description:String!,cost:Float!,freeLimit:Float!,valuationFee:Float!):ShopCommonData
+    updateDelivery(id:Int!,name:String,description:String,cost:Float,freeLimit:Float,valuationFee:Float):ShopCommonData
+    deleteDelivery(id:Int!):ShopCommonData
+}
+
+type Query{
+    deliveries:DeliveriesData
+}
+
+type DeliveriesData{
+    code:Int
+    message:String
+    deliveries:[Delivery]
+}
+
+type Delivery{
+    id:Int
+    name:String
+    description:String
+    cost:Float
+    freeLimit:Float
+    valuationFee:Float
+}
