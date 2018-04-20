@@ -28,4 +28,35 @@ export class DeliveryService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
+
+    async updateDelivery(id: number, name: string, description: string, cost: number, freeLimit: number, valuationFee: number): Promise<void> {
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(id);
+        if (!delivery) {
+            throw new HttpException("指定id=" + id + "配送信息不存在", 404);
+        }
+        if (name && name !== delivery.name) {
+            const exist: Delivery | undefined = await this.deliveryRepository.findOne({ name });
+            if (exist) {
+                throw new HttpException("指定name=" + name + "配送信息已存在", 404);
+            }
+            delivery.name = name;
+        }
+        if (description) {
+            delivery.description = description;
+        }
+        if (cost !== undefined && cost !== null) {
+            delivery.cost = cost;
+        }
+        if (freeLimit !== undefined && freeLimit !== null) {
+            delivery.freeLimit = freeLimit;
+        }
+        if (valuationFee !== undefined && valuationFee !== null) {
+            delivery.valuationFee = valuationFee;
+        }
+        try {
+            await this.deliveryRepository.save(delivery);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
