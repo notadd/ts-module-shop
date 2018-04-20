@@ -59,4 +59,15 @@ export class DeliveryService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
+    async deleteDelivery(id: number): Promise<void> {
+        const delivery: Delivery|undefined = await this.deliveryRepository.findOneById(id);
+        if (!delivery) {
+            throw new HttpException("指定id=" + id + "配送信息不存在", 404);
+        }
+        try {
+            await this.deliveryRepository.remove(delivery);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
