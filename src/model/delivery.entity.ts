@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
 
 /* 配送类型实体 */
-@Entity("delivery_type")
-export class DeliveryType {
+@Entity("delivery")
+export class Delivery {
 
     @PrimaryGeneratedColumn()
     id: number;

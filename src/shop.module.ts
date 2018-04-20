@@ -1,3 +1,4 @@
+import { UserReceivingInformation } from "./model/user.receiving.information.entity";
 import { GoodsPropertyResolver } from "./resolver/goods.property.resolver";
 import { PropertyValueResolver } from "./resolver/property.value.resolver";
 import { ShopComponentProvider } from "./export/shop.component.provider";
@@ -22,17 +23,19 @@ import { BrandService } from "./service/brand.service";
 import { GoodsType } from "./model/goods.type.entity";
 import { BrandLogo } from "./model/brand.logo.entity";
 import { SkuResolver } from "./resolver/sku.resolver";
+import { Delivery } from "./model/delivery.entity";
 import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
+import { Order } from "./model/order.entity";
 import { Sku } from "./model/sku.entity";
 import { Module } from "@nestjs/common";
 
 @Module({
     modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
-        Brand, BrandLogo, Sku])],
+        Brand, BrandLogo, Sku, Order, Delivery, UserReceivingInformation])],
     components: [
         SkuService, SkuResolver,
         GoodsService, GoodsResolver,
