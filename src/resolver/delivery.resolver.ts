@@ -15,4 +15,9 @@ export class DeliveryResolver {
         @Inject(DeliveryService) private readonly deliveryService: DeliveryService
     ) { }
 
+    @Query("deliveries")
+    async deliveries(req: Request): Promise<DeliveriesData> {
+
+    }
+
 }
