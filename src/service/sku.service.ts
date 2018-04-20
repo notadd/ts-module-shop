@@ -72,7 +72,7 @@ export class SkuService {
                     throw new HttpException("指定id=" + propertyValueIds[i] + "属性值不存在", 404);
                 }
                 if (find.goods.id !== sku.goods.id) {
-                    throw new HttpException("指定id=" + propertyValueIds[i] + "属性值不存在于指定id=" + goods.id + "商品之下", 404);
+                    throw new HttpException("指定id=" + propertyValueIds[i] + "属性值不存在于指定id=" + sku.goods.id + "商品之下", 404);
                 }
                 if (find.property.type !== "radio") {
                     throw new HttpException("指定id=" + propertyValueIds[i] + "属性值的属性不是单选类型，只有单选类型属性值可以作为sku添加", 404);

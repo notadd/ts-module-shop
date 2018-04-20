@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
-import { GoodsReceivingInformation } from "./goods.receiving.information.entity";
-import { DeliveryType } from "./delivery.type.entity";
+import { UserReceivingInformation } from "./user.receiving.information.entity";
+import { Delivery } from "./delivery.entity";
 
 
 @Entity("order")
@@ -46,21 +46,21 @@ export class Order {
     })
     customerMessage: string;
 
-    @OneToOne(type => DeliveryType, {
+    @OneToOne(type => Delivery, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
         lazy: false,
         eager: false
     })
-    deliveryType: DeliveryType;
+    delivery: Delivery;
 
-    @OneToOne(type => GoodsReceivingInformation, {
+    @OneToOne(type => UserReceivingInformation, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
         lazy: false,
         eager: false
     })
-    receivingInformation: GoodsReceivingInformation;
+    receivingInformation: UserReceivingInformation;
 }
