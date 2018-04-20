@@ -1,6 +1,6 @@
 export interface DeliveriesData {
     code: number;
-    message; string;
+    message: string;
     deliveries: Array<{
         id: number
         name: string
