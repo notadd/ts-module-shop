@@ -26,22 +26,22 @@ export class SkuResolver {
     }
 
     @Mutation("createSku")
-    async createSku(req: Request, body: { goodsId: number, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {
-        const { goodsId, inventory, propertyValueIds } = body;
-        if (!goodsId || !inventory || !propertyValueIds || propertyValueIds.length === 0) {
+    async createSku(req: Request, body: { goodsId: number, no: string, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {
+        const { goodsId, no, inventory, propertyValueIds } = body;
+        if (!goodsId || !no || !inventory || !propertyValueIds || propertyValueIds.length === 0) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.skuService.createSku(goodsId, inventory, propertyValueIds);
+        await this.skuService.createSku(goodsId, no, inventory, propertyValueIds);
         return { code: 200, message: "创建Sku成功" };
     }
 
     @Mutation("updateSku")
-    async updateSku(req: Request, body: { id: number, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {
-        const { id, inventory, propertyValueIds } = body;
+    async updateSku(req: Request, body: { id: number, no: string, inventory: number, propertyValueIds: Array<number> }): Promise<Data> {
+        const { id, no, inventory, propertyValueIds } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.skuService.updateSku(id, inventory, propertyValueIds);
+        await this.skuService.updateSku(id, no, inventory, propertyValueIds);
         return { code: 200, message: "更新Sku成功" };
     }
 

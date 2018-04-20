@@ -28,7 +28,7 @@ export class SkuService {
         return goods.skus;
     }
 
-    async createSku(goodsId: number, inventory: number, propertyValueIds: Array<number>): Promise<void> {
+    async createSku(goodsId: number, no: string, inventory: number, propertyValueIds: Array<number>): Promise<void> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
@@ -47,16 +47,19 @@ export class SkuService {
             }
         }
         try {
-            await this.skuRepository.save({ inventory, goods, values });
+            await this.skuRepository.save({ no, inventory, goods, values });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
 
-    async updateSku(id: number, inventory: number, propertyValueIds: Array<number>): Promise<void> {
+    async updateSku(id: number, no: string, inventory: number, propertyValueIds: Array<number>): Promise<void> {
         const sku: Sku | undefined = await this.skuRepository.findOneById(id, { relations: ["goods", "values"] });
         if (!sku) {
             throw new HttpException("指定id=" + id + "Sku不存在", 404);
+        }
+        if (no) {
+            sku.no = no;
         }
         if (inventory) {
             sku.inventory = inventory;

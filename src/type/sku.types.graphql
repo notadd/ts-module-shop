@@ -1,6 +1,6 @@
 type Mutation{
-    createSku(goodsId:Int!,inventory:Int!,propertyValueIds:[Int]!):ShopCommonData
-    updateSku(id:Int!,inventory:Int,propertyValueIds:[Int]):ShopCommonData
+    createSku(goodsId:Int!,no:String!,inventory:Int!,propertyValueIds:[Int]!):ShopCommonData
+    updateSku(id:Int!,no:String,inventory:Int,propertyValueIds:[Int]):ShopCommonData
     deleteSku(id:Int!):ShopCommonData
 }
 
@@ -16,6 +16,7 @@ type SkusData{
 
 type Sku{
     id:Int
+    no:String
     inventory:Int
     values:[PropertyValue]
 }

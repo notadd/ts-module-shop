@@ -9,6 +9,9 @@ export class Sku {
     id: number;
 
     @Column()
+    no: string;
+
+    @Column()
     inventory: number;
 
     @ManyToMany(type => PropertyValue, {
