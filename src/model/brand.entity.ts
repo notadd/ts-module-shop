@@ -10,7 +10,6 @@ export class Brand {
     id: number;
 
     @Column({
-        name: "name",
         length: 20,
         unique: true
     })

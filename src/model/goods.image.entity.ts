@@ -10,19 +10,16 @@ export class GoodsImage {
     id: number;
 
     @Column({
-        name: "bucketName",
         length: 20
     })
     bucketName: string;
 
     @Column({
-        name: "name",
         length: 100
     })
     name: string;
 
     @Column({
-        name: "type",
         length: 20
     })
     type: string;

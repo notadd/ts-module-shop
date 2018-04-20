@@ -7,11 +7,10 @@ import { Goods } from "./goods.entity";
 @Entity("goods_type")
 export class GoodsType {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
-        name: "name",
         length: 20,
         unique: true
     })

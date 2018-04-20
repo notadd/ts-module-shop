@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
 
+/* 配送类型实体 */
 @Entity("delivery_type")
 export class DeliveryType {
 
@@ -18,21 +19,21 @@ export class DeliveryType {
 
     @Column({
         type: "decimal",
-        percision: 10,
+        precision: 10,
         scale: 2
     })
     deliveryCost: number;
 
     @Column({
         type: "decimal",
-        percision: 10,
+        precision: 10,
         scale: 2
     })
     freeLimit: number;
 
     @Column({
         type: "decimal",
-        percision: 10,
+        precision: 10,
         scale: 2
     })
     ValuationFee: number;

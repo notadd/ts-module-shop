@@ -12,25 +12,22 @@ import { Sku } from "./sku.entity";
 @Entity("goods")
 export class Goods {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
-        name: "name",
         length: 50,
         unique: true
     })
     name: string;
 
     @Column({
-        name: "name",
         length: 50
     })
     no: string;
 
     /* 商品基本价格，最终价格由基本价格与属性价格相加决定 */
     @Column({
-        name: "base_price",
         type: "decimal",
         precision: 10,
         scale: 2
@@ -39,7 +36,6 @@ export class Goods {
 
     /* 商品折扣价格 */
     @Column({
-        name: "discount_price",
         type: "decimal",
         precision: 10,
         scale: 2,
@@ -48,25 +44,19 @@ export class Goods {
     discountPrice: number;
 
     @Column({
-        name: "description",
         type: "text"
     })
     description: string;
 
     @Column({
-        name: "recycle",
         default: false
     })
     recycle: boolean;
 
-    @Column({
-        name: "classifyId"
-    })
+    @Column()
     classifyId: number;
 
-    @Column({
-        name: "typeId"
-    })
+    @Column()
     typeId: number;
 
     /* 分类删除时，其下存在商品，需要报错，不级联删除 */

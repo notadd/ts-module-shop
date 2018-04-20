@@ -7,17 +7,15 @@ import { Goods } from "./goods.entity";
 @Entity("property_value")
 export class PropertyValue {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
-        name: "value",
         length: 20
     })
     value: string;
 
     @Column({
-        name: "price",
         type: "decimal",
         precision: 10,
         scale: 2,

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Module, MiddlewaresConsumer, NestModule, Inject, RequestMethod } from "@nestjs/common";
 import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
 import { GraphQLModule, GraphQLFactory } from "@nestjs/graphql";
@@ -16,7 +17,7 @@ import { ShopModule } from "../src/shop.module";
     database: "postgres",
     entities: ["./**/*.entity.ts"],
     logger: "simple-console",
-    logging:"all",
+    logging: "all",
     synchronize: true,
     dropSchema: true
   }), ShopModule],

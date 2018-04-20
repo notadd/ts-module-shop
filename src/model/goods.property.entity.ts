@@ -10,11 +10,10 @@ import { GoodsType } from "./goods.type.entity";
 @Index("name_type_id", ["name", "goodsTypeId"])
 export class GoodsProperty {
 
-    @PrimaryGeneratedColumn({ name: "id", type: "integer" })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
-        name: "name",
         length: 20
     })
     name: string;
@@ -25,7 +24,6 @@ export class GoodsProperty {
        check：复选属性，可以选择多个属性值，多个值对应的价格都会被加到总价中
     */
     @Column({
-        name: "type",
         length: 20
     })
     type: string;
@@ -36,22 +34,18 @@ export class GoodsProperty {
        textarea：多行文本框
     */
     @Column({
-        name: "input_type",
         length: 20
     })
     inputType: string;
 
     /* 当属性录入方式为list时，所有列表值 */
     @Column({
-        name: "list",
         type: "simple-array",
         nullable: true
     })
     list: Array<string>;
 
-    @Column({
-        name: "goodsTypeId"
-    })
+    @Column()
     goodsTypeId: number;
 
     /* 商品类型删除时，其下属性级联删除，注意此时要保证商品类型下没有商品 */

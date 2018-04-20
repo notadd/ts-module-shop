@@ -10,20 +10,17 @@ export class ThirdClassify {
     id: number;
 
     @Column({
-        name: "name",
         length: 20,
         unique: true
     })
     name: string;
 
     @Column({
-        name: "description",
         length: 100
     })
     description: string;
 
     @Column({
-        name: "level",
         default: 3
     })
     level: number;
