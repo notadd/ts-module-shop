@@ -11,4 +11,9 @@ export class DeliveryService {
     constructor(
         @InjectRepository(Delivery) private readonly deliveryRepository: Repository<Delivery>
     ) { }
+
+    async getDeliveries(): Promise<Array<Delivery>> {
+        const deliveries = await this.deliveryRepository.find();
+        return deliveries;
+    }
 }
