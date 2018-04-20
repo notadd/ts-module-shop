@@ -7,23 +7,27 @@ export class DeliveryType {
     @PrimaryGeneratedColumn()
     id: number;
 
+    /* 配送名称 */
     @Column({
         length: 20
     })
     name: string;
 
+    /* 描述 */
     @Column({
         length: 50
     })
     description: string;
 
+    /* 配送费 */
     @Column({
         type: "decimal",
         precision: 10,
         scale: 2
     })
-    deliveryCost: number;
+    cost: number;
 
+    /* 免费额度 */
     @Column({
         type: "decimal",
         precision: 10,
@@ -31,6 +35,7 @@ export class DeliveryType {
     })
     freeLimit: number;
 
+    /* 保价费 */
     @Column({
         type: "decimal",
         precision: 10,
