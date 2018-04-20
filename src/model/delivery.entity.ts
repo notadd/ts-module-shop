@@ -9,7 +9,8 @@ export class Delivery {
 
     /* 配送名称 */
     @Column({
-        length: 20
+        length: 20,
+        unique: true
     })
     name: string;
 

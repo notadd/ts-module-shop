@@ -16,4 +16,16 @@ export class DeliveryService {
         const deliveries = await this.deliveryRepository.find();
         return deliveries;
     }
+
+    async createDelivery(name: string, description: string, cost: number, freeLimit: number, valuationFee: number): Promise<void> {
+        const exist: Delivery | undefined = await this.deliveryRepository.findOne({ name });
+        if (exist) {
+            throw new HttpException("指定name=" + name + "配送信息已存在", 404);
+        }
+        try {
+            await this.deliveryRepository.save({ name, description, cost, freeLimit, valuationFee });
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
