@@ -24,22 +24,32 @@ export class DeliveryResolver {
 
     @Mutation("createDelivery")
     async createDelivery(req: Request, body: { name: string, description: string, cost: number, freeLimit: number, valuationFee: number }): Promise<Data> {
-        const { name, description, cost, freeLimit, valuationFee} = body;
+        const { name, description, cost, freeLimit, valuationFee } = body;
         if (!name || !description || cost === undefined || cost === null || freeLimit === undefined || freeLimit === null || valuationFee === undefined || valuationFee === null) {
             throw new HttpException("缺少参数", 404);
         }
         await this.deliveryService.createDelivery(name, description, cost, freeLimit, valuationFee);
-        return {code: 200, message: "创建配送信息成功"};
+        return { code: 200, message: "创建配送信息成功" };
     }
 
     @Mutation("updateDelivery")
     async updateDelivery(req: Request, body: { id: number, name: string, description: string, cost: number, freeLimit: number, valuationFee: number }): Promise<Data> {
-        const { id, name, description, cost, freeLimit, valuationFee} = body;
+        const { id, name, description, cost, freeLimit, valuationFee } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
         await this.deliveryService.updateDelivery(id, name, description, cost, freeLimit, valuationFee);
-        return {code: 200, message: "更新配送信息成功"};
+        return { code: 200, message: "更新配送信息成功" };
+    }
+
+    @Mutation("deleteDelivery")
+    async deleteDelivery(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.deliveryService.deleteDelivery(id);
+        return { code: 200, message: "删除配送信息成功" };
     }
 
 }
