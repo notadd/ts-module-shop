@@ -33,4 +33,23 @@ export class UserReceivingInformationResolver {
         return { code: 200, message: "创建用户收货信息成功" };
     }
 
+    @Mutation("updateUserReceivingInformation")
+    async updateUserReceivingInformation(req: Request, body: {
+        id: number,
+        consignee: string,
+        email: string,
+        region: string,
+        address: string,
+        postCode: string,
+        homePhone: string,
+        mobilePhone: string
+    }): Promise<Data> {
+        const { id, consignee, email, region, address, postCode, homePhone, mobilePhone } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.userReceivingInformationService.updateUserReceivingInformation(id, consignee, email, region, address, postCode, homePhone, mobilePhone);
+        return { code: 200, message: "更新用户收货信息成功" };
+    }
+
 }
