@@ -25,3 +25,24 @@ type Mutation{
     deleteUserReceivingInformation(id:Int!):ShopCommonData
 
 }
+
+type Query{
+    userReceivingInformations:UserReceivingInformationsData
+}
+
+type UserReceivingInformationsData{
+    code:Int
+    message:String
+    informations:[UserReceivingInformation]
+}
+
+type UserReceivingInformation{
+    id:Int
+    consignee:String
+    email:String
+    region:String
+    address:String
+    postCode:String
+    homePhone:String
+    mobilePhone:String
+}
