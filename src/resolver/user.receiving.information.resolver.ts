@@ -12,8 +12,18 @@ import { Request } from "express";
 export class UserReceivingInformationResolver {
 
     constructor(
-        @Inject(UserReceivingInformationService) private readonly userReceivingInformationService: SUserReceivingInformationService
+        @Inject(UserReceivingInformationService) private readonly userReceivingInformationService: UserReceivingInformationService
     ) { }
+
+    @Query("userReceivingInformation")
+    async userReceivingInformation(req: Request, body: {id: number}): Promise<any> {
+        const {id} = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const information = await this.userReceivingInformationService.getUserReceivingInformation(id);
+        return {code: 200, message: "获取指定用户收货信息成功", information};
+    }
 
     @Query("userReceivingInformations")
     async userReceivingInformations(req: Request, body: { userId: number }): Promise<UserReceivingInformationsData> {
