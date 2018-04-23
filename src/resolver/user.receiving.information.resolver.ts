@@ -1,4 +1,5 @@
-import { UserReceivingInformationsData } from "../interface/userreceivinginformation/user.receiving.information.data";
+import { UserReceivingInformationsData } from "../interface/userreceivinginformation/user.receiving.informations.data";
+import { UserReceivingInformationData } from "../interface/userreceivinginformation/user.receiving.information.data";
 import { UserReceivingInformationService } from "../service/user.receiving.information.service";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
@@ -16,13 +17,13 @@ export class UserReceivingInformationResolver {
     ) { }
 
     @Query("userReceivingInformation")
-    async userReceivingInformation(req: Request, body: {id: number}): Promise<any> {
-        const {id} = body;
+    async userReceivingInformation(req: Request, body: { id: number }): Promise<UserReceivingInformationData> {
+        const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
         const information = await this.userReceivingInformationService.getUserReceivingInformation(id);
-        return {code: 200, message: "获取指定用户收货信息成功", information};
+        return { code: 200, message: "获取指定用户收货信息成功", information };
     }
 
     @Query("userReceivingInformations")

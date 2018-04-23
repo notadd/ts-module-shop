@@ -1,7 +1,7 @@
-export interface UserReceivingInformationData {
+export interface UserReceivingInformationsData {
     code: number;
     message: string;
-    information: {
+    informations: Array<{
         id: number,
         consignee: string,
         email: string,
@@ -10,5 +10,5 @@ export interface UserReceivingInformationData {
         postCode: string,
         homePhone: string,
         mobilePhone: string
-    };
+    }>;
 }
