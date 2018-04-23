@@ -14,4 +14,23 @@ export class UserReceivingInformationResolver {
         @Inject(UserReceivingInformationService) private readonly userReceivingInformationService: SUserReceivingInformationService
     ) { }
 
+    @Mutation("createUserReceivingInformation")
+    async createUserReceivingInformation(req: Request, body: {
+        userId: number,
+        consignee: string,
+        email: string,
+        region: string,
+        address: string,
+        postCode: string,
+        homePhone: string,
+        mobilePhone: string
+    }): Promise<Data> {
+        const { userId, consignee, email, region, address, postCode, homePhone, mobilePhone } = body;
+        if (!userId || !consignee || !email || !region || !address || !postCode || !homePhone || !mobilePhone) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.userReceivingInformationService.createUserReceivingInformation(userId, consignee, email, region, address, postCode, homePhone, mobilePhone);
+        return { code: 200, message: "创建用户收货信息成功" };
+    }
+
 }
