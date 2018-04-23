@@ -13,4 +13,5 @@ export class UserReceivingInformationService {
         @InjectRepository(UserReceivingInformation) private readonly userReceivingInformationRepository: Repository<UserReceivingInformation>
     ) { }
 
+
 }
