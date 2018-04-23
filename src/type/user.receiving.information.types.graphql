@@ -13,13 +13,13 @@ type Mutation{
 
     updateUserReceivingInformation(
         id:Int!,
-        consignee:String,
-        email:String,
-        region:String,
-        address:String,
-        postCode:String,
-        homePhone:String,
-        mobilePhone:String
+        consignee:String!,
+        email:String!,
+        region:String!,
+        address:String!,
+        postCode:String!,
+        homePhone:String!,
+        mobilePhone:String!
     ):ShopCommonData
 
 }

@@ -45,7 +45,7 @@ export class UserReceivingInformationResolver {
         mobilePhone: string
     }): Promise<Data> {
         const { id, consignee, email, region, address, postCode, homePhone, mobilePhone } = body;
-        if (!id) {
+        if (!id || !consignee || !email || !region || !address || !postCode || !homePhone || !mobilePhone) {
             throw new HttpException("缺少参数", 404);
         }
         await this.userReceivingInformationService.updateUserReceivingInformation(id, consignee, email, region, address, postCode, homePhone, mobilePhone);

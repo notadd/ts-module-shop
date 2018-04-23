@@ -35,4 +35,32 @@ export class UserReceivingInformationService {
         }
     }
 
+    async updateUserReceivingInformation(
+        id: number,
+        consignee: string,
+        email: string,
+        region: string,
+        address: string,
+        postCode: string,
+        homePhone: string,
+        mobilePhone: string
+    ): Promise<void> {
+        const userReveivingInformation: UserReceivingInformation = await this.userReceivingInformationRepository.findOneById(id);
+        if (!userReveivingInformation) {
+            throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
+        }
+        userReveivingInformation.consignee = consignee;
+        userReveivingInformation.email = email;
+        userReveivingInformation.region = region;
+        userReveivingInformation.address = address;
+        userReveivingInformation.postCode = postCode;
+        userReveivingInformation.homePhone = homePhone;
+        userReveivingInformation.mobilePhone = mobilePhone;
+        try {
+            await this.userReceivingInformationRepository.save(userReveivingInformation);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
