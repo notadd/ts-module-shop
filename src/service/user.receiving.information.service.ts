@@ -63,4 +63,16 @@ export class UserReceivingInformationService {
         }
     }
 
+    async deleteUserReceivingInformation(id: number): Promise<void> {
+        const userReveivingInformation: UserReceivingInformation = await this.userReceivingInformationRepository.findOneById(id);
+        if (!userReveivingInformation) {
+            throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
+        }
+        try {
+            await this.userReceivingInformationRepository.remove(userReveivingInformation);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
