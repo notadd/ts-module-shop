@@ -1,4 +1,5 @@
 type Mutation{
+
     createUserReceivingInformation(
         userId:Int!,
         consignee:String!,
@@ -9,4 +10,16 @@ type Mutation{
         homePhone:String!,
         mobilePhone:String！
     ):ShopCommonData
+
+    updateUserReceivingInformation(
+        id:Int!,
+        consignee:String,
+        email:String,
+        region:String,
+        address:String,
+        postCode:String,
+        homePhone:String,
+        mobilePhone:String
+    ):ShopCommonData
+
 }
