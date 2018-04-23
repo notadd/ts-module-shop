@@ -14,6 +14,16 @@ export class UserReceivingInformationResolver {
         @Inject(UserReceivingInformationService) private readonly userReceivingInformationService: SUserReceivingInformationService
     ) { }
 
+    @Query("userReceivingInformations")
+    async userReceivingInformations(req: Request, body: { userId: number }): Promise<any> {
+        const { userId } = body;
+        if (!userId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const informations = await this.userReceivingInformationService.getUserReceivingInformations(userId);
+        return { code: 200, message: "获取指定用户收货信息成功", informations };
+    }
+
     @Mutation("createUserReceivingInformation")
     async createUserReceivingInformation(req: Request, body: {
         userId: number,
@@ -53,13 +63,13 @@ export class UserReceivingInformationResolver {
     }
 
     @Mutation("deleteUserReceivingInformation")
-    async deleteUserReceivingInformation(req: Request, body: {id: number}): Promise<Data> {
-        const {id} = body;
+    async deleteUserReceivingInformation(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
         await this.userReceivingInformationService.deleteUserReceivingInformation(id);
-        return {code: 200, message: "删除用户收货信息成功"};
+        return { code: 200, message: "删除用户收货信息成功" };
     }
 
 }

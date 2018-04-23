@@ -27,7 +27,7 @@ type Mutation{
 }
 
 type Query{
-    userReceivingInformations:UserReceivingInformationsData
+    userReceivingInformations(userId:Int!):UserReceivingInformationsData
 }
 
 type UserReceivingInformationsData{
