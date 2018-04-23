@@ -22,4 +22,6 @@ type Mutation{
         mobilePhone:String!
     ):ShopCommonData
 
+    deleteUserReceivingInformation(id:Int!):ShopCommonData
+
 }

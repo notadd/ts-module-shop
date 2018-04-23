@@ -52,4 +52,14 @@ export class UserReceivingInformationResolver {
         return { code: 200, message: "更新用户收货信息成功" };
     }
 
+    @Mutation("deleteUserReceivingInformation")
+    async deleteUserReceivingInformation(req: Request, body: {id: number}): Promise<Data> {
+        const {id} = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.userReceivingInformationService.deleteUserReceivingInformation(id);
+        return {code: 200, message: "删除用户收货信息成功"};
+    }
+
 }
