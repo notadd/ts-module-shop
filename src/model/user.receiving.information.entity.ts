@@ -19,7 +19,12 @@ export class UserReceivingInformation {
     @Column({
         length: 50
     })
-    addresss: string;
+    region: string;
+
+    @Column({
+        length: 50
+    })
+    address: string;
 
     @Column({
         length: 20
@@ -36,4 +41,6 @@ export class UserReceivingInformation {
     })
     mobilePhone: string;
 
+    @Column()
+    userId: number;
 }
