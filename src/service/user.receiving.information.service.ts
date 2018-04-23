@@ -14,6 +14,15 @@ export class UserReceivingInformationService {
         @InjectRepository(UserReceivingInformation) private readonly userReceivingInformationRepository: Repository<UserReceivingInformation>
     ) { }
 
+    async getUserReceivingInformations(userId: number): Promise<Array<UserReceivingInformation>> {
+        const user: { id: number, userName: string, status: boolean, recycle: boolean }; = await this.userComponent.getUserById(userId);
+        if (!user) {
+            throw new HttpException("指定id=" + userId + "用户不存在", 404);
+        }
+        const informations: Array<UserReceivingInformation> = await this.userReceivingInformationRepository.find({ userId });
+        return informations;
+    }
+
     async createUserReceivingInformation(
         userId: number,
         consignee: string,
