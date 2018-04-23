@@ -1,3 +1,4 @@
+import { UserReceivingInformationsData } from "../interface/userreceivinginformation/user.receiving.information.data";
 import { UserReceivingInformationService } from "../service/user.receiving.information.service";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
@@ -15,7 +16,7 @@ export class UserReceivingInformationResolver {
     ) { }
 
     @Query("userReceivingInformations")
-    async userReceivingInformations(req: Request, body: { userId: number }): Promise<any> {
+    async userReceivingInformations(req: Request, body: { userId: number }): Promise<UserReceivingInformationsData> {
         const { userId } = body;
         if (!userId) {
             throw new HttpException("缺少参数", 404);
