@@ -27,6 +27,7 @@ type Mutation{
 }
 
 type Query{
+    userReceivingInformation(id:Int!):UserReceivingInformationData
     userReceivingInformations(userId:Int!):UserReceivingInformationsData
 }
 
@@ -45,4 +46,10 @@ type UserReceivingInformation{
     postCode:String
     homePhone:String
     mobilePhone:String
+}
+
+type UserReceivingInformationData{
+    code:Int
+    message:String
+    information:UserReceivingInformation
 }
