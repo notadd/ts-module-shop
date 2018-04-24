@@ -30,6 +30,14 @@ export class OrderService {
         return orders;
     }
 
+    async getOrder(id: number): Promise<Order> {
+        const order: Order | undefined = await this.orderRepository.createQueryBuilder("order")
+            .leftJoinAndSelect("order.delivery", "delivery")
+            .leftJoinAndSelect("order.userReceivingInformation", "userReceivingInformation")
+            .getOne();
+        return order;
+    }
+
     async createOrder(
         userId: number,
         delivertNo: string,
