@@ -23,5 +23,8 @@ type Mutation{
         deliveryId:Int!,
         userReceivingInformationId:Int!
     ):ShopCommonData
-    
+
+    deleteOrder(
+        id:Int!
+    ):ShopCommonData
 }
