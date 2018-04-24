@@ -48,7 +48,45 @@ export class OrderService {
         /* 生成32位订单号  */
         const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
         try {
-            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation });
+            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation });
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+    async updateOrder(
+        id: number,
+        delivertNo: string,
+        delivertTime: string,
+        invoiceType: string,
+        invoiceContent: string,
+        invoiceTitle: string,
+        customerMessage: string,
+        deliveryId: number,
+        userReceivingInformationId: number
+    ): Promise<void> {
+        const order: Order | undefined = await this.orderRepository.findOneById(id);
+        if (!order) {
+            throw new HttpException("指定id=" + id + "订单不存在", 404);
+        }
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(deliveryId);
+        if (!delivery) {
+            throw new HttpException("指定id=" + deliveryId + "配送信息不存在", 404);
+        }
+        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(userReceivingInformationId);
+        if (!userReceivingInformation) {
+            throw new HttpException("缺少参数", 404);
+        }
+        order.delivertNo = delivertNo;
+        order.delivertTime = new Date(delivertTime);
+        order.invoiceType = invoiceType;
+        order.invoiceContent = invoiceContent;
+        order.invoiceTitle = invoiceTitle;
+        order.customerMessage = customerMessage;
+        order.delivery = delivery;
+        order.userReceivingInformation = userReceivingInformation;
+        try {
+            await this.orderRepository.save(order);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
