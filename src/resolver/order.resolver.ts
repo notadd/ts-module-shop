@@ -15,6 +15,16 @@ export class OrderResolver {
         @Inject(OrderService) private readonly orderService: OrderService
     ) { }
 
+    @Query("order")
+    async order(req: Request, body: {id: number}): Promise<any> {
+        const {id} = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const order = await this.orderService.getOrder(id);
+        return {code: 200, message: "获取指定订单成功", order};
+    }
+
     @Query("orders")
     async orders(req: Request): Promise<any> {
         const orders = await this.orderService.getOrders();
