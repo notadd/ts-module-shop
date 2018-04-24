@@ -28,3 +28,29 @@ type Mutation{
         id:Int!
     ):ShopCommonData
 }
+
+type Query{
+    orders:OrdersData
+}
+
+type OrdersData{
+    code:Int
+    message:String
+    orders:[Order]
+}
+
+type Order{
+    id:Int
+    orderNo:String
+    createDate:String
+    updateDate:String
+    userId:Int
+    delivertNo: String
+    delivertTime: String
+    invoiceType: String
+    invoiceContent: String
+    invoiceTitle: String
+    customerMessage: String
+    delivery:[Delivery]
+    userReceivingInformation:[UserReceivingInformation]
+}
