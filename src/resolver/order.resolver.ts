@@ -35,4 +35,24 @@ export class OrderResolver {
         return { code: 200, message: "创建订单成功" };
     }
 
+    @Mutation("updateOrder")
+    async updateOrder(req: Request, body: {
+        id: number,
+        delivertNo: string,
+        delivertTime: string,
+        invoiceType: string,
+        invoiceContent: string,
+        invoiceTitle: string,
+        customerMessage: string,
+        deliveryId: number,
+        userReceivingInformationId: number
+    }): Promise<Data> {
+        const { id, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId } = body;
+        if (!id || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !userReceivingInformationId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.orderService.updateOrder(id, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId);
+        return { code: 200, message: "更新订单成功" };
+    }
+
 }
