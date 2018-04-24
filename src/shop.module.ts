@@ -33,6 +33,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Order } from "./model/order.entity";
+import { DateUtil } from "./util/date.util";
 import { Sku } from "./model/sku.entity";
 import { Module } from "@nestjs/common";
 
@@ -41,6 +42,7 @@ import { Module } from "@nestjs/common";
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, Delivery, UserReceivingInformation])],
     components: [
+        DateUtil,
         SkuService, SkuResolver,
         OrderService, OrderResolver,
         GoodsService, GoodsResolver,

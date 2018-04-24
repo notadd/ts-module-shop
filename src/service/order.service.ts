@@ -5,12 +5,15 @@ import { UserComponent } from "../interface/user.component";
 import { Delivery } from "../model/delivery.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Order } from "../model/order.entity";
+import { DateUtil } from "../util/date.util";
+
 
 /* 订单服务组件 */
 @Component()
 export class OrderService {
 
     constructor(
+        @Inject(DateUtil) private readonly dateUtil: DateUtil,
         @Inject("UserComponentToken") private readonly userComponent: UserComponent,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         @InjectRepository(Delivery) private readonly deliveryRepository: Repository<Delivery>,
@@ -40,13 +43,12 @@ export class OrderService {
         if (!userReceivingInformation) {
             throw new HttpException("缺少参数", 404);
         }
-        const orderNo = "";
+        const orderNo = this.dateUtil.getString(new Date());
         try {
             await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
-
     }
 
 }
