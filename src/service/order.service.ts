@@ -92,4 +92,15 @@ export class OrderService {
         }
     }
 
+    async deleteOrder(id: number): Promise<void> {
+        const order: Order | undefined = await this.orderRepository.findOneById(id);
+        if (!order) {
+            throw new HttpException("指定id=" + id + "订单不存在", 404);
+        }
+        try {
+            await this.orderRepository.remove(order);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
