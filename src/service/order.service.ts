@@ -22,6 +22,14 @@ export class OrderService {
         @InjectRepository(UserReceivingInformation) private readonly userReceivingInformationRepository: Repository<UserReceivingInformation>
     ) { }
 
+    async getOrders(): Promise<Array<Order>> {
+        const orders: Array<Order> | undefined = await this.orderRepository.createQueryBuilder("order")
+            .leftJoinAndSelect("order.delivery", "delivery")
+            .leftJoinAndSelect("order.userReceivingInformation", "userReceivingInformation")
+            .getMany();
+        return orders;
+    }
+
     async createOrder(
         userId: number,
         delivertNo: string,
