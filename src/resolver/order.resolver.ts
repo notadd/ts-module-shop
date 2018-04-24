@@ -55,4 +55,15 @@ export class OrderResolver {
         return { code: 200, message: "更新订单成功" };
     }
 
+    @Mutation("deleteOrder")
+    async deleteOrder(req: Request, body: {
+        id: number
+    }): Promise<Data> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.orderService.deleteOrder(id);
+        return { code: 200, message: "删除订单成功" };
+    }
 }
