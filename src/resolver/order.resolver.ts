@@ -15,6 +15,12 @@ export class OrderResolver {
         @Inject(OrderService) private readonly orderService: OrderService
     ) { }
 
+    @Query("orders")
+    async orders(req: Request): Promise<any> {
+        const orders = await this.orderService.getOrders();
+        return { code: 200, message: "获取所有订单成功", orders };
+    }
+
     @Mutation("createOrder")
     async createOrder(req: Request, body: {
         userId: number,
