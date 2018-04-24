@@ -30,6 +30,7 @@ import { SkuResolver } from "./resolver/sku.resolver";
 import { Delivery } from "./model/delivery.entity";
 import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { RandomUtil } from "./util/random.util";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Order } from "./model/order.entity";
@@ -42,7 +43,7 @@ import { Module } from "@nestjs/common";
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, Delivery, UserReceivingInformation])],
     components: [
-        DateUtil,
+        DateUtil, RandomUtil,
         SkuService, SkuResolver,
         OrderService, OrderResolver,
         GoodsService, GoodsResolver,

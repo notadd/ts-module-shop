@@ -4,6 +4,7 @@ import { Component, HttpException, Inject } from "@nestjs/common";
 import { UserComponent } from "../interface/user.component";
 import { Delivery } from "../model/delivery.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { RandomUtil } from "../util/random.util";
 import { Order } from "../model/order.entity";
 import { DateUtil } from "../util/date.util";
 
@@ -14,6 +15,7 @@ export class OrderService {
 
     constructor(
         @Inject(DateUtil) private readonly dateUtil: DateUtil,
+        @Inject(RandomUtil) private readonly randomUtil: RandomUtil,
         @Inject("UserComponentToken") private readonly userComponent: UserComponent,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         @InjectRepository(Delivery) private readonly deliveryRepository: Repository<Delivery>,
@@ -43,7 +45,8 @@ export class OrderService {
         if (!userReceivingInformation) {
             throw new HttpException("缺少参数", 404);
         }
-        const orderNo = this.dateUtil.getString(new Date());
+        /* 生成32位订单号  */
+        const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
         try {
             await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation });
         } catch (err) {
