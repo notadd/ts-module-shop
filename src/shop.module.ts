@@ -19,9 +19,11 @@ import { DeliveryService } from "./service/delivery.service";
 import { ClassifyService } from "./service/classify.service";
 import { GoodsResolver } from "./resolver/goods.resolver";
 import { BrandResolver } from "./resolver/brand.resolver";
+import { OrderResolver } from "./resolver/order.resolver";
 import { GoodsImage } from "./model/goods.image.entity";
 import { GoodsService } from "./service/goods.service";
 import { BrandService } from "./service/brand.service";
+import { OrderService } from "./service/order.service";
 import { GoodsType } from "./model/goods.type.entity";
 import { BrandLogo } from "./model/brand.logo.entity";
 import { SkuResolver } from "./resolver/sku.resolver";
@@ -40,6 +42,7 @@ import { Module } from "@nestjs/common";
         Brand, BrandLogo, Sku, Order, Delivery, UserReceivingInformation])],
     components: [
         SkuService, SkuResolver,
+        OrderService, OrderResolver,
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
         ClassifyService, ClassifyResolver,

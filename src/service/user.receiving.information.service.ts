@@ -1,11 +1,10 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
+import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
 import { Component, HttpException, Inject } from "@nestjs/common";
-import { PropertyValue } from "../model/property.value.entity";
 import { UserComponent } from "../interface/user.component";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 
-/* 用户收货信息的服务组件 */
+/* 用户收货信息服务组件 */
 @Component()
 export class UserReceivingInformationService {
 
@@ -23,7 +22,7 @@ export class UserReceivingInformationService {
     }
 
     async getUserReceivingInformations(userId: number): Promise<Array<UserReceivingInformation>> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean }; = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
@@ -41,7 +40,7 @@ export class UserReceivingInformationService {
         homePhone: string,
         mobilePhone: string
     ): Promise<void> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean }; = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
