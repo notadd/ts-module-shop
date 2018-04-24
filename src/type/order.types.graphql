@@ -30,6 +30,7 @@ type Mutation{
 }
 
 type Query{
+    order(id:Int!):OrderData
     orders:OrdersData
 }
 
@@ -37,6 +38,12 @@ type OrdersData{
     code:Int
     message:String
     orders:[Order]
+}
+
+type OrderData{
+    code:Int
+    message:String
+    order:Order
 }
 
 type Order{
