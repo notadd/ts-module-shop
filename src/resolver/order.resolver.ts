@@ -25,14 +25,14 @@ export class OrderResolver {
         invoiceTitle: string,
         customerMessage: string,
         deliveryId: number,
-        receivingInformationId: number
+        userReceivingInformationId: number
     }): Promise<Data> {
-        const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, receivingInformationId } = body;
-        if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !receivingInformationId) {
+        const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId } = body;
+        if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !userReceivingInformationId) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.orderService.createOrder(userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, receivingInformationId);
-        return {code: 200, message: "创建订单成功"};
+        await this.orderService.createOrder(userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId);
+        return { code: 200, message: "创建订单成功" };
     }
 
 }

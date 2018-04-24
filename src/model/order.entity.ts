@@ -84,5 +84,5 @@ export class Order {
         lazy: false,
         eager: false
     })
-    receivingInformation: UserReceivingInformation;
+    userReceivingInformation: UserReceivingInformation;
 }
