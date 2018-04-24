@@ -1,4 +1,5 @@
 type Mutation{
+
     createOrder(
         userId:Int!,
         delivertNo: String!,
@@ -10,4 +11,17 @@ type Mutation{
         deliveryId:Int!,
         userReceivingInformationId:Int!
     ):ShopCommonData
+
+    updateOrder(
+        id:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
+        deliveryId:Int!,
+        userReceivingInformationId:Int!
+    ):ShopCommonData
+    
 }
