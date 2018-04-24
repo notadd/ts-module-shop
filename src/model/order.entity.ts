@@ -9,6 +9,10 @@ export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
+    /* 订单号 */
+    @Column()
+    orderNo: string;
+
     /* 创建日期 */
     @CreateDateColumn()
     createDate: Date;
@@ -54,6 +58,13 @@ export class Order {
         length: 20
     })
     customerMessage: string;
+
+    @Column({ unique: true })
+    deliveryId: number;
+
+
+    @Column({ unique: true })
+    receivingInformationId: number;
 
     /* 订单配送信息 */
     @OneToOne(type => Delivery, {

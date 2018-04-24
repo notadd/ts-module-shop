@@ -1,0 +1,13 @@
+type Mutation{
+    createOrder(
+        userId:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: string!,
+        invoiceContent: string!,
+        invoiceTitle: string!,
+        customerMessage: string!,
+        deliveryId:Int!,
+        receivingInformationId:Int!
+    ):ShopCommonData
+}
