@@ -2,50 +2,60 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { UserReceivingInformation } from "./user.receiving.information.entity";
 import { Delivery } from "./delivery.entity";
 
-
+/* 订单实体类 */
 @Entity("order")
 export class Order {
 
     @PrimaryGeneratedColumn()
     id: number;
 
+    /* 创建日期 */
     @CreateDateColumn()
     createDate: Date;
 
+    /* 更新日期 */
     @UpdateDateColumn()
     updateDate: Date;
 
+    /* 订单所属用户id */
     @Column()
     userId: number;
 
+    /* 发货单号 */
     @Column({
         length: 30
     })
     delivertNo: string;
 
+    /* 发货时间 */
     @Column()
     delivertTime: Date;
 
+    /* 发票类型 */
     @Column({
         length: 20
     })
-    InvoiceType: string;
+    invoiceType: string;
 
+    /* 发票内容 */
     @Column({
         length: 100
     })
     invoiceContent: string;
 
+    /* 发票抬头 */
     @Column({
         length: 20
     })
     invoiceTitle: string;
 
+    /* 客户消息 */
     @Column({
         length: 20
     })
     customerMessage: string;
 
+    /* 订单配送信息 */
     @OneToOne(type => Delivery, {
         cascadeInsert: false,
         cascadeUpdate: false,
@@ -55,6 +65,7 @@ export class Order {
     })
     delivery: Delivery;
 
+    /* 收货人信息 */
     @OneToOne(type => UserReceivingInformation, {
         cascadeInsert: false,
         cascadeUpdate: false,
