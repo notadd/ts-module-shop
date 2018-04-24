@@ -3,10 +3,10 @@ type Mutation{
         userId:Int!,
         delivertNo: String!,
         delivertTime: String!,
-        invoiceType: string!,
-        invoiceContent: string!,
-        invoiceTitle: string!,
-        customerMessage: string!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
         deliveryId:Int!,
         receivingInformationId:Int!
     ):ShopCommonData

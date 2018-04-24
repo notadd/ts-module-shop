@@ -15,4 +15,24 @@ export class OrderResolver {
         @Inject(OrderService) private readonly orderService: OrderService
     ) { }
 
+    @Mutation("createOrder")
+    async createOrder(req: Request, body: {
+        userId: number,
+        delivertNo: string,
+        delivertTime: string,
+        invoiceType: string,
+        invoiceContent: string,
+        invoiceTitle: string,
+        customerMessage: string,
+        deliveryId: number,
+        receivingInformationId: number
+    }): Promise<Data> {
+        const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, receivingInformationId } = body;
+        if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !receivingInformationId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.orderService.createOrder(userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, receivingInformationId);
+        return {code: 200, message: "创建订单成功"};
+    }
+
 }
