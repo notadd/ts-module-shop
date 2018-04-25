@@ -15,6 +15,16 @@ export class OrderItemResolver {
         @Inject(OrderItemService) private readonly orderItemService: OrderItemService
     ) { }
 
+    @Query("cartItems")
+    async cartItems(req: Request, body: { userId: number }): Promise<any> {
+        const { userId } = body;
+        if (!userId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const cartItems = await this.orderItemService.findCartItems(userId);
+        return { code: 200, message: "获取指定用户购物车订单项成功", cartItems };
+    }
+
     @Mutation("createOrderItem")
     async createOrderItem(req: Request, body: { count: number, skuId: number, userId: number }): Promise<Data> {
         const { count, skuId, userId } = body;
@@ -42,12 +52,12 @@ export class OrderItemResolver {
     }
 
     @Mutation("deleteOrderItem")
-    async deleteOrderItem(req: Request,body: {id: number}): Promise<Data> {
-        const {id} = body;
+    async deleteOrderItem(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
         await this.orderItemService.deleteOrderItem(id);
-        return {code: 200, message: "删除订单项成功"};
+        return { code: 200, message: "删除订单项成功" };
     }
 }

@@ -12,7 +12,7 @@ type Query{
 type OrderItemsData{
     code:Int
     message:String
-    orderItems:[OrderItem]
+    cartItems:[OrderItem]
 }
 
 type OrderItemData{
