@@ -6,7 +6,9 @@ import { PropertyValueService } from "./service/property.value.service";
 import { GoodsPropertyService } from "./service/goods.property.service";
 import { GoodsImageResolver } from "./resolver/goods.image.resolver";
 import { GoodsTypeResolver } from "./resolver/goods.type.resolver";
+import { OrderItemResolver } from "./resolver/order.item.resolver";
 import { GoodsImageService } from "./service/goods.image.service";
+import { OrderItemService } from "./service/order.item.service";
 import { ClassifyResolver } from "./resolver/classify.resolver";
 import { SecondClassify } from "./model/second.classify.entity";
 import { GoodsTypeService } from "./service/goods.type.service";
@@ -54,6 +56,7 @@ import { Module } from "@nestjs/common";
         GoodsImageService, GoodsImageResolver,
         GoodsPropertyService, GoodsPropertyResolver,
         PropertyValueService, PropertyValueResolver,
+        OrderItemService, OrderItemResolver,
         DeliveryService, DeliveryResolver,
         ShopComponentProvider
     ],
