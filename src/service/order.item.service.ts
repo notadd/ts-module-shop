@@ -26,7 +26,20 @@ export class OrderItemService {
             throw new HttpException("指定id=" + skuId + "Sku不存在", 404);
         }
         try {
-            await this.orderItemRepository.save({count, userId, sku});
+            await this.orderItemRepository.save({ count, userId, sku });
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+    async updateOrderItem(id: number, count: number): Promise<void> {
+        const item: OrderItem | undefined = await this.orderItemRepository.findOneById(id);
+        if (!item) {
+            throw new HttpException("指定id=" + id + "订单项不存在", 404);
+        }
+        item.count = count;
+        try {
+            await this.orderItemRepository.save(item);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
