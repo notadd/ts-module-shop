@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
 import { UserReceivingInformation } from "./user.receiving.information.entity";
+import { OrderItem } from "./order.item.entity";
 import { Delivery } from "./delivery.entity";
 
 /* 订单实体类 */
@@ -75,6 +76,15 @@ export class Order {
         eager: false
     })
     delivery: Delivery;
+
+    /* 订单对应的订单项，包含了sku以及购买数量 */
+    @OneToMany(type => OrderItem, orderItem => orderItem.order, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    items: Array<OrderItem>;
 
     /* 收货人信息 */
     @OneToOne(type => UserReceivingInformation, {
