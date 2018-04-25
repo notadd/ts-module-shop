@@ -1,5 +1,6 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
+import { CartItemsData } from "../interface/orderitem/cart.items.data";
 import { OrderItemService } from "../service/order.item.service";
 import { Resolver, Mutation, Query } from "@nestjs/graphql";
 import { Order } from "../model/order.entity";
@@ -16,7 +17,7 @@ export class OrderItemResolver {
     ) { }
 
     @Query("cartItems")
-    async cartItems(req: Request, body: { userId: number }): Promise<any> {
+    async cartItems(req: Request, body: { userId: number }): Promise<CartItemsData> {
         const { userId } = body;
         if (!userId) {
             throw new HttpException("缺少参数", 404);
@@ -26,13 +27,13 @@ export class OrderItemResolver {
     }
 
     @Query("orderItem")
-    async orderItem(req:Request,body: {id: number}): Promise<any> {
+    async orderItem(req: Request, body: { id: number }): Promise<any> {
         const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 400);
         }
-        const orderItem  = await this.orderItemService.findOrderItem(id);
-        return {code: 200, message: "获取指定id订单项成功", orderItem};
+        const orderItem = await this.orderItemService.findOrderItem(id);
+        return { code: 200, message: "获取指定id订单项成功", orderItem };
     }
 
     @Mutation("createOrderItem")

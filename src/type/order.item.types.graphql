@@ -5,11 +5,11 @@ type Mutation{
 }
 
 type Query{
-    cartItems(userId:Int!):OrderItemsData
+    cartItems(userId:Int!):CartItemsData
     orderItem(id:Int!):OrderItemData
 }
 
-type OrderItemsData{
+type CartItemsData{
     code:Int
     message:String
     cartItems:[OrderItem]
