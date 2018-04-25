@@ -16,12 +16,15 @@ export class OrderItemResolver {
     ) { }
 
     @Mutation("createOrderItem")
-    async createOrderItem(req: Request, body: {count: number, skuId: number, userId: number}): Promise<Data> {
-        const {count, skuId, userId} = body;
+    async createOrderItem(req: Request, body: { count: number, skuId: number, userId: number }): Promise<Data> {
+        const { count, skuId, userId } = body;
         if (!count || !skuId || !userId) {
-            throw new HttpException("缺少参数", 404);
+            throw new HttpException("缺少参数", 400);
+        }
+        if (count <= 0) {
+            throw new HttpException("商品数量必须大于0", 400);
         }
         await this.orderItemService.createOrderItem(count, skuId, userId);
-        return {code: 200, message: "创建订单项成功"};
+        return { code: 200, message: "创建订单项成功" };
     }
 }
