@@ -27,6 +27,7 @@ import { OrderService } from "./service/order.service";
 import { GoodsType } from "./model/goods.type.entity";
 import { BrandLogo } from "./model/brand.logo.entity";
 import { SkuResolver } from "./resolver/sku.resolver";
+import { OrderItem } from "./model/order.item.entity";
 import { Delivery } from "./model/delivery.entity";
 import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -41,7 +42,7 @@ import { Module } from "@nestjs/common";
 @Module({
     modules: [TypeOrmModule.forFeature([FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
-        Brand, BrandLogo, Sku, Order, Delivery, UserReceivingInformation])],
+        Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation])],
     components: [
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
