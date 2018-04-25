@@ -3,3 +3,28 @@ type Mutation{
     updateOrderItem(id:Int!,count:Int!):ShopCommonData
     deleteOrderItem(id:Int!):ShopCommonData
 }
+
+type Query{
+    cartItems(userId:Int!):OrderItemsData
+    orderItem(id:Int!):OrderItemData
+}
+
+type OrderItemsData{
+    code:Int
+    message:String
+    orderItems:[OrderItem]
+}
+
+type OrderItemData{
+    code:Int
+    message:String
+    orderItem:OrderItem
+}
+
+type OrderItem{
+    id:Int
+    count:Int
+    userId:Int
+    sku:[Sku]
+    order:Order
+}
