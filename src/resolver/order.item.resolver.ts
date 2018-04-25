@@ -40,4 +40,14 @@ export class OrderItemResolver {
         await this.orderItemService.updateOrderItem(id, count);
         return { code: 200, message: "更新订单项成功" };
     }
+
+    @Mutation("deleteOrderItem")
+    async deleteOrderItem(req: Request,body: {id: number}): Promise<Data> {
+        const {id} = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.orderItemService.deleteOrderItem(id);
+        return {code: 200, message: "删除订单项成功"};
+    }
 }
