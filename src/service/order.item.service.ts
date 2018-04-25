@@ -16,6 +16,12 @@ export class OrderItemService {
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
     ) { }
 
+    /* 获取指定用户购物车订单项，即过滤出order属性不存在的订单项 */
+    async findCartItems(userId: number): Promise<Array<OrderItem>> {
+        const cartItems: Array<OrderItem> | undefined = await this.orderItemRepository.find({ userId });
+        return cartItems.filter(item => !item.order);
+    }
+
     async createOrderItem(count: number, skuId: number, userId: number): Promise<void> {
         const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
