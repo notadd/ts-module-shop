@@ -25,6 +25,16 @@ export class OrderItemResolver {
         return { code: 200, message: "获取指定用户购物车订单项成功", cartItems };
     }
 
+    @Query("orderItem")
+    async orderItem(req:Request,body: {id: number}): Promise<any> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 400);
+        }
+        const orderItem  = await this.orderItemService.findOrderItem(id);
+        return {code: 200, message: "获取指定id订单项成功", orderItem};
+    }
+
     @Mutation("createOrderItem")
     async createOrderItem(req: Request, body: { count: number, skuId: number, userId: number }): Promise<Data> {
         const { count, skuId, userId } = body;

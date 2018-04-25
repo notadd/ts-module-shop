@@ -18,7 +18,11 @@ export class OrderItemService {
 
     /* 获取指定用户购物车订单项，即过滤出order属性不存在的订单项 */
     async findCartItems(userId: number): Promise<Array<OrderItem>> {
-        const cartItems: Array<OrderItem> | undefined = await this.orderItemRepository.find({ userId });
+        const cartItems: Array<OrderItem> | undefined = await this.orderItemRepository.createQueryBuilder("item")
+            .where({ userId })
+            .leftJoinAndSelect("item.sku", "sku")
+            .leftJoinAndSelect("item.order", "order")
+            .getMany();
         return cartItems.filter(item => !item.order);
     }
 
