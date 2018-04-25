@@ -26,6 +26,15 @@ export class OrderItemService {
         return cartItems.filter(item => !item.order);
     }
 
+    async findOrderItem(id: number): Promise<OrderItem> {
+        const orderItem: OrderItem | undefined = await this.orderItemRepository.createQueryBuilder("item")
+            .where({ id })
+            .leftJoinAndSelect("item.sku", "sku")
+            .leftJoinAndSelect("item.order", "order")
+            .getOne();
+        return orderItem;
+    }
+
     async createOrderItem(count: number, skuId: number, userId: number): Promise<void> {
         const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
