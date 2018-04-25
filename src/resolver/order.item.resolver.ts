@@ -27,4 +27,17 @@ export class OrderItemResolver {
         await this.orderItemService.createOrderItem(count, skuId, userId);
         return { code: 200, message: "创建订单项成功" };
     }
+
+    @Mutation("updateOrderItem")
+    async updateOrderItem(req: Request, body: { id: number, count: number }): Promise<Data> {
+        const { id, count } = body;
+        if (!id || !count) {
+            throw new HttpException("缺少参数", 400);
+        }
+        if (count <= 0) {
+            throw new HttpException("商品数量必须大于0", 400);
+        }
+        await this.orderItemService.updateOrderItem(id, count);
+        return { code: 200, message: "更新订单项成功" };
+    }
 }
