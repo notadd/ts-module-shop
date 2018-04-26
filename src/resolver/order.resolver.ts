@@ -1,5 +1,6 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
+import { OrdersData } from "../interface/order/orders.data";
 import { Resolver, Mutation, Query } from "@nestjs/graphql";
 import { OrderData } from "../interface/order/order.data";
 import { OrderService } from "../service/order.service";
@@ -27,7 +28,7 @@ export class OrderResolver {
     }
 
     @Query("orders")
-    async orders(req: Request): Promise<any> {
+    async orders(req: Request): Promise<OrdersData> {
         const orders = await this.orderService.getOrders();
         return { code: 200, message: "获取所有订单成功", orders };
     }
