@@ -24,6 +24,7 @@ export class OrderService {
 
     async getOrders(): Promise<Array<Order>> {
         const orders: Array<Order> | undefined = await this.orderRepository.createQueryBuilder("order")
+            .leftJoinAndSelect("order.items", "item")
             .leftJoinAndSelect("order.delivery", "delivery")
             .leftJoinAndSelect("order.userReceivingInformation", "userReceivingInformation")
             .getMany();
@@ -32,6 +33,7 @@ export class OrderService {
 
     async getOrder(id: number): Promise<Order> {
         const order: Order | undefined = await this.orderRepository.createQueryBuilder("order")
+            .leftJoinAndSelect("order.items", "item")
             .leftJoinAndSelect("order.delivery", "delivery")
             .leftJoinAndSelect("order.userReceivingInformation", "userReceivingInformation")
             .getOne();
