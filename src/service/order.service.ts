@@ -8,7 +8,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { RandomUtil } from "../util/random.util";
 import { Order } from "../model/order.entity";
 import { DateUtil } from "../util/date.util";
-
+import { Sku } from "../model/sku.entity";
 
 /* 订单服务组件 */
 @Component()
@@ -17,6 +17,7 @@ export class OrderService {
     constructor(
         @Inject(DateUtil) private readonly dateUtil: DateUtil,
         @Inject(RandomUtil) private readonly randomUtil: RandomUtil,
+        @InjectRepository(Sku) private readonly skuRepository: Repository<Sku>,
         @Inject("UserComponentToken") private readonly userComponent: UserComponent,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
@@ -52,7 +53,7 @@ export class OrderService {
         customerMessage: string,
         deliveryId: number,
         userReceivingInformationId: number,
-        items: Array<{ userId: number, skuId: number, count: number }>
+        items: Array<{ skuId: number, count: number }>
     ): Promise<void> {
         const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
@@ -68,6 +69,14 @@ export class OrderService {
         }
         /* 生成32位订单号  */
         const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
+        for (let i = 0; i < items.length; i++) {
+            const sku: Sku | undefined = await this.skuRepository.findOneById(items[i].skuId);
+            if (!sku) {
+                throw new HttpException("指定id=" + items[i].skuId + "Sku不存在", 404);
+            }
+            (items[i] as OrderItem).userId = userId;
+            (items[i] as OrderItem).sku = sku;
+        }
         try {
             await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
         } catch (err) {

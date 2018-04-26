@@ -78,7 +78,6 @@ type Order{
 }
 
 input InputOrderItem{
-    userId:Int!,
     skuId:Int!,
     count:Int!
 }
