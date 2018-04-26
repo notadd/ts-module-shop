@@ -47,7 +47,8 @@ export class OrderService {
         invoiceTitle: string,
         customerMessage: string,
         deliveryId: number,
-        userReceivingInformationId: number
+        userReceivingInformationId: number,
+        items: Array<{ userId: number, skuId: number, count: number }>
     ): Promise<void> {
         const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
         if (!user) {
@@ -64,7 +65,7 @@ export class OrderService {
         /* 生成32位订单号  */
         const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
         try {
-            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation });
+            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
