@@ -9,7 +9,8 @@ type Mutation{
         invoiceTitle: String!,
         customerMessage: String!,
         deliveryId:Int!,
-        userReceivingInformationId:Int!
+        userReceivingInformationId:Int!,
+        items:[OrderItem]
     ):ShopCommonData
 
     updateOrder(
@@ -60,4 +61,11 @@ type Order{
     customerMessage: String
     delivery:[Delivery]
     userReceivingInformation:[UserReceivingInformation]
+    items:[OrderItem]
+}
+
+input OrderItem{
+    userId:Int!,
+    skuId:Int!,
+    count:Int!
 }

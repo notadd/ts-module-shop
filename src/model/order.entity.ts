@@ -79,7 +79,7 @@ export class Order {
 
     /* 订单对应的订单项，包含了sku以及购买数量 */
     @OneToMany(type => OrderItem, orderItem => orderItem.order, {
-        cascadeInsert: false,
+        cascadeInsert: true,
         cascadeUpdate: false,
         lazy: false,
         eager: false
