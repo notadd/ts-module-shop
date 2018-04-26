@@ -1,6 +1,7 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { Resolver, Mutation, Query } from "@nestjs/graphql";
+import { OrderData } from "../interface/order/order.data";
 import { OrderService } from "../service/order.service";
 import { Order } from "../model/order.entity";
 import { Data } from "../interface/data";
@@ -16,7 +17,7 @@ export class OrderResolver {
     ) { }
 
     @Query("order")
-    async order(req: Request, body: { id: number }): Promise<any> {
+    async order(req: Request, body: { id: number }): Promise<OrderData> {
         const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
