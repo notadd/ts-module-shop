@@ -13,6 +13,19 @@ type Mutation{
         items:[OrderItem]
     ):ShopCommonData
 
+    createOrderFromCart(
+        userId:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
+        deliveryId:Int!,
+        userReceivingInformationId:Int!,
+        itemIds:[Int]
+    ):ShopCommonData
+
     updateOrder(
         id:Int!,
         delivertNo: String!,
