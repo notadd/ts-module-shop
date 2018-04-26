@@ -1,3 +1,5 @@
+import { UserReceivingInformationResolver } from "./resolver/user.receiving.information.resolver";
+import { UserReceivingInformationService } from "./service/user.receiving.information.service";
 import { UserReceivingInformation } from "./model/user.receiving.information.entity";
 import { GoodsPropertyResolver } from "./resolver/goods.property.resolver";
 import { PropertyValueResolver } from "./resolver/property.value.resolver";
@@ -51,13 +53,14 @@ import { Module } from "@nestjs/common";
         OrderService, OrderResolver,
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
+        DeliveryService, DeliveryResolver,
         ClassifyService, ClassifyResolver,
         GoodsTypeService, GoodsTypeResolver,
+        OrderItemService, OrderItemResolver,
         GoodsImageService, GoodsImageResolver,
         GoodsPropertyService, GoodsPropertyResolver,
         PropertyValueService, PropertyValueResolver,
-        OrderItemService, OrderItemResolver,
-        DeliveryService, DeliveryResolver,
+        UserReceivingInformationService, UserReceivingInformationResolver,
         ShopComponentProvider
     ],
     controllers: [],
