@@ -1,0 +1,55 @@
+query all{
+	userReceivingInformations(userId:1){
+		code
+    message
+    informations{
+      id
+      consignee
+      email
+      region
+      address
+      postCode
+      homePhone
+      mobilePhone
+    }
+  }
+}
+
+mutation create{
+  createUserReceivingInformation(
+    userId:1,
+    consignee:"张三",
+    email:"232313123qq",
+    region:"西北",
+    address:"西安莲湖区",
+    postCode:"711111",
+    homePhone:"88823231",
+    mobilePhone:"12121999931"
+  ){
+    code
+    message
+  }
+}
+
+mutation update{
+  updateUserReceivingInformation(
+    id:1,
+    consignee:"张三三",
+    email:"75677576567567qq",
+    region:"东南",
+    address:"莲湖区",
+    postCode:"93232323",
+    homePhone:"01212121212",
+    mobilePhone:"11111111111"
+  ){
+    code
+    message
+  }
+}
+
+mutation delete{
+  deleteUserReceivingInformation(id:1){
+    code
+    message
+  }
+}
