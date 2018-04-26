@@ -33,7 +33,9 @@ export class Order {
     delivertNo: string;
 
     /* 发货时间 */
-    @Column()
+    @Column({
+        type: "timestamp"
+    })
     delivertTime: Date;
 
     /* 发票类型 */
