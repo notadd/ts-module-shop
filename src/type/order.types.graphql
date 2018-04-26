@@ -10,7 +10,7 @@ type Mutation{
         customerMessage: String!,
         deliveryId:Int!,
         userReceivingInformationId:Int!,
-        items:[OrderItem]
+        items:[InputOrderItem]
     ):ShopCommonData
 
     createOrderFromCart(
@@ -77,7 +77,7 @@ type Order{
     items:[OrderItem]
 }
 
-input OrderItem{
+input InputOrderItem{
     userId:Int!,
     skuId:Int!,
     count:Int!

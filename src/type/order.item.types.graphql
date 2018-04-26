@@ -1,5 +1,5 @@
 type Mutation{
-    createOrderItem(count:Int!,skuId:Int1,userId:Int!):ShopCommonData
+    createOrderItem(count:Int!,skuId:Int!,userId:Int!):ShopCommonData
     updateOrderItem(id:Int!,count:Int!):ShopCommonData
     deleteOrderItem(id:Int!):ShopCommonData
 }
