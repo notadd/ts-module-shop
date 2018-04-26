@@ -1,0 +1,35 @@
+query all{
+  deliveries{
+    code
+    message
+    deliveries{
+      id
+      name
+      description
+      cost
+      freeLimit
+      valuationFee
+    }
+  }
+}
+
+mutation create{
+  createDelivery(name:"圆通",description:"圆通速递",cost:20,freeLimit:65,valuationFee:0.5){
+    code
+    message
+  }
+}
+
+mutation update{
+  updateDelivery(id:1,name:"中通",description:"中通速递"){
+		code
+    message
+  }
+}
+
+mutation delete{
+  deleteDelivery(id:1){
+    code
+    message
+  }
+}
