@@ -16,13 +16,13 @@ export class OrderResolver {
     ) { }
 
     @Query("order")
-    async order(req: Request, body: {id: number}): Promise<any> {
-        const {id} = body;
+    async order(req: Request, body: { id: number }): Promise<any> {
+        const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
         }
         const order = await this.orderService.getOrder(id);
-        return {code: 200, message: "获取指定订单成功", order};
+        return { code: 200, message: "获取指定订单成功", order };
     }
 
     @Query("orders")
@@ -41,13 +41,14 @@ export class OrderResolver {
         invoiceTitle: string,
         customerMessage: string,
         deliveryId: number,
-        userReceivingInformationId: number
+        userReceivingInformationId: number,
+        items: Array<{ userId: number, sukId: number, count: number }>
     }): Promise<Data> {
-        const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId } = body;
-        if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !userReceivingInformationId) {
+        const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId, items } = body;
+        if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !userReceivingInformationId || !items || items.length === 0) {
             throw new HttpException("缺少参数", 404);
         }
-        await this.orderService.createOrder(userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId);
+        await this.orderService.createOrder(userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId, items);
         return { code: 200, message: "创建订单成功" };
     }
 
