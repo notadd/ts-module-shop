@@ -62,15 +62,15 @@ export class Order {
     })
     customerMessage: string;
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
     deliveryId: number;
 
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
     receivingInformationId: number;
 
     /* 订单配送信息 */
-    @OneToOne(type => Delivery, {
+    @ManyToOne(type => Delivery, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,
@@ -89,7 +89,7 @@ export class Order {
     items: Array<OrderItem>;
 
     /* 收货人信息 */
-    @OneToOne(type => UserReceivingInformation, {
+    @ManyToOne(type => UserReceivingInformation, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,

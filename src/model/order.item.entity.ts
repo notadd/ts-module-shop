@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 import { Order } from "./order.entity";
 import { Sku } from "./sku.entity";
 
@@ -42,6 +42,7 @@ export class OrderItem {
         lazy: false,
         eager: false
     })
+    @JoinColumn()
     sku: Sku;
 
 }

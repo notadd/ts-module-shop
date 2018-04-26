@@ -80,6 +80,7 @@ export class OrderService {
         try {
             await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
         } catch (err) {
+            console.log(err)
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }

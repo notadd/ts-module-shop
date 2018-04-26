@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable,OneToMany, ManyToMany, ManyToOne } from "typeorm";
 import { PropertyValue } from "./property.value.entity";
 import { Goods } from "./goods.entity";
 
@@ -20,6 +20,7 @@ export class Sku {
         lazy: false,
         eager: false
     })
+    @JoinTable()
     values: Array<PropertyValue>;
 
     @ManyToOne(type => Goods, goods => goods.skus, {

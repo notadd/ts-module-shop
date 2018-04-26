@@ -1,0 +1,20 @@
+mutation create{
+  createSku(goodsId:1,no:"d12121212",inventory:20,propertyValueIds:[2]){
+    code
+    message
+  }
+}
+
+mutation update{
+  updateSku(id:1,inventory:13){
+    code
+    message
+  }
+}
+
+mutation delete{
+  deleteSku(id:1){
+    code
+    message
+  }
+}
