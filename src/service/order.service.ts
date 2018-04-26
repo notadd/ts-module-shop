@@ -16,6 +16,7 @@ export class OrderService {
 
     constructor(
         @Inject(DateUtil) private readonly dateUtil: DateUtil,
+        @Inject(Connection) private readonly connection: Connection,
         @Inject(RandomUtil) private readonly randomUtil: RandomUtil,
         @InjectRepository(Sku) private readonly skuRepository: Repository<Sku>,
         @Inject("UserComponentToken") private readonly userComponent: UserComponent,
@@ -74,14 +75,26 @@ export class OrderService {
             if (!sku) {
                 throw new HttpException("指定id=" + items[i].skuId + "Sku不存在", 404);
             }
+            if (sku.inventory < items[i].count) {
+                throw new HttpException("商品库存小于购买数量", 404);
+            }
             (items[i] as OrderItem).userId = userId;
             (items[i] as OrderItem).sku = sku;
         }
+        const queryRunner: QueryRunner = this.connection.createQueryRunner("master");
+        await queryRunner.startTransaction();
         try {
-            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
+            for (let i = 0; i < items.length; i++) {
+                (items[i] as OrderItem).sku.inventory -= items[i].count;
+                await queryRunner.manager.save((items[i] as OrderItem).sku);
+            }
+            await queryRunner.manager.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
+            await queryRunner.commitTransaction();
         } catch (err) {
-            console.log(err)
+            await queryRunner.rollbackTransaction();
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -124,10 +137,20 @@ export class OrderService {
                 throw new HttpException("指定订单项id=" + id + "已属于订单", 404);
             }
         });
+        const queryRunner: QueryRunner = this.connection.createQueryRunner("master");
+        await queryRunner.startTransaction();
         try {
-            await this.orderRepository.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
+            for (let i = 0; i < items.length; i++) {
+                items[i].sku.inventory -= items[i].count;
+                await queryRunner.manager.save(items[i].sku);
+            }
+            await queryRunner.manager.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
+            await queryRunner.commitTransaction();
         } catch (err) {
+            await queryRunner.rollbackTransaction();
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        } finally {
+            await queryRunner.release();
         }
     }
 
