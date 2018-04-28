@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany, ManyToMany, ManyToOne } from "typeorm";
 
 /* 商城设置实体类 */
-@Entity("setting")
-export class Setting {
+@Entity("store_setting")
+export class StoreSetting {
 
     @PrimaryGeneratedColumn()
     id: number;

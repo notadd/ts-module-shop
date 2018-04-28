@@ -21,6 +21,7 @@ import { GoodsProperty } from "./model/goods.property.entity";
 import { PropertyValue } from "./model/property.value.entity";
 import { DeliveryService } from "./service/delivery.service";
 import { ClassifyService } from "./service/classify.service";
+import { StoreSetting } from "./model/store.setting.entity";
 import { GoodsResolver } from "./resolver/goods.resolver";
 import { BrandResolver } from "./resolver/brand.resolver";
 import { OrderResolver } from "./resolver/order.resolver";
@@ -34,7 +35,6 @@ import { SkuResolver } from "./resolver/sku.resolver";
 import { OrderItem } from "./model/order.item.entity";
 import { Delivery } from "./model/delivery.entity";
 import { SkuService } from "./service/sku.service";
-import { Setting } from "./model/setting.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RandomUtil } from "./util/random.util";
 import { Brand } from "./model/brand.entity";
@@ -49,7 +49,7 @@ import { Module } from "@nestjs/common";
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation])],
     components: [
-        Setting,
+        StoreSetting,
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
         OrderService, OrderResolver,

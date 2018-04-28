@@ -1,0 +1,13 @@
+type Mutation{
+    createStoreSetting(
+        logoBucketName:String!,
+        logoRawName:String!,
+        logoBase64:String!,
+        title:String!,
+        region:String!,
+        address:String!,
+        close:String!,
+        closeReason:String,
+        servicePhone:String!
+    ):ShopCommonData
+}
