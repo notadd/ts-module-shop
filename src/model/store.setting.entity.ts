@@ -49,7 +49,8 @@ export class StoreSetting {
 
     /* 关闭原因 */
     @Column({
-        length: 50
+        length: 50,
+        nullable: true
     })
     closeReason: string;
 

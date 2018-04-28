@@ -1,5 +1,5 @@
 type Mutation{
-    createStoreSetting(
+    saveStoreSetting(
         logoBucketName:String!,
         logoRawName:String!,
         logoBase64:String!,
