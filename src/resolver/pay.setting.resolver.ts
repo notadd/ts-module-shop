@@ -13,4 +13,14 @@ export class PaySettingResolver {
     constructor(
         @Inject(PaySettingService) private readonly paySettingService: PaySettingService
     ) { }
+
+    @Mutation("savePaySetting")
+    async savePaySetting(req: Request, body: { aliPay: string, weixinPay: string }): Promise<Data> {
+        const { aliPay, weixinPay } = body;
+        if (aliPay === undefined || aliPay === null || weixinPay === undefined || weixinPay === null) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.paySettingService.savePaySetting(aliPay, weixinPay);
+        return { code: 200, message: "保存支付设置成功" };
+    }
 }
