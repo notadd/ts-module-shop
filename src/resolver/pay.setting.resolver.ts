@@ -23,4 +23,10 @@ export class PaySettingResolver {
         await this.paySettingService.savePaySetting(aliPay, weixinPay);
         return { code: 200, message: "保存支付设置成功" };
     }
+
+    @Mutation("clearPaySetting")
+    async clearPaySetting(req: Request): Promise<Data> {
+        await this.paySettingService.clearPaySetting();
+        return { code: 200, message: "清除支付配置成功" };
+    }
 }
