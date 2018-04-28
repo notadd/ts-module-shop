@@ -1,5 +1,6 @@
 type Mutation{
     savePaySetting(aliPay:Boolean!.wenxinPay:Boolean!):ShopCommonData
+    clearPaySetting:ShopCommonData
 }
 
 enum Boolean{
