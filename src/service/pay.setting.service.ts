@@ -11,6 +11,11 @@ export class PaySettingService {
         @InjectRepository(PaySetting) private readonly paySettingRepository: Repository<PaySetting>
     ) { }
 
+    async getPaySetting(): Promise<PaySetting> {
+        const paySetting: PaySetting | undefined = await this.paySettingRepository.findOneById(1);
+        return paySetting;
+    }
+
     async savePaySetting(aliPay: string, weixinPay: string): Promise<void> {
         const paySetting: PaySetting = this.paySettingRepository.create({ id: 1, aliPay: !!aliPay, weixinPay: !!weixinPay });
         try {
