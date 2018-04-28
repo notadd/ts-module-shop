@@ -44,4 +44,16 @@ export class StoreSettingService {
         }
     }
 
+    async clearStoreSetting(): Promise<void> {
+        const setting: StoreSetting | undefined = await this.storeSettingRepository.findOneById(1);
+        if (!setting) {
+            throw new HttpException("商城设置不存在", 404);
+        }
+        try {
+            await this.storeSettingRepository.remove(setting);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
