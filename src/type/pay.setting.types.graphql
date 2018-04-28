@@ -1,0 +1,4 @@
+type Mutation{
+    savePaySetting(aliPay:String!.wenxinPay:String!):ShopCommonData
+}
+
