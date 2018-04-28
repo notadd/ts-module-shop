@@ -10,4 +10,13 @@ export class PaySettingService {
     constructor(
         @InjectRepository(PaySetting) private readonly paySettingRepository: Repository<PaySetting>
     ) { }
+
+    async savePaySetting(aliPay: string, weixinPay: string): Promise<void> {
+        const paySetting: PaySetting | undefined = this.paySettingRepository.create({ id: 1, aliPay: !!aliPay, weixinPay: !!weixinPay });
+        try {
+            await this.paySettingRepository.save(paySetting);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
