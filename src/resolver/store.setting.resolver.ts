@@ -19,7 +19,6 @@ export class StoreSettingResolver {
         return { code: 200, message: "获取商城配置成功", storeSetting };
     }
 
-
     @Mutation("saveStoreSetting")
     async saveStoreSetting(req: Request, body: {
         logoBucketName: string,
