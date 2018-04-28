@@ -14,6 +14,12 @@ export class PaySettingResolver {
         @Inject(PaySettingService) private readonly paySettingService: PaySettingService
     ) { }
 
+    @Query("paySetting")
+    async paySetting(): Promise<any> {
+        const paySetting = await this.paySettingService.getPaySetting();
+        return { code: 200, message: "获取支付设置成功", paySetting };
+    }
+
     @Mutation("savePaySetting")
     async savePaySetting(req: Request, body: { aliPay: string, weixinPay: string }): Promise<Data> {
         const { aliPay, weixinPay } = body;
