@@ -1,4 +1,5 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
+import { PaySettingData } from "../interface/paysetting/pay.setting.data";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { PaySettingService } from "../service/pay.setting.service";
 import { Resolver, Mutation, Query } from "@nestjs/graphql";
@@ -15,7 +16,7 @@ export class PaySettingResolver {
     ) { }
 
     @Query("paySetting")
-    async paySetting(): Promise<any> {
+    async paySetting(): Promise<PaySettingData> {
         const paySetting = await this.paySettingService.getPaySetting();
         return { code: 200, message: "获取支付设置成功", paySetting };
     }
