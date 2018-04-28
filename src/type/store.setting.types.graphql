@@ -13,3 +13,26 @@ type Mutation{
 
     clearStoreSetting:ShopCommonData
 }
+
+type Query{
+    storeSetting:StoreSettingData
+}
+
+type StoreSettingData{
+    code:Int
+    message:String
+    storeSetting:StoreSetting
+}
+
+type StoreSetting{
+    id:Int
+    logoBucketName:String
+    logoName:String
+    logoType:String
+    title:String
+    region:String
+    address:String
+    close:String
+    closeReason:String
+    servicePhone:String
+}
