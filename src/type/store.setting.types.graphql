@@ -10,4 +10,6 @@ type Mutation{
         closeReason:String,
         servicePhone:String!
     ):ShopCommonData
+
+    clearStoreSetting:ShopCommonData
 }
