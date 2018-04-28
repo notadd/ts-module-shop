@@ -12,6 +12,12 @@ export class StoreSettingResolver {
 
     constructor( @Inject(StoreSettingService) private readonly storeSettingService: StoreSettingService) { }
 
+    @Query("storeSetting")
+    async storeSetting(req: Request): Promise<any> {
+        const storeSetting = await this.storeSettingService.getStoreSetting()
+        return { code: 200, message: "获取商城配置成功", storeSetting }
+    }
+
 
     @Mutation("saveStoreSetting")
     async saveStoreSetting(req: Request, body: {
