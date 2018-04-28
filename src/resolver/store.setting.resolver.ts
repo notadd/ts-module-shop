@@ -36,5 +36,11 @@ export class StoreSettingResolver {
         return { code: 200, message: "保存商城设置成功" };
     }
 
+    @Mutation("clearStoreSetting")
+    async clearStoreSetting(req: Request): Promise<Data> {
+        await this.storeSettingService.clearStoreSetting()
+        return { code: 200, message: "清除商城设置成功" }
+    }
+
 
 }
