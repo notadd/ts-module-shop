@@ -13,6 +13,11 @@ export class StoreSettingService {
         @InjectRepository(StoreSetting) private readonly storeSettingRepository: Repository<StoreSetting>
     ) { }
 
+    async getStoreSetting(): Promise<StoreSetting> {
+        const storeSetting: StoreSetting | undefined = await this.storeSettingRepository.getOneById(1);
+        return storeSetting;
+    }
+
     async saveStoreSetting(
         logoBucketName: string,
         logoRawName: string,

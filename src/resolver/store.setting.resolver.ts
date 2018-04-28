@@ -1,3 +1,4 @@
+import { StoreSettingData } from "../interface/storesetting/store.setting.data";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { StoreSettingService } from "../service/store.setting.service";
@@ -13,9 +14,9 @@ export class StoreSettingResolver {
     constructor( @Inject(StoreSettingService) private readonly storeSettingService: StoreSettingService) { }
 
     @Query("storeSetting")
-    async storeSetting(req: Request): Promise<any> {
-        const storeSetting = await this.storeSettingService.getStoreSetting()
-        return { code: 200, message: "获取商城配置成功", storeSetting }
+    async storeSetting(req: Request): Promise<StoreSettingData> {
+        const storeSetting = await this.storeSettingService.getStoreSetting();
+        return { code: 200, message: "获取商城配置成功", storeSetting };
     }
 
 
@@ -44,8 +45,8 @@ export class StoreSettingResolver {
 
     @Mutation("clearStoreSetting")
     async clearStoreSetting(req: Request): Promise<Data> {
-        await this.storeSettingService.clearStoreSetting()
-        return { code: 200, message: "清除商城设置成功" }
+        await this.storeSettingService.clearStoreSetting();
+        return { code: 200, message: "清除商城设置成功" };
     }
 
 
