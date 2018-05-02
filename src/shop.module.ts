@@ -25,10 +25,12 @@ import { GoodsProperty } from "./model/goods.property.entity";
 import { PropertyValue } from "./model/property.value.entity";
 import { DeliveryService } from "./service/delivery.service";
 import { ClassifyService } from "./service/classify.service";
+import { MemberResolver } from "./resolver/member.resolver";
 import { StoreSetting } from "./model/store.setting.entity";
 import { GoodsResolver } from "./resolver/goods.resolver";
 import { BrandResolver } from "./resolver/brand.resolver";
 import { OrderResolver } from "./resolver/order.resolver";
+import { MemberService } from "./service/member.service";
 import { PaySetting } from "./model/pay.setting.entity";
 import { GoodsImage } from "./model/goods.image.entity";
 import { GoodsService } from "./service/goods.service";
@@ -58,12 +60,12 @@ import { Module } from "@nestjs/common";
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation
     ])],
     components: [
-
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
         OrderService, OrderResolver,
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
+        MemberService, MemberResolver,
         DeliveryService, DeliveryResolver,
         ClassifyService, ClassifyResolver,
         GoodsTypeService, GoodsTypeResolver,
