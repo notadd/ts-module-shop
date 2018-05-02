@@ -1,5 +1,6 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
+import { MembersData } from "../interface/member/members.data";
 import { MemberData } from "../interface/member/member.data";
 import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { MemberService } from "../service/member.service";
@@ -17,7 +18,7 @@ export class MemberResolver {
     ) { }
 
     @Query("members")
-    async members(req: Request): Promise<any> {
+    async members(req: Request): Promise<MembersData> {
         const members = await this.memberService.getMembers();
         return { code: 200, message: "获取所有会员成功", members };
     }
