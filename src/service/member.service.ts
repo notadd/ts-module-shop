@@ -12,6 +12,11 @@ export class MemberService {
         @InjectRepository(Member) private readonly memberRepository: Repository<Member>,
     ) { }
 
+    async getMembers(): Promise<Array<Member>> {
+        const members: Array<Member> | undefined = await this.memberRepository.find();
+        return members;
+    }
+
     async getMember(id: number): Promise<Member> {
         const member: Member | undefined = await this.memberRepository.findOneById(id);
         return member;
