@@ -10,6 +10,15 @@ type Mutation{
         mobilePhone:String!
     ):ShopCommonData
 
+    updateMember(
+        id:number!,
+        email:String!,
+        sex:Sex!,
+        birthday:String!,
+        password:String!,
+        mobilePhone:String!
+    ):ShopCommonData
+
 }
 
 
