@@ -11,13 +11,15 @@ type Mutation{
     ):ShopCommonData
 
     updateMember(
-        id:number!,
+        id:Int!,
         email:String!,
         sex:Sex!,
         birthday:String!,
         password:String!,
         mobilePhone:String!
     ):ShopCommonData
+
+    deleteMember(id:Int!):ShopCommonData
 
 }
 
