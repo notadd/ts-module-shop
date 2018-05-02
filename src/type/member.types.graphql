@@ -23,6 +23,11 @@ type Mutation{
 
 }
 
+type Query{
+    member(id:Int!):MemberData
+    
+}
+
 
 enum Sex{
     man 
