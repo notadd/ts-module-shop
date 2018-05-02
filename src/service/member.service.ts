@@ -33,4 +33,28 @@ export class MemberService {
         }
     }
 
+    async updateMember(
+        id: number,
+        email: string,
+        sex: string,
+        birthday: string,
+        password: string,
+        mobilePhone: string
+    ): Promise<void> {
+        const member: Member | undefined = await this.memberRepository.findOneById(id);
+        if (!member) {
+            throw new HttpException("指定id=" + id + "会员不存在", 404);
+        }
+        member.email = email;
+        member.sex = sex;
+        member.birthday = new Date(birthday);
+        member.password = password;
+        member.mobilePhone = mobilePhone;
+        try {
+            await this.memberRepository.save(member);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
