@@ -42,6 +42,7 @@ import { Delivery } from "./model/delivery.entity";
 import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RandomUtil } from "./util/random.util";
+import { Member } from "./model/member.entity";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Order } from "./model/order.entity";
@@ -51,7 +52,7 @@ import { Module } from "@nestjs/common";
 
 @Module({
     modules: [TypeOrmModule.forFeature([
-        StoreSetting, PaySetting,
+        StoreSetting, PaySetting, Member,
         FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation
