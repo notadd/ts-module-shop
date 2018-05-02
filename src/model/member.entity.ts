@@ -8,7 +8,7 @@ export class Member {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 20 })
+    @Column({ length: 20, unique: true })
     name: string;
 
     @Column({ length: 20 })
