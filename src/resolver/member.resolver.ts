@@ -15,6 +15,12 @@ export class MemberResolver {
         @Inject(MemberService) private readonly memberService: MemberService
     ) { }
 
+    @Query("members")
+    async members(req: Request): Promise<any> {
+        const members = await this.memberService.getMembers();
+        return { code: 200, message: "获取所有会员成功", members }
+    }
+
     @Query("member")
     async member(req: Request, body: { id: number }): Promise<any> {
         const { id } = body;
