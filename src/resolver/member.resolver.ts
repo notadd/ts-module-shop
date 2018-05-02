@@ -23,7 +23,7 @@ export class MemberResolver {
         sex: string,
         idNumber: string,
         birthday: string,
-        password: string
+        password: string,
         mobilePhone: string
     }): Promise<Data> {
         const { name, realName, email, sex, idNumber, birthday, password, mobilePhone } = body;
@@ -32,6 +32,23 @@ export class MemberResolver {
         }
         await this.memberService.createMember(name, realName, email, sex, idNumber, birthday, password, mobilePhone);
         return { code: 200, message: "创建会员成功" };
+    }
+
+    @Mutation("updateMember")
+    async updateMember(req: Request, body: {
+        id: number,
+        email: string,
+        sex: string,
+        birthday: string,
+        password: string,
+        mobilePhone: string
+    }): Promise<Data> {
+        const { id, email, sex, birthday, password, mobilePhone } = body;
+        if (!id || !email || !sex || !birthday || !password || !mobilePhone) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.memberService.updateMember(id, email, sex, birthday, password, mobilePhone);
+        return { code: 200, message: "更新会员成功" };
     }
 
 }
