@@ -57,4 +57,17 @@ export class MemberService {
         }
     }
 
+    async deleteMember(id:number): Promise<void> {
+        const member: Member|undefined = await this.memberRepository.findOneById(id);
+        if (!member) {
+            throw new HttpException("指定id=" + id + "会员不存在", 404);
+        }
+        try {
+            await this.memberRepository.remove(member);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
+
 }
