@@ -25,7 +25,7 @@ type Mutation{
 
 type Query{
     member(id:Int!):MemberData
-    
+    members:MembersData
 }
 
 
