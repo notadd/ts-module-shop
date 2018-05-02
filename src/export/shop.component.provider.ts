@@ -1,4 +1,7 @@
 import { Repository, Connection, SelectQueryBuilder } from "typeorm";
+import { SecondClassify } from "../model/second.classify.entity";
+import { ThirdClassify } from "../model/third.classify.entity";
+import { FirstClassify } from "../model/first.classify.entity";
 import { HttpException } from "@nestjs/common";
 import { Goods } from "../model/goods.entity";
 
@@ -6,8 +9,29 @@ import { Goods } from "../model/goods.entity";
 export class ShopComponent {
 
     constructor(
-        private readonly goodsRepository: Repository<Goods>
+        private readonly goodsRepository: Repository<Goods>,
+        private readonly firstClassifyRepository: Repository<FirstClassify>,
+        private readonly secondClassifyRepository: Repository<SecondClassify>,
+        private readonly thirdClassifyRepository: Repository<ThirdClassify>
     ) { }
+
+    async getSubClassifyIds(id: number, level: 1 | 2): Promise<Array<number>> {
+        if (level === 1) {
+            const firstClassify: FirstClassify | undefined = await this.firstClassifyRepository.createQueryBuilder("first")
+                .leftJoinAndSelect("first.children", "second")
+                .select(["second.id"])
+                .getOne();
+            return firstClassify.children.map(second => second.id);
+        } else if (level === 2) {
+            const secondClassify: SecondClassify | undefined = await this.secondClassifyRepository.createQueryBuilder("second")
+                .leftJoinAndSelect("second.children", "third")
+                .select(["third.id"])
+                .getOne();
+            return secondClassify.children.map(third => third.id);
+        } else {
+            return undefined;
+        }
+    }
 
     async getGoodsById(id: number): Promise<Goods> {
         const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
