@@ -28,8 +28,31 @@ type Query{
     members:MembersData
 }
 
-
 enum Sex{
     man 
     woman
+}
+
+type MemberData{
+    code:Int
+    message:String
+    member:Member
+}
+
+type MembersData{
+    code:Int
+    message:String
+    members:[Member]
+}
+
+type Member{
+    id:Int
+    name:String
+    realName:String
+    email:String
+    sex:Sex,
+    idNumber:String,
+    birthday:String,
+    password:String,
+    mobilePhone:String
 }
