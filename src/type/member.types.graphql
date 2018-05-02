@@ -1,0 +1,19 @@
+type Mutation{
+    createMember(
+        name:String!,
+        realName:String!,
+        email:String!,
+        sex:Sex!,
+        idNumber:String!,
+        birthday:String!,
+        password:String!,
+        mobilePhone:String!
+    ):ShopCommonData
+
+}
+
+
+enum Sex{
+    man 
+    woman
+}
