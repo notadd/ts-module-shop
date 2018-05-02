@@ -15,6 +15,16 @@ export class MemberResolver {
         @Inject(MemberService) private readonly memberService: MemberService
     ) { }
 
+    @Query("member")
+    async member(req: Request, body: { id: number }): Promise<any> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const member = await this.memberService.getMember(id);
+        return { code: 200, message: "获取指定id会员成功", member };
+    }
+
     @Mutation("createMember")
     async createMember(req: Request, body: {
         name: string,
