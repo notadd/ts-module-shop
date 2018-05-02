@@ -1,7 +1,8 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
-import { MemberService } from "../service/member.service";
+import { MemberData } from "../interface/member/member.data";
 import { Resolver, Query, Mutation } from "@nestjs/graphql";
+import { MemberService } from "../service/member.service";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
@@ -18,11 +19,11 @@ export class MemberResolver {
     @Query("members")
     async members(req: Request): Promise<any> {
         const members = await this.memberService.getMembers();
-        return { code: 200, message: "获取所有会员成功", members }
+        return { code: 200, message: "获取所有会员成功", members };
     }
 
     @Query("member")
-    async member(req: Request, body: { id: number }): Promise<any> {
+    async member(req: Request, body: { id: number }): Promise<MemberData> {
         const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
