@@ -1,5 +1,6 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
-import { Inject, HttpException, UseInterceptors } from "@nestjs/common"; \
+import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
+import { FloorsData } from "../interface/floor/floors.data";
 import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { FloorData } from "../interface/floor/floor.data";
 import { FloorService } from "../service/floor.service";
@@ -14,7 +15,7 @@ export class FloorResolver {
     constructor(@Inject(FloorService) private readonly floorService: FloorService) { }
 
     @Query("floors")
-    async floors(req: Request): Promise<any> {
+    async floors(req: Request): Promise<FloorsData> {
         const floors = await this.floorService.getFloors();
         return {code: 200, message: "获取所有楼层成功", floors};
     }
