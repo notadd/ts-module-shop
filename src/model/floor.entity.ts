@@ -9,7 +9,7 @@ export class Floor {
     id: number;
 
     @Column({ length: 20 })
-    floorName: string;
+    name: string;
 
     @Column()
     display: boolean;
