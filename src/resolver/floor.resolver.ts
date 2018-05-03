@@ -1,6 +1,7 @@
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
-import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
+import { Inject, HttpException, UseInterceptors } from "@nestjs/common"; \
 import { Resolver, Query, Mutation } from "@nestjs/graphql";
+import { FloorData } from "../interface/floor/floor.data";
 import { FloorService } from "../service/floor.service";
 import { Data } from "../interface/data";
 import { Request } from "express";
@@ -19,7 +20,7 @@ export class FloorResolver {
     }
 
     @Query("floor")
-    async floor(req: Request, body: { id: number }): Promise<any> {
+    async floor(req: Request, body: { id: number }): Promise<FloorData> {
         const { id } = body;
         if (!id) {
             throw new HttpException("缺少参数", 404);
