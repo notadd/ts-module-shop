@@ -10,7 +10,13 @@ import { Request } from "express";
 @UseInterceptors(ExceptionInterceptor)
 export class FloorResolver {
 
-    constructor( @Inject(FloorService) private readonly floorService: FloorService) { }
+    constructor(@Inject(FloorService) private readonly floorService: FloorService) { }
+
+    @Query("floors")
+    async floors(req: Request): Promise<any> {
+        const floors = await this.floorService.getFloors();
+        return {code: 200, message: "获取所有楼层成功", floors};
+    }
 
     @Query("floor")
     async floor(req: Request, body: { id: number }): Promise<any> {
