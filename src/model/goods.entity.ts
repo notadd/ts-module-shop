@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne,ManyToMany } from "typeorm";
 import { PropertyValue } from "./property.value.entity";
 import { ThirdClassify } from "./third.classify.entity";
 import { GoodsImage } from "./goods.image.entity";
@@ -96,17 +96,14 @@ export class Goods {
     })
     type: GoodsType;
 
-    /* 商品所属楼层 */
-    @ManyToOne(type => Floor, floor => floor.goodses, {
+    /* 商品所属楼层,商品楼层为多对多关系 */
+    @ManyToMany(type => Floor, floor => floor.goodses, {
         cascadeInsert: false,
         cascadeUpdate: false,
-        cascadeRemove: false,
-        onDelete: "RESTRICT",
-        nullable: true,
         lazy: false,
         eager: false
     })
-    floor: Floor;
+    floors: Array<Floor>;
 
     @OneToMany(type => PropertyValue, propertyValue => propertyValue.goods, {
         cascadeInsert: false,

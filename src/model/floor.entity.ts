@@ -14,7 +14,7 @@ export class Floor {
     @Column()
     display: boolean;
 
-    @OneToMany(type => Goods, goods => goods.floor, {
+    @ManyToMany(type => Goods, goods => goods.floors, {
         cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,

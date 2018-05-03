@@ -19,6 +19,8 @@ export class FloorService {
         if(exist) {
             throw new HttpException("指定name=" + name + "楼层已存在", 404);
         }
+        const goodses:Array<Goods>|undefined = await this.goodsRepository.findByIds(goodsIds);
+        
     }
 
 }
