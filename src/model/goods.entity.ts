@@ -3,6 +3,7 @@ import { PropertyValue } from "./property.value.entity";
 import { ThirdClassify } from "./third.classify.entity";
 import { GoodsImage } from "./goods.image.entity";
 import { GoodsType } from "./goods.type.entity";
+import { Floor } from "./floor.entity";
 import { Brand } from "./brand.entity";
 import { Sku } from "./sku.entity";
 
@@ -94,6 +95,18 @@ export class Goods {
         eager: false
     })
     type: GoodsType;
+
+    /* 商品所属楼层 */
+    @ManyToOne(type => Floor, floor => floor.goodses, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        cascadeRemove: false,
+        onDelete: "RESTRICT",
+        nullable: true,
+        lazy: false,
+        eager: false
+    })
+    floor: Floor;
 
     @OneToMany(type => PropertyValue, propertyValue => propertyValue.goods, {
         cascadeInsert: false,
