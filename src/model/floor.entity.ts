@@ -8,7 +8,7 @@ export class Floor {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 20 })
+    @Column({ length: 20, unique: true })
     name: string;
 
     @Column()
