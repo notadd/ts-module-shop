@@ -1,3 +1,4 @@
 type Mutation{
     createFloor(name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
+    updateFloor(id:Int!,name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
 }
