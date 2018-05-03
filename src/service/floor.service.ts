@@ -14,6 +14,11 @@ export class FloorService {
         @InjectRepository(Floor) private readonly floorRepository: Repository<Floor>
     ) { }
 
+    async getFloors(): Promise<Array<Floor>> {
+        const floors: Array<Floor> | undefined = await this.floorRepository.find();
+        return floors;
+    }
+
     async getFloor(id: number): Promise<Floor> {
         const floor: Floor | undefined = await this.floorRepository.createQueryBuilder("floor")
             .leftJoinAndSelect("floor.goodses", "goods")
