@@ -10,7 +10,7 @@ import { Request } from "express";
 @UseInterceptors(ExceptionInterceptor)
 export class FloorResolver {
 
-    constructor( @Inject(FloorService) private readonly floorService: FloorService) { }
+    constructor(@Inject(FloorService) private readonly floorService: FloorService) { }
 
     @Mutation("createFloor")
     async createFloor(req: Request, body: { name: string, display: string, goodsIds: Array<number> }): Promise<Data> {
@@ -19,7 +19,17 @@ export class FloorResolver {
             throw new HttpException("缺少参数", 404);
         }
         await this.floorService.createFloor(name, display, goodsIds);
-        return {code: 200, message: "创建楼层成功"};
+        return { code: 200, message: "创建楼层成功" };
+    }
+
+    @Mutation("updateFloor")
+    async updateFloor(req: Request, body: { id: number, name: string, display: string, goodsIds: Array<number> }): Promise<Data> {
+        const { id, name, display, goodsIds } = body;
+        if (!id || !name || display === undefined || display === null || !goodsIds || goodsIds.length === 0) {
+            throw new HttpException("缺少参数", 404);
+        }
+        await this.floorService.updateFloor(id, name, display, goodsIds);
+        return { code: 200, message: "更新楼层成功" };
     }
 
 }
