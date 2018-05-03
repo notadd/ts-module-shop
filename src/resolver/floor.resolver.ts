@@ -12,6 +12,16 @@ export class FloorResolver {
 
     constructor( @Inject(FloorService) private readonly floorService: FloorService) { }
 
+    @Query("floor")
+    async floor(req: Request, body: { id: number }): Promise<any> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const floor = await this.floorService.getFloor(id);
+        return { code: 200, message: "获取指定楼层成功", floor };
+    }
+
     @Mutation("createFloor")
     async createFloor(req: Request, body: { name: string, display: string, goodsIds: Array<number> }): Promise<Data> {
         const { name, display, goodsIds } = body;
