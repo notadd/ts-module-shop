@@ -79,8 +79,13 @@ export class ShopComponent {
 
 export const ShopComponentProvider = {
     provide: "ShopComponentToken",
-    useFactory: (goodsRepository: Repository<Goods>) => {
-        return new ShopComponent(goodsRepository);
+    useFactory: (
+        goodsRepository: Repository<Goods>,
+        firstClassifyRepository: Repository<FirstClassify>,
+        secondClassifyRepository: Repository<SecondClassify>,
+        thirdClassifyRepository: Repository<ThirdClassify>
+    ) => {
+        return new ShopComponent(goodsRepository, firstClassifyRepository, secondClassifyRepository, thirdClassifyRepository);
     },
-    inject: ["GoodsRepository"]
+    inject: ["GoodsRepository", "FirstClassifyRepository", "SecondClassifyRepository", "ThirdClassifyRepository"]
 };
