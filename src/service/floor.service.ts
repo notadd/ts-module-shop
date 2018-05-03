@@ -61,4 +61,16 @@ export class FloorService {
         }
     }
 
+    async deleteFloor(id: number): Promise<void> {
+        const floor: Floor | undefined = await this.floorRepository.findOneById(id);
+        if (!floor) {
+            throw new HttpException("指定id=" + id + "楼层不存在", 404);
+        }
+        try {
+            await this.floorRepository.remove(floor);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
