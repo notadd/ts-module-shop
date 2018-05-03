@@ -33,4 +33,32 @@ export class FloorService {
         }
     }
 
+    async updateFloor(id: number, name: string, display: string, goodsIds: Array<number>): Promise<void> {
+        const floor: Floor | undefined = await this.floorRepository.findOneById(id);
+        if (!floor) {
+            throw new HttpException("指定id=" + id + "楼层不存在", 404);
+        }
+        if (floor.name !== name) {
+            const exist: Floor | undefined = await this.floorRepository.findOne({ name });
+            if (exist) {
+                throw new HttpException("指定name=" + name + "楼层已存在", 404);
+            }
+            floor.name = name;
+        }
+        floor.display = !!display;
+        const goodses: Array<Goods> | undefined = await this.goodsRepository.findByIds(goodsIds);
+        for (let i = 0; i < goodsIds.length; i++) {
+            const find: Goods | undefined = goodses.find(goods => goods.id === goodsIds[i]);
+            if (!find) {
+                throw new HttpException("指定id=" + goodsIds[i] + "商品未找到", 404);
+            }
+        }
+        floor.goodses = goodses;
+        try {
+            await this.floorRepository.save(floor);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
