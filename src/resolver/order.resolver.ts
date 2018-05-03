@@ -44,7 +44,7 @@ export class OrderResolver {
         customerMessage: string,
         deliveryId: number,
         userReceivingInformationId: number,
-        items: Array<{ sukId: number, count: number }>
+        items: Array<{ skuId: number, count: number }>
     }): Promise<Data> {
         const { userId, delivertNo, delivertTime, invoiceType, invoiceContent, invoiceTitle, customerMessage, deliveryId, userReceivingInformationId, items } = body;
         if (!userId || !delivertNo || !delivertTime || !invoiceType || !invoiceContent || !invoiceTitle || !customerMessage || !deliveryId || !userReceivingInformationId || !items || items.length === 0) {
