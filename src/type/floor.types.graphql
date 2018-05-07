@@ -1,0 +1,29 @@
+type Mutation{
+    createFloor(name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
+    updateFloor(id:Int!,name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
+    deleteFloor(id:Int!):ShopCommonData
+}
+
+type Query{
+    floor(id:Int!):FloorData
+    floors:FloorsData
+}
+
+type FloorData{
+    code:Int
+    message:String
+    floor:Floor
+}
+
+type FloorsData{
+    code:Int
+    message:String
+    floors:[Floor]
+}
+
+type Floor{
+    id:Int
+    name:String
+    display:String
+    goodses:[Goods]
+}

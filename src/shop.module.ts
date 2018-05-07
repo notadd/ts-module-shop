@@ -30,12 +30,14 @@ import { StoreSetting } from "./model/store.setting.entity";
 import { GoodsResolver } from "./resolver/goods.resolver";
 import { BrandResolver } from "./resolver/brand.resolver";
 import { OrderResolver } from "./resolver/order.resolver";
+import { FloorResolver } from "./resolver/floor.resolver";
 import { MemberService } from "./service/member.service";
 import { PaySetting } from "./model/pay.setting.entity";
 import { GoodsImage } from "./model/goods.image.entity";
 import { GoodsService } from "./service/goods.service";
 import { BrandService } from "./service/brand.service";
 import { OrderService } from "./service/order.service";
+import { FloorService } from "./service/floor.service";
 import { GoodsType } from "./model/goods.type.entity";
 import { BrandLogo } from "./model/brand.logo.entity";
 import { SkuResolver } from "./resolver/sku.resolver";
@@ -45,6 +47,7 @@ import { SkuService } from "./service/sku.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RandomUtil } from "./util/random.util";
 import { Member } from "./model/member.entity";
+import { Floor } from "./model/floor.entity";
 import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Order } from "./model/order.entity";
@@ -54,7 +57,7 @@ import { Module } from "@nestjs/common";
 
 @Module({
     modules: [TypeOrmModule.forFeature([
-        StoreSetting, PaySetting, Member,
+        StoreSetting, PaySetting, Member, Floor,
         FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation
@@ -62,6 +65,7 @@ import { Module } from "@nestjs/common";
     components: [
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
+        FloorService, FloorResolver,
         OrderService, OrderResolver,
         GoodsService, GoodsResolver,
         BrandService, BrandResolver,
