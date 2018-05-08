@@ -1,6 +1,6 @@
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
 import { Component, HttpException, Inject } from "@nestjs/common";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent, UserComponentToken } from "@notadd/user";
 import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Sku } from "../model/sku.entity";
@@ -11,7 +11,7 @@ export class OrderItemService {
 
     constructor(
         @InjectRepository(Sku) private readonly skuRepository: Repository<Sku>,
-        @Inject("UserComponentToken") private readonly userComponent: UserComponent,
+        @Inject(UserComponentToken) private readonly userComponent: UserComponent,
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
     ) { }
 
