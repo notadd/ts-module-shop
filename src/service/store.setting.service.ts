@@ -14,7 +14,7 @@ export class StoreSettingService {
     ) { }
 
     async getStoreSetting(): Promise<StoreSetting> {
-        const storeSetting: StoreSetting | undefined = await this.storeSettingRepository.getOneById(1);
+        const storeSetting: StoreSetting | undefined = await this.storeSettingRepository.findOneById(1);
         return storeSetting;
     }
 

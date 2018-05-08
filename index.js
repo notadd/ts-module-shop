@@ -1,1 +1,0 @@
-export { ShopComponent,ShopComponentToken } from './src/export/shop.component.provider'
