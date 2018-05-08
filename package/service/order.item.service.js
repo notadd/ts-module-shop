@@ -22,6 +22,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
+const user_1 = require("@notadd/user");
 const order_item_entity_1 = require("../model/order.item.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const sku_entity_1 = require("../model/sku.entity");
@@ -102,8 +103,10 @@ let OrderItemService = class OrderItemService {
 OrderItemService = __decorate([
     common_1.Component(),
     __param(0, typeorm_2.InjectRepository(sku_entity_1.Sku)),
-    __param(1, common_1.Inject("UserComponentToken")),
+    __param(1, common_1.Inject(user_1.UserComponentToken)),
     __param(2, typeorm_2.InjectRepository(order_item_entity_1.OrderItem)),
-    __metadata("design:paramtypes", [typeorm_1.Repository, Object, typeorm_1.Repository])
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        user_1.UserComponent,
+        typeorm_1.Repository])
 ], OrderItemService);
 exports.OrderItemService = OrderItemService;

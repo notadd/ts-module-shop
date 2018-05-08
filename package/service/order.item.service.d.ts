@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent } from "@notadd/user";
 import { OrderItem } from "../model/order.item.entity";
 import { Sku } from "../model/sku.entity";
 export declare class OrderItemService {

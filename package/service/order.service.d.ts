@@ -1,6 +1,6 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository, Connection } from "typeorm";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent } from "@notadd/user";
 import { OrderItem } from "../model/order.item.entity";
 import { Delivery } from "../model/delivery.entity";
 import { RandomUtil } from "../util/random.util";

@@ -1,7 +1,7 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
 import { Component, HttpException, Inject } from "@nestjs/common";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent, UserComponentToken } from "@notadd/user";
 import { InjectRepository } from "@nestjs/typeorm";
 
 /* 用户收货信息服务组件 */
@@ -9,7 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class UserReceivingInformationService {
 
     constructor(
-        @Inject("UserComponentToken") private readonly userComponent: UserComponent,
+        @Inject(UserComponentToken) private readonly userComponent: UserComponent,
         @InjectRepository(UserReceivingInformation) private readonly userReceivingInformationRepository: Repository<UserReceivingInformation>
     ) { }
 

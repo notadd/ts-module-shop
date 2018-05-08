@@ -23,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_receiving_information_entity_1 = require("../model/user.receiving.information.entity");
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
+const user_1 = require("@notadd/user");
 const typeorm_2 = require("@nestjs/typeorm");
 let UserReceivingInformationService = class UserReceivingInformationService {
     constructor(userComponent, userReceivingInformationRepository) {
@@ -100,8 +101,9 @@ let UserReceivingInformationService = class UserReceivingInformationService {
 };
 UserReceivingInformationService = __decorate([
     common_1.Component(),
-    __param(0, common_1.Inject("UserComponentToken")),
+    __param(0, common_1.Inject(user_1.UserComponentToken)),
     __param(1, typeorm_2.InjectRepository(user_receiving_information_entity_1.UserReceivingInformation)),
-    __metadata("design:paramtypes", [Object, typeorm_1.Repository])
+    __metadata("design:paramtypes", [user_1.UserComponent,
+        typeorm_1.Repository])
 ], UserReceivingInformationService);
 exports.UserReceivingInformationService = UserReceivingInformationService;

@@ -23,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_receiving_information_entity_1 = require("../model/user.receiving.information.entity");
 const typeorm_1 = require("typeorm");
 const common_1 = require("@nestjs/common");
+const user_1 = require("@notadd/user");
 const order_item_entity_1 = require("../model/order.item.entity");
 const delivery_entity_1 = require("../model/delivery.entity");
 const typeorm_2 = require("@nestjs/typeorm");
@@ -205,7 +206,7 @@ OrderService = __decorate([
     __param(1, common_1.Inject(typeorm_1.Connection)),
     __param(2, common_1.Inject(random_util_1.RandomUtil)),
     __param(3, typeorm_2.InjectRepository(sku_entity_1.Sku)),
-    __param(4, common_1.Inject("UserComponentToken")),
+    __param(4, common_1.Inject(user_1.UserComponentToken)),
     __param(5, typeorm_2.InjectRepository(order_entity_1.Order)),
     __param(6, typeorm_2.InjectRepository(order_item_entity_1.OrderItem)),
     __param(7, typeorm_2.InjectRepository(delivery_entity_1.Delivery)),
@@ -213,7 +214,9 @@ OrderService = __decorate([
     __metadata("design:paramtypes", [date_util_1.DateUtil,
         typeorm_1.Connection,
         random_util_1.RandomUtil,
-        typeorm_1.Repository, Object, typeorm_1.Repository,
+        typeorm_1.Repository,
+        user_1.UserComponent,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository])

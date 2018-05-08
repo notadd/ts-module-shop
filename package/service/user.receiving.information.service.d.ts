@@ -1,6 +1,6 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository } from "typeorm";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent } from "@notadd/user";
 export declare class UserReceivingInformationService {
     private readonly userComponent;
     private readonly userReceivingInformationRepository;
