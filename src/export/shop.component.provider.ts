@@ -76,8 +76,10 @@ export class ShopComponent {
 
 }
 
+export const ShopComponentToken = "ShopComponentToken"
+
 export const ShopComponentProvider = {
-    provide: "ShopComponentToken",
+    provide: ShopComponentToken,
     useFactory: (
         goodsRepository: Repository<Goods>,
         firstClassifyRepository: Repository<FirstClassify>,
