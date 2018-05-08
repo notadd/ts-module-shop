@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { BrandLogo } from "./brand.logo.entity";
 import { Goods } from "./goods.entity";
 
-
 @Entity("brand")
 export class Brand {
 

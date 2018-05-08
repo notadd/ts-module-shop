@@ -7,7 +7,6 @@ import { MemberService } from "../service/member.service";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 会员Resolver */
 @Resolver("Member")
 @UseInterceptors(ExceptionInterceptor)

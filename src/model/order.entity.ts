@@ -65,7 +65,6 @@ export class Order {
     @Column({ nullable: true })
     deliveryId: number;
 
-
     @Column({ nullable: true })
     receivingInformationId: number;
 

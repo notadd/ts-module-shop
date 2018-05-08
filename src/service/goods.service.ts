@@ -8,7 +8,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Goods } from "../model/goods.entity";
 import { Brand } from "../model/brand.entity";
 
-
 /* 商品服务组件 */
 @Component()
 export class GoodsService {
@@ -240,6 +239,5 @@ export class GoodsService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
-
 
 }

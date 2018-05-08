@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne,ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, ManyToMany } from "typeorm";
 import { PropertyValue } from "./property.value.entity";
 import { ThirdClassify } from "./third.classify.entity";
 import { GoodsImage } from "./goods.image.entity";

@@ -3,7 +3,6 @@ import { Delivery } from "../model/delivery.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-
 /* 配送服务的组件 */
 @Component()
 export class DeliveryService {

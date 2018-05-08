@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from "typeorm";
 import { Goods } from "./goods.entity";
 
-
 /* 商品图片实体*/
 @Entity("goods_image")
 export class GoodsImage {

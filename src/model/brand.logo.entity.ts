@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn, Index, OneToOne } from "typeorm";
 import { Brand } from "./brand.entity";
 
-
 /* 品牌logo实体*/
 @Entity("brand_logo")
 @Index("brand_id", ["brandId"])

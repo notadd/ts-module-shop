@@ -11,7 +11,7 @@ import { Request } from "express";
 @UseInterceptors(ExceptionInterceptor)
 export class StoreSettingResolver {
 
-    constructor( @Inject(StoreSettingService) private readonly storeSettingService: StoreSettingService) { }
+    constructor(@Inject(StoreSettingService) private readonly storeSettingService: StoreSettingService) { }
 
     @Query("storeSetting")
     async storeSetting(req: Request): Promise<StoreSettingData> {
@@ -47,6 +47,5 @@ export class StoreSettingResolver {
         await this.storeSettingService.clearStoreSetting();
         return { code: 200, message: "清除商城设置成功" };
     }
-
 
 }

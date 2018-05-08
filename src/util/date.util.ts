@@ -13,7 +13,7 @@ export class DateUtil {
     }
 
     zero(a: number): string {
-        if (a >= 10) return a + "";
+        if (a >= 10) { return a + ""; }
         return "0" + a;
     }
 

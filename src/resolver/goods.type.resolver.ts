@@ -7,7 +7,6 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 商品类型Resolver */
 @Resolver("GoodsTyoe")
 @UseInterceptors(ExceptionInterceptor)

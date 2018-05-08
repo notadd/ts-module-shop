@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany, ManyToMany, ManyToOne } from "typeorm";
 import { Goods } from "./goods.entity";
 
-
 @Entity("floor")
 export class Floor {
 

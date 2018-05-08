@@ -6,7 +6,6 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 商品图片的Resolver */
 @Resolver("GoodsImage")
 @UseInterceptors(ExceptionInterceptor)

@@ -5,7 +5,6 @@ import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Sku } from "../model/sku.entity";
 
-
 /* 订单项服务组件 */
 @Component()
 export class OrderItemService {

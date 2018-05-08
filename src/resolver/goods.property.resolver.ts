@@ -5,7 +5,6 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 商品属性Resolver，没有什么Query，查询商品类型时会顺带查询其下商品属性 */
 @Resolver("GoodsProperty")
 @UseInterceptors(ExceptionInterceptor)

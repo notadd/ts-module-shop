@@ -5,7 +5,6 @@ import { Goods } from "../model/goods.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-
 /* 属性值服务组件 */
 @Component()
 export class PropertyValueService {
@@ -15,7 +14,6 @@ export class PropertyValueService {
         @InjectRepository(PropertyValue) private readonly propertyValueRepository: Repository<PropertyValue>,
         @InjectRepository(GoodsProperty) private readonly goodsPropertyRepository: Repository<GoodsProperty>
     ) { }
-
 
     async getPropertyValues(goodsId: number): Promise<Array<PropertyValue>> {
         const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
@@ -74,7 +72,6 @@ export class PropertyValueService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
-
 
     /* 更新指定属性值，可以更新属性值属性价格*/
     async updatePropertyValue(id: number, value: string, price: number): Promise<void> {

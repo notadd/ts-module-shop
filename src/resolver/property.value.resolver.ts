@@ -7,7 +7,6 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 属性值的Resolver,属性值的查询在商品详情里面，获取单个商品时会获取其关联属性值 */
 @Resolver("PropertyValue")
 export class PropertyValueResolver {

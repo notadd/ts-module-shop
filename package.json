@@ -9,7 +9,7 @@
         "test": "jest --config=jest.json --runInBand --forceExit",
         "test:watch": "jest --watchAll --config=jest.json --runInBand --forceExit",
         "test:coverage": "jest --config=jest.json --coverage --runInBand --forceExit",
-        "check": "tslint -p tsconfig.json -c tslint.json --type-check",
+        "check": "tslint -p tsconfig.json -c tslint.json",
         "fix": "tslint -p tsconfig.json -c tslint.json --fix"
     },
     "repository": {

@@ -6,7 +6,6 @@ import { Classify } from "../interface/classify/classify";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-
 /* 分类的服务组件，一、二、三级分类三个实体被分别操作 */
 @Component()
 export class ClassifyService {

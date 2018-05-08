@@ -6,7 +6,6 @@ import { BrandService } from "../service/brand.service";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 品牌的Resolver */
 @Resolver("Brand")
 @UseInterceptors(ExceptionInterceptor)

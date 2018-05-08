@@ -6,7 +6,6 @@ import { Resolver, Query, Mutation } from "@nestjs/graphql";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 配送方式Resolver */
 @Resolver("Delivery")
 @UseInterceptors(ExceptionInterceptor)

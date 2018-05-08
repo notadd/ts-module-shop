@@ -6,7 +6,6 @@ import { Classify } from "../interface/classify/classify";
 import { Data } from "../interface/data";
 import { Request } from "express";
 
-
 /* 商品分类Resolver */
 @Resolver("Classify")
 @UseInterceptors(ExceptionInterceptor)

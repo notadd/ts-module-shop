@@ -2,11 +2,9 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { FirstClassify } from "./first.classify.entity";
 import { ThirdClassify } from "./third.classify.entity";
 
-
 /* 二级分类实体，其level默认为2 */
 @Entity("second_classify")
 export class SecondClassify {
-
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -49,7 +47,5 @@ export class SecondClassify {
         eager: false
     })
     children: Array<ThirdClassify>;
-
-
 
 }

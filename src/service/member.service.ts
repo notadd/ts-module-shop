@@ -3,7 +3,6 @@ import { Component, HttpException, Inject } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Member } from "../model/member.entity";
 
-
 /* 会员服务组件 */
 @Component()
 export class MemberService {
@@ -78,6 +77,5 @@ export class MemberService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
-
 
 }

@@ -5,7 +5,6 @@ import { FirstClassify } from "../model/first.classify.entity";
 import { HttpException } from "@nestjs/common";
 import { Goods } from "../model/goods.entity";
 
-
 export class ShopComponent {
 
     constructor(
