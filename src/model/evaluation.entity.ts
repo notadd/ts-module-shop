@@ -9,6 +9,12 @@ export class Evaluation{
     @Column({length:200})
     content:string;
 
+    @Column()
+    display:boolean;
 
+    @Column()
+    userId:number;
+
+    
 
 }
