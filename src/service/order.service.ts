@@ -1,7 +1,7 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
 import { Component, HttpException, Inject } from "@nestjs/common";
-import { UserComponent } from "../interface/user.component";
+import { UserComponent, UserComponentToken } from "@notadd/user";
 import { OrderItem } from "../model/order.item.entity";
 import { Delivery } from "../model/delivery.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -19,7 +19,7 @@ export class OrderService {
         @Inject(Connection) private readonly connection: Connection,
         @Inject(RandomUtil) private readonly randomUtil: RandomUtil,
         @InjectRepository(Sku) private readonly skuRepository: Repository<Sku>,
-        @Inject("UserComponentToken") private readonly userComponent: UserComponent,
+        @Inject(UserComponentToken) private readonly userComponent: UserComponent,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
         @InjectRepository(Delivery) private readonly deliveryRepository: Repository<Delivery>,
