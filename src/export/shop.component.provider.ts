@@ -1,4 +1,5 @@
 import { Repository, Connection, SelectQueryBuilder } from "typeorm";
+import { getRepositoryToken } from "@nestjs/typeorm/typeorm.utils";
 import { SecondClassify } from "../model/second.classify.entity";
 import { ThirdClassify } from "../model/third.classify.entity";
 import { FirstClassify } from "../model/first.classify.entity";
@@ -76,7 +77,7 @@ export class ShopComponent {
 
 }
 
-export const ShopComponentToken = "ShopComponentToken"
+export const ShopComponentToken = "ShopComponentToken";
 
 export const ShopComponentProvider = {
     provide: ShopComponentToken,
@@ -88,5 +89,5 @@ export const ShopComponentProvider = {
     ) => {
         return new ShopComponent(goodsRepository, firstClassifyRepository, secondClassifyRepository, thirdClassifyRepository);
     },
-    inject: ["GoodsRepository", "FirstClassifyRepository", "SecondClassifyRepository", "ThirdClassifyRepository"]
+    inject: [getRepositoryToken(Goods), getRepositoryToken(FirstClassify), getRepositoryToken(SecondClassify), getRepositoryToken(ThirdClassify)]
 };
