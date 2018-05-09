@@ -6,3 +6,20 @@ type Mutation{
 
     deleteEvaluation(id:Int!):ShopCommonData
 }
+
+type Query{
+    evaluation(id:Int!):EvaluationData
+}
+
+type EvaluationData{
+    code:Int
+    message:String
+    evaluation:Evaluation
+}
+
+type Evaluation{
+    id:Int
+    content:String
+    display:String
+    orderItem:OrderItem
+}
