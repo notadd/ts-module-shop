@@ -15,6 +15,14 @@ export class EvaluationService {
         @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>
     ) { }
 
+    async getEvaluation(id: number): Promise<Evaluation> {
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.createQueryBuilder("evaluation")
+            .leftJoinAndSelect("evaluation.orderItem", "orderItem")
+            .where({ id })
+            .getOne();
+        return evaluation;
+    }
+
     async createEvaluation(content: string, userId: number, orderItemId: number): Promise<void> {
         const user: User | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
