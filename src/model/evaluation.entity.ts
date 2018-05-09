@@ -19,7 +19,7 @@ export class Evaluation {
     @Column()
     userId: number;
 
-    /* 用户与评论是ManyToOne关系，且用户删除时，评论也要级联删除 */
+    /* 用户与评论是ManyToOne关系，一个用户有多个评价 */
     @ManyToOne(type => User, {
         cascadeAll: false,
         nullable: false,
@@ -37,9 +37,14 @@ export class Evaluation {
     @Column({ unique: true })
     orderItemId: number;
 
-    /* 评价与订单项是一对一关系，用户只能在完成订单后对订单中的订单项进行评论 */
+    /* 
+    评价与订单项是一对一关系，用户只能在完成订单后对订单中的订单项进行评论
+    关系可以级联更新订单项
+    */
     @OneToOne(type => OrderItem, {
-        cascadeAll: false,
+        cascadeInsert: false,
+        cascadeUpdate: true,
+        cascadeRemove: false,
         nullable: false,
         lazy: false,
         eager: false,

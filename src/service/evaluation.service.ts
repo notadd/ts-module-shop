@@ -24,13 +24,18 @@ export class EvaluationService {
         if (!orderItem) {
             throw new HttpException("指定id=" + orderItemId + "订单项不存在", 404);
         }
+        /*
+        一个订单项只有所属用户可以评价，且一个订单项只能评价一次
+        按理说，一个订单只有当交易成功后才可以评价，但是目前订单状态还没有定义
+        */
         if (orderItem.userId !== userId) {
             throw new HttpException("指定id=" + orderItemId + "订单项不属于当前用户，不能评价", 404);
         }
         if (orderItem.evaluated) {
-            throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404)
+            throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404);
         }
         try {
+            orderItem.evaluated = true;
             await this.evaluationRepository.save({ content, display: true, user, orderItem });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
