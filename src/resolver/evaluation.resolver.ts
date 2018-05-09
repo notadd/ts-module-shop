@@ -14,6 +14,16 @@ export class EvaluationResolver {
         @Inject(EvaluationService) private readonly evaluationService: EvaluationService
     ) { }
 
+    @Query("evaluation")
+    async evaluation(req: Request, body: { id: number }): Promise<any> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 400);
+        }
+        const evaluation = await this.evaluationService.getEvaluation(id)
+        return { code: 200, message: "获取指定评价信息成功", evaluation }
+    }
+
     @Mutation("createEvaluation")
     async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number }): Promise<Data> {
         const { content, userId, orderItemId } = body;
