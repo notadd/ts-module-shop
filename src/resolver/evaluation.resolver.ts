@@ -24,6 +24,7 @@ export class EvaluationResolver {
         return { code: 200, message: "获取指定评价信息成功", evaluation };
     }
 
+    /* 获取指定商品的所有评价 */
     @Query("evaluations")
     async evaluations(req: Request, body: { goodsId: number }): Promise<any> {
         const { goodsId } = body;
