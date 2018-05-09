@@ -14,4 +14,14 @@ export class EvaluationResolver {
         @Inject(EvaluationService) private readonly evaluationService: EvaluationService
     ) { }
 
+    @Mutation("createEvaluation")
+    async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number }): Promise<Data> {
+        const { content, userId, orderItemId } = body;
+        if (!content || !userId || !orderItemId) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.evaluationService.createEvaluation(content, userId, orderItemId);
+        return { code: 200, message: "创建评价成功" };
+    }
+
 }
