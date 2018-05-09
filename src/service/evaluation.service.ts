@@ -1,5 +1,7 @@
-import { Component, HttpException } from "@nestjs/common";
+import { UserComponent, UserComponentToken, User } from "@notadd/user";
+import { Component, HttpException, Inject } from "@nestjs/common";
 import { Evaluation } from "../model/evaluation.entity";
+import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -8,6 +10,30 @@ import { Repository } from "typeorm";
 export class EvaluationService {
 
     constructor(
+        @Inject(UserComponentToken) private readonly userComponent: UserComponent,
+        @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
         @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>
     ) { }
+
+    async createEvaluation(content: string, userId: number, orderItemId: number): Promise<void> {
+        const user: User | undefined = await this.userComponent.getUserById(userId);
+        if (!user) {
+            throw new HttpException("指定id=" + userId + "用户不存在", 404);
+        }
+        const orderItem: OrderItem | undefined = await this.orderItemRepository.findOneById(orderItemId);
+        if (!orderItem) {
+            throw new HttpException("指定id=" + orderItemId + "订单项不存在", 404);
+        }
+        if (orderItem.userId !== userId) {
+            throw new HttpException("指定id=" + orderItemId + "订单项不属于当前用户，不能评价", 404);
+        }
+        if (orderItem.evaluated) {
+            throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404)
+        }
+        try {
+            await this.evaluationRepository.save({ content, display: true, user, orderItem });
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }

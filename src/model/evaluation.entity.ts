@@ -15,12 +15,12 @@ export class Evaluation {
     @Column()
     display: boolean;
 
-    /* 外键字段需要添加唯一性约束，保证OneToOne关系 */
-    @Column({ unique: true })
+    /**/
+    @Column()
     userId: number;
 
-    /* 用户与评论是OneToOne关系，且用户删除时，评论也要级联删除 */
-    @OneToOne(type => User, {
+    /* 用户与评论是ManyToOne关系，且用户删除时，评论也要级联删除 */
+    @ManyToOne(type => User, {
         cascadeAll: false,
         nullable: false,
         lazy: false,

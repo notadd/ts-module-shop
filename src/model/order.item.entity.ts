@@ -14,6 +14,10 @@ export class OrderItem {
     @Column()
     count: number;
 
+    /* 订单项是否已评价 */
+    @Column({ default: false })
+    evaluated: boolean;
+
     /* skuId,由于是一对一关系，所以外键为unique */
     @Column({
         unique: true
