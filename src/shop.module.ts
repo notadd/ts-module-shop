@@ -10,10 +10,12 @@ import { GoodsPropertyService } from "./service/goods.property.service";
 import { StoreSettingService } from "./service/store.setting.service";
 import { GoodsImageResolver } from "./resolver/goods.image.resolver";
 import { PaySettingResolver } from "./resolver/pay.setting.resolver";
+import { EvaluationResolver } from "./resolver/evaluation.resolver";
 import { GoodsTypeResolver } from "./resolver/goods.type.resolver";
 import { OrderItemResolver } from "./resolver/order.item.resolver";
 import { PaySettingService } from "./service/pay.setting.service";
 import { GoodsImageService } from "./service/goods.image.service";
+import { EvaluationService } from "./service/evaluation.service";
 import { OrderItemService } from "./service/order.item.service";
 import { ClassifyResolver } from "./resolver/classify.resolver";
 import { SecondClassify } from "./model/second.classify.entity";
@@ -76,6 +78,7 @@ import { Module } from "@nestjs/common";
         OrderItemService, OrderItemResolver,
         GoodsImageService, GoodsImageResolver,
         PaySettingService, PaySettingResolver,
+        EvaluationService, EvaluationResolver,
         StoreSettingService, StoreSettingResolver,
         GoodsPropertyService, GoodsPropertyResolver,
         PropertyValueService, PropertyValueResolver,
