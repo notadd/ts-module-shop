@@ -29,9 +29,13 @@ export class EvaluationService {
         const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
             .loadRelationIdAndMap("skuIds", "goods.skus")
             .where({ id: goodsId })
-            .getOne()
-        const 
-
+            .getOne();
+        const orderItems: Array<OrderItem> | undefined = await this.orderItemRepository.createQueryBuilder("orderItem")
+            .where(`orderItem.skuId in (${(goods as any).skuIds.join(",")})`)
+            .innerJoinAndSelect("orderItem.evaluation", "evaluation")
+            .getMany();
+        const evaluations: Array<Evaluation> | undefined = orderItems.map(orderItem => orderItem.evaluation);
+        return evaluations;
     }
 
     async createEvaluation(content: string, userId: number, orderItemId: number): Promise<void> {
