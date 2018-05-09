@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany, ManyToMany, ManyToOne } from "typeorm";
 import { PropertyValue } from "./property.value.entity";
+import { OrderItem } from "./order.item.entity";
 import { Goods } from "./goods.entity";
 
 @Entity("sku")
@@ -13,6 +14,14 @@ export class Sku {
 
     @Column()
     inventory: number;
+
+    @OneToMany(type => OrderItem, orderItem => orderItem.sku, {
+        cascadeInsert: false,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    orderItems: Array<OrderItem>;
 
     @ManyToMany(type => PropertyValue, {
         cascadeInsert: false,

@@ -39,14 +39,15 @@ export class OrderItem {
     })
     order: Order;
 
-    /* 一个订单项对应一个sku */
-    @OneToOne(type => Sku, {
+    /* 多个订单项对应一个sku */
+    @ManyToOne(type => Sku, sku => sku.orderItems, {
         cascadeInsert: false,
         cascadeUpdate: false,
+        cascadeRemove: false,
+        onDelete: "RESTRICT",
         lazy: false,
         eager: false
     })
-    @JoinColumn()
     sku: Sku;
 
 }
