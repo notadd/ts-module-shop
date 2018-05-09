@@ -3,6 +3,7 @@ import { Component, HttpException, Inject } from "@nestjs/common";
 import { Evaluation } from "../model/evaluation.entity";
 import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Goods } from "../model/goods.entity";
 import { Repository } from "typeorm";
 
 /* 评价的服务组件 */
@@ -11,6 +12,7 @@ export class EvaluationService {
 
     constructor(
         @Inject(UserComponentToken) private readonly userComponent: UserComponent,
+        @InjectRepository(Goods) private readonly goodsRepository: Repository<Goods>,
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
         @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>
     ) { }
@@ -21,6 +23,15 @@ export class EvaluationService {
             .where({ id })
             .getOne();
         return evaluation;
+    }
+
+    async getEvaluations(goodsId: number): Promise<Array<Evaluation>> {
+        const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
+            .loadRelationIdAndMap("skuIds", "goods.skus")
+            .where({ id: goodsId })
+            .getOne()
+        const 
+
     }
 
     async createEvaluation(content: string, userId: number, orderItemId: number): Promise<void> {
@@ -39,11 +50,10 @@ export class EvaluationService {
         if (orderItem.userId !== userId) {
             throw new HttpException("指定id=" + orderItemId + "订单项不属于当前用户，不能评价", 404);
         }
-        if (orderItem.evaluated) {
+        if (orderItem.evaluation) {
             throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404);
         }
         try {
-            orderItem.evaluated = true;
             await this.evaluationRepository.save({ content, display: true, user, orderItem });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);

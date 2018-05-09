@@ -33,11 +33,11 @@ export class Evaluation {
     @Column({ unique: true })
     orderItemId: number;
 
-    /* 
+    /*
     评价与订单项是一对一关系，用户只能在完成订单后对订单中的订单项进行评论
     关系可以级联更新订单项
     */
-    @OneToOne(type => OrderItem, {
+    @OneToOne(type => OrderItem, orderItem => orderItem.evaluation, {
         cascadeInsert: false,
         cascadeUpdate: true,
         cascadeRemove: false,

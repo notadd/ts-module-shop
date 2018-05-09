@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from "typeorm";
+import { Evaluation } from "./evaluation.entity";
 import { Order } from "./order.entity";
 import { Sku } from "./sku.entity";
 
@@ -14,10 +15,6 @@ export class OrderItem {
     @Column()
     count: number;
 
-    /* 订单项是否已评价 */
-    @Column({ default: false })
-    evaluated: boolean;
-
     /* skuId,由于是一对一关系，所以外键为unique */
     @Column({
         unique: true
@@ -27,6 +24,14 @@ export class OrderItem {
     /* 订单项所属用户 */
     @Column()
     userId: number;
+
+    @OneToOne(type => Evaluation, evaluation => evaluation.orderItem, {
+        cascadeAll: false,
+        lazy: false,
+        eager: false,
+        nullable: true
+    })
+    evaluation: Evaluation;
 
     /* 多个订单项属于一个订单，当直接创建订单项时，所属订单为空 */
     @ManyToOne(type => Order, order => order.items, {
