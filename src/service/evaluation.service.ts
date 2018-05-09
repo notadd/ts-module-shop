@@ -26,6 +26,7 @@ export class EvaluationService {
     }
 
     async getEvaluations(goodsId: number): Promise<Array<Evaluation>> {
+        /* 这里的查询暂时不确定是否准确 */
         const goods: Goods | undefined = await this.goodsRepository.createQueryBuilder("goods")
             .loadRelationIdAndMap("skuIds", "goods.skus")
             .where({ id: goodsId })
@@ -34,7 +35,10 @@ export class EvaluationService {
             .where(`orderItem.skuId in (${(goods as any).skuIds.join(",")})`)
             .innerJoinAndSelect("orderItem.evaluation", "evaluation")
             .getMany();
-        const evaluations: Array<Evaluation> | undefined = orderItems.map(orderItem => orderItem.evaluation);
+        const evaluations: Array<Evaluation> | undefined = orderItems.map(orderItem => {
+            orderItem.evaluation.orderItem = orderItem;
+            return orderItem.evaluation;
+        });
         return evaluations;
     }
 
@@ -64,13 +68,14 @@ export class EvaluationService {
         }
     }
 
-    async updateEvaluation(id: number, content: string): Promise<void> {
+    async updateEvaluation(id: number, content: string, display: string): Promise<void> {
         const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id);
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }
         try {
             evaluation.content = content;
+            evaluation.display = !!display;
             await this.evaluationRepository.save(evaluation);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);

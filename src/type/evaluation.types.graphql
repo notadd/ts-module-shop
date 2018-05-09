@@ -2,7 +2,7 @@ type Mutation{
 
     createEvaluation(content:String!,userId:Int!,orderItemId:Int!):ShopCommonData
 
-    updateEvaluation(id:Int!,content:String!):ShopCommonData
+    updateEvaluation(id:Int!,content:String!,display:String!):ShopCommonData
 
     deleteEvaluation(id:Int!):ShopCommonData
 }
