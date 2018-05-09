@@ -27,10 +27,6 @@ export class Evaluation {
         eager: false,
         onDelete: "CASCADE"
     })
-    @JoinColumn({
-        name: "userId",
-        referencedColumnName: "id"
-    })
     user: User;
 
     /* 订单项外键列，也需要唯一性约束 */

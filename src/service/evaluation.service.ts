@@ -54,4 +54,16 @@ export class EvaluationService {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
+
+    async deleteEvaluation(id: number): Promise<void> {
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id);
+        if (!evaluation) {
+            throw new HttpException("指定id=" + id + "评价不存在", 404);
+        }
+        try {
+            await this.evaluationRepository.remove(evaluation);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
 }
