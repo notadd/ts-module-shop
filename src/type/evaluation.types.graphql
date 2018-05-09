@@ -1,3 +1,7 @@
 type Mutation{
+
     createEvaluation(content:String!,userId:Int!,orderItemId:Int!):ShopCommonData
+
+    updateEvaluation(id:Int!,content:String!):ShopCommonData
+
 }
