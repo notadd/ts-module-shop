@@ -20,8 +20,18 @@ export class EvaluationResolver {
         if (!id) {
             throw new HttpException("缺少参数", 400);
         }
-        const evaluation = await this.evaluationService.getEvaluation(id)
-        return { code: 200, message: "获取指定评价信息成功", evaluation }
+        const evaluation = await this.evaluationService.getEvaluation(id);
+        return { code: 200, message: "获取指定评价信息成功", evaluation };
+    }
+
+    @Query("evaluations")
+    async evaluations(req: Request, body: { goodsId: number }): Promise<any> {
+        const { goodsId } = body;
+        if (!goodsId) {
+            throw new HttpException("缺少参数", 404);
+        }
+        const evaluations = await this.evaluationService.getEvaluations(goodsId);
+        return { code: 200, message: "获取指定商品评价成功", evaluations };
     }
 
     @Mutation("createEvaluation")
