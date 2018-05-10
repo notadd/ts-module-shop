@@ -15,4 +15,18 @@ export class EvaluationImageService {
         @InjectRepository(EvaluationImage) private readonly evaluationImageRepository: Repository<EvaluationImage>
     ) { }
 
+    async createEvaluation(evaluationId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId, { relations: ["images"] });
+        if (!evaluation) {
+            throw new HttpException("指定id=" + evaluationId + "评价不存在0", 404);
+        }
+        const { name, type } = await this.storeComponent.upload(bucketName, rawName, base64, undefined);
+        try {
+            evaluation.images.push(this.evaluationImageRepository.create({ bucketName, name, type }))
+            await this.evaluationRepository.save(evaluation);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
