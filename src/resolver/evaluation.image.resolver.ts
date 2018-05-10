@@ -14,6 +14,16 @@ export class EvaluationImageResolver {
         @Inject(EvaluationImageService) private readonly evaluationImageService: EvaluationImageService
     ) { }
 
+    @Query("evaluationImages")
+    async evaluationImages(req:Request, body: {evaluationId:number}): Promise<any> {
+        const {evaluationId} = body;
+        if(!evaluationId) {
+            throw new HttpException("缺少参数", 400);
+        }
+        const images = await this.evaluationImageService.getEvaluationImages(evaluationId);
+        return {code: 200, message: "获取指定评价的图片成功", images};
+    }
+
     @Mutation("createEvaluationImage")
     async createEvaluationImage(req: Request, body: { evaluationId: number, bucketName: string, rawName: string, base64: string }): Promise<Data> {
         const { evaluationId, bucketName, rawName, base64 } = body;
