@@ -1,6 +1,8 @@
 import { UserReceivingInformationResolver } from "./resolver/user.receiving.information.resolver";
 import { UserReceivingInformationService } from "./service/user.receiving.information.service";
 import { UserReceivingInformation } from "./model/user.receiving.information.entity";
+import { EvaluationImageResolver } from "./resolver/evaluation.image.resolver";
+import { EvaluationImageService } from "./service/evaluation.image.service";
 import { GoodsPropertyResolver } from "./resolver/goods.property.resolver";
 import { PropertyValueResolver } from "./resolver/property.value.resolver";
 import { StoreSettingResolver } from "./resolver/store.setting.resolver";
@@ -85,6 +87,7 @@ import { Module } from "@nestjs/common";
         StoreSettingService, StoreSettingResolver,
         GoodsPropertyService, GoodsPropertyResolver,
         PropertyValueService, PropertyValueResolver,
+        EvaluationImageService, EvaluationImageResolver,
         UserReceivingInformationService, UserReceivingInformationResolver,
         ShopComponentProvider
     ],
