@@ -29,4 +29,17 @@ export class EvaluationImageService {
         }
     }
 
+    async deleteEvaluationImage(id: number): Promise<void> {
+        const evaluationImage: EvaluationImage | undefined = await this.evaluationImageRepository.findOneById(id);
+        if (!evaluationImage) {
+            throw new HttpException("指定id=" + id + "评价图片不存在", 404);
+        }
+        await this.storeComponent.delete(evaluationImage.bucketName, evaluationImage.name, evaluationImage.type);
+        try {
+            await this.evaluationImageRepository.remove(evaluationImage);
+        } catch (err) {
+            throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        }
+    }
+
 }
