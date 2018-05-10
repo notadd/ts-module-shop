@@ -14,4 +14,14 @@ export class EvaluationImageResolver {
         @Inject(EvaluationImageService) private readonly evaluationImageService: EvaluationImageService
     ) { }
 
+    @Mutation("createEvaluationImage")
+    async createEvaluationImage(req: Request, body: { evaluationId: number, bucketName: string, rawName: string, base64: string }): Promise<Data> {
+        const { evaluationId, bucketName, rawName, base64 } = body;
+        if (!evaluationId || !bucketName || !rawName || !base64) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.evaluationImageService.createEvaluationImage(evaluationId, bucketName, rawName, base64);
+        return { code: 200, message: "创建评价图片成功" };
+    }
+
 }
