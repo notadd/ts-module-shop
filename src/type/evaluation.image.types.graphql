@@ -9,3 +9,17 @@ type Query{
 
     evaluationImages(evaluationid:Int!):EvaluationImagesData
 }
+
+type EvaluationImagesData{
+    code:Int
+    message:String
+    images:[EvaluationImage]
+}
+
+type EvaluationImage{
+    id:Int
+    bucketName:String
+    name:String
+    type;String
+    url:String
+}
