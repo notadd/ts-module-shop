@@ -66,12 +66,12 @@ export class EvaluationService {
         if (orderItem.evaluation) {
             throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404);
         }
+        const images: Array<EvaluationImage> = new Array();
+        for (let i = 0; i < inputImages.length; i++) {
+            const { bucketName, name, type } = await this.storeComponent.upload(inputImages[i].bucketName, inputImages[i].rawName, inputImages[i].base64, undefined);
+            images.push(this.evaluationImageRepository.create({ bucketName, name, type }));
+        }
         try {
-            const images: Array<EvaluationImage> = new Array();
-            for (let i = 0; i < inputImages.length; i++) {
-                const { bucketName, name, type } = await this.storeComponent.upload(inputImages[i].bucketName, inputImages[i].rawName, inputImages[i].base64, undefined);
-                images.push(this.evaluationImageRepository.create({ bucketName, name, type }));
-            }
             await this.evaluationRepository.save({ content, display: true, user, orderItem, images });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
@@ -97,11 +97,11 @@ export class EvaluationService {
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }
+        for (let i = 0; i < evaluation.images.length; i++) {
+            const { bucketName, name, type }: EvaluationImage = evaluation.images[i];
+            await this.storeComponent.delete(bucketName, name, type);
+        }
         try {
-            for (let i = 0; i < evaluation.images.length; i++) {
-                const { bucketName, name, type }: EvaluationImage = evaluation.images[i];
-                await this.storeComponent.delete(bucketName, name, type);
-            }
             /* 删除评价时会级联删除EvaluationImage实体 */
             await this.evaluationRepository.remove(evaluation);
         } catch (err) {
