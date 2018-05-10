@@ -24,4 +24,13 @@ export class EvaluationImageResolver {
         return { code: 200, message: "创建评价图片成功" };
     }
 
+    @Mutation("deleteEvaluationImage")
+    async deleteEvaluationImage(req: Request, body: { id: number }): Promise<Data> {
+        const { id } = body;
+        if (!id) {
+            throw new HttpException("缺少参数", 400);
+        }
+        await this.evaluationImageService.deleteEvaluationImage(id);
+        return { code: 200, message: "删除评价图片成功" };
+    }
 }
