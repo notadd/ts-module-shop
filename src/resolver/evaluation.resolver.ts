@@ -1,3 +1,4 @@
+import { InputEvaluationImage } from "../interface/evaluation/input.evaluation.image";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
 import { EvaluationService } from "../service/evaluation.service";
@@ -36,7 +37,7 @@ export class EvaluationResolver {
     }
 
     @Mutation("createEvaluation")
-    async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number }): Promise<Data> {
+    async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number, images: Array<InputEvaluationImage> }): Promise<Data> {
         const { content, userId, orderItemId } = body;
         if (!content || !userId || !orderItemId) {
             throw new HttpException("缺少参数", 400);
