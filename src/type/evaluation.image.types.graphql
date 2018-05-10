@@ -1,3 +1,6 @@
 type Mutation{
+
     createEvaluationImage(evaluationId:Int!,bucketName:String!,rawName:String!,base64:String!):ShopCommonData
+
+    deleteEvaluationImage(id:Int!):ShopCommonData
 }
