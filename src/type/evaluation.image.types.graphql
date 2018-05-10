@@ -4,3 +4,8 @@ type Mutation{
 
     deleteEvaluationImage(id:Int!):ShopCommonData
 }
+
+type Query{
+
+    evaluationImages(evaluationid:Int!):EvaluationImagesData
+}
