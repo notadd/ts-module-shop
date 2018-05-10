@@ -37,12 +37,12 @@ export class EvaluationResolver {
     }
 
     @Mutation("createEvaluation")
-    async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number, images: Array<InputEvaluationImage> }): Promise<Data> {
-        const { content, userId, orderItemId } = body;
+    async createEvaluation(req: Request, body: { content: string, userId: number, orderItemId: number, inputImages: Array<InputEvaluationImage> }): Promise<Data> {
+        const { content, userId, orderItemId, inputImages } = body;
         if (!content || !userId || !orderItemId) {
             throw new HttpException("缺少参数", 400);
         }
-        await this.evaluationService.createEvaluation(content, userId, orderItemId);
+        await this.evaluationService.createEvaluation(content, userId, orderItemId, inputImages);
         return { code: 200, message: "创建评价成功" };
     }
 

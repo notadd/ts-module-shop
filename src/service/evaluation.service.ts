@@ -1,5 +1,8 @@
+import { InputEvaluationImage } from "../interface/evaluation/input.evaluation.image";
 import { UserComponent, UserComponentToken, User } from "@notadd/user";
+import { EvaluationImage } from "../model/evaluation.image.entity";
 import { Component, HttpException, Inject } from "@nestjs/common";
+import { StoreComponent } from "../interface/store.component";
 import { Evaluation } from "../model/evaluation.entity";
 import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -13,8 +16,10 @@ export class EvaluationService {
     constructor(
         @Inject(UserComponentToken) private readonly userComponent: UserComponent,
         @InjectRepository(Goods) private readonly goodsRepository: Repository<Goods>,
+        @Inject("StoreComponentToken") private readonly storeComponent: StoreComponent,
         @InjectRepository(OrderItem) private readonly orderItemRepository: Repository<OrderItem>,
-        @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>
+        @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>,
+        @InjectRepository(EvaluationImage) private readonly evaluationImageRepository: Repository<EvaluationImage>
     ) { }
 
     async getEvaluation(id: number): Promise<Evaluation> {
@@ -42,7 +47,7 @@ export class EvaluationService {
         return evaluations;
     }
 
-    async createEvaluation(content: string, userId: number, orderItemId: number): Promise<void> {
+    async createEvaluation(content: string, userId: number, orderItemId: number, inputImages: Array<InputEvaluationImage>): Promise<void> {
         const user: User | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
@@ -62,7 +67,12 @@ export class EvaluationService {
             throw new HttpException("指定id=" + orderItemId + "订单项已经评价，不能再次评价", 404);
         }
         try {
-            await this.evaluationRepository.save({ content, display: true, user, orderItem });
+            const images: Array<EvaluationImage> = new Array();
+            for (let i = 0; i < inputImages.length; i++) {
+                const { bucketName, name, type } = await this.storeComponent.upload(inputImages[i].bucketName, inputImages[i].rawName, inputImages[i].base64, undefined);
+                images.push(this.evaluationImageRepository.create({ bucketName, name, type }));
+            }
+            await this.evaluationRepository.save({ content, display: true, user, orderItem, images });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
