@@ -4,7 +4,7 @@ import { StoreComponent } from "../interface/store.component";
 import { Evaluation } from "../model/evaluation.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-
+import { Request } from "express";
 /* 评价图片的服务组件 */
 @Component()
 export class EvaluationImageService {
@@ -14,6 +14,18 @@ export class EvaluationImageService {
         @InjectRepository(Evaluation) private readonly evaluationRepository: Repository<Evaluation>,
         @InjectRepository(EvaluationImage) private readonly evaluationImageRepository: Repository<EvaluationImage>
     ) { }
+
+    async getEvaluationImages(req: Request, evaluationId: number): Promise<Array<EvaluationImage>> {
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId);
+        if (!evaluation) {
+            throw new HttpException("指定id=" + evaluationId + "评价不存在", 404);
+        }
+        const images: Array<any> | undefined = await this.evaluationImageRepository.find({ evaluationId });
+        for (let i = 0; i < images.length; i++) {
+            images[i].url = await this.storeComponent.getUrl(req, images[i].bucketName, images[i].name, images[i].type, undefined);
+        }
+        return images;
+    }
 
     async createEvaluationImage(evaluationId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
         const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId, { relations: ["images"] });

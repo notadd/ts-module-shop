@@ -15,13 +15,13 @@ export class EvaluationImageResolver {
     ) { }
 
     @Query("evaluationImages")
-    async evaluationImages(req:Request, body: {evaluationId:number}): Promise<any> {
-        const {evaluationId} = body;
-        if(!evaluationId) {
+    async evaluationImages(req: Request, body: { evaluationId: number }): Promise<any> {
+        const { evaluationId } = body;
+        if (!evaluationId) {
             throw new HttpException("缺少参数", 400);
         }
-        const images = await this.evaluationImageService.getEvaluationImages(evaluationId);
-        return {code: 200, message: "获取指定评价的图片成功", images};
+        const images = await this.evaluationImageService.getEvaluationImages(req, evaluationId);
+        return { code: 200, message: "获取指定评价的图片成功", images };
     }
 
     @Mutation("createEvaluationImage")
