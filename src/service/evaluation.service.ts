@@ -93,11 +93,16 @@ export class EvaluationService {
     }
 
     async deleteEvaluation(id: number): Promise<void> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id);
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id, { relations: ["images"] });
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }
         try {
+            for (let i = 0; i < evaluation.images.length; i++) {
+                const { bucketName, name, type }: EvaluationImage = evaluation.images[i];
+                await this.storeComponent.delete(bucketName, name, type);
+            }
+            /* 删除评价时会级联删除EvaluationImage实体 */
             await this.evaluationRepository.remove(evaluation);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
