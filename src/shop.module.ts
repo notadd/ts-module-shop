@@ -13,6 +13,7 @@ import { PaySettingResolver } from "./resolver/pay.setting.resolver";
 import { EvaluationResolver } from "./resolver/evaluation.resolver";
 import { GoodsTypeResolver } from "./resolver/goods.type.resolver";
 import { OrderItemResolver } from "./resolver/order.item.resolver";
+import { EvaluationImage } from "./model/evaluation.image.entity";
 import { PaySettingService } from "./service/pay.setting.service";
 import { GoodsImageService } from "./service/goods.image.service";
 import { EvaluationService } from "./service/evaluation.service";
@@ -36,6 +37,7 @@ import { FloorResolver } from "./resolver/floor.resolver";
 import { MemberService } from "./service/member.service";
 import { PaySetting } from "./model/pay.setting.entity";
 import { GoodsImage } from "./model/goods.image.entity";
+import { Evaluation } from "./model/evaluation.entity";
 import { GoodsService } from "./service/goods.service";
 import { BrandService } from "./service/brand.service";
 import { OrderService } from "./service/order.service";
@@ -59,6 +61,7 @@ import { Module } from "@nestjs/common";
 
 @Module({
     modules: [TypeOrmModule.forFeature([
+        Evaluation, EvaluationImage,
         StoreSetting, PaySetting, Member, Floor,
         FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,

@@ -3,7 +3,6 @@ import { Brand } from "./brand.entity";
 
 /* 品牌logo实体*/
 @Entity("brand_logo")
-@Index("brand_id", ["brandId"])
 export class BrandLogo {
 
     @PrimaryGeneratedColumn()
@@ -24,7 +23,7 @@ export class BrandLogo {
     })
     type: string;
 
-    @Column()
+    @Column({ unique: true })
     brandId: number;
 
     /* 品牌删除时，logo实体级联删除 */
