@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, ManyToOne, JoinColumn } from "typeorm";
+import { EvaluationImage } from "./evaluation.image.entity";
 import { OrderItem } from "./order.item.entity";
 import { User } from "@notadd/user";
 
@@ -19,6 +20,18 @@ export class Evaluation {
     @Column()
     userId: number;
 
+    /* 订单项外键列，也需要唯一性约束 */
+    @Column({ unique: true })
+    orderItemId: number;
+
+    @OneToMany(type => EvaluationImage, evaluationImage => evaluationImage.evaluation, {
+        cascadeInsert: true,
+        cascadeUpdate: false,
+        lazy: false,
+        eager: false
+    })
+    images: Array<EvaluationImage>;
+
     /* 用户与评论是ManyToOne关系，一个用户有多个评价 */
     @ManyToOne(type => User, {
         cascadeAll: false,
@@ -28,10 +41,6 @@ export class Evaluation {
         onDelete: "CASCADE"
     })
     user: User;
-
-    /* 订单项外键列，也需要唯一性约束 */
-    @Column({ unique: true })
-    orderItemId: number;
 
     /*
     评价与订单项是一对一关系，用户只能在完成订单后对订单中的订单项进行评论
