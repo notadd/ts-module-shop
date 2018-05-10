@@ -1,3 +1,4 @@
+import { OutEvaluationImage } from "../interface/evaluationimage/evaluation.images.data";
 import { EvaluationImage } from "../model/evaluation.image.entity";
 import { Component, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
@@ -5,6 +6,7 @@ import { Evaluation } from "../model/evaluation.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Request } from "express";
+
 /* 评价图片的服务组件 */
 @Component()
 export class EvaluationImageService {
@@ -15,7 +17,7 @@ export class EvaluationImageService {
         @InjectRepository(EvaluationImage) private readonly evaluationImageRepository: Repository<EvaluationImage>
     ) { }
 
-    async getEvaluationImages(req: Request, evaluationId: number): Promise<Array<EvaluationImage>> {
+    async getEvaluationImages(req: Request, evaluationId: number): Promise<Array<OutEvaluationImage>> {
         const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId);
         if (!evaluation) {
             throw new HttpException("指定id=" + evaluationId + "评价不存在", 404);

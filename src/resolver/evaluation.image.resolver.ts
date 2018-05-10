@@ -1,3 +1,4 @@
+import { EvaluationImagesData } from "../interface/evaluationimage/evaluation.images.data";
 import { EvaluationImageService } from "../service/evaluation.image.service";
 import { ExceptionInterceptor } from "../interceptor/exception.interceptor";
 import { Inject, HttpException, UseInterceptors } from "@nestjs/common";
@@ -16,7 +17,7 @@ export class EvaluationImageResolver {
 
     /* 查询指定评价的图片，同时返回图片访问url */
     @Query("evaluationImages")
-    async evaluationImages(req: Request, body: { evaluationId: number }): Promise<any> {
+    async evaluationImages(req: Request, body: { evaluationId: number }): Promise<EvaluationImagesData> {
         const { evaluationId } = body;
         if (!evaluationId) {
             throw new HttpException("缺少参数", 400);
