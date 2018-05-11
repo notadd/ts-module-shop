@@ -1,0 +1,64 @@
+query evaluation{
+  evaluation(id:1){
+    code
+    message
+    evaluation{
+      id
+      content
+      display
+      orderItem{
+        id
+        count
+        userId
+      }
+    }
+  }
+}
+
+query evaluations{
+  evaluations(goodsId:1){
+    code
+    message
+    evaluations{
+      id
+      content
+      display
+      orderItem{
+        id
+        count
+        userId
+      }
+    }
+  }
+}
+
+mutation createEvaliation{
+  createEvaluation(content:"这家东西真不错",userId:1,orderItemId:1,inputImages:[
+    {
+      bucketName:"public",
+      rawName:"1.jpg",
+      base64:"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAKBueIx4ZKCMgoy0qqC+8P//8Nzc8P//////////////////////////////////////////////////////////2wBDAaq0tPDS8P//////////////////////////////////////////////////////////////////////////////wAARCABkAGQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EACIQAQEAAgICAgMBAQAAAAAAAAABETECIUFxElGBkfHR8P/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAwDAQACEQMRAD8A5gKiCgIsmUagJpG97/bNmL2CAAAAAAoAAACxF47UU6vVKyBZhGpfF0nLjj0ggAAAKCyZUQwvUZtQXMh1dMhqty+KWYSXKy/aoiy49FiAvLj5mmWpcHKTcQZABol8ACWd97StbmL+/wDvDNmLiorXDh8u7pq8eE/t/wAJcTpn5W5zaCXE1Pzklz7TaWYBuXHos8xJc+1lw0iVZ5WzzE8VBkQB0AURdzFBAlx1yn5L8ZN59G5isWYvYrcvCTeWLc1BAalykmWpPpYhLg5WY9l2lUQUQbFFEABDcxf4qIMXjZcLOP21nBmewMedRM/XRe9gCVUUAEHQBQABAAEBAQAEAAAH/9k="
+    },{
+      bucketName:"public",
+      rawName:"2.jpg",
+      base64:"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAKBueIx4ZKCMgoy0qqC+8P//8Nzc8P//////////////////////////////////////////////////////////2wBDAaq0tPDS8P//////////////////////////////////////////////////////////////////////////////wAARCABkAGQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EACQQAQEAAgICAQMFAAAAAAAAAAABAhESUTFBAxMhYUJxgaGx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFhEBAQEAAAAAAAAAAAAAAAAAABEB/9oADAMBAAIRAxEAPwDkAAAAAAAAAAAAAANz473FnxzsI5jrPjxamOM8RKscF45dV33InKFI4WWeR2uUvpi443x9ikYFssRUAAAAd9ibN6Zb1pLN+2dm4sZq8EuOvcLkm57xqhYjXPGfp/w+rj6gVJ+yWb9F+XqJyyviCHFZhL7TjlW8ZxmgThOhoBm1N91j+0F3a3yicvwyCLypuooIKAiy2eKKDUz7jcsvhyWSg6BudwBxPIAmhQBdJLYuwNGjabBr7H8MgLv8m0ANgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//2Q=="
+    }
+  ]){
+    code
+    message
+  }
+}
+
+mutation updateEvaluation{
+  updateEvaluation(id:1,content:"这家东西超级烂",display:false){
+    code
+    message
+  }
+}
+
+mutation deleteEvaluation{
+  deleteEvaluation(id:1){
+    code
+    message
+  }
+}

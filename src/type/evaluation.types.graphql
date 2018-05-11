@@ -1,6 +1,6 @@
 type Mutation{
 
-    createEvaluation(content:String!,userId:Int!,orderItemId:Int!,images:[InputEvaluationImage]):ShopCommonData
+    createEvaluation(content:String!,userId:Int!,orderItemId:Int!,inputImages:[InputEvaluationImage]):ShopCommonData
 
     updateEvaluation(id:Int!,content:String!,display:Boolean!):ShopCommonData
 
