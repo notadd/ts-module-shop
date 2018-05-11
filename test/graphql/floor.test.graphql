@@ -1,0 +1,64 @@
+query floors{
+  floors{
+    code
+    message
+    floors{
+      id
+      name
+      display
+      goodses{
+        id
+    		name
+    		no
+    		basePrice
+    		discountPrice
+    		description
+    		typeId
+    		recycle
+      }
+    }
+  }
+}
+
+query floor{
+  floor(id:2){
+    code
+    message
+    floor{
+      id
+      name
+      display
+      goodses{
+        id
+    		name
+    		no
+    		basePrice
+    		discountPrice
+    		description
+    		typeId
+    		recycle
+      }
+    }
+  }
+}
+
+mutation createFloor{
+	dianzijingpin:createFloor(name:"电子精品",display:true,goodsIds:[1,2,3]){
+    code
+    message
+  }
+}
+
+mutation updateFloor{
+	updateFloor(id:1,name:"手机精品",display:false,goodsIds:[1,2]){
+    code
+    message
+  }
+}
+
+mutation deleteFloor{
+  deleteFloor(id:1){
+    code
+    message
+  }
+}
