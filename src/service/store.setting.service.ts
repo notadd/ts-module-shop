@@ -15,6 +15,9 @@ export class StoreSettingService {
 
     async getStoreSetting(): Promise<StoreSetting> {
         const storeSetting: StoreSetting | undefined = await this.storeSettingRepository.findOneById(1);
+        if (!storeSetting) {
+            throw new HttpException("商城配置不存在", 404);
+        }
         return storeSetting;
     }
 

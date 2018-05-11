@@ -31,11 +31,14 @@ export class OrderItemService {
             .leftJoinAndSelect("item.sku", "sku")
             .leftJoinAndSelect("item.order", "order")
             .getOne();
+        if (!orderItem) {
+            throw new HttpException("指定id=" + id + "订单项不存在", 404);
+        }
         return orderItem;
     }
 
     async createOrderItem(count: number, skuId: number, userId: number): Promise<void> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }

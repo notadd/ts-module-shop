@@ -8,7 +8,7 @@ export interface BrandsData {
     }>;
 }
 
-interface OutputBrandLogo {
+export interface OutputBrandLogo {
     id: number;
     bucketName: string;
     name: string;

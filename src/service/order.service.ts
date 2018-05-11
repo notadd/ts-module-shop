@@ -41,6 +41,9 @@ export class OrderService {
             .leftJoinAndSelect("order.delivery", "delivery")
             .leftJoinAndSelect("order.userReceivingInformation", "userReceivingInformation")
             .getOne();
+        if (!order) {
+            throw new HttpException("指定id=" + id + "订单不存在", 404);
+        }
         return order;
     }
 
@@ -56,7 +59,7 @@ export class OrderService {
         userReceivingInformationId: number,
         items: Array<{ skuId: number, count: number }>
     ): Promise<void> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
@@ -110,7 +113,7 @@ export class OrderService {
         userReceivingInformationId: number,
         itemIds: Array<number>
     ): Promise<void> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }

@@ -93,7 +93,7 @@ export class SkuService {
             throw new HttpException("指定id=" + id + "Sku不存在", 404);
         }
         try {
-            sku.values = undefined;
+            sku.values = undefined as any;
             await this.skuRepository.save(sku);
             await this.skuRepository.remove(sku);
         } catch (err) {

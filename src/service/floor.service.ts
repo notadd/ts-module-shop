@@ -24,6 +24,9 @@ export class FloorService {
             .leftJoinAndSelect("floor.goodses", "goods")
             .where({ id })
             .getOne();
+        if (!floor) {
+            throw new HttpException("指定id=" + id + "楼层不存在", 404);
+        }
         return floor;
     }
 

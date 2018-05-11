@@ -27,6 +27,9 @@ export class EvaluationService {
             .leftJoinAndSelect("evaluation.orderItem", "orderItem")
             .where({ id })
             .getOne();
+        if (!evaluation) {
+            throw new HttpException("指定id=" + id + "评价不存在", 404);
+        }
         return evaluation;
     }
 

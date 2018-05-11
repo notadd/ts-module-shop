@@ -1,8 +1,9 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Component, HttpException, Inject, NotImplementedException } from "@nestjs/common";
 import { UserComponent, UserComponentToken } from "@notadd/user";
 import { InjectRepository } from "@nestjs/typeorm";
+import { NodeStringDecoder } from "string_decoder";
 
 /* 用户收货信息服务组件 */
 @Component()
@@ -14,7 +15,7 @@ export class UserReceivingInformationService {
     ) { }
 
     async getUserReceivingInformation(id: number): Promise<UserReceivingInformation> {
-        const information: UserReceivingInformation = await this.userReceivingInformationRepository.findOneById(id);
+        const information: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
         if (!information) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }
@@ -22,7 +23,7 @@ export class UserReceivingInformationService {
     }
 
     async getUserReceivingInformations(userId: number): Promise<Array<UserReceivingInformation>> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
@@ -40,7 +41,7 @@ export class UserReceivingInformationService {
         homePhone: string,
         mobilePhone: string
     ): Promise<void> {
-        const user: { id: number, userName: string, status: boolean, recycle: boolean } = await this.userComponent.getUserById(userId);
+        const user: { id: number, userName: string, status: boolean, recycle: boolean } | undefined = await this.userComponent.getUserById(userId);
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
@@ -61,7 +62,7 @@ export class UserReceivingInformationService {
         homePhone: string,
         mobilePhone: string
     ): Promise<void> {
-        const userReveivingInformation: UserReceivingInformation = await this.userReceivingInformationRepository.findOneById(id);
+        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
         if (!userReveivingInformation) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }
@@ -80,7 +81,7 @@ export class UserReceivingInformationService {
     }
 
     async deleteUserReceivingInformation(id: number): Promise<void> {
-        const userReveivingInformation: UserReceivingInformation = await this.userReceivingInformationRepository.findOneById(id);
+        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
         if (!userReveivingInformation) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }
