@@ -3,17 +3,18 @@ import { UserComponent, UserComponentToken, User } from "@notadd/user";
 import { EvaluationImage } from "../model/evaluation.image.entity";
 import { Component, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
+import { Repository, Connection, QueryRunner } from "typeorm";
 import { Evaluation } from "../model/evaluation.entity";
 import { OrderItem } from "../model/order.item.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Goods } from "../model/goods.entity";
-import { Repository } from "typeorm";
 
 /* 评价的服务组件 */
 @Component()
 export class EvaluationService {
 
     constructor(
+        @Inject(Connection) private readonly connection: Connection,
         @Inject(UserComponentToken) private readonly userComponent: UserComponent,
         @InjectRepository(Goods) private readonly goodsRepository: Repository<Goods>,
         @Inject("StoreComponentToken") private readonly storeComponent: StoreComponent,
@@ -74,10 +75,20 @@ export class EvaluationService {
             const { bucketName, name, type } = await this.storeComponent.upload(inputImages[i].bucketName, inputImages[i].rawName, inputImages[i].base64, undefined);
             images.push(this.evaluationImageRepository.create({ bucketName, name, type }));
         }
+        const queryRunner: QueryRunner = this.connection.createQueryRunner("master");
+        await queryRunner.startTransaction();
         try {
-            await this.evaluationRepository.save({ content, display: true, user, orderItem, images });
+            const evaluation: Evaluation | undefined = await queryRunner.manager.save(
+                this.evaluationRepository.create({ content, display: true, user, orderItem,images })
+            );
+            images.forEach(image => image.evaluation = evaluation)
+            await queryRunner.manager.save(images); 
+            await queryRunner.commitTransaction();
         } catch (err) {
+            await queryRunner.rollbackTransaction();
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
+        } finally {
+            await queryRunner.release();
         }
     }
 

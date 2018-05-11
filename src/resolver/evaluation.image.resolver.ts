@@ -19,6 +19,7 @@ export class EvaluationImageResolver {
     @Query("evaluationImages")
     async evaluationImages(req: Request, body: { evaluationId: number }): Promise<EvaluationImagesData> {
         const { evaluationId } = body;
+        console.log(evaluationId)
         if (!evaluationId) {
             throw new HttpException("缺少参数", 400);
         }

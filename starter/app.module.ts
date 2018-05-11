@@ -17,7 +17,7 @@ import { LocalModule } from "@notadd/addon-local";
     database: "postgres",
     entities: ["./**/*.entity.ts", "./**/*.entity.js"],
     logger: "simple-console",
-    logging: false,
+    logging:"all",
     synchronize: true,
     dropSchema: false
   })],

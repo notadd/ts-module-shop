@@ -7,7 +7,7 @@ type Mutation{
 
 type Query{
 
-    evaluationImages(evaluationid:Int!):EvaluationImagesData
+    evaluationImages(evaluationId:Int!):EvaluationImagesData
 }
 
 type EvaluationImagesData{

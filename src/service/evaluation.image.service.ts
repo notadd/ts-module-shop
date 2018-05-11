@@ -18,14 +18,15 @@ export class EvaluationImageService {
     ) { }
 
     async getEvaluationImages(req: Request, evaluationId: number): Promise<Array<OutEvaluationImage>> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId);
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId, { relations: ["images"] });
         if (!evaluation) {
             throw new HttpException("指定id=" + evaluationId + "评价不存在", 404);
         }
-        const images: Array<any> | undefined = await this.evaluationImageRepository.find({ evaluationId });
+        const images: Array<any> | undefined = evaluation.images
         for (let i = 0; i < images.length; i++) {
             images[i].url = await this.storeComponent.getUrl(req, images[i].bucketName, images[i].name, images[i].type, undefined);
         }
+        console.log(images)
         return images;
     }
 
