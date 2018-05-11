@@ -24,7 +24,6 @@ export class Evaluation {
     @Column({ unique: true })
     orderItemId: number;
 
-
     /* 评价图片，保存评价时可以级联保存图片 */
     @OneToMany(type => EvaluationImage, evaluationImage => evaluationImage.evaluation, {
         cascadeInsert: true,
