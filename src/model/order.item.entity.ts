@@ -15,10 +15,8 @@ export class OrderItem {
     @Column()
     count: number;
 
-    /* skuId,由于是一对一关系，所以外键为unique */
-    @Column({
-        unique: true
-    })
+    /*  */
+    @Column()
     skuId: number;
 
     /* 订单项所属用户 */

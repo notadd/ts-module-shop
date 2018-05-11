@@ -22,6 +22,7 @@ export class OrderItemService {
             .leftJoinAndSelect("item.sku", "sku")
             .leftJoinAndSelect("item.order", "order")
             .getMany();
+        console.log(cartItems)
         return cartItems.filter(item => !item.order);
     }
 

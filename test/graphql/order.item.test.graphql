@@ -1,0 +1,78 @@
+query cartItems{
+  cartItems(userId:1){
+    code
+    message
+    cartItems{
+      id
+      count
+      userId
+      sku{
+				id
+        no
+        inventory
+      }
+    }
+  }
+}
+
+query orderItem{
+  orderItem(id:5){
+    code
+    message
+    orderItem{
+      id
+      count
+      userId
+      sku{
+        id
+        no
+        inventory
+      }
+      order{
+        id
+    		orderNo
+    		createDate
+    		updateDate
+    		userId
+    		delivertNo
+    		delivertTime
+    		invoiceType
+    		invoiceContent
+    		customerMessage
+      }
+    }
+  }
+}
+
+mutation createOrderItem{
+  G64:createOrderItem(count:1,skuId:1,userId:1){
+    code
+    message
+  }
+  G256:createOrderItem(count:1,skuId:2,userId:1){
+    code
+    message
+  }
+}
+
+mutation updateOrderItem{
+  G64:updateOrderItem(id:1,count:4){
+    code
+    message
+  }
+  G256:updateOrderItem(id:1,count:12){
+    code
+    message
+  }
+}
+
+mutation deleteOrderItem{
+  G64:deleteOrderItem(id:9) {
+    code
+    message
+  }
+  G256:deleteOrderItem(id:10) {
+    code
+    message
+  }
+}

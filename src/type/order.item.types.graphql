@@ -25,6 +25,6 @@ type OrderItem{
     id:Int
     count:Int
     userId:Int
-    sku:[Sku]
+    sku:Sku
     order:Order
 }
