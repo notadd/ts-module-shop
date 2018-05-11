@@ -6,7 +6,7 @@ type Mutation{
         title:String!,
         region:String!,
         address:String!,
-        close:String!,
+        close:Boolean!,
         closeReason:String,
         servicePhone:String!
     ):ShopCommonData
@@ -32,7 +32,7 @@ type StoreSetting{
     title:String
     region:String
     address:String
-    close:String
+    close:Boolean
     closeReason:String
     servicePhone:String
 }

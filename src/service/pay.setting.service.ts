@@ -19,8 +19,8 @@ export class PaySettingService {
         return paySetting;
     }
 
-    async savePaySetting(aliPay: string, weixinPay: string): Promise<void> {
-        const paySetting: PaySetting = this.paySettingRepository.create({ id: 1, aliPay: aliPay === "true", weixinPay: weixinPay === "true" });
+    async savePaySetting(aliPay: boolean, weixinPay: boolean): Promise<void> {
+        const paySetting: PaySetting = this.paySettingRepository.create({ id: 1, aliPay: aliPay, weixinPay: weixinPay });
         try {
             await this.paySettingRepository.save(paySetting);
         } catch (err) {

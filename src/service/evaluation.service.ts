@@ -81,14 +81,14 @@ export class EvaluationService {
         }
     }
 
-    async updateEvaluation(id: number, content: string, display: string): Promise<void> {
+    async updateEvaluation(id: number, content: string, display: boolean): Promise<void> {
         const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id);
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }
         try {
             evaluation.content = content;
-            evaluation.display = display==="true";
+            evaluation.display = display;
             await this.evaluationRepository.save(evaluation);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);

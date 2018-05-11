@@ -30,7 +30,7 @@ export class FloorService {
         return floor;
     }
 
-    async createFloor(name: string, display: string, goodsIds: Array<number>): Promise<void> {
+    async createFloor(name: string, display: boolean, goodsIds: Array<number>): Promise<void> {
         const exist: Floor | undefined = await this.floorRepository.findOne({ name });
         if (exist) {
             throw new HttpException("指定name=" + name + "楼层已存在", 404);
@@ -43,13 +43,13 @@ export class FloorService {
             }
         }
         try {
-            await this.floorRepository.save({ name, display: display === "true", goodses });
+            await this.floorRepository.save({ name, display: display, goodses });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
     }
 
-    async updateFloor(id: number, name: string, display: string, goodsIds: Array<number>): Promise<void> {
+    async updateFloor(id: number, name: string, display: boolean, goodsIds: Array<number>): Promise<void> {
         const floor: Floor | undefined = await this.floorRepository.findOneById(id);
         if (!floor) {
             throw new HttpException("指定id=" + id + "楼层不存在", 404);
@@ -61,7 +61,7 @@ export class FloorService {
             }
             floor.name = name;
         }
-        floor.display = display === "true";
+        floor.display = display;
         const goodses: Array<Goods> | undefined = await this.goodsRepository.findByIds(goodsIds);
         for (let i = 0; i < goodsIds.length; i++) {
             const find: Goods | undefined = goodses.find(goods => goods.id === goodsIds[i]);

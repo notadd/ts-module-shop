@@ -27,7 +27,7 @@ export class StoreSettingResolver {
         title: string,
         region: string,
         address: string,
-        close: string,
+        close: boolean,
         closeReason: string,
         servicePhone: string
     }): Promise<Data> {
@@ -35,7 +35,7 @@ export class StoreSettingResolver {
         if (!logoBucketName || !logoRawName || !logoBase64 || !title || !region || !address || close === undefined || close === null || !servicePhone) {
             throw new HttpException("缺少参数", 404);
         }
-        if (close === "true" && !closeReason) {
+        if (close && !closeReason) {
             throw new HttpException("商城关闭必须说明关闭原因", 404);
         }
         await this.storeSettingService.saveStoreSetting(logoBucketName, logoRawName, logoBase64, title, region, address, close, closeReason, servicePhone);

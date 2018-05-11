@@ -47,10 +47,13 @@ export class EvaluationResolver {
     }
 
     @Mutation("updateEvaluation")
-    async updateEvaluation(req: Request, body: { id: number, content: string, display: string }): Promise<Data> {
+    async updateEvaluation(req: Request, body: { id: number, content: string, display: boolean }): Promise<Data> {
         const { id, content, display } = body;
         if (!id || !content || display === undefined || display === null) {
             throw new HttpException("缺少参数", 404);
+        }
+        if(display!==true&&display!==false){
+            throw new HttpException("参数错误", 404);
         }
         await this.evaluationService.updateEvaluation(id, content, display);
         return { code: 200, message: "更新评价成功" };

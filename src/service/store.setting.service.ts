@@ -28,7 +28,7 @@ export class StoreSettingService {
         title: string,
         region: string,
         address: string,
-        close: string,
+        close: boolean,
         closeReason: string,
         servicePhone: string
     ): Promise<void> {
@@ -42,7 +42,7 @@ export class StoreSettingService {
                 title,
                 region,
                 address,
-                close: close==="true",
+                close,
                 closeReason,
                 servicePhone
             });

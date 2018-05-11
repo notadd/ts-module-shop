@@ -1,6 +1,6 @@
 type Mutation{
-    createFloor(name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
-    updateFloor(id:Int!,name:String!,display:String!,goodsIds:[Int!]!):ShopCommonData
+    createFloor(name:String!,display:Boolean!,goodsIds:[Int!]!):ShopCommonData
+    updateFloor(id:Int!,name:String!,display:Boolean!,goodsIds:[Int!]!):ShopCommonData
     deleteFloor(id:Int!):ShopCommonData
 }
 
@@ -24,6 +24,6 @@ type FloorsData{
 type Floor{
     id:Int
     name:String
-    display:String
+    display:Boolean
     goodses:[Goods]
 }
