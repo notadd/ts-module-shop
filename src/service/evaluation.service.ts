@@ -88,7 +88,7 @@ export class EvaluationService {
         }
         try {
             evaluation.content = content;
-            evaluation.display = !!display;
+            evaluation.display = display==="true";
             await this.evaluationRepository.save(evaluation);
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);

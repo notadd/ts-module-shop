@@ -43,7 +43,7 @@ export class FloorService {
             }
         }
         try {
-            await this.floorRepository.save({ name, display: !!display, goodses });
+            await this.floorRepository.save({ name, display: display === "true", goodses });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }
@@ -61,7 +61,7 @@ export class FloorService {
             }
             floor.name = name;
         }
-        floor.display = !!display;
+        floor.display = display === "true";
         const goodses: Array<Goods> | undefined = await this.goodsRepository.findByIds(goodsIds);
         for (let i = 0; i < goodsIds.length; i++) {
             const find: Goods | undefined = goodses.find(goods => goods.id === goodsIds[i]);

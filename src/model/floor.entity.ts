@@ -19,5 +19,6 @@ export class Floor {
         lazy: false,
         eager: false
     })
+    @JoinTable()
     goodses: Array<Goods>;
 }

@@ -42,7 +42,7 @@ export class StoreSettingService {
                 title,
                 region,
                 address,
-                close: !!close,
+                close: close==="true",
                 closeReason,
                 servicePhone
             });
