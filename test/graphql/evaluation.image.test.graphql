@@ -1,0 +1,27 @@
+mutation createEvaluationImage{
+  createEvaluationImage(evaluationId:1,bucketName:"public",rawName:"jpeg",base64:"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCABkAGQDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAECAwT/xAAkEAACAgEEAgIDAQAAAAAAAAAAAQIRIQMxQVFhcRIyIoGRQv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAbEQEBAAIDAQAAAAAAAAAAAAAAAQIREiExQf/aAAwDAQACEQMRAD8A6gFUWyKgo6fFLfIk1FbpeyoyoN+DSgjm9Zf5Tb72RylqzlzXouktd5pLb+GTzp1JSO6JYsu1ABFQFIAAAFD1VBJVbBz1Fj1kqLLVnLml4Mc3yWKstFi1l7Eo06IzTll6zR00naroyir8ZJ/pkpje3UAGHUIUgAAAUjRQBiCq10zVWZ2l7waM30Zcf4SkdCOPReTnlj9Ye5GjXxbNKC9mmZKkHcfPJoy/xl4eDQdYAEIoAAKAAMyV7FWUmHsSDy1+xraNgAukCCwBJK40Iu1ZTKxNrh5QWNAAigJkAUAADG0kzZiSKjoDMHcVe/JoIAEAGZrFrdZNmXJJ1z0gCysAkU4xymleCkUAAVQQAUjKQDMHUmuzocqfyVK2dVCct2orxllRG0ll0ROUvpF+3hHSOnGLurfbyaA5rSb+8r8LBuMYxVRSRJakYbvPSOT15P6qvLA66jXxORlW3cm2zQFABFAABSAAZeGmekAqJJ0mzyPVnN03S6QAFUUaSAApQCKgAA//2Q=="){
+    code
+    message
+  }
+}
+
+mutation deleteEvaluationImage{
+  deleteEvaluationImage(id:1){
+    code
+    message
+  }
+}
+
+query images{
+  evaluationImages(evaluationId:10){
+    code
+    message
+    images{
+      id
+      bucketName
+      name
+      type
+      url
+    }
+  }
+}
