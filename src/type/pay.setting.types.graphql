@@ -1,5 +1,5 @@
 type Mutation{
-    savePaySetting(aliPay:Boolean!.weixinPay:Boolean!):ShopCommonData
+    savePaySetting(aliPay:Boolean!,weixinPay:Boolean!):ShopCommonData
     clearPaySetting:ShopCommonData
 }
 

@@ -4,10 +4,10 @@ import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
 import { GraphQLModule, GraphQLFactory } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ShopModule } from "../src/shop.module";
-
+import { LocalModule } from "@notadd/addon-local";
 
 @Module({
-  modules: [GraphQLModule, TypeOrmModule.forRoot({
+  modules: [GraphQLModule, ShopModule, LocalModule, TypeOrmModule.forRoot({
     name: "shop",
     type: "postgres",
     host: "localhost",
@@ -15,15 +15,14 @@ import { ShopModule } from "../src/shop.module";
     username: "postgres",
     password: "123456",
     database: "postgres",
-    entities: ["./**/*.entity.ts"],
+    entities: ["./**/*.entity.ts", "./**/*.entity.js"],
     logger: "simple-console",
-    logging: "all",
+    logging: false,
     synchronize: true,
     dropSchema: true
-  }), ShopModule],
+  })],
   controllers: []
 })
-
 
 export class ApplicationModule implements NestModule {
 
@@ -32,7 +31,7 @@ export class ApplicationModule implements NestModule {
   ) { }
 
   configure(consumer: MiddlewaresConsumer) {
-    const typeDefs = this.graphQLFactory.mergeTypesByPaths("./src/**/*.types.graphql");
+    const typeDefs = this.graphQLFactory.mergeTypesByPaths("./**/*.types.graphql");
     const schema = this.graphQLFactory.createSchema({ typeDefs });
     consumer
       .apply(graphiqlExpress({ endpointURL: "/graphql" }))

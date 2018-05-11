@@ -20,6 +20,6 @@ type EvaluationImage{
     id:Int
     bucketName:String
     name:String
-    type;String
+    type:String
     url:String
 }

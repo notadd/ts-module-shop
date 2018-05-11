@@ -37,5 +37,5 @@ type Evaluation{
 input InputEvaluationImage{
     bucketName:String!
     rawName:String!
-    base64:String！
+    base64:String!
 }
