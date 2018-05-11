@@ -34,12 +34,24 @@ query one{
   }
 }
 
-mutation create{
-  bijiben:createGoodsType(name:"笔记本电脑"){
+mutation createGoodsTypo{
+  shouji:createGoodsType(name:"手机"){
     code
     message
   }
-  shouji:createGoodsType(name:"手机"){
+  bijibendiannao:createGoodsType(name:"笔记本电脑"){
+    code
+    message
+  }
+  pingbandiannao:createGoodsType(name:"平板电脑"){
+    code
+    message
+  }
+  taishidiannao:createGoodsType(name:"台式电脑"){
+    code
+    message
+  }
+  zhaoxiangji:createGoodsType(name:"照相机"){
     code
     message
   }

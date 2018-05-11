@@ -65,7 +65,7 @@ query one{
 }
 
 
-mutation create{
+mutation createClassify{
   first:createClassify(name:"数码产品",description:"数码产品描述",level:1){
     code
     message

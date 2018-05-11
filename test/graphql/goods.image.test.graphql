@@ -12,7 +12,7 @@ query images{
   }
 }
 
-mutation create{
+mutation createGoodsImage{
   two:createGoodsImage(
     goodsId:1,
     bucketName:"public",

@@ -55,16 +55,16 @@ query one{
   }
 }
 
-mutation create{
-  mix2:createGoods(name:"mix2",no:"11111",basePrice:2999,discountPrice:2500,description:"小米旗舰产品",classifyId:1,goodsTypeId:2,brandId:1){
+mutation createGoods{
+  mix2:createGoods(name:"mix2",no:"11111",basePrice:2999,discountPrice:2500,description:"小米旗舰产品",classifyId:1,goodsTypeId:1,brandId:1){
     code
     message
   }
-  p10:createGoods(name:"P10",no:"11111",basePrice:3200,description:"华为旗舰产品",classifyId:1,goodsTypeId:2,brandId:2){
+  p10:createGoods(name:"P10",no:"11111",basePrice:3200,description:"华为旗舰产品",classifyId:1,goodsTypeId:1,brandId:2){
     code
     message
   }
-  iphoneX:createGoods(name:"iphoneX",no:"11111",basePrice:9499,description:"苹果旗舰茶品",classifyId:1,goodsTypeId:2,brandId:3){
+  iphoneX:createGoods(name:"iphoneX",no:"11111",basePrice:9499,description:"苹果旗舰茶品",classifyId:1,goodsTypeId:1,brandId:3){
     code
     message
   }

@@ -13,7 +13,7 @@ query all{
   }
 }
 
-mutation create{
+mutation createDelivery{
   shunfeng:createDelivery(name:"顺丰",description:"顺丰速递",cost:20,freeLimit:65,valuationFee:0.5){
     code
     message
@@ -30,7 +30,6 @@ mutation create{
     code
     message
   }
-}
 
 mutation update{
   updateDelivery(id:1,name:"中通",description:"中通速递"){

@@ -17,7 +17,7 @@ query goodsValues{
   }
 }
 
-mutation create{
+mutation createPropertyValue{
   xinghao:createPropertyValue(goodsId:1,goodsPropertyId:1,value:"xiaomi MIX DIDIDI"){
     code
     message

@@ -1,9 +1,9 @@
-mutation create{
-  xinghao:createGoodsProperty(goodsTypeId:1,name:"型号",type:unique,inputType:text){
+mutation createGoodsProperty{
+  neicun:createGoodsProperty(goodsTypeId:1,name:"内存",type:radio,inputType:list,list:["64G","256G"]){
     code
     message
   }
-  neicun:createGoodsProperty(goodsTypeId:1,name:"内存",type:radio,inputType:list,list:["64G","256G"]){
+  xinghao:createGoodsProperty(goodsTypeId:1,name:"型号",type:unique,inputType:text){
     code
     message
   }

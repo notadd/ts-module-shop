@@ -15,10 +15,36 @@ query all{
   }
 }
 
-mutation create{
-  createUserReceivingInformation(
+mutation createUserReceivingInformation{
+  niuer:createUserReceivingInformation(
+    userId:1,
+    consignee:"牛二",
+    email:"232313123qq",
+    region:"西北",
+    address:"西安莲湖区",
+    postCode:"711111",
+    homePhone:"88823231",
+    mobilePhone:"12121999931"
+  ){
+    code
+    message
+  }
+  zhangsan:createUserReceivingInformation(
     userId:1,
     consignee:"张三",
+    email:"232313123qq",
+    region:"西北",
+    address:"西安莲湖区",
+    postCode:"711111",
+    homePhone:"88823231",
+    mobilePhone:"12121999931"
+  ){
+    code
+    message
+  }
+  lisi:createUserReceivingInformation(
+    userId:1,
+    consignee:"李四",
     email:"232313123qq",
     region:"西北",
     address:"西安莲湖区",
