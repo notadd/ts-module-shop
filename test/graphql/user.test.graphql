@@ -1,0 +1,26 @@
+mutation createUser{
+  niuer:createUser(
+    organizationId:null,
+    userName:"牛二",
+    password:"123456"
+  ){
+		code 
+    message
+  }
+  zhangsan:createUser(
+    organizationId:null,
+    userName:"张三",
+    password:"123456"
+  ){
+		code 
+    message
+  }
+  lisi:createUser(
+    organizationId:null,
+    userName:"李四",
+    password:"123456",
+  ){
+		code 
+    message
+  }
+}
