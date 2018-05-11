@@ -58,6 +58,7 @@ import { Brand } from "./model/brand.entity";
 import { Goods } from "./model/goods.entity";
 import { Order } from "./model/order.entity";
 import { DateUtil } from "./util/date.util";
+import { UserModule } from "@notadd/user";
 import { Sku } from "./model/sku.entity";
 import { Module } from "@nestjs/common";
 
@@ -68,7 +69,7 @@ import { Module } from "@nestjs/common";
         FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation
-    ])],
+    ]), UserModule],
     components: [
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
