@@ -15,18 +15,24 @@ export class ShopComponent {
         private readonly thirdClassifyRepository: Repository<ThirdClassify>
     ) { }
 
-    async getSubClassifyIds(id: number, level: 1 | 2): Promise<Array<number>> {
+    async getSubClassifyIds(id: number, level: 1 | 2): Promise<Array<number> | undefined> {
         if (level === 1) {
             const firstClassify: FirstClassify | undefined = await this.firstClassifyRepository.createQueryBuilder("first")
                 .leftJoinAndSelect("first.children", "second")
                 .select(["second.id"])
                 .getOne();
+            if (!firstClassify) {
+                throw new HttpException("指定id=" + id + "一级分类不存在", 404);
+            }
             return firstClassify.children.map(second => second.id);
         } else if (level === 2) {
             const secondClassify: SecondClassify | undefined = await this.secondClassifyRepository.createQueryBuilder("second")
                 .leftJoinAndSelect("second.children", "third")
                 .select(["third.id"])
                 .getOne();
+            if (!secondClassify) {
+                throw new HttpException("指定id=" + id + "二级分类不存在", 404);
+            }
             return secondClassify.children.map(third => third.id);
         } else {
             return undefined;
@@ -40,6 +46,9 @@ export class ShopComponent {
             .leftJoinAndSelect("goods.classify", "classify")
             .leftJoinAndSelect("goods.images", "image")
             .getOne();
+        if (!goods) {
+            throw new HttpException("指定id=" + id + "商品不存在", 404);
+        }
         return goods;
     }
 
@@ -64,10 +73,10 @@ export class ShopComponent {
         return total;
     }
 
-    async findNoExist(ids: Array<number>): Promise<{ exist: boolean, id: number }> {
+    async findNoExist(ids: Array<number>): Promise<{ exist: boolean, id: number | undefined }> {
         const goodses: Array<Goods> = await this.goodsRepository.findByIds(ids);
         for (let i = 0; i < ids.length; i++) {
-            const exist: Goods = goodses.find(goods => goods.id === ids[i]);
+            const exist: Goods | undefined = goodses.find(goods => goods.id === ids[i]);
             if (!exist) {
                 return { exist: false, id: ids[i] };
             }
