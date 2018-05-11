@@ -19,7 +19,7 @@ import { LocalModule } from "@notadd/addon-local";
     logger: "simple-console",
     logging: false,
     synchronize: true,
-    dropSchema: true
+    dropSchema: false
   })],
   controllers: []
 })

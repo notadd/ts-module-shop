@@ -1,10 +1,10 @@
-mutation create{
-  createOrder(
+mutation createOrder{
+  G64:createOrder(
     userId:1,
     delivertNo:"No312312313",
     delivertTime:"2018-03-12",
     invoiceType:"增值税",
-    invoiceContent:"小米手机",
+    invoiceContent:"小米手机+64G内存",
     invoiceTitle:"张三",
     customerMessage:"不知道",
     deliveryId:1,
@@ -13,6 +13,26 @@ mutation create{
       {
         count:4,
         skuId:1
+      }
+    ]
+  ){
+    code
+    message
+  }
+  G256:createOrder(
+    userId:1,
+    delivertNo:"No312312313",
+    delivertTime:"2018-03-12",
+    invoiceType:"增值税",
+    invoiceContent:"小米手机+256G内存",
+    invoiceTitle:"张三",
+    customerMessage:"不知道",
+    deliveryId:1,
+    userReceivingInformationId:1,
+    items:[
+      {
+        count:4,
+        skuId:2
       }
     ]
   ){

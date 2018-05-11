@@ -34,7 +34,7 @@ export class OrderItem {
     evaluation: Evaluation;
 
     /* 多个订单项属于一个订单，当直接创建订单项时，所属订单为空 */
-    @ManyToOne(type => Order, order => order.items, {
+    @ManyToOne(type => Order, order => order.orderItems, {
         cascadeInsert: false,
         cascadeUpdate: false,
         cascadeRemove: false,

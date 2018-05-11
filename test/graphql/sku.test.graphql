@@ -1,5 +1,9 @@
-mutation create{
-  createSku(goodsId:1,no:"d12121212",inventory:20,propertyValueIds:[2]){
+mutation createSku{
+  G64:createSku(goodsId:1,no:"d12121212",inventory:20,propertyValueIds:[2]){
+    code
+    message
+  }
+  G256:createSku(goodsId:1,no:"d12121213",inventory:20,propertyValueIds:[3]){
     code
     message
   }

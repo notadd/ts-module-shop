@@ -73,6 +73,7 @@ export class OrderService {
         }
         /* 生成32位订单号  */
         const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
+        const orderItems: Array<OrderItem> = new Array();
         for (let i = 0; i < items.length; i++) {
             const sku: Sku | undefined = await this.skuRepository.findOneById(items[i].skuId);
             if (!sku) {
@@ -81,20 +82,24 @@ export class OrderService {
             if (sku.inventory < items[i].count) {
                 throw new HttpException("商品库存小于购买数量", 404);
             }
-            (items[i] as OrderItem).userId = userId;
-            (items[i] as OrderItem).sku = sku;
+            orderItems[i] = this.orderItemRepository.create({ count: items[i].count, userId, sku, });
         }
         const queryRunner: QueryRunner = this.connection.createQueryRunner("master");
         await queryRunner.startTransaction();
         try {
             for (let i = 0; i < items.length; i++) {
-                (items[i] as OrderItem).sku.inventory -= items[i].count;
-                await queryRunner.manager.save((items[i] as OrderItem).sku);
+                await queryRunner.manager.save(orderItems[i]);
+                /* 更新库存 */
+                orderItems[i].sku.inventory -= items[i].count;
+                await queryRunner.manager.save(orderItems[i].sku);
             }
-            await queryRunner.manager.save({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, items });
+            await queryRunner.manager.save(
+                this.orderRepository.create({ orderNo, userId, delivertNo, delivertTime: new Date(delivertTime), invoiceType, invoiceContent, invoiceTitle, customerMessage, delivery, userReceivingInformation, orderItems })
+            );
             await queryRunner.commitTransaction();
         } catch (err) {
             await queryRunner.rollbackTransaction();
+            console.log(err);
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         } finally {
             await queryRunner.release();

@@ -80,12 +80,12 @@ export class Order {
 
     /* 订单对应的订单项，包含了sku以及购买数量 */
     @OneToMany(type => OrderItem, orderItem => orderItem.order, {
-        cascadeInsert: true,
+        cascadeInsert: false,
         cascadeUpdate: false,
         lazy: false,
         eager: false
     })
-    items: Array<OrderItem>;
+    orderItems: Array<OrderItem>;
 
     /* 收货人信息 */
     @ManyToOne(type => UserReceivingInformation, {
