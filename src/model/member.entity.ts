@@ -19,7 +19,7 @@ export class Member {
     @Column({ length: 10 })
     sex: string;
 
-    @Column({ length: 20 })
+    @Column({ length: 30 })
     idNumber: string;
 
     @Column()

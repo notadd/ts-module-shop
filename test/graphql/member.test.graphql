@@ -1,0 +1,86 @@
+query member{
+		member(id:1){
+    code
+    message
+    member{
+      id
+      name
+      realName
+      email
+      sex
+      idNumber
+      birthday
+      password
+      mobilePhone
+    }
+  }
+}
+
+
+query members{
+  
+  members{
+  	code
+    message
+    members{
+      id
+      name
+      realName
+      email
+      sex
+      idNumber
+      birthday
+      password
+      mobilePhone
+    }
+	}
+  
+}
+
+
+
+
+
+mutation createMember{
+  
+  createMember(
+    name:"aa",
+    realName: "张三",
+    email:"123232323@qq.com",
+    sex:man,
+    idNumber:"7237123123712372312732",
+    birthday:"2001-02-12",
+		password:"123456",
+    mobilePhone:"18702930122"
+  ){
+    code
+    message
+  }
+  
+}
+
+
+mutation updateMember{
+	
+  updateMember(
+    id:1,
+    email:"10000222@qq.com",
+    sex:woman,
+    birthday:"1992-12-20",
+    password:"654321",
+    mobilePhone:"090111111111"
+  ){
+		code
+    message
+  }
+}
+
+
+mutation deleteMember{
+  
+  deleteMember(id:1){
+    code
+    message
+  }
+  
+}

@@ -17,13 +17,12 @@ import { LocalModule } from "@notadd/addon-local";
     database: "postgres",
     entities: ["./**/*.entity.ts", "./**/*.entity.js"],
     logger: "simple-console",
-    logging:"all",
+    logging: false,
     synchronize: true,
     dropSchema: false
   })],
   controllers: []
 })
-
 export class ApplicationModule implements NestModule {
 
   constructor(
