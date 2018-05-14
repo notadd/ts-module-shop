@@ -1,0 +1,32 @@
+mutation savePaySetting{
+  
+  savePaySetting(aliPay:true,weixinPay:true){
+    code
+    message
+  }
+  
+}
+
+
+mutation clearPaySetting{
+  
+  clearPaySetting{
+    code
+    message
+  }
+  
+}
+
+query paySetting{
+  
+  paySetting{
+    code
+    message
+    paySetting{
+      id
+      aliPay
+      weixinPay
+    }
+  }
+  
+}

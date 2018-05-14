@@ -3,11 +3,6 @@ type Mutation{
     clearPaySetting:ShopCommonData
 }
 
-enum Boolean{
-    true
-    false
-}
-
 type Query{
     paySetting:PaySettingData
 }
