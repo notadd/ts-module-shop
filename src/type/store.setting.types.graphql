@@ -29,6 +29,7 @@ type StoreSetting{
     logoBucketName:String
     logoName:String
     logoType:String
+    logoUrl:String
     title:String
     region:String
     address:String

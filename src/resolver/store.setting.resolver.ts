@@ -15,7 +15,7 @@ export class StoreSettingResolver {
 
     @Query("storeSetting")
     async storeSetting(req: Request): Promise<StoreSettingData> {
-        const storeSetting = await this.storeSettingService.getStoreSetting();
+        const storeSetting = await this.storeSettingService.getStoreSetting(req);
         return { code: 200, message: "获取商城配置成功", storeSetting };
     }
 
