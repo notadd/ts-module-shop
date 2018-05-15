@@ -23,7 +23,7 @@ export class ClassifyService {
         } else if (level === 2) {
             let parent: FirstClassify | undefined;
             if (parentId) {
-                parent = await this.firstClassifyRepository.findOneById(parentId);
+                parent = await this.firstClassifyRepository.findOne(parentId);
                 if (!parent) {
                     throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
                 }
@@ -34,7 +34,7 @@ export class ClassifyService {
         } else {
             let parent: SecondClassify | undefined;
             if (parentId) {
-                parent = await this.secondClassifyRepository.findOneById(parentId);
+                parent = await this.secondClassifyRepository.findOne(parentId);
                 if (!parent) {
                     throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
                 }
@@ -49,11 +49,11 @@ export class ClassifyService {
     async getClassify(id: number, level: number): Promise<Classify | undefined> {
         let result: any;
         if (level === 1) {
-            result = await this.firstClassifyRepository.findOneById(id);
+            result = await this.firstClassifyRepository.findOne(id);
         } else if (level === 2) {
-            result = await this.secondClassifyRepository.findOneById(id);
+            result = await this.secondClassifyRepository.findOne(id);
         } else {
-            result = await this.thirdClassifyRepository.findOneById(id);
+            result = await this.thirdClassifyRepository.findOne(id);
         }
         return result;
     }
@@ -75,7 +75,7 @@ export class ClassifyService {
             if (exist) {
                 throw new HttpException("指定name=" + name + "二级分类已存在", 404);
             }
-            const parent: FirstClassify | undefined = await this.firstClassifyRepository.findOneById(parentId);
+            const parent: FirstClassify | undefined = await this.firstClassifyRepository.findOne(parentId);
             if (!parent) {
                 throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
             }
@@ -89,7 +89,7 @@ export class ClassifyService {
             if (exist) {
                 throw new HttpException("指定name=" + name + "三级分类已存在", 404);
             }
-            const parent: SecondClassify | undefined = await this.secondClassifyRepository.findOneById(parentId);
+            const parent: SecondClassify | undefined = await this.secondClassifyRepository.findOne(parentId);
             if (!parent) {
                 throw new HttpException("指定id=" + parentId + "上级分类不存在", 404);
             }
@@ -104,7 +104,7 @@ export class ClassifyService {
     /* 更新指定id、级别分类，只能更新名称、描述字段，不能更新父分类等 */
     async updateClassify(id: number, name: string, description: string, level: number): Promise<void> {
         if (level === 1) {
-            const classify: FirstClassify | undefined = await this.firstClassifyRepository.findOneById(id);
+            const classify: FirstClassify | undefined = await this.firstClassifyRepository.findOne(id);
             if (!classify) {
                 throw new HttpException("指定id=" + id + "一级分类不存在", 404);
             }
@@ -116,7 +116,7 @@ export class ClassifyService {
                 throw new HttpException("发生了数据库错误" + err.toString(), 403);
             }
         } else if (level === 2) {
-            const classify: SecondClassify | undefined = await this.secondClassifyRepository.findOneById(id);
+            const classify: SecondClassify | undefined = await this.secondClassifyRepository.findOne(id);
             if (!classify) {
                 throw new HttpException("指定id=" + id + "二级分类不存在", 404);
             }
@@ -128,7 +128,7 @@ export class ClassifyService {
                 throw new HttpException("发生了数据库错误" + err.toString(), 403);
             }
         } else {
-            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(id);
+            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOne(id);
             if (!classify) {
                 throw new HttpException("指定id=" + id + "三级分类不存在", 404);
             }
@@ -145,7 +145,7 @@ export class ClassifyService {
     /* 删除指定id、级别分类，根据级别分别操作三个实体 */
     async deleteClassify(id: number, level: number): Promise<void> {
         if (level === 1) {
-            const classify: FirstClassify | undefined = await this.firstClassifyRepository.findOneById(id, { relations: ["children"] });
+            const classify: FirstClassify | undefined = await this.firstClassifyRepository.findOne(id, { relations: ["children"] });
             if (!classify) {
                 throw new HttpException("指定id=" + id + "一级分类不存在", 404);
             }
@@ -158,7 +158,7 @@ export class ClassifyService {
                 throw new HttpException("发生了数据库错误" + err.toString(), 403);
             }
         } else if (level === 2) {
-            const classify: SecondClassify | undefined = await this.secondClassifyRepository.findOneById(id, { relations: ["children"] });
+            const classify: SecondClassify | undefined = await this.secondClassifyRepository.findOne(id, { relations: ["children"] });
             if (!classify) {
                 throw new HttpException("指定id=" + id + "二级分类不存在", 404);
             }
@@ -171,7 +171,7 @@ export class ClassifyService {
                 throw new HttpException("发生了数据库错误" + err.toString(), 403);
             }
         } else {
-            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(id, { relations: ["goodses"] });
+            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOne(id, { relations: ["goodses"] });
             if (!classify) {
                 throw new HttpException("指定id=" + id + "三级分类不存在", 404);
             }

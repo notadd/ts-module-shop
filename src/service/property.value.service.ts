@@ -16,7 +16,7 @@ export class PropertyValueService {
     ) { }
 
     async getPropertyValues(goodsId: number): Promise<Array<PropertyValue>> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId);
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -26,11 +26,11 @@ export class PropertyValueService {
 
     /* 创建指定商品、指定属性的属性值 */
     async createPropertyValue(goodsId: number, goodsPropertyId: number, value: string, price: number): Promise<void> {
-        const goodsProperty: GoodsProperty | undefined = await this.goodsPropertyRepository.findOneById(goodsPropertyId, { relations: ["goodsType"] });
+        const goodsProperty: GoodsProperty | undefined = await this.goodsPropertyRepository.findOne(goodsPropertyId, { relations: ["goodsType"] });
         if (!goodsProperty) {
             throw new HttpException("指定id=" + goodsPropertyId + "商品属性不存在", 404);
         }
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["type"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId, { relations: ["type"] });
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -75,7 +75,7 @@ export class PropertyValueService {
 
     /* 更新指定属性值，可以更新属性值属性价格*/
     async updatePropertyValue(id: number, value: string, price: number): Promise<void> {
-        const propertyValue: PropertyValue | undefined = await this.propertyValueRepository.findOneById(id, { relations: ["property"] });
+        const propertyValue: PropertyValue | undefined = await this.propertyValueRepository.findOne(id, { relations: ["property"] });
         if (!propertyValue) {
             throw new HttpException("指定id=" + id + "属性值不存在", 404);
         }
@@ -91,7 +91,7 @@ export class PropertyValueService {
 
     /* 删除指定id属性值 */
     async deletePropertyValue(id: number): Promise<void> {
-        const propertyValue: PropertyValue | undefined = await this.propertyValueRepository.findOneById(id);
+        const propertyValue: PropertyValue | undefined = await this.propertyValueRepository.findOne(id);
         if (!propertyValue) {
             throw new HttpException("指定id=" + id + "属性值不存在", 404);
         }

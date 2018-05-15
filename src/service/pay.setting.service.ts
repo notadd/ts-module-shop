@@ -12,7 +12,7 @@ export class PaySettingService {
     ) { }
 
     async getPaySetting(): Promise<PaySetting> {
-        const paySetting: PaySetting | undefined = await this.paySettingRepository.findOneById(1);
+        const paySetting: PaySetting | undefined = await this.paySettingRepository.findOne(1);
         if (!paySetting) {
             throw new HttpException("支付配置不存在", 404);
         }
@@ -29,7 +29,7 @@ export class PaySettingService {
     }
 
     async clearPaySetting(): Promise<void> {
-        const paySetting: PaySetting | undefined = await this.paySettingRepository.findOneById(1);
+        const paySetting: PaySetting | undefined = await this.paySettingRepository.findOne(1);
         if (!paySetting) {
             throw new HttpException("支付配置不存在", 404);
         }

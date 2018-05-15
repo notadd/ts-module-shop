@@ -29,7 +29,7 @@ export class SkuService {
     }
 
     async createSku(goodsId: number, no: string, inventory: number, propertyValueIds: Array<number>): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId);
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -54,7 +54,7 @@ export class SkuService {
     }
 
     async updateSku(id: number, no: string, inventory: number, propertyValueIds: Array<number>): Promise<void> {
-        const sku: Sku | undefined = await this.skuRepository.findOneById(id, { relations: ["goods", "values"] });
+        const sku: Sku | undefined = await this.skuRepository.findOne(id, { relations: ["goods", "values"] });
         if (!sku) {
             throw new HttpException("指定id=" + id + "Sku不存在", 404);
         }
@@ -88,7 +88,7 @@ export class SkuService {
     }
 
     async deleteSku(id: number): Promise<void> {
-        const sku: Sku | undefined = await this.skuRepository.findOneById(id, { relations: ["values"] });
+        const sku: Sku | undefined = await this.skuRepository.findOne(id, { relations: ["values"] });
         if (!sku) {
             throw new HttpException("指定id=" + id + "Sku不存在", 404);
         }

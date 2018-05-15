@@ -15,7 +15,7 @@ export class UserReceivingInformationService {
     ) { }
 
     async getUserReceivingInformation(id: number): Promise<UserReceivingInformation> {
-        const information: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
+        const information: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(id);
         if (!information) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }
@@ -62,7 +62,7 @@ export class UserReceivingInformationService {
         homePhone: string,
         mobilePhone: string
     ): Promise<void> {
-        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
+        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(id);
         if (!userReveivingInformation) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }
@@ -81,7 +81,7 @@ export class UserReceivingInformationService {
     }
 
     async deleteUserReceivingInformation(id: number): Promise<void> {
-        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(id);
+        const userReveivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(id);
         if (!userReveivingInformation) {
             throw new HttpException("指定id=" + id + "用户收货信息不存在", 404);
         }

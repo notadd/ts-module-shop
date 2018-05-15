@@ -63,11 +63,11 @@ export class OrderService {
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
-        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(deliveryId);
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOne(deliveryId);
         if (!delivery) {
             throw new HttpException("指定id=" + deliveryId + "配送信息不存在", 404);
         }
-        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(userReceivingInformationId);
+        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(userReceivingInformationId);
         if (!userReceivingInformation) {
             throw new HttpException("缺少参数", 404);
         }
@@ -75,7 +75,7 @@ export class OrderService {
         const orderNo = this.dateUtil.getString(new Date()) + this.randomUtil.getRandom(18);
         const orderItems: Array<OrderItem> = new Array();
         for (let i = 0; i < items.length; i++) {
-            const sku: Sku | undefined = await this.skuRepository.findOneById(items[i].skuId);
+            const sku: Sku | undefined = await this.skuRepository.findOne(items[i].skuId);
             if (!sku) {
                 throw new HttpException("指定id=" + items[i].skuId + "Sku不存在", 404);
             }
@@ -122,11 +122,11 @@ export class OrderService {
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
-        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(deliveryId);
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOne(deliveryId);
         if (!delivery) {
             throw new HttpException("指定id=" + deliveryId + "配送信息不存在", 404);
         }
-        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(userReceivingInformationId);
+        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(userReceivingInformationId);
         if (!userReceivingInformation) {
             throw new HttpException("缺少参数", 404);
         }
@@ -173,15 +173,15 @@ export class OrderService {
         deliveryId: number,
         userReceivingInformationId: number
     ): Promise<void> {
-        const order: Order | undefined = await this.orderRepository.findOneById(id);
+        const order: Order | undefined = await this.orderRepository.findOne(id);
         if (!order) {
             throw new HttpException("指定id=" + id + "订单不存在", 404);
         }
-        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(deliveryId);
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOne(deliveryId);
         if (!delivery) {
             throw new HttpException("指定id=" + deliveryId + "配送信息不存在", 404);
         }
-        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOneById(userReceivingInformationId);
+        const userReceivingInformation: UserReceivingInformation | undefined = await this.userReceivingInformationRepository.findOne(userReceivingInformationId);
         if (!userReceivingInformation) {
             throw new HttpException("缺少参数", 404);
         }
@@ -201,7 +201,7 @@ export class OrderService {
     }
 
     async deleteOrder(id: number): Promise<void> {
-        const order: Order | undefined = await this.orderRepository.findOneById(id);
+        const order: Order | undefined = await this.orderRepository.findOne(id);
         if (!order) {
             throw new HttpException("指定id=" + id + "订单不存在", 404);
         }

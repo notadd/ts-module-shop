@@ -29,7 +29,7 @@ export class DeliveryService {
     }
 
     async updateDelivery(id: number, name: string, description: string, cost: number, freeLimit: number, valuationFee: number): Promise<void> {
-        const delivery: Delivery | undefined = await this.deliveryRepository.findOneById(id);
+        const delivery: Delivery | undefined = await this.deliveryRepository.findOne(id);
         if (!delivery) {
             throw new HttpException("指定id=" + id + "配送信息不存在", 404);
         }
@@ -59,7 +59,7 @@ export class DeliveryService {
         }
     }
     async deleteDelivery(id: number): Promise<void> {
-        const delivery: Delivery|undefined = await this.deliveryRepository.findOneById(id);
+        const delivery: Delivery|undefined = await this.deliveryRepository.findOne(id);
         if (!delivery) {
             throw new HttpException("指定id=" + id + "配送信息不存在", 404);
         }

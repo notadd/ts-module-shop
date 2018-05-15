@@ -56,7 +56,7 @@ export class EvaluationService {
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
-        const orderItem: OrderItem | undefined = await this.orderItemRepository.findOneById(orderItemId);
+        const orderItem: OrderItem | undefined = await this.orderItemRepository.findOne(orderItemId);
         if (!orderItem) {
             throw new HttpException("指定id=" + orderItemId + "订单项不存在", 404);
         }
@@ -81,7 +81,7 @@ export class EvaluationService {
             const evaluation: Evaluation | undefined = await queryRunner.manager.save(
                 this.evaluationRepository.create({ content, display: true, user, orderItem,images })
             );
-            images.forEach(image => image.evaluation = evaluation)
+            images.forEach(image => image.evaluation = evaluation);
             await queryRunner.manager.save(images);
             await queryRunner.commitTransaction();
         } catch (err) {
@@ -93,7 +93,7 @@ export class EvaluationService {
     }
 
     async updateEvaluation(id: number, content: string, display: boolean): Promise<void> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id);
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOne(id);
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }
@@ -107,7 +107,7 @@ export class EvaluationService {
     }
 
     async deleteEvaluation(id: number): Promise<void> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(id, { relations: ["images"] });
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOne(id, { relations: ["images"] });
         if (!evaluation) {
             throw new HttpException("指定id=" + id + "评价不存在", 404);
         }

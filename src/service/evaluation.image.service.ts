@@ -18,7 +18,7 @@ export class EvaluationImageService {
     ) { }
 
     async getEvaluationImages(req: Request, evaluationId: number): Promise<Array<OutEvaluationImage>> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId, { relations: ["images"] });
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOne(evaluationId, { relations: ["images"] });
         if (!evaluation) {
             throw new HttpException("指定id=" + evaluationId + "评价不存在", 404);
         }
@@ -31,7 +31,7 @@ export class EvaluationImageService {
     }
 
     async createEvaluationImage(evaluationId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
-        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOneById(evaluationId, { relations: ["images"] });
+        const evaluation: Evaluation | undefined = await this.evaluationRepository.findOne(evaluationId, { relations: ["images"] });
         if (!evaluation) {
             throw new HttpException("指定id=" + evaluationId + "评价不存在0", 404);
         }
@@ -45,7 +45,7 @@ export class EvaluationImageService {
     }
 
     async deleteEvaluationImage(id: number): Promise<void> {
-        const evaluationImage: EvaluationImage | undefined = await this.evaluationImageRepository.findOneById(id);
+        const evaluationImage: EvaluationImage | undefined = await this.evaluationImageRepository.findOne(id);
         if (!evaluationImage) {
             throw new HttpException("指定id=" + id + "评价图片不存在", 404);
         }

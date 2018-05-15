@@ -17,7 +17,7 @@ export class GoodsImageService {
     ) { }
 
     async getGoodsImages(req: Request, goodsId: number): Promise<Array<{ id: number, bucketName: string, name: string, type: string, url: string }>> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["images"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId, { relations: ["images"] });
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -29,7 +29,7 @@ export class GoodsImageService {
     }
 
     async createGoodsImage(goodsId: number, bucketName: string, rawName: string, base64: string): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId);
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }
@@ -43,7 +43,7 @@ export class GoodsImageService {
     }
 
     async deleteGoodsImage(goodsId: number, id: number): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(goodsId, { relations: ["images"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOne(goodsId, { relations: ["images"] });
         if (!goods) {
             throw new HttpException("指定id=" + goodsId + "商品不存在", 404);
         }

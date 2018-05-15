@@ -17,7 +17,7 @@ export class MemberService {
     }
 
     async getMember(id: number): Promise<Member> {
-        const member: Member | undefined = await this.memberRepository.findOneById(id);
+        const member: Member | undefined = await this.memberRepository.findOne(id);
         if (!member) {
             throw new HttpException("指定id=" + id + "会员不存在", 404);
         }
@@ -53,7 +53,7 @@ export class MemberService {
         password: string,
         mobilePhone: string
     ): Promise<void> {
-        const member: Member | undefined = await this.memberRepository.findOneById(id);
+        const member: Member | undefined = await this.memberRepository.findOne(id);
         if (!member) {
             throw new HttpException("指定id=" + id + "会员不存在", 404);
         }
@@ -70,7 +70,7 @@ export class MemberService {
     }
 
     async deleteMember(id: number): Promise<void> {
-        const member: Member | undefined = await this.memberRepository.findOneById(id);
+        const member: Member | undefined = await this.memberRepository.findOne(id);
         if (!member) {
             throw new HttpException("指定id=" + id + "会员不存在", 404);
         }

@@ -23,7 +23,7 @@ export class GoodsService {
 
     /* 获取指定分类下所有商品，如果传递分页参数则分页获取,只能获取不在回收站中商品 */
     async getGoodses(classifyId: number, pageNumber: number, pageSize: number): Promise<Array<Goods>> {
-        const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);
+        const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOne(classifyId);
         if (!classify) {
             throw new HttpException("指定id=" + classifyId + "分类不存在", 404);
         }
@@ -53,7 +53,7 @@ export class GoodsService {
 
     /* 获取指定的详细信息，会同时获取商品所属类型以及类型下的属性、商品下所有属性值以及属性值关联的属性 */
     async getGoods(id: number): Promise<Goods> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["type", "values"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOne(id, { relations: ["type", "values"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
@@ -66,17 +66,17 @@ export class GoodsService {
         if (exist) {
             throw new HttpException("指定name=" + name + "商品已存在", 404);
         }
-        const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);
+        const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOne(classifyId);
         if (!classify) {
             throw new HttpException("指定id=" + classifyId + "分类不存在", 404);
         }
-        const type: GoodsType | undefined = await this.goodsTypeRepository.findOneById(goodsTypeId);
+        const type: GoodsType | undefined = await this.goodsTypeRepository.findOne(goodsTypeId);
         if (!type) {
             throw new HttpException("指定id" + goodsTypeId + "商品类型不存在", 404);
         }
         let brand: Brand | undefined;
         if (brandId) {
-            brand = await this.brandRepository.findOneById(brandId);
+            brand = await this.brandRepository.findOne(brandId);
             if (!brand) {
                 throw new HttpException("指定id" + brandId + "品牌不存在", 404);
             }
@@ -90,7 +90,7 @@ export class GoodsService {
 
     /* 更新指定商品，如果商品分类被更新，则商品下原来所有的商品属性值都会被删除 */
     async updateGoods(id: number, name: string, no: string, basePrice: number, discountPrice: number, description: string, classifyId: number, goodsTypeId: number, brandId: number): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id, { relations: ["classify", "type", "values", "brand"] });
+        const goods: Goods | undefined = await this.goodsRepository.findOne(id, { relations: ["classify", "type", "values", "brand"] });
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
@@ -109,7 +109,7 @@ export class GoodsService {
         discountPrice && (goods.discountPrice = discountPrice);
         description && (goods.description = description);
         if (classifyId && (classifyId !== goods.classify.id)) {
-            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOneById(classifyId);
+            const classify: ThirdClassify | undefined = await this.thirdClassifyRepository.findOne(classifyId);
             if (!classify) {
                 throw new HttpException("指定id=" + classifyId + "分类不存在", 404);
             }
@@ -118,7 +118,7 @@ export class GoodsService {
         /* 解除商品与商品类型关系时，需要删除商品下存在的属性值 */
         let changeGoodsType = false;
         if (goodsTypeId && (goodsTypeId !== goods.type.id)) {
-            const type: GoodsType | undefined = await this.goodsTypeRepository.findOneById(goodsTypeId);
+            const type: GoodsType | undefined = await this.goodsTypeRepository.findOne(goodsTypeId);
             if (!type) {
                 throw new HttpException("指定id" + goodsTypeId + "商品类型不存在", 404);
             }
@@ -126,7 +126,7 @@ export class GoodsService {
             changeGoodsType = true;
         }
         if (brandId && (brandId !== goods.brand.id)) {
-            const brand: Brand | undefined = await this.brandRepository.findOneById(brandId);
+            const brand: Brand | undefined = await this.brandRepository.findOne(brandId);
             if (!brand) {
                 throw new HttpException("指定id" + brandId + "品牌不存在", 404);
             }
@@ -148,7 +148,7 @@ export class GoodsService {
 
     /* 删除商品时，其下所有属性值也会被删除,这是由数据库的外键关联删除的 */
     async deleteGoods(id: number): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(id);
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
@@ -164,7 +164,7 @@ export class GoodsService {
 
     /* 软删除商品，即放入回收站中，其实是将商品的recycle属性置为true，说明商品在回收站中 */
     async softDeleteGoods(id: number): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(id);
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }
@@ -203,7 +203,7 @@ export class GoodsService {
 
     /* 从回收站中还原商品，即将recycle属性置为false */
     async restoreGoods(id: number): Promise<void> {
-        const goods: Goods | undefined = await this.goodsRepository.findOneById(id);
+        const goods: Goods | undefined = await this.goodsRepository.findOne(id);
         if (!goods) {
             throw new HttpException("指定id=" + id + "商品不存在", 404);
         }

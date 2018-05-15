@@ -46,7 +46,7 @@ export class BrandService {
 
     /* 更新指定id品牌，品牌不存在或者新名称已存在，抛出异常 */
     async updateBrand(id: number, name: string, logo: { bucketName: string, rawName: string, base64: string }): Promise<void> {
-        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["logo"] });
+        const brand: Brand | undefined = await this.brandRepository.findOne(id, { relations: ["logo"] });
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }
@@ -72,7 +72,7 @@ export class BrandService {
 
     /* 删除指定id品牌，品牌不存在或者品牌下存在商品，抛出异常 */
     async deleteBrand(id: number): Promise<void> {
-        const brand: Brand | undefined = await this.brandRepository.findOneById(id, { relations: ["goodses", "logo"] });
+        const brand: Brand | undefined = await this.brandRepository.findOne(id, { relations: ["goodses", "logo"] });
         if (!brand) {
             throw new HttpException("指定id=" + id + "品牌不存在", 404);
         }

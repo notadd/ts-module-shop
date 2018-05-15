@@ -42,7 +42,7 @@ export class OrderItemService {
         if (!user) {
             throw new HttpException("指定id=" + userId + "用户不存在", 404);
         }
-        const sku: Sku | undefined = await this.skuRepository.findOneById(skuId);
+        const sku: Sku | undefined = await this.skuRepository.findOne(skuId);
         if (!sku) {
             throw new HttpException("指定id=" + skuId + "Sku不存在", 404);
         }
@@ -54,7 +54,7 @@ export class OrderItemService {
     }
 
     async updateOrderItem(id: number, count: number): Promise<void> {
-        const item: OrderItem | undefined = await this.orderItemRepository.findOneById(id);
+        const item: OrderItem | undefined = await this.orderItemRepository.findOne(id);
         if (!item) {
             throw new HttpException("指定id=" + id + "订单项不存在", 404);
         }
@@ -67,7 +67,7 @@ export class OrderItemService {
     }
 
     async deleteOrderItem(id: number): Promise<void> {
-        const item: OrderItem | undefined = await this.orderItemRepository.findOneById(id);
+        const item: OrderItem | undefined = await this.orderItemRepository.findOne(id);
         if (!item) {
             throw new HttpException("指定id=" + id + "订单项不存在", 404);
         }

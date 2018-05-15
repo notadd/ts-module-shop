@@ -14,7 +14,7 @@ export class GoodsPropertyService {
     ) { }
 
     async createGoodsProperty(goodsTypeId: number, name: string, type: string, inputType: string, list: Array<string>): Promise<void> {
-        const goodsType: GoodsType|undefined = await this.goodsTypeRepository.findOneById(goodsTypeId);
+        const goodsType: GoodsType|undefined = await this.goodsTypeRepository.findOne(goodsTypeId);
         if (!goodsType) {
             throw new HttpException("指定id=" + goodsTypeId + "商品类型不存在", 404);
         }
@@ -34,7 +34,7 @@ export class GoodsPropertyService {
     }
 
     async updateGoodsProperty(id: number, name: string, type: string, inputType: string, list: Array<string>): Promise<void> {
-        const goodsProperty: GoodsProperty|undefined = await this.goodsPropertyRepository.findOneById(id, { relations: ["goodsType", "values"] });
+        const goodsProperty: GoodsProperty|undefined = await this.goodsPropertyRepository.findOne(id, { relations: ["goodsType", "values"] });
         if (!goodsProperty) {
             throw new HttpException("指定id=" + id + "商品属性不存在", 404);
         }
@@ -83,7 +83,7 @@ export class GoodsPropertyService {
     }
 
     async deleteGoodsProperty(id: number): Promise<void> {
-        const goodsProperty: GoodsProperty|undefined = await this.goodsPropertyRepository.findOneById(id, { relations: ["goodsType"] });
+        const goodsProperty: GoodsProperty|undefined = await this.goodsPropertyRepository.findOne(id, { relations: ["goodsType"] });
         if (!goodsProperty) {
             throw new HttpException("指定id=" + id + "商品属性不存在", 404);
         }
