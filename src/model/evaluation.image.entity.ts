@@ -29,9 +29,7 @@ export class EvaluationImage {
 
     /* 评价图片必然属于一个评价,评价删除时，图片级联删除 */
     @ManyToOne(type => Evaluation, evaluation => evaluation.images, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "CASCADE",
         nullable: true,
         lazy: false,

@@ -15,16 +15,13 @@ export class Brand {
     name: string;
 
     @OneToOne(type => BrandLogo, brandLogo => brandLogo.brand, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         nullable: true
     })
     logo: BrandLogo;
 
     @OneToMany(type => Goods, goods => goods.brand, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

@@ -14,8 +14,7 @@ export class Floor {
     display: boolean;
 
     @ManyToMany(type => Goods, goods => goods.floors, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade:false,
         lazy: false,
         eager: false
     })

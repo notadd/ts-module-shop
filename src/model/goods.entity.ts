@@ -62,9 +62,7 @@ export class Goods {
 
     /* 分类删除时，其下存在商品，需要报错，不级联删除 */
     @ManyToOne(type => ThirdClassify, thirdClassify => thirdClassify.goodses, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "RESTRICT",
         nullable: false,
         lazy: false,
@@ -74,9 +72,7 @@ export class Goods {
 
     /* 商品品牌 */
     @ManyToOne(type => Brand, brand => brand.goodses, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "RESTRICT",
         nullable: true,
         lazy: false,
@@ -86,9 +82,7 @@ export class Goods {
 
     /* 商品类型删除时，其下存在商品需要报错，不级联删除 */
     @ManyToOne(type => GoodsType, goodsType => goodsType.goodses, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "RESTRICT",
         nullable: false,
         lazy: false,
@@ -98,32 +92,28 @@ export class Goods {
 
     /* 商品所属楼层,商品楼层为多对多关系 */
     @ManyToMany(type => Floor, floor => floor.goodses, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
     floors: Array<Floor>;
 
     @OneToMany(type => PropertyValue, propertyValue => propertyValue.goods, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
     values: Array<PropertyValue>;
 
     @OneToMany(type => GoodsImage, goodsImage => goodsImage.goods, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
     images: Array<GoodsImage>;
 
     @OneToMany(type => Sku, sku => sku.goods, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

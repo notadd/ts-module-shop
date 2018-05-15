@@ -50,9 +50,7 @@ export class GoodsProperty {
 
     /* 商品类型删除时，其下属性级联删除，注意此时要保证商品类型下没有商品 */
     @ManyToOne(type => GoodsType, goodsType => goodsType.properties, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "CASCADE",
         nullable: false,
         lazy: false,
@@ -61,8 +59,7 @@ export class GoodsProperty {
     goodsType: GoodsType;
 
     @OneToMany(type => PropertyValue, propertyValue => propertyValue.property, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

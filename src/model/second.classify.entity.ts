@@ -30,9 +30,7 @@ export class SecondClassify {
 
     /* 一级分类删除时，如果其下存在二级分类，需要报错，也就是不级联删除 */
     @ManyToOne(type => FirstClassify, firstClassify => firstClassify.children, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "RESTRICT",
         nullable: false,
         lazy: false,
@@ -41,8 +39,7 @@ export class SecondClassify {
     parent: FirstClassify;
 
     @OneToMany(type => ThirdClassify, thirdClassify => thirdClassify.parent, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

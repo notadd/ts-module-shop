@@ -25,8 +25,7 @@ export class FirstClassify {
     level: number;
 
     @OneToMany(type => SecondClassify, secondClassify => secondClassify.parent, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

@@ -24,7 +24,7 @@ export class OrderItem {
     userId: number;
 
     @OneToOne(type => Evaluation, evaluation => evaluation.orderItem, {
-        cascadeAll: false,
+        cascade: false,
         lazy: false,
         eager: false,
         nullable: true
@@ -33,9 +33,7 @@ export class OrderItem {
 
     /* 多个订单项属于一个订单，当直接创建订单项时，所属订单为空 */
     @ManyToOne(type => Order, order => order.orderItems, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         lazy: false,
         eager: false,
         nullable: true
@@ -44,9 +42,7 @@ export class OrderItem {
 
     /* 多个订单项对应一个sku */
     @ManyToOne(type => Sku, sku => sku.orderItems, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         onDelete: "RESTRICT",
         lazy: false,
         eager: false

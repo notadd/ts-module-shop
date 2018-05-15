@@ -16,16 +16,14 @@ export class GoodsType {
     name: string;
 
     @OneToMany(type => GoodsProperty, goodsProperty => goodsProperty.goodsType, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
     properties: Array<GoodsProperty>;
 
     @OneToMany(type => Goods, goods => goods.type, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

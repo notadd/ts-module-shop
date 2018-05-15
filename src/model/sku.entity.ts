@@ -16,16 +16,14 @@ export class Sku {
     inventory: number;
 
     @OneToMany(type => OrderItem, orderItem => orderItem.sku, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
     orderItems: Array<OrderItem>;
 
     @ManyToMany(type => PropertyValue, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
@@ -33,9 +31,7 @@ export class Sku {
     values: Array<PropertyValue>;
 
     @ManyToOne(type => Goods, goods => goods.skus, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

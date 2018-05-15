@@ -70,9 +70,7 @@ export class Order {
 
     /* 订单配送信息 */
     @ManyToOne(type => Delivery, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
@@ -80,8 +78,7 @@ export class Order {
 
     /* 订单对应的订单项，包含了sku以及购买数量 */
     @OneToMany(type => OrderItem, orderItem => orderItem.order, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
+        cascade: false,
         lazy: false,
         eager: false
     })
@@ -89,9 +86,7 @@ export class Order {
 
     /* 收货人信息 */
     @ManyToOne(type => UserReceivingInformation, {
-        cascadeInsert: false,
-        cascadeUpdate: false,
-        cascadeRemove: false,
+        cascade: false,
         lazy: false,
         eager: false
     })

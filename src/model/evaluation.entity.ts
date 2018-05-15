@@ -26,8 +26,7 @@ export class Evaluation {
 
     /* 评价图片，保存评价时可以级联保存图片 */
     @OneToMany(type => EvaluationImage, evaluationImage => evaluationImage.evaluation, {
-        cascadeInsert: true,
-        cascadeUpdate: false,
+        cascade: ["insert"],
         lazy: false,
         eager: false
     })
@@ -35,7 +34,7 @@ export class Evaluation {
 
     /* 用户与评论是ManyToOne关系，一个用户有多个评价 */
     @ManyToOne(type => User, {
-        cascadeAll: false,
+        cascade: false,
         nullable: false,
         lazy: false,
         eager: false,
@@ -48,9 +47,7 @@ export class Evaluation {
     关系可以级联更新订单项
     */
     @OneToOne(type => OrderItem, orderItem => orderItem.evaluation, {
-        cascadeInsert: false,
-        cascadeUpdate: true,
-        cascadeRemove: false,
+        cascade: ["update"],
         nullable: false,
         lazy: false,
         eager: false,
