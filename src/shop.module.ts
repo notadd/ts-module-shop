@@ -63,14 +63,14 @@ import { Sku } from "./model/sku.entity";
 import { Module } from "@nestjs/common";
 
 @Module({
-    modules: [TypeOrmModule.forFeature([
+    imports: [TypeOrmModule.forFeature([
         Evaluation, EvaluationImage,
         StoreSetting, PaySetting, Member, Floor,
         FirstClassify, SecondClassify, ThirdClassify,
         Goods, GoodsType, GoodsImage, GoodsProperty, PropertyValue,
         Brand, BrandLogo, Sku, Order, OrderItem, Delivery, UserReceivingInformation
     ]), UserModule],
-    components: [
+    providers: [
         DateUtil, RandomUtil,
         SkuService, SkuResolver,
         FloorService, FloorResolver,
