@@ -1,4 +1,4 @@
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
 import { GoodsImage } from "../model/goods.image.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -7,7 +7,7 @@ import { Repository } from "typeorm";
 import { Request } from "express";
 
 /* 商品图片的服务组件 */
-@Component()
+@Injectable()
 export class GoodsImageService {
 
     constructor(

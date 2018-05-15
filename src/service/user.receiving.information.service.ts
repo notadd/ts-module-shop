@@ -1,12 +1,12 @@
 import { UserReceivingInformation } from "../model/user.receiving.information.entity";
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
-import { Component, HttpException, Inject, NotImplementedException } from "@nestjs/common";
+import { Injectable, HttpException, Inject, NotImplementedException } from "@nestjs/common";
 import { UserComponent, UserComponentToken } from "@notadd/user";
 import { InjectRepository } from "@nestjs/typeorm";
 import { NodeStringDecoder } from "string_decoder";
 
 /* 用户收货信息服务组件 */
-@Component()
+@Injectable()
 export class UserReceivingInformationService {
 
     constructor(

@@ -1,10 +1,10 @@
-import { Component, HttpException } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { Delivery } from "../model/delivery.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 /* 配送服务的组件 */
-@Component()
+@Injectable()
 export class DeliveryService {
 
     constructor(

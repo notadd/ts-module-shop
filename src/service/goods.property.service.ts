@@ -1,10 +1,10 @@
-import { Component, Inject, HttpException } from "@nestjs/common";
+import { Injectable, Inject, HttpException } from "@nestjs/common";
 import { GoodsProperty } from "../model/goods.property.entity";
 import { Repository, QueryRunner, Connection } from "typeorm";
 import { GoodsType } from "../model/goods.type.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
-@Component()
+@Injectable()
 export class GoodsPropertyService {
 
     constructor(

@@ -1,4 +1,4 @@
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { PropertyValue } from "../model/property.value.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Goods } from "../model/goods.entity";
@@ -6,7 +6,7 @@ import { Sku } from "../model/sku.entity";
 import { Repository } from "typeorm";
 
 /* 品牌的服务组件 */
-@Component()
+@Injectable()
 export class SkuService {
 
     constructor(

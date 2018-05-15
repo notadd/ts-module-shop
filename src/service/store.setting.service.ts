@@ -1,5 +1,5 @@
 import { OutputStoreSetting } from "../interface/storesetting/store.setting.data";
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
 import { StoreSetting } from "../model/store.setting.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -7,7 +7,7 @@ import { Repository } from "typeorm";
 import { Request } from "express";
 
 /* 商城设置的服务组件 */
-@Component()
+@Injectable()
 export class StoreSettingService {
 
     constructor(

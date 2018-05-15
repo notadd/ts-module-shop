@@ -1,4 +1,4 @@
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Floor } from "../model/floor.entity";
 import { Goods } from "../model/goods.entity";
@@ -6,7 +6,7 @@ import { Repository } from "typeorm";
 import { Request } from "express";
 
 /* 楼层的服务组件 */
-@Component()
+@Injectable()
 export class FloorService {
 
     constructor(
@@ -43,7 +43,7 @@ export class FloorService {
             }
         }
         try {
-            await this.floorRepository.save({ name, display: display, goodses });
+            await this.floorRepository.save({ name, display, goodses });
         } catch (err) {
             throw new HttpException("发生了数据库错误" + err.toString(), 403);
         }

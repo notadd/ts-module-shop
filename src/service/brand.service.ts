@@ -1,4 +1,4 @@
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
 import { BrandLogo } from "../model/brand.logo.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -7,7 +7,7 @@ import { Repository } from "typeorm";
 import { Request } from "express";
 
 /* 品牌的服务组件 */
-@Component()
+@Injectable()
 export class BrandService {
 
     constructor(

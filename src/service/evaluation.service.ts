@@ -1,7 +1,7 @@
 import { InputEvaluationImage } from "../interface/evaluation/input.evaluation.image";
 import { UserComponent, UserComponentToken, User } from "@notadd/user";
 import { EvaluationImage } from "../model/evaluation.image.entity";
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
 import { Repository, Connection, QueryRunner } from "typeorm";
 import { Evaluation } from "../model/evaluation.entity";
@@ -10,7 +10,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Goods } from "../model/goods.entity";
 
 /* 评价的服务组件 */
-@Component()
+@Injectable()
 export class EvaluationService {
 
     constructor(
@@ -82,7 +82,7 @@ export class EvaluationService {
                 this.evaluationRepository.create({ content, display: true, user, orderItem,images })
             );
             images.forEach(image => image.evaluation = evaluation)
-            await queryRunner.manager.save(images); 
+            await queryRunner.manager.save(images);
             await queryRunner.commitTransaction();
         } catch (err) {
             await queryRunner.rollbackTransaction();

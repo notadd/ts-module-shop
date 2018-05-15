@@ -1,13 +1,13 @@
 import { SecondClassify } from "../model/second.classify.entity";
 import { FirstClassify } from "../model/first.classify.entity";
 import { ThirdClassify } from "../model/third.classify.entity";
-import { Component, HttpException } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { Classify } from "../interface/classify/classify";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 /* 分类的服务组件，一、二、三级分类三个实体被分别操作 */
-@Component()
+@Injectable()
 export class ClassifyService {
 
     constructor(

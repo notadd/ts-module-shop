@@ -1,6 +1,6 @@
 import { OutEvaluationImage } from "../interface/evaluationimage/evaluation.images.data";
 import { EvaluationImage } from "../model/evaluation.image.entity";
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { StoreComponent } from "../interface/store.component";
 import { Evaluation } from "../model/evaluation.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 import { Request } from "express";
 
 /* 评价图片的服务组件 */
-@Component()
+@Injectable()
 export class EvaluationImageService {
 
     constructor(
@@ -22,11 +22,11 @@ export class EvaluationImageService {
         if (!evaluation) {
             throw new HttpException("指定id=" + evaluationId + "评价不存在", 404);
         }
-        const images: Array<any> | undefined = evaluation.images
+        const images: Array<any> | undefined = evaluation.images;
         for (let i = 0; i < images.length; i++) {
             images[i].url = await this.storeComponent.getUrl(req, images[i].bucketName, images[i].name, images[i].type, undefined);
         }
-        console.log(images)
+        console.log(images);
         return images;
     }
 

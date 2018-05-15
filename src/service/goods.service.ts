@@ -1,5 +1,5 @@
 import { Repository, Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { ThirdClassify } from "../model/third.classify.entity";
 import { PropertyValue } from "../model/property.value.entity";
 import { GoodsData } from "../interface/goods/goods.data";
@@ -9,7 +9,7 @@ import { Goods } from "../model/goods.entity";
 import { Brand } from "../model/brand.entity";
 
 /* 商品服务组件 */
-@Component()
+@Injectable()
 export class GoodsService {
 
     constructor(

@@ -1,10 +1,10 @@
-import { Component, HttpException, Inject } from "@nestjs/common";
+import { Injectable, HttpException, Inject } from "@nestjs/common";
 import { PaySetting } from "../model/pay.setting.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 /* 支付配置服务组件 */
-@Component()
+@Injectable()
 export class PaySettingService {
 
     constructor(
@@ -20,7 +20,7 @@ export class PaySettingService {
     }
 
     async savePaySetting(aliPay: boolean, weixinPay: boolean): Promise<void> {
-        const paySetting: PaySetting = this.paySettingRepository.create({ id: 1, aliPay: aliPay, weixinPay: weixinPay });
+        const paySetting: PaySetting = this.paySettingRepository.create({ id: 1, aliPay, weixinPay });
         try {
             await this.paySettingRepository.save(paySetting);
         } catch (err) {

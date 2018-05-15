@@ -1,9 +1,9 @@
-import { Component, Inject, HttpException } from "@nestjs/common";
+import { Injectable, Inject, HttpException } from "@nestjs/common";
 import { GoodsType } from "../model/goods.type.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-@Component()
+@Injectable()
 export class GoodsTypeService {
 
     constructor(
