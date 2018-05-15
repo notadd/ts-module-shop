@@ -1,8 +1,8 @@
-import { Repository, Connection, SelectQueryBuilder } from "typeorm";
-import { getRepositoryToken } from "@nestjs/typeorm/typeorm.utils";
+import { Repository, SelectQueryBuilder } from "typeorm";
 import { SecondClassify } from "../model/second.classify.entity";
 import { ThirdClassify } from "../model/third.classify.entity";
 import { FirstClassify } from "../model/first.classify.entity";
+import { getRepositoryToken } from "@nestjs/typeorm";
 import { HttpException } from "@nestjs/common";
 import { Goods } from "../model/goods.entity";
 
