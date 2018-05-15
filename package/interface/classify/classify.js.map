@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/classify/classify.ts"],"names":[],"mappings":"","file":"classify.js","sourcesContent":["export interface Classify {\n    id: number;\n    name: string;\n    description: string;\n    level: number;\n}\n"]}

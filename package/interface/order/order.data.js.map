@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/order/order.data.ts"],"names":[],"mappings":"","file":"order.data.js","sourcesContent":["import { Order } from \"../../model/order.entity\";\n\nexport interface OrderData {\n    code: number;\n    message: string;\n    order: Order;\n}\n"]}

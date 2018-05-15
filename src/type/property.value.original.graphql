@@ -1,0 +1,22 @@
+type Mutation{
+    createPropertyValue(goodsId:Int!,goodsPropertyId:Int!,value:String!,price:Float):ShopCommonData
+    updatePropertyValue(id:Int!,value:String,price:Float):ShopCommonData
+    deletePropertyValue(id:Int!):ShopCommonData
+}
+
+type Query{
+    propertyValues(goodsId:Int!):PropertyValuesData
+}
+
+type PropertyValuesData{
+    code:Int
+    message:String
+    values:[PropertyValue]
+}
+
+type PropertyValue{
+    id:Int
+    value:String
+    price:Float
+    property:GoodsProperty
+}

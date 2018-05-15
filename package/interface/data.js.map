@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/data.ts"],"names":[],"mappings":"","file":"data.js","sourcesContent":["export interface Data {\n    code: number;\n    message: string;\n}\n"]}

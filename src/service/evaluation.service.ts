@@ -79,7 +79,7 @@ export class EvaluationService {
         await queryRunner.startTransaction();
         try {
             const evaluation: Evaluation | undefined = await queryRunner.manager.save(
-                this.evaluationRepository.create({ content, display: true, user, orderItem,images })
+                this.evaluationRepository.create({ content, display: true, user, orderItem, images })
             );
             images.forEach(image => image.evaluation = evaluation);
             await queryRunner.manager.save(images);

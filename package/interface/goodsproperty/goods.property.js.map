@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/goodsproperty/goods.property.ts"],"names":[],"mappings":"","file":"goods.property.js","sourcesContent":["export interface GoodsProperty {\n    id: number;\n    name: string;\n    type: string;\n    inputType: string;\n    list: Array<string>;\n}\n"]}

@@ -1,0 +1,22 @@
+type Mutation{
+    createSku(goodsId:Int!,no:String!,inventory:Int!,propertyValueIds:[Int]!):ShopCommonData
+    updateSku(id:Int!,no:String,inventory:Int,propertyValueIds:[Int]):ShopCommonData
+    deleteSku(id:Int!):ShopCommonData
+}
+
+type Query{
+    skus(goodsId:Int!):SkusData
+}
+
+type SkusData{
+    code:Int
+    message:String
+    skus:[Sku]
+}
+
+type Sku{
+    id:Int
+    no:String
+    inventory:Int
+    values:[PropertyValue]
+}

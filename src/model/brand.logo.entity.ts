@@ -28,7 +28,7 @@ export class BrandLogo {
 
     /* 品牌删除时，logo实体级联删除 */
     @OneToOne(type => Brand, brand => brand.logo, {
-        cascade:false,
+        cascade: false,
         onDelete: "CASCADE",
         nullable: false,
         lazy: false,

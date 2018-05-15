@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/floor/floor.data.ts"],"names":[],"mappings":"","file":"floor.data.js","sourcesContent":["import { Floor } from \"../../model/floor.entity\";\n\nexport interface FloorData {\n    code: number;\n    message: string;\n    floor: Floor;\n}\n"]}

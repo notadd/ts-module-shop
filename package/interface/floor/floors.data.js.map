@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/floor/floors.data.ts"],"names":[],"mappings":"","file":"floors.data.js","sourcesContent":["import { Floor } from \"../../model/floor.entity\";\n\nexport interface FloorsData {\n    code: number;\n    message: string;\n    floors: Array<Floor>;\n}\n"]}

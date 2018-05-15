@@ -1,0 +1,41 @@
+type Mutation{
+
+    createEvaluation(content:String!,userId:Int!,orderItemId:Int!,inputImages:[InputEvaluationImage]):ShopCommonData
+
+    updateEvaluation(id:Int!,content:String!,display:Boolean!):ShopCommonData
+
+    deleteEvaluation(id:Int!):ShopCommonData
+}
+
+type Query{
+
+    evaluation(id:Int!):EvaluationData
+
+    #get all evaluation of the goods
+    evaluations(goodsId:Int!):EvaluationsData
+}
+
+type EvaluationData{
+    code:Int
+    message:String
+    evaluation:Evaluation
+}
+
+type EvaluationsData{
+    code:Int
+    message:String
+    evaluations:[Evaluation]
+}
+
+type Evaluation{
+    id:Int
+    content:String
+    display:String
+    orderItem:OrderItem
+}
+
+input InputEvaluationImage{
+    bucketName:String!
+    rawName:String!
+    base64:String!
+}

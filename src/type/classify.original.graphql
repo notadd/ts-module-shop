@@ -1,0 +1,34 @@
+type Query{
+    classify(id:Int!,level:Int!):ClassifyData
+    classifies(parentId:Int,level:Int!):ClassiesData
+}
+
+type Mutation{
+    createClassify(name:String!,description:String!,level:Int!,parentId:Int):ShopCommonData
+    updateClassify(id:Int!,name:String!,description:String!,level:Int!):ShopCommonData
+    deleteClassify(id:Int!,level:Int!):ShopCommonData
+}
+
+type ClassiesData{
+    code:Int
+    message:String
+    classifies:[Classify]
+}
+
+type ClassifyData{
+    code:Int
+    message:String
+    classify:Classify
+}
+
+type Classify{
+    id:Int
+    name:String
+    description:String
+    level:Int
+}
+
+type ShopCommonData{
+    code:Int
+    message:String
+}

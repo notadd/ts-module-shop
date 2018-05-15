@@ -1,0 +1,20 @@
+type Mutation{
+    savePaySetting(aliPay:Boolean!,weixinPay:Boolean!):ShopCommonData
+    clearPaySetting:ShopCommonData
+}
+
+type Query{
+    paySetting:PaySettingData
+}
+
+type PaySettingData{
+    code:Int
+    message:String
+    paySetting:PaySetting
+}
+
+type PaySetting{
+    id:Int
+    aliPay:Boolean
+    weixinPay:Boolean
+}

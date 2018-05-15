@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/member/member.data.ts"],"names":[],"mappings":"","file":"member.data.js","sourcesContent":["import { Member } from \"../../model/member.entity\";\n\nexport interface MemberData {\n    code: number;\n    message: string;\n    member: Member;\n}\n"]}

@@ -1,0 +1,55 @@
+type Mutation{
+
+    createUserReceivingInformation(
+        userId:Int!,
+        consignee:String!,
+        email:String!,
+        region:String!,
+        address:String!,
+        postCode:String!,
+        homePhone:String!,
+        mobilePhone:String!
+    ):ShopCommonData
+
+    updateUserReceivingInformation(
+        id:Int!,
+        consignee:String!,
+        email:String!,
+        region:String!,
+        address:String!,
+        postCode:String!,
+        homePhone:String!,
+        mobilePhone:String!
+    ):ShopCommonData
+
+    deleteUserReceivingInformation(id:Int!):ShopCommonData
+
+}
+
+type Query{
+    userReceivingInformation(id:Int!):UserReceivingInformationData
+    userReceivingInformations(userId:Int!):UserReceivingInformationsData
+}
+
+type UserReceivingInformationsData{
+    code:Int
+    message:String
+    informations:[UserReceivingInformation]
+}
+
+type UserReceivingInformation{
+    id:Int
+    consignee:String
+    email:String
+    region:String
+    address:String
+    postCode:String
+    homePhone:String
+    mobilePhone:String
+}
+
+type UserReceivingInformationData{
+    code:Int
+    message:String
+    information:UserReceivingInformation
+}

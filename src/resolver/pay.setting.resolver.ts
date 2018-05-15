@@ -27,11 +27,11 @@ export class PaySettingResolver {
         if (aliPay === undefined || aliPay === null || weixinPay === undefined || weixinPay === null) {
             throw new HttpException("缺少参数", 404);
         }
-        if(aliPay!==true&&aliPay!==false){
-            throw new HttpException("参数错误",400);
+        if (aliPay !== true && aliPay !== false) {
+            throw new HttpException("参数错误", 400);
         }
-        if(weixinPay!==true&&weixinPay!==false){
-            throw new HttpException("参数错误",400);
+        if (weixinPay !== true && weixinPay !== false) {
+            throw new HttpException("参数错误", 400);
         }
         await this.paySettingService.savePaySetting(aliPay, weixinPay);
         return { code: 200, message: "保存支付设置成功" };

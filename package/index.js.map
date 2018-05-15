@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.ts"],"names":[],"mappings":";;AAAA,4EAAqF;AAA5E,kDAAA,aAAa,CAAA;AAAE,uDAAA,kBAAkB,CAAA;AAC1C,6CAA2C;AAAlC,mCAAA,UAAU,CAAA","file":"index.js","sourcesContent":["export { ShopComponent, ShopComponentToken } from \"./export/shop.component.provider\";\nexport { ShopModule } from \"./shop.module\";\n"]}

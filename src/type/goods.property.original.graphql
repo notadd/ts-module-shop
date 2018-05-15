@@ -1,0 +1,25 @@
+type Mutation{
+    createGoodsProperty(goodsTypeId:Int!,name:String!,type:GoodsPropertyType!,inputType:GoodsPropertyInputType!,list:[String]):ShopCommonData
+    updateGoodsProperty(id:Int!,name:String,type:GoodsPropertyType,inputType:GoodsPropertyInputType,list:[String]):ShopCommonData
+    deleteGoodsProperty(id:Int!):ShopCommonData
+}
+
+type GoodsProperty{
+    id:Int
+    name:String
+    type:GoodsPropertyType
+    inputType:GoodsPropertyInputType
+    list:[String]
+}
+
+enum GoodsPropertyType{
+    unique
+    radio
+    check
+}
+
+enum GoodsPropertyInputType{
+    text
+    list
+    textarea
+}

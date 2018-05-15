@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/sku/skus.data.ts"],"names":[],"mappings":"","file":"skus.data.js","sourcesContent":["import { Sku } from \"../../model/sku.entity\";\nexport interface SkusData {\n    code: number;\n    message: string;\n    skus: Array<Sku>;\n}\n"]}

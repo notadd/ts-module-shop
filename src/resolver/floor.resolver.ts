@@ -36,8 +36,8 @@ export class FloorResolver {
         if (!name || display === undefined || display === null || !goodsIds || goodsIds.length === 0) {
             throw new HttpException("缺少参数", 404);
         }
-        if(display!==true&&display!==false){
-            throw new HttpException("参数错误",400);
+        if (display !== true && display !== false) {
+            throw new HttpException("参数错误", 400);
         }
         await this.floorService.createFloor(name, display, goodsIds);
         return { code: 200, message: "创建楼层成功" };
@@ -49,8 +49,8 @@ export class FloorResolver {
         if (!id || !name || display === undefined || display === null || !goodsIds || goodsIds.length === 0) {
             throw new HttpException("缺少参数", 404);
         }
-        if(display!==true&&display!==false){
-            throw new HttpException("参数错误",400);
+        if (display !== true && display !== false) {
+            throw new HttpException("参数错误", 400);
         }
         await this.floorService.updateFloor(id, name, display, goodsIds);
         return { code: 200, message: "更新楼层成功" };

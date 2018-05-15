@@ -1,0 +1,30 @@
+type Mutation{
+    createOrderItem(count:Int!,skuId:Int!,userId:Int!):ShopCommonData
+    updateOrderItem(id:Int!,count:Int!):ShopCommonData
+    deleteOrderItem(id:Int!):ShopCommonData
+}
+
+type Query{
+    cartItems(userId:Int!):CartItemsData
+    orderItem(id:Int!):OrderItemData
+}
+
+type CartItemsData{
+    code:Int
+    message:String
+    cartItems:[OrderItem]
+}
+
+type OrderItemData{
+    code:Int
+    message:String
+    orderItem:OrderItem
+}
+
+type OrderItem{
+    id:Int
+    count:Int
+    userId:Int
+    sku:Sku
+    order:Order
+}

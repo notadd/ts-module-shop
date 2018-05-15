@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/orderitem/cart.items.data.ts"],"names":[],"mappings":"","file":"cart.items.data.js","sourcesContent":["import { OrderItem } from \"../../model/order.item.entity\";\n\nexport interface CartItemsData {\n    code: number;\n    message: string;\n    cartItems: Array<OrderItem>;\n}\n"]}

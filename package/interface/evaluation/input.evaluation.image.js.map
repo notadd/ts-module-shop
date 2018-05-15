@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/evaluation/input.evaluation.image.ts"],"names":[],"mappings":"","file":"input.evaluation.image.js","sourcesContent":["export interface InputEvaluationImage {\n    bucketName: string;\n    rawName: string;\n    base64: string;\n}\n"]}

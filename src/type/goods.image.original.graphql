@@ -1,0 +1,22 @@
+type Query{
+    goodsImages(goodsId:Int!):GoodsImagesData
+}
+
+type Mutation{
+    createGoodsImage(goodsId:Int!,bucketName:String!,rawName:String!,base64:String!):ShopCommonData
+    deleteGoodsImage(goodsId:Int!,id:Int!):ShopCommonData
+}
+
+type GoodsImagesData{
+    code:Int
+    message:String
+    images:[GoodsImage]
+}
+
+type GoodsImage{
+    id:Int
+    bucketName:String
+    name:String
+    type:String
+    url:String
+}

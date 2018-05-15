@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/goodsimage/goods.image.data.ts"],"names":[],"mappings":"","file":"goods.image.data.js","sourcesContent":["export interface GoodsImageData {\n    code: number;\n    message: string;\n    images: Array<{\n        id: number;\n        bucketName: string;\n        name: string;\n        type: string;\n        url: string;\n    }>;\n}\n"]}

@@ -1,0 +1,83 @@
+type Mutation{
+
+    createOrder(
+        userId:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
+        deliveryId:Int!,
+        userReceivingInformationId:Int!,
+        items:[InputOrderItem]
+    ):ShopCommonData
+
+    createOrderFromCart(
+        userId:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
+        deliveryId:Int!,
+        userReceivingInformationId:Int!,
+        itemIds:[Int]
+    ):ShopCommonData
+
+    updateOrder(
+        id:Int!,
+        delivertNo: String!,
+        delivertTime: String!,
+        invoiceType: String!,
+        invoiceContent: String!,
+        invoiceTitle: String!,
+        customerMessage: String!,
+        deliveryId:Int!,
+        userReceivingInformationId:Int!
+    ):ShopCommonData
+
+    deleteOrder(
+        id:Int!
+    ):ShopCommonData
+}
+
+type Query{
+    order(id:Int!):OrderData
+    orders:OrdersData
+}
+
+type OrdersData{
+    code:Int
+    message:String
+    orders:[Order]
+}
+
+type OrderData{
+    code:Int
+    message:String
+    order:Order
+}
+
+type Order{
+    id:Int
+    orderNo:String
+    createDate:String
+    updateDate:String
+    userId:Int
+    delivertNo: String
+    delivertTime: String
+    invoiceType: String
+    invoiceContent: String
+    invoiceTitle: String
+    customerMessage: String
+    delivery:[Delivery]
+    userReceivingInformation:[UserReceivingInformation]
+    items:[OrderItem]
+}
+
+input InputOrderItem{
+    skuId:Int!,
+    count:Int!
+}

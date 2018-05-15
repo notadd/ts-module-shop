@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/paysetting/pay.setting.data.ts"],"names":[],"mappings":"","file":"pay.setting.data.js","sourcesContent":["export interface PaySettingData {\n    code: number;\n    message: string;\n    paySetting: {\n        id: number\n        aliPay: boolean\n        weixinPay: boolean\n    };\n}\n"]}

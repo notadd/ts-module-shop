@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/propertyvalue/property.values.data.ts"],"names":[],"mappings":"","file":"property.values.data.js","sourcesContent":["import { PropertyValue } from \"../../model/property.value.entity\";\n\nexport interface PropertyValuesData {\n    code: number;\n    message: string;\n    values: Array<PropertyValue>;\n}\n"]}

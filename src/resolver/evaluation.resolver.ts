@@ -52,7 +52,7 @@ export class EvaluationResolver {
         if (!id || !content || display === undefined || display === null) {
             throw new HttpException("缺少参数", 404);
         }
-        if(display!==true&&display!==false){
+        if (display !== true && display !== false) {
             throw new HttpException("参数错误", 404);
         }
         await this.evaluationService.updateEvaluation(id, content, display);

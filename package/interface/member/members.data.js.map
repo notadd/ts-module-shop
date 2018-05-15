@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/member/members.data.ts"],"names":[],"mappings":"","file":"members.data.js","sourcesContent":["import { Member } from \"../../model/member.entity\";\n\nexport interface MembersData {\n    code: number;\n    message: string;\n    members: Array<Member>;\n}\n"]}

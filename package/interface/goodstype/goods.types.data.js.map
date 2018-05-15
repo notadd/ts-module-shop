@@ -1,0 +1,1 @@
+{"version":3,"sources":["interface/goodstype/goods.types.data.ts"],"names":[],"mappings":"","file":"goods.types.data.js","sourcesContent":["export interface GoodsTypesData {\n    code: number;\n    message: string;\n    goodsTypes: Array<{\n        id: number\n        name: string\n    }>;\n}\n"]}

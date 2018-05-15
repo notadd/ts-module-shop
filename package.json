@@ -4,6 +4,10 @@
     "description": "商城模块",
     "main": "index.js",
     "scripts": {
+        "build": "node --max_old_space_size=4096 ./node_modules/gulp/bin/gulp.js build",
+        "dev": "gulp default",
+        "prepublish": "node --max_old_space_size=4096 ./node_modules/gulp/bin/gulp.js build",
+        "publish": "node ./node_modules/lerna/bin/lerna.js publish -m \"chore(release): publish %s\"",
         "start": "node ./starter/index.js",
         "start:watch": "nodemon",
         "test": "jest --config=jest.json --runInBand --forceExit",

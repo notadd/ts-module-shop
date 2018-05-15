@@ -1,0 +1,25 @@
+type Mutation{
+
+    createEvaluationImage(evaluationId:Int!,bucketName:String!,rawName:String!,base64:String!):ShopCommonData
+
+    deleteEvaluationImage(id:Int!):ShopCommonData
+}
+
+type Query{
+
+    evaluationImages(evaluationId:Int!):EvaluationImagesData
+}
+
+type EvaluationImagesData{
+    code:Int
+    message:String
+    images:[EvaluationImage]
+}
+
+type EvaluationImage{
+    id:Int
+    bucketName:String
+    name:String
+    type:String
+    url:String
+}
